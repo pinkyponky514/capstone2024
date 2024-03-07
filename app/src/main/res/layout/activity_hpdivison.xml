@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HPDivisonActivity">
+
+    <Button
+        android:id="@+id/HospitalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="병원"
+        android:drawableBottom="@drawable/hospital_button_image_add"
+        android:background="@drawable/hospital_button_style"
+        android:textColor="@drawable/text_click_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/PatientButton"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/PatientButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="환자"
+        android:drawableBottom="@drawable/patient_button_image_add"
+        android:background="@drawable/patient_button_style"
+        android:textColor="@drawable/text_click_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@+id/HospitalButton"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
