@@ -17,5 +17,7 @@ class HPDivisonActivity : AppCompatActivity() {
         binding.PatientButton.setOnClickListener {
             MainActivity().setActivity(this, LoginActivity())
         }
+
+
     }
 }
