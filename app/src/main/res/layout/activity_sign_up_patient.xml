@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".SignUpPatient">
+
+
+    <EditText
+        android:id="@+id/register_id"
+        android:layout_width="335dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="44dp"
+        android:background="@drawable/layout"
+        android:drawableLeft="@drawable/image_id"
+        android:drawablePadding="20dp"
+        android:ems="10"
+        android:hint="아이디를 입력해주세요"
+        android:paddingLeft="10dp"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/register_email"
+        android:layout_width="335dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/layout"
+        android:drawableLeft="@drawable/image_email"
+        android:drawablePadding="20dp"
+        android:ems="10"
+        android:hint="이메일을 입력해주세요"
+        android:inputType="none"
+        android:paddingLeft="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/register_password"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/register_password"
+        app:layout_constraintTop_toBottomOf="@+id/register_password" />
+
+    <EditText
+        android:id="@+id/register_password"
+        android:layout_width="335dp"
+        android:layout_height="48dp"
+        android:background="@drawable/layout"
+        android:drawableLeft="@drawable/image_password"
+        android:ems="10"
+        android:drawablePadding="20dp"
+        android:hint="비밀번호를 입력해주세요"
+        android:paddingLeft="10dp"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/register_id"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/register_id"
+        app:layout_constraintTop_toBottomOf="@+id/register_id" />
+
+    <TextView
+        android:id="@+id/password_warning"
+        android:layout_width="278dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:text="비밀번호는 7자리 이상이어야 합니다"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/register_password"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/register_password"
+        app:layout_constraintTop_toBottomOf="@+id/register_password" />
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="259dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="172dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="148dp"
+        android:backgroundTint="#8AF311"
+        android:text="계정 생성"
+        android:textColor="#0E4D11"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_name" />
+
+    <EditText
+        android:id="@+id/register_name"
+        android:layout_width="335dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/layout"
+        android:ems="10"
+        android:drawablePadding="20dp"
+        android:hint="이름을 입력해주세요"
+        android:paddingLeft="10dp"
+        android:drawableLeft="@drawable/image_id"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="@+id/register_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/register_email"
+        app:layout_constraintTop_toBottomOf="@+id/register_email" />
+
+
+    <EditText
+        android:id="@+id/register_phone"
+        android:layout_width="335dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/layout"
+        android:ems="10"
+        android:drawablePadding="20dp"
+        android:hint="전화번호를 입력해주세요"
+        android:paddingLeft="10dp"
+        android:drawableLeft="@drawable/image_telephone"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="@+id/register_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/register_email"
+        app:layout_constraintTop_toBottomOf="@+id/register_email" />
+
+    <Spinner
+        android:id="@+id/birthdate_year"
+        android:layout_width="108dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_phone" />
+
+    <Spinner
+        android:id="@+id/birthdate_month"
+        android:layout_width="83dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/birthdate_day"
+        app:layout_constraintTop_toBottomOf="@+id/register_phone" />
+
+    <Spinner
+        android:id="@+id/birthdate_day"
+        android:layout_width="83dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/register_phone"
+        app:layout_constraintTop_toBottomOf="@+id/register_phone" />
+
+    <ImageView
+        android:id="@+id/birthdate"
+        android:layout_width="39dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/birthdate_year"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_phone"
+        app:srcCompat="@drawable/birthdate" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -15,12 +15,11 @@ class SignUpActivity : AppCompatActivity() {
         // 회원가입 버튼
         val SignUpTextView: TextView = findViewById(R.id.textView6)
         SignUpTextView.setOnClickListener {
-            val intent = Intent(this, SignUpActivity2::class.java)
+            val intent = Intent(this, SignUpPatient::class.java)
             startActivity(intent)
             finish()
         }
 
-        // Set onClickListener for the login button
         // 로그인 버튼
         val loginButton: Button = findViewById(R.id.button)
         loginButton.setOnClickListener {
@@ -29,7 +28,6 @@ class SignUpActivity : AppCompatActivity() {
             finish()
         }
 
-        // Set contentDescription for the button
         val button: Button = findViewById(R.id.button)
         button.contentDescription = "로그인 버튼"
     }
