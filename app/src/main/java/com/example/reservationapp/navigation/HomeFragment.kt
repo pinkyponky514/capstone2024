@@ -14,6 +14,7 @@ import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.MainActivity
+import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.R
 import com.example.reservationapp.databinding.FragmentHomeBinding
 import com.naver.maps.map.MapView

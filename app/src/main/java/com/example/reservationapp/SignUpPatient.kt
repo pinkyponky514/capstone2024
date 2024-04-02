@@ -1,74 +1,59 @@
 package com.example.reservationapp
 
+import android.R
 import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.reservationapp.databinding.ActivitySignUpBinding
+import com.example.reservationapp.Model.UserInfo
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
-import com.google.android.gms.common.api.Api
-import com.google.android.gms.common.internal.service.Common.API
 import com.google.android.material.snackbar.Snackbar
-import retrofit2.Callback
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
 import java.util.*
 
+interface APIService {
+    @POST("/jwt-login/user/join")
+    fun postSignUp(@Body user: UserInfo): Call<UserInfo>
+
+}
 
 class SignUpPatient : AppCompatActivity() {
 
     private lateinit var sContext: Context
     private lateinit var binding: ActivitySignUpPatientBinding
-    private lateinit var api: RetrofitAPI
+
     private lateinit var birthdateYear: String
     private lateinit var birthdateMonth: String
     private lateinit var birthdateDay: String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpPatientBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val api = retrofit.create(RetrofitAPI::class.java)
-
-        val birthday = "$birthdateYear-$birthdateMonth-$birthdateDay"
-
-        var repo = Repo(
-            id = binding.registerId.text.toString(),
-            password = binding.registerPassword.text.toString(),
-            name = binding.registerName.text.toString(),
-            birthday = birthday
-        )
-
-        // 생년월일을 LocalDate 객체로 파싱
-        val date = LocalDate.parse(birthday, DateTimeFormatter.ISO_DATE)
-        Log.w("date: ", "${date}")
-        join(repo)
-
-
-        //Paint.Join(repo)
 
         // 초기화
         sContext = this
+        val idEditText = binding.registerId
+        val passwordEditText = binding.registerPassword
+        val nameEditText = binding.registerName
+
         val signUpButton = binding.btnRegister
+
         val birthdateYearSpinner = binding.birthdateYear
         val birthdateMonthSpinner = binding.birthdateMonth
         val birthdateDaySpinner = binding.birthdateDay
@@ -76,7 +61,7 @@ class SignUpPatient : AppCompatActivity() {
         // 생년월일 년도 스피너 설정
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val years = (1900..currentYear).toList()
-        val yearAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, years)
+        val yearAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, years)
         birthdateYearSpinner.adapter = yearAdapter
 
         birthdateYearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -92,7 +77,7 @@ class SignUpPatient : AppCompatActivity() {
 
         // 생년월일 월 스피너 설정
         val months = (1..12).toList()
-        val monthAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, months)
+        val monthAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, months)
         birthdateMonthSpinner.adapter = monthAdapter
 
         birthdateMonthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -108,7 +93,7 @@ class SignUpPatient : AppCompatActivity() {
 
         // 생년월일 일 스피너 설정 (단순히 1부터 31까지의 숫자로 설정)
         val days = (1..31).toList()
-        val dayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, days)
+        val dayAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, days)
         birthdateDaySpinner.adapter = dayAdapter
 
         birthdateDaySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -125,10 +110,10 @@ class SignUpPatient : AppCompatActivity() {
         // 회원가입 버튼 눌렀을때
         signUpButton.setOnClickListener {
             // EditText의 값 가져오기
-            val registerId = binding.registerId.text.toString()
+            val registerId = idEditText.text.toString()
             val registerEmail = binding.registerEmail.text.toString()
-            val registerPassword = binding.registerPassword.text.toString()
-            val registerName = binding.registerName.text.toString()
+            val registerPassword = passwordEditText.text.toString()
+            val registerName = nameEditText.text.toString()
             val registerPhone = binding.registerPhone.text.toString()
 
             // 각 필드가 비어 있는지 확인
@@ -160,30 +145,37 @@ class SignUpPatient : AppCompatActivity() {
             // 모든 필드가 입력되었을 때 회원가입 성공 처리 수행
             Log.w("Birthdate : ", "$birthdateYear-$birthdateMonth-$birthdateDay")
 
+
+            //Retrofit
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080")
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build()
+
+            val userInfo = UserInfo(registerId, registerPassword, registerName)
+            val call = retrofit.create(APIService::class.java).postSignUp(userInfo)
+            call.enqueue(object: Callback<UserInfo> {
+                override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
+                    if(response.isSuccessful())
+                        Log.d("Response: ", response.body().toString()) //통신 성공한 경우
+                    else
+                        Log.d("RESPONSE", "FAILURE") //통신 성공, 응답은 실패
+                }
+
+                override fun onFailure(call: Call<UserInfo>, t: Throwable) {
+                    Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                }
+            })
+
+
+
+
             // 회원가입 성공 시 메인 화면으로 이동
             val intent = Intent(this@SignUpPatient, MainActivity::class.java)
             startActivity(intent)
             finish() // 현재 액티비티 종료
 
         }
-    }
-
-    fun join(user: Repo) {
-        val call = api.getLoginResponse(user)
-
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response.isSuccessful) {
-                    Log.d("RESPONSE: ", response.body().toString())
-                } else {
-                    Log.d("RESPONSE: ", "FAIL")
-                }
-            }
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
-            }
-        })
     }
 
 }

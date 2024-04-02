@@ -6,17 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.R
 
-
-//MyViewModel
+/*
 data class ReserveItem (
     var hospital_name : String, //예약한 병원이름
     var date : String //예약한 날짜
 )
+ */
 private var reserve_data = ArrayList<ReserveItem>()
-
-
 
 //HomeFragment에서 RecyclerView에 사용할 Adapter
 class ReserveAlarmAdapter ():
