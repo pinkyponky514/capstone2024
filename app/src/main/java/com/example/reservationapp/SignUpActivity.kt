@@ -1,30 +1,59 @@
 package com.example.reservationapp
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.reservationapp.databinding.ActivitySignUpBinding
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // 회원가입 메인화면
 class SignUpActivity : AppCompatActivity() {
+
+
+    private lateinit var HPDivison: String
+    private lateinit var PatientButton: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-        
+
+        HPDivison = intent?.getStringExtra("HPDivison").toString()
+        PatientButton = intent?.getStringExtra("PatientButton").toString()
+
+
         // 회원가입 버튼
         val SignUpTextView: TextView = findViewById(R.id.textView6)
         SignUpTextView.setOnClickListener {
-            val intent = Intent(this, SignUpPatient::class.java)
-            startActivity(intent)
+
+            if(HPDivison == "1") { //병원
+                val intent = Intent(this, SignUpDoctor::class.java)
+                startActivity(intent)
+            } else if(HPDivison == "2") { //환자
+                val intent = Intent(this, SignUpPatient::class.java)
+                startActivity(intent)
+            } else {
+                Log.w("HPDivison intent error : ", HPDivison)
+            }
             finish()
         }
 
         // 로그인 버튼
         val loginButton: Button = findViewById(R.id.button)
         loginButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            if(HPDivison == "1") { //병원
+                val intent = Intent(this, DoctorLoginActivity::class.java)
+                startActivity(intent)
+            } else if(HPDivison == "2") { //환자
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+            } else {
+                Log.w("HPDivison intent error : ", HPDivison)
+            }
             finish()
         }
 

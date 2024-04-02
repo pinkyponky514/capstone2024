@@ -5,54 +5,157 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pink">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <!-- 검색창 -->
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/reserve_searchView"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_margin="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/searchview_style"
                 app:iconifiedByDefault="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:queryBackground="@null"
                 app:queryHint="병원, 질병을 검색하세요."
-                app:searchIcon="@drawable/ic_search">
+                app:searchIcon="@drawable/ic_search" />
 
-            </androidx.appcompat.widget.SearchView>
 
-            <!-- 진료 예약 알림 -->
-            <!--
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!-- 진료예약 알림 -->
+            <TextView
+                android:id="@+id/comming_reserve_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@string/comming_reserve"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/reserve_searchView"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_searchView" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/reserve_RecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"/>
-            </LinearLayout>
-            -->
+            <TextView
+                android:id="@+id/comming_more_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/reserve_more"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/reserve_alarm_RecyclerView"
+                app:layout_constraintEnd_toEndOf="@+id/reserve_searchView"
+                app:layout_constraintTop_toTopOf="@+id/comming_reserve_TextView" />
+
+
+            <!-- 진료과별 예약 -->
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reserve_alarm_RecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comming_reserve_TextView" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/class_reserve_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@string/class_reserve"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/comming_reserve_TextView"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_alarm_RecyclerView" />
+
+            <TextView
+                android:id="@+id/class_more_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reserve_more"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/comming_more_TextView"
+                app:layout_constraintTop_toTopOf="@+id/class_reserve_TextView" />
+
+            <com.naver.maps.map.MapView
+                android:id="@+id/destinationmap"
+                android:layout_width="172dp"
+                android:layout_height="163dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_alarm_RecyclerView" />
+
+            <com.naver.maps.map.MapView
+                android:id="@+id/medicinemap"
+                android:layout_width="172dp"
+                android:layout_height="163dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_alarm_RecyclerView" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="52dp"
+                android:layout_marginTop="4dp"
+                android:text="주변에 위치한 병원"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/destinationmap" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="주변에 위치한 약국"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.633"
+                app:layout_constraintStart_toEndOf="@+id/textView8"
+                app:layout_constraintTop_toBottomOf="@+id/medicinemap" />
+
+
+            <FrameLayout
+                android:id="@+id/map_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/hospitalMapButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="300dp"
+                android:layout_marginEnd="16dp"
+                android:text="Button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/medicinemap" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

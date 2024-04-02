@@ -2,28 +2,69 @@ package com.example.reservationapp
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.reservationapp.databinding.ActivitySignUpBinding
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
+import com.google.android.gms.common.api.Api
+import com.google.android.gms.common.internal.service.Common.API
 import com.google.android.material.snackbar.Snackbar
+import retrofit2.Callback
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
+
 class SignUpPatient : AppCompatActivity() {
+
     private lateinit var sContext: Context
     private lateinit var binding: ActivitySignUpPatientBinding
+    private lateinit var api: RetrofitAPI
     private lateinit var birthdateYear: String
     private lateinit var birthdateMonth: String
     private lateinit var birthdateDay: String
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpPatientBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(RetrofitAPI::class.java)
+
+        val birthday = "$birthdateYear-$birthdateMonth-$birthdateDay"
+
+        var repo = Repo(
+            id = binding.registerId.text.toString(),
+            password = binding.registerPassword.text.toString(),
+            name = binding.registerName.text.toString(),
+            birthday = birthday
+        )
+
+        // 생년월일을 LocalDate 객체로 파싱
+        val date = LocalDate.parse(birthday, DateTimeFormatter.ISO_DATE)
+        Log.w("date: ", "${date}")
+        join(repo)
+
+
+        //Paint.Join(repo)
 
         // 초기화
         sContext = this
@@ -106,13 +147,13 @@ class SignUpPatient : AppCompatActivity() {
                 }
             }
 
-            // 비밀번호가 7자리 이상인지 확인
-            if (registerPassword.length < 7) {
-                // 비밀번호가 7자리 미만이므로 경고 메시지 표시
+            // 비밀번호가 8자리 이상인지 확인
+            if (registerPassword.length < 8) {
+                // 비밀번호가 8자리 미만이므로 경고 메시지 표시
                 binding.passwordWarning.visibility = View.VISIBLE
                 return@setOnClickListener
             } else {
-                // 비밀번호가 7자리 이상이면 경고 메시지 숨기기
+                // 비밀번호가 8자리 이상이면 경고 메시지 숨기기
                 binding.passwordWarning.visibility = View.GONE
             }
 
@@ -126,4 +167,23 @@ class SignUpPatient : AppCompatActivity() {
 
         }
     }
+
+    fun join(user: Repo) {
+        val call = api.getLoginResponse(user)
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    Log.d("RESPONSE: ", response.body().toString())
+                } else {
+                    Log.d("RESPONSE: ", "FAIL")
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+            }
+        })
+    }
+
 }

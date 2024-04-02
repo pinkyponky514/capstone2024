@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -11,41 +16,54 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FullScreenTheme"
-        tools:targetApi="31">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31" >
+        <activity
+            android:name=".DrugstoreMap"
+            android:exported="false" />
+        <activity
+            android:name=".Hospital_DetailPage"
+            android:exported="false" />
+        <activity
+            android:name=".HospitalMap"
+            android:exported="false" />
+        <activity
+            android:name=".DoctorLoginActivity"
+            android:exported="false" />
         <activity
             android:name=".SignUpDoctor"
             android:exported="false" />
         <activity
             android:name=".SignUpPatient"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".HPDivisonActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,6 +73,12 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <meta-data
+                android:name="com.naver.maps.map.CLIENT_ID"
+                android:value="2l5wy5359k" />
+            <meta-data
+                android:name="com.naver.maps.map.CLIENT_TYPE"
+                android:value="gov" />
         </activity>
     </application>
 

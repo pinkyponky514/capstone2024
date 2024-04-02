@@ -99,7 +99,6 @@
         android:hint="이름을 입력해주세요"
         android:paddingLeft="10dp"
         android:drawableLeft="@drawable/image_id"
-        android:inputType="phone"
         app:layout_constraintEnd_toEndOf="@+id/register_email"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/register_email"

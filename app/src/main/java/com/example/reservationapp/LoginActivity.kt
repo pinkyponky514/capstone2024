@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import com.example.reservationapp.databinding.ActivityLoginBinding
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 //로그인 화면
 class LoginActivity: AppCompatActivity() {
@@ -38,6 +40,9 @@ class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+
 
         //초기화
         lContext = this

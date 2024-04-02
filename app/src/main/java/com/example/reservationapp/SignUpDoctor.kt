@@ -51,10 +51,10 @@ class SignUpDoctor : AppCompatActivity() {
             return
         }
 
-        // 비밀번호가 7자리 이상인지 확인
-        if (password.length < 7) {
+        // 비밀번호가 8자리 이상인지 확인
+        if (password.length < 8) {
             // 비밀번호가 7자리 미만이므로 경고 메시지 표시
-            passwordWarning.text = "비밀번호는 7자리 이상이어야 합니다"
+            passwordWarning.text = "비밀번호는 8자리 이상이어야 합니다"
             passwordWarning.visibility = View.VISIBLE
             return
         }
