@@ -19,6 +19,37 @@
         android:usesCleartextTraffic="true"
         android:hardwareAccelerated="true"
         tools:targetApi="31" >
+
+        <!-- 병원 목록 페이지 액티비티 -->
+        <activity
+            android:name=".HospitalListActivity"
+            android:exported="true" >
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <!-- 최근 검색내역, 검색창 액티비티 -->
+        <activity
+            android:name=".HospitalSearchActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+
+
         <activity
             android:name=".DrugstoreMap"
             android:exported="false" />
@@ -28,12 +59,12 @@
         <activity
             android:name=".HospitalMap"
             android:exported="false" />
-        <activity
-            android:name=".DoctorLoginActivity"
-            android:exported="false" />
+
+        <!-- 병원 회원가입 액티비티 -->
         <activity
             android:name=".SignUpDoctor"
             android:exported="false" />
+        <!-- 환자 회원가입 액티비티 -->
         <activity
             android:name=".SignUpPatient"
             android:exported="false" >
@@ -41,6 +72,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <!-- 로그인, 회원가입 메인 액티비티 -->
         <activity
             android:name=".SignUpActivity"
             android:exported="false" >
@@ -48,6 +81,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <!-- 병원, 환자 선택 액티비티 -->
         <activity
             android:name=".HPDivisonActivity"
             android:exported="false" >
@@ -55,22 +89,29 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <!-- 병원 로그인 액티비티 -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginDoctorActivity"
+            android:exported="false" />
+        <!-- 환자 로그인 액티비티 -->
+        <activity
+            android:name=".LoginPatientActivity"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <!-- 메인 액티비티 -->
         <activity
             android:name=".MainActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -81,6 +122,7 @@
                 android:name="com.naver.maps.map.CLIENT_TYPE"
                 android:value="gov" />
         </activity>
+
     </application>
 
 </manifest>

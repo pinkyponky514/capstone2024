@@ -9,12 +9,12 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
-import com.example.reservationapp.databinding.ActivityDoctorLoginBinding
+import com.example.reservationapp.databinding.ActivityLoginDoctorBinding
 
 //병원측 로그인 화측
-class DoctorLoginActivity : AppCompatActivity() {
+class LoginDoctorActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityDoctorLoginBinding
+    private lateinit var binding : ActivityLoginDoctorBinding
     private lateinit var userBusinessNumber: String //유저가 직접 입력한 사업자번호
     private lateinit var userPassword: String //유저가 입력한 비밀번호
 
@@ -31,7 +31,7 @@ class DoctorLoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDoctorLoginBinding.inflate(layoutInflater)
+        binding = ActivityLoginDoctorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //초기화

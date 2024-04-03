@@ -15,3 +15,16 @@ data class UserInfo (
     @SerializedName("password") var password: String,
     @SerializedName("name") var name: String
 )
+
+//RecentSearchWordAdapter - MyViewModel
+data class RecentItem (
+    var recent_search_word: String //최근 검색한 단어
+)
+
+//HospitalListAdapter - MyViewModel
+data class HospitalItem (
+    var hospitalName: String, //병원이름
+    var starScore: String, //별점(4.0)
+    var openingTimes: String, //영업시간
+    var hospitalAddress: String //병원주소
+)

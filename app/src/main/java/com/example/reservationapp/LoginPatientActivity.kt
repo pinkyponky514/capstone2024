@@ -2,7 +2,6 @@ package com.example.reservationapp
 
 import android.content.Intent
 import android.content.Context
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -13,14 +12,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
-import com.example.reservationapp.databinding.ActivityLoginBinding
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.reservationapp.databinding.ActivityLoginPatientBinding
 
 //로그인 화면
-class LoginActivity: AppCompatActivity() {
+class LoginPatientActivity: AppCompatActivity() {
     lateinit var lContext: Context
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityLoginPatientBinding
     private lateinit var DomainAddress: String //유저가 선택한 도메인주소
     private lateinit var userEmail: String //유저가 직접 입력한 이메일
     private lateinit var userPassword: String //유저가 입력한 비밀번호
@@ -38,7 +35,7 @@ class LoginActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityLoginPatientBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 

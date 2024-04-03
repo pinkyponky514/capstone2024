@@ -168,8 +168,6 @@ class SignUpPatient : AppCompatActivity() {
             })
 
 
-
-
             // 회원가입 성공 시 메인 화면으로 이동
             val intent = Intent(this@SignUpPatient, MainActivity::class.java)
             startActivity(intent)

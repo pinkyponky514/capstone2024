@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Adapter.ReserveAlarmAdapter
 import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.Hospital_DetailPage

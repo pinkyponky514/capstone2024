@@ -1,15 +1,11 @@
 package com.example.reservationapp
 
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.reservationapp.databinding.ActivitySignUpBinding
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 // 회원가입 메인화면
 class SignUpActivity : AppCompatActivity() {
@@ -46,10 +42,10 @@ class SignUpActivity : AppCompatActivity() {
         val loginButton: Button = findViewById(R.id.button)
         loginButton.setOnClickListener {
             if(HPDivison == "1") { //병원
-                val intent = Intent(this, DoctorLoginActivity::class.java)
+                val intent = Intent(this, LoginDoctorActivity::class.java)
                 startActivity(intent)
             } else if(HPDivison == "2") { //환자
-                val intent = Intent(this, LoginActivity::class.java)
+                val intent = Intent(this, LoginPatientActivity::class.java)
                 startActivity(intent)
             } else {
                 Log.w("HPDivison intent error : ", HPDivison)

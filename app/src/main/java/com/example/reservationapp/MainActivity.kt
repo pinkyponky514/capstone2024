@@ -4,18 +4,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.telecom.Call
-import android.view.WindowInsetsAnimation
 import androidx.fragment.app.Fragment
 import com.example.reservationapp.databinding.ActivityMainBinding
 import com.example.reservationapp.navigation.HomeFragment
-import com.google.android.gms.maps.model.LatLng
-import retrofit2.Callback
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.lang.reflect.Member
 
 //메인메뉴
 class MainActivity : AppCompatActivity() {

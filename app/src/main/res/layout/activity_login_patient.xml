@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PatientLoginActivity"
+    tools:context=".LoginPatientActivity"
     android:background="@color/white" >
 
-    <!-- 로고 이미지 -->
+    <!--
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    -->
     <ImageView
         android:id="@+id/LogoImageView"
         android:layout_width="match_parent"
@@ -21,27 +24,37 @@
         app:srcCompat="@android:drawable/ic_input_add" />
 
 
-    <!-- 사업자번호 입력 -->
+    <!-- 이메일 입력 -->
     <TextView
-        android:id="@+id/BusinessNumberTextView"
+        android:id="@+id/EmailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="75dp"
-        android:text="사업자번호"
+        android:text="이메일"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/LogoImageView"
         app:layout_constraintTop_toBottomOf="@+id/LogoImageView" />
 
     <EditText
-        android:id="@+id/BusinessNumberEditText"
-        android:layout_width="wrap_content"
+        android:id="@+id/EmailEditText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="@+id/BusinessNumberTextView"
-        app:layout_constraintTop_toBottomOf="@+id/BusinessNumberTextView" />
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toStartOf="@+id/EmailSpinner"
+        app:layout_constraintStart_toStartOf="@+id/EmailTextView"
+        app:layout_constraintTop_toBottomOf="@+id/EmailTextView" />
+
+    <Spinner
+        android:id="@+id/EmailSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/EmailEditText"
+        app:layout_constraintEnd_toEndOf="@+id/LogoImageView"
+        app:layout_constraintTop_toTopOf="@+id/EmailEditText" />
 
 
 
@@ -53,16 +66,17 @@
         android:layout_marginTop="25dp"
         android:text="비밀번호"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/BusinessNumberTextView"
-        app:layout_constraintTop_toBottomOf="@+id/BusinessNumberEditText" />
+        app:layout_constraintStart_toStartOf="@+id/EmailTextView"
+        app:layout_constraintTop_toBottomOf="@+id/EmailEditText" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/PW_TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="@+id/LogoImageView"
-        app:layout_constraintStart_toStartOf="@+id/BusinessNumberEditText"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/EmailSpinner"
+        app:layout_constraintStart_toStartOf="@+id/EmailEditText"
         app:layout_constraintTop_toBottomOf="@+id/PasswordTextView"
         app:passwordToggleEnabled="true">
 
@@ -119,7 +133,6 @@
         app:layout_constraintEnd_toEndOf="@+id/LoginButton"
         app:layout_constraintStart_toStartOf="@+id/LoginButton"
         app:layout_constraintTop_toBottomOf="@+id/LoginButton" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

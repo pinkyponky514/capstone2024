@@ -1,4 +1,4 @@
-package com.example.reservationapp.navigation
+package com.example.reservationapp.Adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,12 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.R
 
-/*
-data class ReserveItem (
-    var hospital_name : String, //예약한 병원이름
-    var date : String //예약한 날짜
-)
- */
 private var reserve_data = ArrayList<ReserveItem>()
 
 //HomeFragment에서 RecyclerView에 사용할 Adapter
@@ -59,7 +53,8 @@ class ReserveAlarmAdapter ():
 
     //ViewHolder 객체를 생성하고 초기화, ViewHolder는 View를 담는 상자
     override fun onCreateViewHolder(viewgroup: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(viewgroup.context).inflate(R.layout.reserve_alarm_item, viewgroup, false)
+        val layoutInflater = LayoutInflater.from(viewgroup.context)
+            .inflate(R.layout.reserve_alarm_item, viewgroup, false)
         return ViewHolder(layoutInflater)
     }
     //ViewHolder에 데이터 연결
