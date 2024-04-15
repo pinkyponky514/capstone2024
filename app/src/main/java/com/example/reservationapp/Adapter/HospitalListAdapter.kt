@@ -1,24 +1,29 @@
 package com.example.reservationapp.Adapter
 
+
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.Model.HospitalItem
 import com.example.reservationapp.R
+
 
 private var hospital_list_data = ArrayList<HospitalItem>()
 
 //병원 목록 페이지 Adapter
-class HospitalListAdapter:
-    RecyclerView.Adapter<HospitalListAdapter.ViewHolder>() {
+class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var Hospital_name_TextView: TextView //병원이름
         private var Star_score_TextView: TextView //별점
         private var Opening_time_TextView: TextView //영업시간
         private var Hospital_address_TextView: TextView //병원주소
+
 
         init {
             Hospital_name_TextView = itemView.findViewById(R.id.hospitalNameTextView)
@@ -28,13 +33,16 @@ class HospitalListAdapter:
 
             //병원 itemView 눌렀을때
             itemView.setOnClickListener {
-
+                val context = itemView.context
+                val intent = Intent(context, Hospital_DetailPage::class.java)
+                context.startActivity(intent)
             }
         }
 
+
+
         //데이터 설정
         fun setContents(list: HospitalItem) {
-
             Hospital_name_TextView.text = list.hospitalName
             Star_score_TextView.text = list.starScore
             Opening_time_TextView.text = list.openingTimes
@@ -54,6 +62,8 @@ class HospitalListAdapter:
     override fun getItemCount(): Int {
         return hospital_list_data.size
     }
+
+
 
     //
     fun updatelist(newList: ArrayList<HospitalItem>) {

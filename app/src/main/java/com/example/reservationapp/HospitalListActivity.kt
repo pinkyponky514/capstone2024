@@ -1,7 +1,9 @@
 package com.example.reservationapp
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.HospitalListAdapter
 import com.example.reservationapp.Model.HospitalItem
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
@@ -9,6 +11,7 @@ import com.example.reservationapp.databinding.ActivityHospitalListBinding
 //검색하면 나오는 병원 목록 페이지
 class HospitalListActivity : AppCompatActivity() {
 
+    var context: Context = this
     private lateinit var binding: ActivityHospitalListBinding
 
     private lateinit var adapter: HospitalListAdapter
@@ -20,7 +23,7 @@ class HospitalListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
+        //Hospital Search Activity에서 검색어 넘겨받기
         var intentString = ""
         intentString = intent.getStringExtra("searchWord").toString()
         if(intentString != "null")
@@ -28,7 +31,6 @@ class HospitalListActivity : AppCompatActivity() {
 
 
 
-        /*
         //adapter
         adapter = HospitalListAdapter()
 
@@ -47,12 +49,33 @@ class HospitalListActivity : AppCompatActivity() {
         hospitalList.add(HospitalItem("강남코모키의원", "4.9", "오전9:30~오후6:30", "서울특별시"))
         hospitalList.add(HospitalItem("강남서울이비인후과", "4.5", "오전9:30~오후6:30", "서울특별시"))
         hospitalList.add(HospitalItem("청소년내과", "4.0", "오전9:30~오후6:30", "서울특별시"))
+
+        hospitalList.add(HospitalItem("삼성드림이비인후과", "4.1", "오전9:30~오후6:30", "역삼동 826-24 화인타워 5,6층"))
+        hospitalList.add(HospitalItem("강남성모이비인후과의원", "4.4", "오전9:30~오후6:30", "서울특별시"))
+        hospitalList.add(HospitalItem("강남코모키의원", "4.9", "오전9:30~오후6:30", "서울특별시"))
+        hospitalList.add(HospitalItem("강남서울이비인후과", "4.5", "오전9:30~오후6:30", "서울특별시"))
+        hospitalList.add(HospitalItem("청소년내과", "4.0", "오전9:30~오후6:30", "서울특별시"))
+
+        hospitalList.add(HospitalItem("삼성드림이비인후과", "4.1", "오전9:30~오후6:30", "역삼동 826-24 화인타워 5,6층"))
+        hospitalList.add(HospitalItem("강남성모이비인후과의원", "4.4", "오전9:30~오후6:30", "서울특별시"))
+        hospitalList.add(HospitalItem("강남코모키의원", "4.9", "오전9:30~오후6:30", "서울특별시"))
+        hospitalList.add(HospitalItem("강남서울이비인후과", "4.5", "오전9:30~오후6:30", "서울특별시"))
+        hospitalList.add(HospitalItem("청소년내과", "4.0", "오전9:30~오후6:30", "서울특별시"))
+
         adapter.updatelist(hospitalList)
+
 
         //검색어에 따른 병원 필터
 
+        //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
+        val backButton = binding.backButtonImageView
+        backButton.setOnClickListener {
+            MainActivity().setActivity(this, MainActivity())
+            finish()
+        }
 
-         */
+
+
 
     }
 }

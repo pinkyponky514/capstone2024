@@ -1,5 +1,6 @@
 package com.example.reservationapp
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                     setFragment(HomeFragment())
                 }
                 R.id.moreFrag -> { //더보기 버튼 클릭했을때
-                        setActivity(HPDivisonActivity())
+                        setActivity(mContext, HPDivisonActivity())
                     /*
                     val intent = Intent(this, HPDivisonActivity::class.java)
                     startActivity(intent)
@@ -43,10 +44,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     //액티비티 전환 사용자정의 함수
-    fun setActivity(activity: Any) {
-        val intent = Intent(this, activity::class.java)
-        startActivity(intent)
-        finish()
+    fun setActivity(context: Context, activity: Any) {
+        val intent = Intent(context, activity::class.java)
+        context.startActivity(intent)
+        //(context as Activity).finish()
     }
     //프래그먼트 전환 사용자정의 함수
     fun setFragment(fragment: Any) {

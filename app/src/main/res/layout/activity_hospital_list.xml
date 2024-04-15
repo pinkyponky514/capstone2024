@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/sky"
-    tools:context=".HospitalListAcitivty">
+    tools:context=".HospitalListActivity">
 
     <!-- 검색창 -->
     <ImageView
@@ -28,7 +28,6 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="searchTextField"
-        android:background="@null"
         app:layout_constraintEnd_toStartOf="@+id/searchButtonImageView"
         app:layout_constraintStart_toEndOf="@+id/backButtonImageView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,20 +43,30 @@
         app:layout_constraintTop_toTopOf="@+id/backButtonImageView"
         app:srcCompat="@drawable/ic_search" />
 
-
-    <!-- 병원 목록 -->
-    <ScrollView
-        android:layout_width="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filterRecyclerView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchTextField" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hospitalListRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterRecyclerView" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"/>
-    </ScrollView>
+
+    <!-- 병원 목록 -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

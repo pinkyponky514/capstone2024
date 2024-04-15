@@ -32,6 +32,7 @@ class ReserveAlarmAdapter ():
             Date = itemView.findViewById(R.id.date_TextView)
 
             //진료예약 알림버튼 눌렀을때
+            //진료내역으로 이동하도록
             itemView.setOnClickListener {
                 //itemClickListener?.onItemClick(adapterPosition)
             }

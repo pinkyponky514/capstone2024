@@ -1,5 +1,6 @@
 package com.example.capstone2024
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.HospitalListActivity
+import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.R
 
@@ -26,6 +29,10 @@ class RecentSearchWordAdapter:
                 //최근 검색 단어 버튼을 클릭했을때
                 itemView.setOnClickListener {
                     //병원 검색 목록 페이지로 넘어간다
+                    val context = itemView.context
+                    val intent = Intent(context, HospitalListActivity::class.java)
+                    intent.putExtra("searchWord", itemView.toString()) //검색어 데이터 putExtra로 전환 해줘야함
+                    context.startActivity(intent)
                 }
 
                 //최근 검색 단어 x버튼 클릭했을때

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capstone2024.RecentSearchWordAdapter
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.databinding.ActivityHospitalSearchBinding
+import com.example.reservationapp.navigation.HomeFragment
 
 
 //병원 검색 페이지 액티비티
@@ -54,7 +55,7 @@ class HospitalSearchActivity : AppCompatActivity() {
         adapter.updateList(recentSearchWordList)
 
 
-        //검색 버튼 눌렀을 경우
+        //검색 버튼 눌렀을 경우 - 병원 검색목록 페이지 나옴
         var searchWord: String
         submitButton.setOnClickListener {
             searchWord = searchEditText.text.toString()
@@ -64,14 +65,11 @@ class HospitalSearchActivity : AppCompatActivity() {
             finish()
         }
 
-        /*
-        //뒤로가기 버튼 눌렀을 경우
+        //뒤로가기 버튼 눌렀을 경우 - 메인화면이 나옴
         backButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            MainActivity().setActivity(this, MainActivity())
             finish()
         }
-         */
 
     }
 }
