@@ -31,10 +31,5 @@ class HPDivisonActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-        binding.button2.setOnClickListener {
-            val intent = Intent(this, ChatActivity::class.java)
-            startActivity(intent)
-        }
     }
 }

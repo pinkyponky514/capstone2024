@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
+import com.example.reservationapp.ChatActivity
 import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.HospitalSearchActivity
@@ -36,7 +37,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater) //val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-
+        //지도 API
         NaverMapSdk.getInstance(requireContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
 
         mapViewHospital = binding.destinationmap //view.findViewById(R.id.destinationmap)
@@ -59,8 +60,6 @@ class HomeFragment : Fragment() {
         reserveSearchView.setOnClickListener {
             MainActivity().setActivity(requireActivity(), HospitalSearchActivity())
         }
-
-
 
 
         //병원 예약 알림 recyclerView
@@ -97,15 +96,15 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        // 버튼 생성 및 클릭 이벤트 처리
-        val hospitalMapButton = binding.hospitalMapButton //view.findViewById<Button>(R.id.hospitalMapButton)
-        hospitalMapButton.setOnClickListener {
-            val intent = Intent(requireActivity(), Hospital_DetailPage::class.java)
+        //채팅 서비스 버튼 클릭 이벤트 처리
+        val chatServiceButton = binding.floatingActionButton.setOnClickListener {
+            val intent = Intent(requireActivity(), ChatActivity::class.java)
             startActivity(intent)
         }
 
         return binding.root //return view
     }
+
 
 
     //
