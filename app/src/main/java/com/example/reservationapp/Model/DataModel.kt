@@ -28,3 +28,9 @@ data class HospitalItem (
     var openingTimes: String, //영업시간
     var hospitalAddress: String //병원주소
 )
+
+//ChattingAdapter
+data class ChatItem (
+    var user : String, //사람
+    var text : String //메세지
+)
