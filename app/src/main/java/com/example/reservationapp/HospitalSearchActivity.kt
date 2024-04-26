@@ -3,21 +3,23 @@ package com.example.reservationapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capstone2024.RecentSearchWordAdapter
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.databinding.ActivityHospitalSearchBinding
-import com.example.reservationapp.navigation.HomeFragment
 
+
+//var recentSearchWordList = ArrayList<RecentItem>() //최근 검색어 리스트
 
 //병원 검색 페이지 액티비티
 class HospitalSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHospitalSearchBinding
-
     private lateinit var adapter: RecentSearchWordAdapter
+
     private lateinit var recentSearchWordList: ArrayList<RecentItem> //최근 검색어 리스트
 
     private lateinit var searchEditText: EditText
@@ -46,23 +48,31 @@ class HospitalSearchActivity : AppCompatActivity() {
 
         //최근 검색어 리스트 초기화
         recentSearchWordList = ArrayList()
+
+
+        /*
         recentSearchWordList.add(RecentItem("이비인후과"))
         recentSearchWordList.add(RecentItem("코로나"))
         recentSearchWordList.add(RecentItem("강남"))
         recentSearchWordList.add(RecentItem("감기"))
         recentSearchWordList.add(RecentItem("인후통"))
         recentSearchWordList.add(RecentItem("성형외과"))
+
         adapter.updateList(recentSearchWordList)
+         */
 
 
         //검색 버튼 눌렀을 경우 - 병원 검색목록 페이지 나옴
         var searchWord: String
         submitButton.setOnClickListener {
             searchWord = searchEditText.text.toString()
+            recentSearchWordList.add(0, RecentItem(searchWord)) //맨 처음으로 들어가게
+            adapter.updateList(recentSearchWordList)
+
             val intent = Intent(this, HospitalListActivity::class.java)
             intent.putExtra("searchWord", searchWord)
             startActivity(intent)
-            finish()
+            //finish()
         }
 
         //뒤로가기 버튼 눌렀을 경우 - 메인화면이 나옴

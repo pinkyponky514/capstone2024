@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.HospitalListActivity
-import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.R
 
@@ -30,13 +29,16 @@ class RecentSearchWordAdapter:
                 itemView.setOnClickListener {
                     //병원 검색 목록 페이지로 넘어간다
                     val context = itemView.context
+                    var searchWord = recent_search_word_data[adapterPosition].recent_search_word
+
                     val intent = Intent(context, HospitalListActivity::class.java)
-                    intent.putExtra("searchWord", itemView.toString()) //검색어 데이터 putExtra로 전환 해줘야함
+                    intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
                     context.startActivity(intent)
                 }
 
                 //최근 검색 단어 x버튼 클릭했을때
                 itemView.findViewById<Button>(R.id.clear_button).setOnClickListener {
+                    //recentSearchWordList.removeAt(adapterPosition)
                     recent_search_word_data.removeAt(adapterPosition)
                     notifyDataSetChanged()
                 }
@@ -61,12 +63,19 @@ class RecentSearchWordAdapter:
     }
 
 
+    //데이터 갱신
 
-    //
     fun updateList(newList: ArrayList<RecentItem>) {
         recent_search_word_data = newList
         Log.w("updateList", "${newList}")
         notifyDataSetChanged()
     }
 
+/*
+    fun updateList(newList: ArrayList<RecentItem>) {
+        recent_search_word_data.clear()
+        recent_search_word_data.addAll(0, newList)
+        notifyDataSetChanged()
+    }
+ */
 }

@@ -1,7 +1,11 @@
 package com.example.reservationapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.HospitalListAdapter
@@ -11,11 +15,13 @@ import com.example.reservationapp.databinding.ActivityHospitalListBinding
 //검색하면 나오는 병원 목록 페이지
 class HospitalListActivity : AppCompatActivity() {
 
-    var context: Context = this
     private lateinit var binding: ActivityHospitalListBinding
 
     private lateinit var adapter: HospitalListAdapter
     private lateinit var hospitalList : ArrayList<HospitalItem>
+
+    private lateinit var intentString: String //최근검색어 추가하기 위한 문자열
+    private lateinit var searchTextField: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +30,11 @@ class HospitalListActivity : AppCompatActivity() {
 
 
         //Hospital Search Activity에서 검색어 넘겨받기
-        var intentString = ""
+        searchTextField = binding.searchTextField
+        intentString = ""
         intentString = intent.getStringExtra("searchWord").toString()
         if(intentString != "null")
-            binding.searchTextField.setText(intentString)
+            searchTextField.setText(intentString)
 
 
 
@@ -65,11 +72,31 @@ class HospitalListActivity : AppCompatActivity() {
         adapter.updatelist(hospitalList)
 
 
+        //검색어 변경 감지 - 새로운 검색어를 추가하기 위해서
+        /*
+        binding.searchTextField.addTextChangedListener(object: TextWatcher {
+            //변경되기전 문자열
+            //startPos:시작되는 위치, countChar:문자열 길이, afterPos:바뀌고 난 후 길이
+            override fun beforeTextChanged(currentChar: CharSequence?, startPos: Int, countChar: Int, afterChar: Int) {
+                TODO("Not yet implemented")
+            }
+            //
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                TODO("Not yet implemented")
+            }
+            //
+            override fun afterTextChanged(p0: Editable?) {
+                TODO("Not yet implemented")
+            }
+        })
+        */
+
         //검색어에 따른 병원 필터
 
         //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
         val backButton = binding.backButtonImageView
         backButton.setOnClickListener {
+            intentString = searchTextField.toString()
             MainActivity().setActivity(this, MainActivity())
             finish()
         }
