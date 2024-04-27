@@ -11,10 +11,10 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintVertical_bias="1" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -100,19 +100,19 @@
                 app:layout_constraintTop_toTopOf="@+id/class_reserve_TextView" />
 
             <TableLayout
-                android:id="@+id/class_reserve_TableLayout"
+                android:id="@+id/tableLayout_hospital_time_guide"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/class_more_TextView"
                 app:layout_constraintStart_toStartOf="@+id/class_reserve_TextView"
                 app:layout_constraintTop_toBottomOf="@+id/class_reserve_TextView">
 
                 <TableRow
-                    android:id="@+id/class_reserve_TableRow1"
+                    android:id="@+id/tableRow_lunch_time"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
 
                     <Button
                         android:id="@+id/class_button1"
@@ -164,7 +164,7 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/class_reserve_TextView"
-                app:layout_constraintTop_toBottomOf="@+id/class_reserve_TableLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/tableLayout_hospital_time_guide" />
 
             <TextView
                 android:id="@+id/symptom_more_TextView"
@@ -181,7 +181,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/symptom_more_TextView"
                 app:layout_constraintStart_toStartOf="@+id/symptom_reserve_TextView"
                 app:layout_constraintTop_toBottomOf="@+id/symptom_reserve_TextView">
@@ -189,7 +188,8 @@
                 <TableRow
                     android:id="@+id/symptom_reserve_TableRow1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
 
                     <Button
                         android:id="@+id/symptom_button1"

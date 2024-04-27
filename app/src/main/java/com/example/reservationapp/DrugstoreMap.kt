@@ -98,7 +98,7 @@ class DrugstoreMap : AppCompatActivity(), OnMapReadyCallback {
             val marker = Marker()
             marker.position = currentPosition
             marker.map = mNaverMap // Add marker to map
-            marker.icon = OverlayImage.fromResource(R.drawable.marker) // Set new marker image
+            marker.icon = OverlayImage.fromResource(R.drawable.image_marker) // Set new marker image
             marker.width = resources.getDimensionPixelSize(R.dimen.marker_width) // Set marker width
             marker.height = resources.getDimensionPixelSize(R.dimen.marker_height) // Set marker height
         }

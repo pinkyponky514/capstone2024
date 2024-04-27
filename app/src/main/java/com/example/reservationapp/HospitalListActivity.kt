@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.HospitalListAdapter
 import com.example.reservationapp.Model.HospitalItem
+import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
 
 //검색하면 나오는 병원 목록 페이지
@@ -33,9 +35,12 @@ class HospitalListActivity : AppCompatActivity() {
         searchTextField = binding.searchTextField
         intentString = ""
         intentString = intent.getStringExtra("searchWord").toString()
-        if(intentString != "null")
+        if(intentString != "null") {
             searchTextField.setText(intentString)
-
+            HospitalSearchActivity().recentSearchWordList.add(0, RecentItem(intentString)) //맨 처음으로 들어가게
+            HospitalSearchActivity().adapter.updateList(HospitalSearchActivity().recentSearchWordList)
+            Log.w("Search Word", "Search word Text : ${intentString}, List : ${HospitalSearchActivity().recentSearchWordList}")
+        }
 
 
         //adapter

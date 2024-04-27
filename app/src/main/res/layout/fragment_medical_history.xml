@@ -4,30 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/white">
+
+
+    <!-- 나의 진료내역 프래그먼트 -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/top_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/white"
+        app:itemBackground="@color/white"
+        app:itemTextColor="@drawable/menu_click_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/medical_history_navi_menu"
+        tools:ignore="MissingConstraints" />
 
     <FrameLayout
-        android:id="@+id/main_content"
+        android:id="@+id/medical_history_main_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/mint"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        app:itemBackground="@color/white"
-        app:itemIconTint="@drawable/menu_click_color"
-        app:itemTextColor="@drawable/menu_click_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/main_navi_menu"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/top_navigation" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

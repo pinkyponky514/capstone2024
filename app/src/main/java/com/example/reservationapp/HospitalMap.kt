@@ -100,7 +100,7 @@ class HospitalMap : AppCompatActivity(), OnMapReadyCallback {
             val marker = Marker()
             marker.position = currentPosition
             marker.map = mNaverMap // 마커를 지도에 추가
-            marker.icon = OverlayImage.fromResource(R.drawable.marker) // 새 마커 이미지 지정
+            marker.icon = OverlayImage.fromResource(R.drawable.image_marker) // 새 마커 이미지 지정
             marker.width = resources.getDimensionPixelSize(R.dimen.marker_width) // 마커의 너비 설정
             marker.height = resources.getDimensionPixelSize(R.dimen.marker_height) // 마커의 높이 설정
         }

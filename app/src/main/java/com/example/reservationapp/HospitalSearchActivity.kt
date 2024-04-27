@@ -18,9 +18,9 @@ import com.example.reservationapp.databinding.ActivityHospitalSearchBinding
 class HospitalSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHospitalSearchBinding
-    private lateinit var adapter: RecentSearchWordAdapter
 
-    private lateinit var recentSearchWordList: ArrayList<RecentItem> //최근 검색어 리스트
+    var adapter: RecentSearchWordAdapter = RecentSearchWordAdapter()
+    var recentSearchWordList: ArrayList<RecentItem> = ArrayList()//최근 검색어 리스트, public
 
     private lateinit var searchEditText: EditText
     private lateinit var submitButton: ImageView
@@ -37,8 +37,8 @@ class HospitalSearchActivity : AppCompatActivity() {
         submitButton = binding.submitButtonImageView
         backButton = binding.backButtonImageView
 
-        //adapter
-        adapter = RecentSearchWordAdapter()
+        //adapter 초기화
+        //adapter = RecentSearchWordAdapter()
 
         //최근 검색어 보여줄 recyclerView
         val recyclerView = binding.recentSearchRecyclerView
@@ -47,7 +47,7 @@ class HospitalSearchActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
 
         //최근 검색어 리스트 초기화
-        recentSearchWordList = ArrayList()
+        //recentSearchWordList = ArrayList()
 
 
         /*
@@ -59,7 +59,7 @@ class HospitalSearchActivity : AppCompatActivity() {
         recentSearchWordList.add(RecentItem("성형외과"))
 
         adapter.updateList(recentSearchWordList)
-         */
+        */
 
 
         //검색 버튼 눌렀을 경우 - 병원 검색목록 페이지 나옴
@@ -78,7 +78,7 @@ class HospitalSearchActivity : AppCompatActivity() {
         //뒤로가기 버튼 눌렀을 경우 - 메인화면이 나옴
         backButton.setOnClickListener {
             MainActivity().setActivity(this, MainActivity())
-            finish()
+            //finish()
         }
 
     }

@@ -10,6 +10,8 @@
     <string name="naver_client_id">2l5wy5359k</string>
     <string name="symptom_reserve">증상 질환별 예약</string>
     <string name="recent_search_list">최근 검색 내역</string>
+    <string name="past_history">과거 진료내역</string>
+    <string name="reserve_history">접수 내역</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

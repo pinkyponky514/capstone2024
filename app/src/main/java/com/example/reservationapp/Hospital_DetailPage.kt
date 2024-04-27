@@ -5,14 +5,15 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.databinding.ActivityHospitalDetailpageBinding
+import com.example.reservationapp.databinding.ActivityHospitalDetailpageExampleBinding
 
 class Hospital_DetailPage : AppCompatActivity() {
-    private lateinit var binding: ActivityHospitalDetailpageBinding
+    private lateinit var binding: ActivityHospitalDetailpageExampleBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityHospitalDetailpageBinding.inflate(layoutInflater)
+        binding = ActivityHospitalDetailpageExampleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // 예약 버튼 클릭 이벤트 설정

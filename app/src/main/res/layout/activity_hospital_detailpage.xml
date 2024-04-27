@@ -11,10 +11,10 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintVertical_bias="1" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -121,10 +121,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:text="병원 위치"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
-                app:layout_constraintStart_toStartOf="@+id/textView14"
+                app:layout_constraintStart_toStartOf="@+id/textView13"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
             <com.naver.maps.map.MapView
@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="150dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/custom_button"
                 android:paddingStart="20dp"
@@ -161,7 +161,55 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_day_tableLayout" />
+
+            <!-- 예약할 날짜 -->
+            <TextView
+                android:id="@+id/reserve_day_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="예약 날짜"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/textView13"
                 app:layout_constraintTop_toBottomOf="@+id/destinationmap" />
+
+            <TableLayout
+                android:id="@+id/reserve_day_tableLayout"
+                android:layout_width="409dp"
+                android:layout_height="148dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_day_textView">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/reserve_time_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="예약 시간"
+                app:layout_constraintStart_toStartOf="@+id/reserve_day_textView"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_day_tableLayout" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
