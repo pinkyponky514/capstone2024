@@ -87,8 +87,8 @@ class HomeFragment : Fragment() {
 
         //진료과별 예약 버튼
         for(i in 0..3) {
-            val classButtonId = resources.getIdentifier("class_button${i+1}", "id", context?.packageName)
-            val button = binding.root.findViewById<Button>(classButtonId) //var button = view.findViewById<Button>(classButtonId)
+            var classButtonId = resources.getIdentifier("class_button${i+1}", "id", context?.packageName)
+            var button = binding.root.findViewById<Button>(classButtonId) //var button = view.findViewById<Button>(classButtonId)
 
             button.text = classReserveList[i]
             button.setOnClickListener {
