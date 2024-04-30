@@ -24,6 +24,16 @@ class Hospital_Mypage : AppCompatActivity() {
             val restday = selectedRadioButton.text.toString()
             Log.d("Hospital_Mypage", "공휴일: $restday")
         }
+
+        // 병원 소개 텍스트 창
+        val hospitalIntroEditText = findViewById<EditText>(R.id.explanation2)
+        // 병원 소개 입력값 로그에 출력
+        hospitalIntroEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
+                val hospitalIntro = hospitalIntroEditText.text.toString()
+                Log.d("Hospital_Mypage", "병원 소개: $hospitalIntro")
+            }
+        }
     }
 
     fun onBackToHospitalClicked(view: View) {
