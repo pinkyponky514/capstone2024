@@ -63,7 +63,7 @@ class SignUpDoctor : AppCompatActivity() {
         passwordWarning.visibility = View.GONE
 
         // 회원가입 성공 시 메인 화면으로 이동
-        val intent = Intent(this@SignUpDoctor, MainActivity::class.java)
+        val intent = Intent(this@SignUpDoctor, HospitalActivity::class.java)
         startActivity(intent)
         finish() // 현재 액티비티 종료
     }

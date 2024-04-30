@@ -16,6 +16,8 @@
     <color name="yellow">#FEFD48</color>
     <color name="red">#D1180B</color>
     <color name="pink">#FFC0CB</color>
+    <color name="reservation_color">#FFA500</color>
+    <color name="hintTextColor">#CCCCCC</color>
     <color name="chat_message_background_color">#FF4081</color>
 
 

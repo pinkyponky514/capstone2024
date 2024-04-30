@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".Hospital_Mypage">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="372dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:background="#87CEEB"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- 병원 기본 정보 -->
+
+        <TextView
+            android:id="@+id/textViewHospitalName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="병원 이름: 아무개멍청이병원"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textViewPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="전화번호: 010-1234-5678"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/AdditionalInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:text="추가 정보"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="진료 시간"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/AdditionalInfo"
+        app:layout_constraintTop_toBottomOf="@+id/AdditionalInfo" />
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:stretchColumns="*"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/calendar">
+
+        <!-- 테이블 헤더 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="요일" />
+
+            <TextView
+                style="@style/TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="진료 시간" />
+        </TableRow>
+
+        <!-- 월요일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="월요일" />
+
+            <EditText
+                android:id="@+id/editTextMon"
+                style="@style/EditTextStyle"
+                android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+        </TableRow>
+
+        <!-- 화요일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="화요일" />
+
+            <EditText
+                android:id="@+id/editTextTue"
+                style="@style/EditTextStyle"
+                android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+        </TableRow>
+
+        <!-- 수요일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수요일" />
+
+            <EditText
+                android:id="@+id/editTextWed"
+                style="@style/EditTextStyle"
+                android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+        </TableRow>
+
+        <!-- 목요일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="목요일" />
+
+            <EditText
+                android:id="@+id/editTextThu"
+                style="@style/EditTextStyle"
+                android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+        </TableRow>
+
+        <!-- 금요일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="금요일" />
+
+            <EditText
+                android:id="@+id/editTextFri"
+                style="@style/EditTextStyle"
+                android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+        </TableRow>
+
+        <!-- 토요일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="토요일" />
+
+            <EditText
+                android:id="@+id/editTextSat"
+                style="@style/EditTextStyle"
+                android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+        </TableRow>
+
+        <!-- 일요일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="일요일" />
+
+            <EditText
+                android:id="@+id/editTextSun"
+                style="@style/EditTextStyle"
+                android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/weekendlunch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="점심 시간"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/calendar"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+    <TableLayout
+        android:id="@+id/tableLayout2"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weekendlunch">
+
+        <!-- 행 1: 평일 -->
+        <TableRow>
+
+            <TextView
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:padding="8dp"
+                android:text="평일" />
+
+            <EditText
+                android:id="@+id/editTextWeekdayLunchTime"
+                style="@style/EditTextStyle"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:hint="점심시간 입력하세요 (예: 12:00 - 13:00)"
+                android:padding="8dp" />
+        </TableRow>
+
+        <!-- 행 2: 주말 -->
+        <TableRow>
+
+            <TextView
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:padding="8dp"
+                android:text="주말" />
+
+            <EditText
+                android:id="@+id/editTextWeekendLunchTime"
+                style="@style/EditTextStyle"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:hint="점심시간 입력하세요 (예: 12:00 - 13:00)"
+                android:padding="8dp" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/restday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="공휴일"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/weekendlunch"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout2" />
+
+    <RadioGroup
+        android:id="@+id/restday_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/restday"
+        app:layout_constraintTop_toTopOf="@id/restday">
+
+        <RadioButton
+            android:id="@+id/restday_working"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="영업" />
+
+        <RadioButton
+            android:id="@+id/restday_realrest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="휴무" />
+
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:onClick="onBackToHospitalClicked"
+        android:text="저장"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restday" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

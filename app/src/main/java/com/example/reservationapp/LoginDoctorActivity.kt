@@ -1,6 +1,5 @@
 package com.example.reservationapp
 
-
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -91,7 +90,7 @@ class LoginDoctorActivity : AppCompatActivity() {
             userPassword = PasswordEditText.text.toString()
 
             Log.w("userBusinessNumber, userPassword", ": $userBusinessNumber" + ", $userPassword")
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, HospitalActivity::class.java)
             startActivity(intent)
             finish()
         }

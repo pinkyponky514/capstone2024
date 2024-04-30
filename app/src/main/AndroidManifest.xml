@@ -20,13 +20,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Hospital_Mypage"
+            android:exported="false" />
+        <activity
+            android:name=".HospitalActivity"
+            android:exported="false" />
+        <activity
             android:name=".Final_Reservation"
             android:exported="false" />
         <activity
             android:name=".ChatActivity"
-            android:exported="false" />
-
-        <!-- 병원 목록 페이지 액티비티 -->
+            android:exported="false" /> <!-- 병원 목록 페이지 액티비티 -->
         <activity
             android:name=".HospitalListActivity"
             android:exported="true">
@@ -39,16 +43,15 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- 최근 검색내역, 검색창 액티비티 -->
+        </activity> <!-- 최근 검색내역, 검색창 액티비티 -->
         <activity
             android:name=".HospitalSearchActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
 
             <meta-data
                 android:name="android.app.lib_name"
@@ -108,16 +111,16 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- 메인 액티비티 -->
+        </activity> <!-- 메인 액티비티 -->
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

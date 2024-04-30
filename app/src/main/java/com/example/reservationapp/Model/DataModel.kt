@@ -1,6 +1,11 @@
 package com.example.reservationapp.Model
 
 import com.google.gson.annotations.SerializedName
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 //ReserveAlarmAdapter - MyViewModel
 data class ReserveItem (
@@ -33,4 +38,12 @@ data class HospitalItem (
 data class ChatItem (
     var user : String, //사람
     var text : String //메세지
+)
+
+// 예약된 내역 모델 클래스
+data class ReservationItem(
+    val time: String, // 예약 시간
+    val patientName: String, // 환자 이름
+    val birthDate: String, // 생년월일
+    val reservationDate: String // 예약 날짜
 )
