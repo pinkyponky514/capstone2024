@@ -26,7 +26,6 @@ import java.util.*
 interface APIService {
     @POST("/jwt-login/user/join")
     fun postSignUp(@Body user: UserInfo): Call<UserInfo>
-
 }
 
 class SignUpPatient : AppCompatActivity() {

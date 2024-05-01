@@ -1,17 +1,20 @@
 package com.example.reservationapp.Adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.Model.HistoryItem
 import com.example.reservationapp.R
 
 private var history_list_data = ArrayList<HistoryItem>()
 
-class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
+class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var status_TextView: TextView //진료상태
         private var hospital_name_TextView: TextView //병원이름
@@ -26,6 +29,14 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
             class_name_TextView = itemView.findViewById(R.id.class_textView)
             reserve_date_TextView = itemView.findViewById(R.id.reserve_date_textView)
 
+            itemView.findViewById<Button>(R.id.try_reserve_button).setOnClickListener {
+                val hospitalNameTextView = itemView.findViewById<TextView>(R.id.hospital_name_textView)
+                val context = itemView.context
+                val intent = Intent(context, Hospital_DetailPage::class.java)
+
+                intent.putExtra("hospitalName", hospitalNameTextView.text)
+                context.startActivity(intent)
+            }
         }
 
         //데이터 설정
@@ -36,12 +47,12 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
             reserve_date_TextView.text = list.reserveDate
         }
     }
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): HistoryAdapter.ViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PastHistoryAdapter.ViewHolder {
         val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.history_item, viewGroup, false)
         return ViewHolder(layoutInflater)
     }
 
-    override fun onBindViewHolder(holder: HistoryAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PastHistoryAdapter.ViewHolder, position: Int) {
         holder.setContents(history_list_data[position])
     }
 

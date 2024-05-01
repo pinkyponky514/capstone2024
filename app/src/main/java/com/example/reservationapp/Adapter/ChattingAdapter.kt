@@ -58,7 +58,6 @@ class ChattingAdapter:
     //
     fun updateList(newList: ArrayList<ChatItem>) {
         chatArray = newList
-        Log.w("updateList", "${newList}")
         notifyDataSetChanged()
     }
 

@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/alarm_item"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="10dp"
     android:background="@drawable/reserve_alarm_item_style"
     android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/relation_imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="9dp"
+        android:background="@drawable/image_background_style"
+        app:tint="@color/dark_green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/hospital" />
 
     <TextView
         android:id="@+id/hospital_name_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="7dp"
+        android:autoSizeMaxTextSize="15dp"
+        android:autoSizeMinTextSize="9dp"
+        android:autoSizeStepGranularity="1dp"
+        android:autoSizeTextType="uniform"
         android:text="협진 병원 이름"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/date_TextView"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/date_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
         android:text="협진 날짜/시간"
         android:textColor="@color/white"
+        android:textSize="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/hospital_name"
-        app:layout_constraintTop_toBottomOf="@+id/hospital_name" />
+        app:layout_constraintStart_toStartOf="@+id/hospital_name_TextView" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

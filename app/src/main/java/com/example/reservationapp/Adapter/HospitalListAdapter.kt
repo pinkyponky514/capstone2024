@@ -33,8 +33,11 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
 
             //병원 itemView 눌렀을때
             itemView.setOnClickListener {
+                val hospitalNameTextView = itemView.findViewById<TextView>(R.id.hospitalNameTextView)
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
+
+                intent.putExtra("hospitalName", hospitalNameTextView.text)
                 context.startActivity(intent)
             }
         }

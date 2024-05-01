@@ -1,5 +1,7 @@
 package com.example.reservationapp.Model
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 
@@ -16,10 +18,35 @@ data class ReserveItem (
     var date : String //예약한 날짜
 )
 
+/*
 //RecentSearchWordAdapter
 data class RecentItem (
     var recent_search_word: String //최근 검색한 단어
 )
+*/
+data class RecentItem(
+    var recent_search_word: String // 최근 검색한 단어
+) : Parcelable {
+    constructor(parcel: Parcel) : this(parcel.readString()!!)
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(recent_search_word)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<RecentItem> {
+        override fun createFromParcel(parcel: Parcel): RecentItem {
+            return RecentItem(parcel)
+        }
+
+        override fun newArray(size: Int): Array<RecentItem?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 //HospitalListAdapter
 data class HospitalItem (
@@ -31,7 +58,7 @@ data class HospitalItem (
 
 //ChattingAdapter
 data class ChatItem (
-    var user : String, //사람
+    var user : String, //사람11
     var text : String //메세지
 )
 

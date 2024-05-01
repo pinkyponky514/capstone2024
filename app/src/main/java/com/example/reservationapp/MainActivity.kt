@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.databinding.ActivityMainBinding
 import com.example.reservationapp.navigation.CommunityFragment
 import com.example.reservationapp.navigation.HomeFragment
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     //var currentLocation: LatLng? = null
 
+    var searchRecentWordList = ArrayList<RecentItem>()
+
     var userName: String = "hansung"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
         mContext = this //다른 class에서 main class의 함수를 쓸 수 있도록
+
+        //searchRecentWordList = (intent.getSerializableExtra("searchWordList") as ArrayList<RecentItem>?)!!
+        searchRecentWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
 
         //binding.navigation.selectedItemId = R.id.homeFrag //처음 실행시 홈 선택으로 시작
         setMainToFragment(HomeFragment())
@@ -42,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     setMainToFragment(CommunityFragment())
                 }
                 R.id.moreFrag -> { //더보기 버튼 클릭했을때
-                        setActivity(mContext, HPDivisonActivity())
+                    setActivity(mContext, HPDivisonActivity())
                     /*
                     val intent = Intent(this, HPDivisonActivity::class.java)
                     startActivity(intent)

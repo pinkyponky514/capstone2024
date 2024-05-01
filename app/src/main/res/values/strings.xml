@@ -4,15 +4,22 @@
     <string name="checkup">나의 진료</string>
     <string name="community">커뮤니티</string>
     <string name="more">더보기</string>
-    <string name="comming_reserve">다가오는 예약</string>
-    <string name="class_reserve">진료과별 예약</string>
-    <string name="reserve_more">더보기 ></string>
-    <string name="naver_client_id">2l5wy5359k</string>
-    <string name="symptom_reserve">증상 질환별 예약</string>
+
+    <string name="comming_reserve">예약 현황</string>
+    <string name="class_reserve">진료과별 접수하기</string>
+    <string name="symptom_reserve">증상 질환별 접수하기</string>
+    <string name="reserve_more">더보기</string>
+
     <string name="recent_search_list">최근 검색 내역</string>
     <string name="past_history">과거 진료내역</string>
     <string name="reserve_history">접수 내역</string>
+    <string name="popular_hospital">인기 병원</string>
+
+    <string name="naver_client_id">2l5wy5359k</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_custom_dialog">CustomDialogActivity</string>
+    <string name="title_activity_dialog">DialogActivity</string>
+    <string name="title_activity_example">ExampleActivity</string>
 </resources>

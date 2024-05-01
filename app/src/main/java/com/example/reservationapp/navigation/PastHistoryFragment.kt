@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.reservationapp.Adapter.HistoryAdapter
+import com.example.reservationapp.Adapter.PastHistoryAdapter
 import com.example.reservationapp.Model.HistoryItem
 import com.example.reservationapp.databinding.FragmentPastHistoryBinding
 
@@ -15,7 +15,7 @@ import com.example.reservationapp.databinding.FragmentPastHistoryBinding
 class PastHistoryFragment : Fragment() {
     private lateinit var binding: FragmentPastHistoryBinding
 
-    private lateinit var adapter: HistoryAdapter
+    private lateinit var adapter: PastHistoryAdapter
     private lateinit var historyList: ArrayList<HistoryItem>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -23,7 +23,7 @@ class PastHistoryFragment : Fragment() {
 
 
         //진료내역 recyclerview
-        adapter = HistoryAdapter()
+        adapter = PastHistoryAdapter()
         val recyclerView = binding.pastHistoryRecyclerView
         val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
@@ -38,6 +38,8 @@ class PastHistoryFragment : Fragment() {
         historyList.add(HistoryItem("진료완료","서울모이비인후과", "이비인후과", "3/15(금) 14:30"))
         historyList.add(HistoryItem("진료완료", "강남성형외과", "성형외과", "3/30(토) 11:00"))
         adapter.updatelist(historyList)
+
+
 
         return binding.root
     }

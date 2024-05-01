@@ -595,13 +595,14 @@
 
             <TableLayout
                 android:id="@+id/tableLayout_reserve_time"
+                android:shrinkColumns="*"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="@+id/imageView_time_arrow_open"
                 app:layout_constraintStart_toStartOf="@+id/imageView_time"
-                app:layout_constraintTop_toBottomOf="@+id/imageView_time"></TableLayout>
+                app:layout_constraintTop_toBottomOf="@+id/imageView_time" />
 
 
             <!-- 시간 선택 밑 구분선 -->
@@ -631,22 +632,23 @@
             <!-- 예약하기 버튼 -->
             <Button
                 android:id="@+id/ReservationButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="100dp"
                 android:layout_marginBottom="30dp"
-                android:background="@drawable/custom_button"
+                android:background="@drawable/button_style"
+                android:enabled="false"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
-                android:text="예약"
+                android:text="예약하기"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_time_arrow_open"
+                app:layout_constraintStart_toStartOf="@+id/imageView_time"
                 app:layout_constraintTop_toBottomOf="@+id/textView_doctor" />
 
 
