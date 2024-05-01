@@ -20,7 +20,7 @@
         app:tint="@color/dark_green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/hospital" />
+        app:srcCompat="@drawable/image_hospital" />
 
     <TextView
         android:id="@+id/hospital_name_TextView"

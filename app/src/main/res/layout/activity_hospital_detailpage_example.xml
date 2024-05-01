@@ -57,7 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_status"
-                app:srcCompat="@drawable/hospitalex" />
+                app:srcCompat="@drawable/ex_hospital" />
 
 
             <!-- 병원 진료가능 상태, 대기인원 -->
@@ -133,7 +133,7 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="@+id/imageView_today_time"
                 app:layout_constraintTop_toBottomOf="@+id/imageView_today_time"
-                app:srcCompat="@drawable/ic_telephone" />
+                app:srcCompat="@drawable/ic_call" />
 
             <TextView
                 android:id="@+id/textView_hospital_call"
