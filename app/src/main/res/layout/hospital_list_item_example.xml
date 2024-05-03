@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="250dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/hospital_list_style">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints">
+    <!-- 병원 대표 사진 -->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="125dp"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ex_hospital" />
+    </FrameLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="125dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- 병원 이름 -->
+        <TextView
+            android:id="@+id/hospitalNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:text="원소아청소년과의원"
+            android:theme="@style/TextView14dpBlackBold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 별점 숫자 -->
+        <TextView
+            android:id="@+id/starScopeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="4.5"
+            android:theme="@style/TextView12dpDarkGray"
+            app:layout_constraintBottom_toBottomOf="@+id/hospitalNameTextView"
+            app:layout_constraintStart_toEndOf="@+id/hospitalNameTextView"
+            app:layout_constraintTop_toTopOf="@+id/hospitalNameTextView" />
+
+        <!-- 영업 시간 -->
+        <TextView
+            android:id="@+id/openTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="목요일 09:00~18:00"
+            android:theme="@style/TextView12dpDarkGray"
+            app:layout_constraintStart_toStartOf="@+id/hospitalNameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/hospitalNameTextView" />
+
+        <!-- 진료과명 -->
+        <TextView
+            android:id="@+id/classTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="소아청소년과"
+            android:theme="@style/TextView12dpDarkGray"
+            app:layout_constraintBottom_toBottomOf="@+id/openTimeTextView"
+            app:layout_constraintStart_toEndOf="@+id/openTimeTextView"
+            app:layout_constraintTop_toTopOf="@+id/openTimeTextView" />
+
+        <!-- 병원 주소 -->
+        <ImageView
+            android:id="@+id/hospital_position_imageView"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+            app:layout_constraintStart_toStartOf="@+id/openTimeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/openTimeTextView"
+            app:srcCompat="@drawable/image_marker" />
+        <TextView
+            android:id="@+id/hospital_address_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="경기도 화성시 장지동"
+            android:theme="@style/TextView12dpDarkGray"
+            app:layout_constraintBottom_toBottomOf="@+id/hospital_position_imageView"
+            app:layout_constraintStart_toEndOf="@+id/hospital_position_imageView"
+            app:layout_constraintTop_toTopOf="@+id/hospital_position_imageView" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/pink"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/status_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="진료중"
+                android:theme="@style/TextView12dpDarkGray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

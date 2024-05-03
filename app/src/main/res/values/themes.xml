@@ -14,8 +14,37 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+    <!-- Custom -->
     <style name="FullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="TextView12dpDarkGray">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColorHint">@color/dark_gray</item>
+    </style>
+
+    <style name="TextView14dpBlackBold">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextView15dpBlackBold">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextView12dpGreenBold">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/dark_green</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="hospitalListItemImageView">
+        <item name="android:topLeftRadius">10dp</item>
+        <item name="android:topRightRadius">10dp</item>
     </style>
 
     <style name="AppTheme"></style>

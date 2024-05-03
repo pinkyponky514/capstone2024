@@ -6,15 +6,20 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.databinding.ActivityMainBinding
 import com.example.reservationapp.navigation.CommunityFragment
 import com.example.reservationapp.navigation.HomeFragment
+import com.example.reservationapp.navigation.MedicalHistoryFragment
 
 //메인메뉴
 class MainActivity : AppCompatActivity() {
     private lateinit var mContext: Context
     private lateinit var binding: ActivityMainBinding
     //var currentLocation: LatLng? = null
+
+    var searchRecentWordList = ArrayList<RecentItem>()
 
     var userName: String = "hansung"
 
@@ -24,21 +29,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
         mContext = this //다른 class에서 main class의 함수를 쓸 수 있도록
-        //userName = "hansung"
 
-        binding.navigation.selectedItemId = R.id.homeFrag //처음 실행시 홈 선택으로 시작
-        setFragment(HomeFragment())
+        //searchRecentWordList = (intent.getSerializableExtra("searchWordList") as ArrayList<RecentItem>?)!!
+        searchRecentWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
+
+        //binding.navigation.selectedItemId = R.id.homeFrag //처음 실행시 홈 선택으로 시작
+        setMainToFragment(HomeFragment())
         //네비게이션바 선택에 따른 화면전환
         binding.navigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.homeFrag -> {
-                    setFragment(HomeFragment())
+                R.id.homeFrag -> { //홈 버튼 클릭했을 때
+                    setMainToFragment(HomeFragment())
+                }
+                R.id.checkupFrag -> { //나의 진료내역 버튼 클릭했을 때
+                    setMainToFragment(MedicalHistoryFragment())
                 }
                 R.id.communityFrag -> { //커뮤니티 버튼 클릭했을 때
-                    setFragment(CommunityFragment())
+                    setMainToFragment(CommunityFragment())
                 }
                 R.id.moreFrag -> { //더보기 버튼 클릭했을때
-                        setActivity(mContext, HPDivisonActivity())
+                    setActivity(mContext, HPDivisonActivity())
                     /*
                     val intent = Intent(this, HPDivisonActivity::class.java)
                     startActivity(intent)
@@ -57,7 +67,25 @@ class MainActivity : AppCompatActivity() {
         //(context as Activity).finish()
     }
     //프래그먼트 전환 사용자정의 함수
+    fun setMainToFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.main_content, fragment).commit()
+    }
+    fun setFragment(currentFragment: Any,fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(currentFragment as Int, fragment).commit()
+    }
+    /*
     fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.main_content, fragment).commit()
     }
+    */
+
+    /*
+    fun setFragment(context: Context,fragment: Fragment) {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(context,fragment, null)
+            addToBackStack(null)
+        }
+    }
+    */
 }

@@ -26,6 +26,11 @@
             android:name=".HospitalActivity"
             android:exported="false" />
         <activity
+            android:name=".CustomDialogActivity"
+            android:exported="false"
+            android:label="@string/title_activity_custom_dialog"
+            android:theme="@style/FullScreenTheme" />
+        <activity
             android:name=".Final_Reservation"
             android:exported="false" />
         <activity
@@ -58,7 +63,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".navigation.CommunitypostFragment"
+            android:name=".navigation.CommunityPostFragment"
             android:exported="false" />
         <activity
             android:name=".navigation.CommunityChatFragment"

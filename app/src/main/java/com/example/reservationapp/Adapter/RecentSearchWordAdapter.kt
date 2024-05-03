@@ -13,16 +13,25 @@ import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.R
 
 
-private var recent_search_word_data = ArrayList<RecentItem>()
-
+var recent_search_word_data = ArrayList<RecentItem>()
+//lateinit var recent_search_word_data:ArrayList<RecentItem>
 
 //최근 검색단어 Adapter
 class RecentSearchWordAdapter:
     RecyclerView.Adapter<RecentSearchWordAdapter.ViewHolder>() {
-        inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             private var recent_textview: TextView
 
             init {
+                //recent_search_word_data = ArrayList()
+                /*
+                if(recent_search_word_data==null) {
+                    recent_search_word_data = ArrayList()
+                }
+                */
+
+
                 recent_textview = itemView.findViewById(R.id.search_word)
 
                 //최근 검색 단어 버튼을 클릭했을때
@@ -38,7 +47,6 @@ class RecentSearchWordAdapter:
 
                 //최근 검색 단어 x버튼 클릭했을때
                 itemView.findViewById<Button>(R.id.clear_button).setOnClickListener {
-                    //recentSearchWordList.removeAt(adapterPosition)
                     recent_search_word_data.removeAt(adapterPosition)
                     notifyDataSetChanged()
                 }
@@ -64,18 +72,16 @@ class RecentSearchWordAdapter:
 
 
     //데이터 갱신
-
     fun updateList(newList: ArrayList<RecentItem>) {
         recent_search_word_data = newList
-        Log.w("updateList", "${newList}")
+        Log.w("RecentSearchWordAdapter", "1. updateList: ${newList}")
         notifyDataSetChanged()
     }
 
-/*
-    fun updateList(newList: ArrayList<RecentItem>) {
-        recent_search_word_data.clear()
-        recent_search_word_data.addAll(0, newList)
-        notifyDataSetChanged()
+    //데이터 접근
+    fun getRecentWorldData(): ArrayList<RecentItem> {
+        return recent_search_word_data
     }
- */
+
+    //
 }

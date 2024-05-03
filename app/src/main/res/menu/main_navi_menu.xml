@@ -4,12 +4,14 @@
         android:id="@+id/homeFrag"
         android:title="@string/home"
         android:icon="@drawable/ic_home"
+        android:enabled="true"
+        android:checked="true"
         />
     <item
         android:id="@+id/checkupFrag"
         android:title="@string/checkup"
         android:icon="@drawable/ic_checkup"
-        android:enabled="true"/>
+        android:enabled="true" />
     <item
         android:id="@+id/communityFrag"
         android:title="@string/community"

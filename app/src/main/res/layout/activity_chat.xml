@@ -8,9 +8,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/messageLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,12 +34,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:theme="@style/TextView12dpDarkGray"
             android:hint="메시지를 입력하세요" />
 
         <Button
             android:id="@+id/sendButton"
+            android:background="@drawable/button_style"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:theme="@style/TextView12dpDarkGray"
             android:text="보내기" />
     </LinearLayout>
 

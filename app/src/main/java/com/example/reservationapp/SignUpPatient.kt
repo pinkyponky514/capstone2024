@@ -11,7 +11,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.reservationapp.Model.UserInfo
+import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.UserSignUpInfo
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -19,15 +20,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
 import java.util.*
 
-interface APIService {
-    @POST("/jwt-login/user/join")
-    fun postSignUp(@Body user: UserInfo): Call<UserInfo>
-
-}
 
 class SignUpPatient : AppCompatActivity() {
 
@@ -152,24 +146,24 @@ class SignUpPatient : AppCompatActivity() {
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
 
-            val userInfo = UserInfo(registerId, registerPassword, registerName)
-            val call = retrofit.create(APIService::class.java).postSignUp(userInfo)
-            call.enqueue(object: Callback<UserInfo> {
-                override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
+            val userSignupInfo = UserSignUpInfo(registerId, registerPassword, registerName)
+            val call = retrofit.create(APIService::class.java).postSignUp(userSignupInfo)
+            call.enqueue(object: Callback<UserSignUpInfo> {
+                override fun onResponse(call: Call<UserSignUpInfo>, response: Response<UserSignUpInfo>) {
                     if(response.isSuccessful())
-                        Log.d("Response: ", response.body().toString()) //통신 성공한 경우
+                        Log.d("Success Response", response.body().toString()) //통신 성공한 경우
                     else
                         Log.d("RESPONSE", "FAILURE") //통신 성공, 응답은 실패
                 }
 
-                override fun onFailure(call: Call<UserInfo>, t: Throwable) {
+                override fun onFailure(call: Call<UserSignUpInfo>, t: Throwable) {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }
             })
 
 
             // 회원가입 성공 시 메인 화면으로 이동
-            val intent = Intent(this@SignUpPatient, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish() // 현재 액티비티 종료
 
