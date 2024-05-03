@@ -40,7 +40,9 @@ class CommunityFragment : Fragment() {
         // RecyclerView에 Adapter 설정
         val itemList = listOf(
             CommunityItem(R.drawable.communityimage1, "세균 번식 속도가 얼마나 빠른지 아시나요 ?"),
-            CommunityItem(R.drawable.communityimage2, "우리 아이가 어제 수술을 했어요")
+            CommunityItem(R.drawable.communityimage2, "우리 아이가 어제 수술을 했어요"),
+            CommunityItem(R.drawable.communityimage3, "마스크는 어른보다 아이들이 더 많이 착용, 아이들에게 본받아야 할 부분"),
+            CommunityItem(R.drawable.communityimage4, "아플 때는 병원으로 바로 가세요. 참는 것은 독이 됩니다.")
             // 나머지 아이템 추가
         )
         adapter = CommunityImageAdapter(itemList) { position ->
