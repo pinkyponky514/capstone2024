@@ -35,17 +35,15 @@ class CustomDialogActivity(val list: List<String>): BottomSheetDialogFragment() 
                 tableRow = TableRow(requireContext())
                 tableRow?.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                 tableRow?.gravity = Gravity.CENTER_VERTICAL
-                //tableRow?.layoutParams = TableRow.LayoutParams()
                 listTableLayout.addView(tableRow)
             }
 
             val button = Button(requireContext())
             button.text = list[i]
 
-            //val minTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 9f, resources.displayMetrics)
-            //val maxTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics)
             button.setTextSize(TypedValue.COMPLEX_UNIT_PX, 15f)
             button.setAutoSizeTextTypeUniformWithConfiguration(9f.toInt(), 15f.toInt(), 1, TypedValue.COMPLEX_UNIT_DIP)
+            button.setBackgroundResource(requireContext().resources.getIdentifier("reserve_button_style", "drawable", requireContext().packageName))
 
             tableRow?.addView(button)
             buttonCountInRow++

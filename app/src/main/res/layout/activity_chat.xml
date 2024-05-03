@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:theme="@style/SearchViewTheme"
+            android:theme="@style/TextView12dpDarkGray"
             android:hint="메시지를 입력하세요" />
 
         <Button
@@ -42,7 +42,7 @@
             android:background="@drawable/button_style"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:theme="@style/SearchViewTheme"
+            android:theme="@style/TextView12dpDarkGray"
             android:text="보내기" />
     </LinearLayout>
 

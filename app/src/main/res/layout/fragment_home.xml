@@ -31,7 +31,7 @@
                 android:background="@drawable/searchview_style"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:theme="@style/SearchViewTheme"
+                android:theme="@style/TextView12dpDarkGray"
                 app:iconifiedByDefault="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

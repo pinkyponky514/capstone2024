@@ -23,21 +23,23 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
         private var Star_score_TextView: TextView //별점
         private var Opening_time_TextView: TextView //영업시간
         private var Hospital_address_TextView: TextView //병원주소
+        private var class_name_TextView: TextView //진료과명
 
 
         init {
             Hospital_name_TextView = itemView.findViewById(R.id.hospitalNameTextView)
             Star_score_TextView = itemView.findViewById(R.id.starScopeTextView)
-            Opening_time_TextView = itemView.findViewById(R.id.openingTimeTextView)
-            Hospital_address_TextView = itemView.findViewById(R.id.hospitalAddressTextView)
+            Opening_time_TextView = itemView.findViewById(R.id.openTimeTextView)
+            Hospital_address_TextView = itemView.findViewById(R.id.hospital_address_TextView)
+            class_name_TextView = itemView.findViewById(R.id.classTextView)
 
             //병원 itemView 눌렀을때
             itemView.setOnClickListener {
-                val hospitalNameTextView = itemView.findViewById<TextView>(R.id.hospitalNameTextView)
+                //val hospitalNameTextView = itemView.findViewById<TextView>(R.id.hospitalNameTextView)
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
 
-                intent.putExtra("hospitalName", hospitalNameTextView.text)
+                intent.putExtra("hospitalName", Hospital_name_TextView.text.toString())
                 context.startActivity(intent)
             }
         }
@@ -50,12 +52,13 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
             Star_score_TextView.text = list.starScore
             Opening_time_TextView.text = list.openingTimes
             Hospital_address_TextView.text = list.hospitalAddress
+            class_name_TextView.text = list.className
         }
     }
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): HospitalListAdapter.ViewHolder {
-        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.hospital_list_item, viewGroup, false)
+        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.hospital_list_item_example, viewGroup, false)
         return ViewHolder(layoutInflater)
     }
     //ViewHolder에 데이터 연결

@@ -1,5 +1,6 @@
 package com.example.reservationapp
 
+import RetrofitClient
 import android.content.Intent
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,15 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
+import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.UserLoginInfo
+import com.example.reservationapp.Model.UserSignUpInfo
 import com.example.reservationapp.databinding.ActivityLoginPatientBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 //로그인 화면
 class LoginPatientActivity: AppCompatActivity() {
@@ -19,12 +28,15 @@ class LoginPatientActivity: AppCompatActivity() {
     lateinit var userId: String //유저가 입력한 아이디
     lateinit var userPassword: String //유저가 입력한 비밀번호
 
+    private lateinit var retrofitClient: RetrofitClient
+    private lateinit var apiService: APIService
+
     //onStart()할 때마다 입력칸 초기화 시키기 위해 전역변수 선언
-    private lateinit var IdEditText: EditText
-    private lateinit var PasswordEditText: EditText
+    private lateinit var IdEditText: EditText //id EditText
+    private lateinit var PasswordEditText: EditText //pw EditText
     private lateinit var PasswordCheckTextView: TextView
 
-    private var idFlag: Boolean = false //email 감지 플래그
+    private var idFlag: Boolean = false //id 감지 플래그
     private var pwFlag: Boolean = false //pw 감지 플래그
     private var flag: Boolean = false
 
@@ -96,14 +108,34 @@ class LoginPatientActivity: AppCompatActivity() {
         //
 
 
-
         //로그인 버튼 눌렀을때
         LoginButton.setOnClickListener {
             userId = IdEditText.text.toString()
             userPassword = PasswordEditText.text.toString()
             Log.w("userId, userPassword", ": $userId" + ", $userPassword")
 
+            val userLoginInfo = UserLoginInfo(userId, userPassword)
+
+            retrofitClient = RetrofitClient().getInstance()
+            apiService = RetrofitClient().getRetrofitInterface()!!
+
+
+            apiService.postLogin(userLoginInfo).enqueue(object: Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        if(response.isSuccessful())
+                            Log.d("Success Response", response.body().toString()) //통신 성공한 경우
+                        else
+                            Log.d("RESPONSE", "FAILURE") //통신 성공, 응답은 실패
+                    }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                    }
+
+            })
+
             val intent = Intent(this, MainActivity::class.java)
+            //intent.putExtra("userId", userLoginInfo.id)
             startActivity(intent)
             finish()
         }

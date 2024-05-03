@@ -6,10 +6,14 @@ import com.google.gson.annotations.SerializedName
 
 
 //Retrofit - Model
-data class UserInfo (
+data class UserSignUpInfo (
     @SerializedName("id") var id: String,
     @SerializedName("password") var password: String,
     @SerializedName("name") var name: String
+)
+data class UserLoginInfo (
+    @SerializedName("id") var id: String,
+    @SerializedName("password") var password: String
 )
 
 //ReserveAlarmAdapter
@@ -53,7 +57,8 @@ data class HospitalItem (
     var hospitalName: String, //병원이름
     var starScore: String, //별점(4.0)
     var openingTimes: String, //영업시간
-    var hospitalAddress: String //병원주소
+    var hospitalAddress: String, //병원주소
+    var className: String //진료과명
 )
 
 //ChattingAdapter
