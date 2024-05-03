@@ -7,7 +7,7 @@
     android:layout_height="100dp"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="10dp"
-    android:background="@drawable/reserve_alarm_item_style"
+    android:background="@drawable/style_reserve_alarm_item"
     android:orientation="vertical">
 
     <ImageView
@@ -16,7 +16,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="9dp"
         android:layout_marginTop="9dp"
-        android:background="@drawable/image_background_style"
+        android:background="@drawable/style_image_background"
         app:tint="@color/dark_green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

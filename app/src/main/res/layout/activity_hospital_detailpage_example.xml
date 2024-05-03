@@ -151,7 +151,7 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
-                android:background="@color/black"
+                android:background="@color/gray"
                 app:layout_constraintTop_toBottomOf="@+id/textView_hospital_call"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -620,11 +620,11 @@
 
             <!-- 의사 선생님 -->
             <TextView
-                android:id="@+id/textView_doctor"
+                android:id="@+id/textView_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="의사선생님 정보"
+                android:text="리뷰"
                 app:layout_constraintStart_toStartOf="@+id/textView_reserve"
                 app:layout_constraintTop_toBottomOf="@+id/divLine4" />
 
@@ -637,7 +637,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="100dp"
                 android:layout_marginBottom="30dp"
-                android:background="@drawable/button_style"
+                android:background="@drawable/style_button"
                 android:enabled="false"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
@@ -649,7 +649,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView_time_arrow_open"
                 app:layout_constraintStart_toStartOf="@+id/imageView_time"
-                app:layout_constraintTop_toBottomOf="@+id/textView_doctor" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_review" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

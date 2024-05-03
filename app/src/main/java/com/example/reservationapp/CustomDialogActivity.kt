@@ -43,7 +43,7 @@ class CustomDialogActivity(val list: List<String>): BottomSheetDialogFragment() 
 
             button.setTextSize(TypedValue.COMPLEX_UNIT_PX, 15f)
             button.setAutoSizeTextTypeUniformWithConfiguration(9f.toInt(), 15f.toInt(), 1, TypedValue.COMPLEX_UNIT_DIP)
-            button.setBackgroundResource(requireContext().resources.getIdentifier("reserve_button_style", "drawable", requireContext().packageName))
+            button.setBackgroundResource(requireContext().resources.getIdentifier("style_reserve_button", "drawable", requireContext().packageName))
 
             tableRow?.addView(button)
             buttonCountInRow++

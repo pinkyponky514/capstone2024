@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
-    android:background="@drawable/recent_search_item_style">
+    android:background="@drawable/style_recent_search_item">
 
     <!-- 최근 검색어 아이템 -->
     <TextView
@@ -28,7 +28,7 @@
         android:layout_height="15dp"
         android:layout_marginStart="7dp"
         android:layout_marginEnd="5dp"
-        android:background="@drawable/recent_search_clear_button_style"
+        android:background="@drawable/style_recent_search_clear_button"
         android:text="X"
         android:textColor="@color/white"
         android:textSize="10dp"
