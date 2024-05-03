@@ -61,10 +61,10 @@
             android:name=".navigation.CommunitypostFragment"
             android:exported="false" />
         <activity
-            android:name=".navigation.CommunitychatFragment"
+            android:name=".navigation.CommunityChatFragment"
             android:exported="false" />
         <activity
-            android:name=".navigation.CommunitydetailFragment"
+            android:name=".navigation.CommunityDetailFragment"
             android:exported="false" />
         <activity
             android:name=".navigation.CommunityFragment"

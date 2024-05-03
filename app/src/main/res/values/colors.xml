@@ -19,6 +19,8 @@
     <color name="reservation_color">#FFA500</color>
     <color name="hintTextColor">#CCCCCC</color>
     <color name="chat_message_background_color">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="select_button_color">#FF018086</color>
 
 
 </resources>

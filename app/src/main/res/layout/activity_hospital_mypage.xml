@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp">
 
         <LinearLayout
@@ -88,27 +89,183 @@
             app:layout_constraintStart_toStartOf="@+id/explanation"
             app:layout_constraintTop_toBottomOf="@+id/explanation" />
 
+        <!-- 진료과별 예약 -->
+
         <TextView
-            android:id="@+id/Clinichours"
+            android:id="@+id/class_reserve_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/class_reserve"
+            app:layout_constraintStart_toStartOf="@+id/explanation"
+            app:layout_constraintTop_toBottomOf="@id/explanation2" />
+
+        <TableLayout
+            android:id="@+id/tableLayout_hospital_time_guide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@+id/class_reserve_TextView"
+            app:layout_constraintTop_toBottomOf="@id/class_reserve_TextView">
+
+            <TableRow
+                android:id="@+id/tableRow_lunch_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/class_button1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/class_button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/class_button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/class_button4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow_lunch_time2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/class_button5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/class_button6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/class_button7"
+                    android:layout_width="64dp"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/class_button8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeMaxTextSize="15dp"
+                    android:autoSizeMinTextSize="9dp"
+                    android:autoSizeStepGranularity="1dp"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/button_shadow"
+                    android:text="Button" />
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:id="@+id/Hospital_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@+id/class_reserve_TextView"
+            app:layout_constraintTop_toBottomOf="@id/class_reserve_TextView">
+
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/ClinicHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:text="진료 시간"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@+id/explanation"
-            app:layout_constraintTop_toBottomOf="@+id/explanation2" />
+            app:layout_constraintStart_toStartOf="@+id/class_reserve_TextView"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout_hospital_time_guide" />
 
         <TableLayout
             android:id="@+id/tableLayout"
-            android:layout_width="356dp"
-            android:layout_height="204dp"
+            android:layout_width="358dp"
+            android:layout_height="213dp"
             android:layout_marginStart="28dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="28dp"
             android:stretchColumns="*"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Clinichours">
+            app:layout_constraintTop_toBottomOf="@id/ClinicHours">
 
             <!-- 테이블 헤더 -->
             <TableRow>
@@ -121,7 +278,7 @@
 
                 <TextView
                     style="@style/TextStyle.Bold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="182dp"
                     android:layout_height="wrap_content"
                     android:text="진료 시간" />
             </TableRow>
@@ -136,9 +293,20 @@
                     android:text="월요일" />
 
                 <EditText
-                    android:id="@+id/editTextMon"
+                    android:id="@+id/MonStartTime"
                     style="@style/EditTextStyle"
-                    android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="시작 시간" />
+
+                <EditText
+                    android:id="@+id/MonEndTime"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="종료 시간" />
             </TableRow>
 
             <!-- 화요일 -->
@@ -151,9 +319,20 @@
                     android:text="화요일" />
 
                 <EditText
-                    android:id="@+id/editTextTue"
+                    android:id="@+id/TueStartTime"
                     style="@style/EditTextStyle"
-                    android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="시작 시간" />
+
+                <EditText
+                    android:id="@+id/TueEndTime"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="종료 시간" />
             </TableRow>
 
             <!-- 수요일 -->
@@ -166,9 +345,20 @@
                     android:text="수요일" />
 
                 <EditText
-                    android:id="@+id/editTextWed"
+                    android:id="@+id/WedStartTime"
                     style="@style/EditTextStyle"
-                    android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="시작 시간" />
+
+                <EditText
+                    android:id="@+id/WedEndTime"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="종료 시간" />
             </TableRow>
 
             <!-- 목요일 -->
@@ -181,9 +371,20 @@
                     android:text="목요일" />
 
                 <EditText
-                    android:id="@+id/editTextThu"
+                    android:id="@+id/ThuStartTime"
                     style="@style/EditTextStyle"
-                    android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="시작 시간" />
+
+                <EditText
+                    android:id="@+id/ThuEndTime"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="종료 시간" />
             </TableRow>
 
             <!-- 금요일 -->
@@ -196,9 +397,20 @@
                     android:text="금요일" />
 
                 <EditText
-                    android:id="@+id/editTextFri"
+                    android:id="@+id/FriStartTime"
                     style="@style/EditTextStyle"
-                    android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="시작 시간" />
+
+                <EditText
+                    android:id="@+id/FriEndTime"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="종료 시간" />
             </TableRow>
 
             <!-- 토요일 -->
@@ -211,9 +423,20 @@
                     android:text="토요일" />
 
                 <EditText
-                    android:id="@+id/editTextSat"
+                    android:id="@+id/SatStartTime"
                     style="@style/EditTextStyle"
-                    android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="시작 시간" />
+
+                <EditText
+                    android:id="@+id/SatEndTime"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="종료 시간" />
             </TableRow>
 
             <!-- 일요일 -->
@@ -226,82 +449,119 @@
                     android:text="일요일" />
 
                 <EditText
-                    android:id="@+id/editTextSun"
+                    android:id="@+id/SunStartTime"
                     style="@style/EditTextStyle"
-                    android:hint="진료시간 입력하세요 (예: 09:00 - 18:00)" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="시작 시간" />
+
+                <EditText
+                    android:id="@+id/SunEndTime"
+                    style="@style/EditTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="종료 시간" />
             </TableRow>
         </TableLayout>
 
         <TextView
-            android:id="@+id/weekendlunch"
+            android:id="@+id/WeekendLunch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="44dp"
             android:text="점심 시간"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@+id/explanation"
+            app:layout_constraintStart_toStartOf="@+id/ClinicHours"
             app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
         <TableLayout
             android:id="@+id/tableLayout2"
             android:layout_width="355dp"
-            android:layout_height="77dp"
+            android:layout_height="87dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="28dp"
+            android:stretchColumns="*"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weekendlunch">
+            app:layout_constraintTop_toBottomOf="@id/WeekendLunch">
 
-            <!-- 행 1: 평일 -->
-            <TableRow>
+        <TableRow>
+            <TextView
+                style="@style/TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="구분" />
 
-                <TextView
-                    style="@style/EditTextStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.8"
-                    android:padding="8dp"
-                    android:text="평일" />
+            <TextView
+                style="@style/TextStyle.Bold"
+                android:layout_width="182dp"
+                android:layout_height="wrap_content"
+                android:text="점심 시간" />
+        </TableRow>
 
-                <EditText
-                    android:id="@+id/editTextWeekdayLunchTime"
-                    style="@style/EditTextStyle"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2"
-                    android:hint="점심시간 입력하세요 (예: 12:00 - 13:00)"
-                    android:padding="8dp" />
-            </TableRow>
+        <TableRow>
 
-            <!-- 행 2: 주말 -->
-            <TableRow>
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="평일" />
 
-                <TextView
-                    style="@style/EditTextStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.8"
-                    android:padding="8dp"
-                    android:text="주말" />
+            <EditText
+                android:id="@+id/DayStartTime"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="시작 시간" />
 
-                <EditText
-                    android:id="@+id/editTextWeekendLunchTime"
-                    style="@style/EditTextStyle"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2"
-                    android:hint="점심시간 입력하세요 (예: 12:00 - 13:00)"
-                    android:padding="8dp" />
-            </TableRow>
+            <EditText
+                android:id="@+id/DayEndTime"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="종료 시간" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주말" />
+
+            <EditText
+                android:id="@+id/WeekendStartTime"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="시작 시간" />
+
+            <EditText
+                android:id="@+id/WeekendEndTime"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="종료 시간" />
+        </TableRow>
+
         </TableLayout>
 
         <TextView
             android:id="@+id/restday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="52dp"
             android:text="공휴일"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@+id/weekendlunch"
+            app:layout_constraintStart_toStartOf="@+id/WeekendLunch"
             app:layout_constraintTop_toBottomOf="@+id/tableLayout2" />
 
         <RadioGroup
@@ -327,7 +587,7 @@
 
         </RadioGroup>
 
-
+        <!-- 저장 버튼 -->
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"

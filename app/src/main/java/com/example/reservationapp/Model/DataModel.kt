@@ -47,3 +47,10 @@ data class ReservationItem(
     val birthDate: String, // 생년월일
     val reservationDate: String // 예약 날짜
 )
+
+// DataModel.kt
+data class CommunityItem(
+    val imageResource: Int,
+    val title: String,
+    //val detail: String
+)

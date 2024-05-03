@@ -10,8 +10,9 @@
 
     <!-- RecyclerView: 이미지 목록을 표시하는 뷰 -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCommunityPosts"
+        android:id="@+id/recyclerViewCommunity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-</LinearLayout>
+    </LinearLayout>
