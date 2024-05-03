@@ -1,7 +1,7 @@
 package com.example.reservationapp.navigation
 
 
-import CustomDialogActivity
+import com.example.reservationapp.CustomDialogActivity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log

@@ -14,7 +14,7 @@
         android:layout_height="223dp"
         android:layout_marginTop="36dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/communityimage1"
+        android:src="@drawable/ex_communityimage1"
         app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.478"

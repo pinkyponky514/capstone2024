@@ -72,7 +72,6 @@ data class ChatItem (
     var text : String //메세지
 )
 
-<<<<<<< HEAD
 // 예약된 내역 모델 클래스
 data class ReservationItem(
     val time: String, // 예약 시간
@@ -87,7 +86,7 @@ data class CommunityItem(
     val title: String,
     //val detail: String
 )
-=======
+
 //HistoryAdapter
 data class HistoryItem (
     var status: String, //진료상태
@@ -95,4 +94,3 @@ data class HistoryItem (
     var className: String, //진료과명
     var reserveDate: String, //예약 날짜
 )
->>>>>>> yhg
