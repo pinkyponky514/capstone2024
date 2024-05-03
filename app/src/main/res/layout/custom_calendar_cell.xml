@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- custom_calendar_cell.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/event_indicator"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/circle_background" /> <!-- 하늘색 동그라미로 채우기 위해 배경을 설정 -->
+</LinearLayout>

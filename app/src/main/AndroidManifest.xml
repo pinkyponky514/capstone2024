@@ -20,15 +20,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ExampleActivity"
-            android:exported="false"
-            android:label="@string/title_activity_example"
-            android:theme="@style/FullScreenTheme" />
+            android:name=".Hospital_Mypage"
+            android:exported="false" />
         <activity
-            android:name=".DialogActivity"
-            android:exported="false"
-            android:label="@string/title_activity_dialog"
-            android:theme="@style/FullScreenTheme" />
+            android:name=".HospitalActivity"
+            android:exported="false" />
         <activity
             android:name=".CustomDialogActivity"
             android:exported="false"
@@ -67,13 +63,13 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".navigation.CommunitypostFragment"
+            android:name=".navigation.CommunityPostFragment"
             android:exported="false" />
         <activity
-            android:name=".navigation.CommunitychatFragment"
+            android:name=".navigation.CommunityChatFragment"
             android:exported="false" />
         <activity
-            android:name=".navigation.CommunitydetailFragment"
+            android:name=".navigation.CommunityDetailFragment"
             android:exported="false" />
         <activity
             android:name=".navigation.CommunityFragment"

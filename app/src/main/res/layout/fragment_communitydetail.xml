@@ -5,6 +5,59 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".navigation.CommunitydetailFragment">
+    android:padding="16dp"
+    tools:context=".navigation.CommunityDetailFragment">
 
+    <ImageView
+        android:id="@+id/imageViewDetail"
+        android:layout_width="356dp"
+        android:layout_height="223dp"
+        android:layout_marginTop="36dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ex_communityimage1"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:text="세균 번식 속도가 얼마나 빠른지 아시나요 ?"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewDetail" />
+
+    <TextView
+        android:id="@+id/textViewContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="세균의 번식 속도는 여러 요인에 따라 다르지만, 일반적으로 이중나선균과 같은 일부 세균은 20분에서 1시간 사이에 한 번 혹은 그 이상으로 번식할 수 있습니다. 이러한 빠른 번식은 적절한 영양분과 환경 조건이 제공되면 가능합니다. 세균의 빠른 번식 속도는 그들이 짧은 세대 간격과 많은 수의 후손을 생성할 수 있기 때문에 놀라운 것입니다. 이것은 세균이 질병의 전파나 식품 부패 등에 어떻게 영향을 미칠 수 있는지에 대한 중요한 이슈 중 하나입니다."
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+
+    <Button
+        android:id="@+id/buttonChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="채팅하기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewContent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
