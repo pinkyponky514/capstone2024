@@ -10,6 +10,5 @@ class CommunityChatFragment : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.fragment_communitychat)
-
     }
 }
