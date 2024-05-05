@@ -520,116 +520,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- 예약하기 -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/reservationConstraintLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:paddingBottom="28dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hospital_address_ConstraintLayout">
-                <!-- 예약 날짜, 시간 선택하기 -->
-                <TextView
-                    android:id="@+id/textView_reserve"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="28dp"
-                    android:layout_marginTop="28dp"
-                    android:text="예약하기"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- 날짜 -->
-                <ImageView
-                    android:id="@+id/imageView_calendar"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="@+id/textView_reserve"
-                    app:layout_constraintTop_toBottomOf="@+id/textView_reserve"
-                    app:srcCompat="@drawable/image_date" />
-
-                <TextView
-                    android:id="@+id/textView_reserve_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:hint="날짜를 선택하세요."
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView_calendar"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView_date_arrow_open"
-                    app:layout_constraintStart_toEndOf="@+id/imageView_calendar"
-                    app:layout_constraintTop_toTopOf="@+id/imageView_calendar" />
-
-                <ImageView
-                    android:id="@+id/imageView_date_arrow_open"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="28dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/imageView_calendar"
-                    app:srcCompat="@drawable/ic_arrow_open" />
-
-                <CalendarView
-                    android:id="@+id/calendarView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView_date_arrow_open"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/imageView_calendar"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView_calendar"
-                    app:layout_goneMarginTop="10dp"
-                    tools:ignore="MissingConstraints" />
-
-                <!-- 시간 -->
-                <ImageView
-                    android:id="@+id/imageView_time"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="@+id/imageView_calendar"
-                    app:layout_constraintTop_toBottomOf="@+id/calendarView"
-                    app:srcCompat="@drawable/ic_clock" />
-
-                <TextView
-                    android:id="@+id/textView_reserve_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:hint="시간을 선택하세요."
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView_time"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView_time_arrow_open"
-                    app:layout_constraintStart_toEndOf="@+id/imageView_time"
-                    app:layout_constraintTop_toTopOf="@+id/imageView_time" />
-
-                <ImageView
-                    android:id="@+id/imageView_time_arrow_open"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView_date_arrow_open"
-                    app:layout_constraintTop_toTopOf="@+id/imageView_time"
-                    app:srcCompat="@drawable/ic_arrow_open" />
-
-                <TableLayout
-                    android:id="@+id/tableLayout_reserve_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:shrinkColumns="*"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView_time_arrow_open"
-                    app:layout_constraintStart_toStartOf="@+id/imageView_time"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView_time" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- 리뷰쓰기 -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -637,11 +527,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingBottom="200dp"
                 android:background="@color/white"
+                android:paddingBottom="200dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reservationConstraintLayout">
+                app:layout_constraintTop_toBottomOf="@+id/hospital_address_ConstraintLayout">
                 <!-- 리뷰 -->
                 <TextView
                     android:id="@+id/textView_review"
@@ -652,6 +542,7 @@
                     android:text="리뷰"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/reviewCountTextView"
                     android:layout_width="wrap_content"
