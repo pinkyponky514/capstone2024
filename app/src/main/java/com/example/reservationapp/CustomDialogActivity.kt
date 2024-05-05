@@ -42,9 +42,10 @@ class CustomDialogActivity(val list: List<String>): BottomSheetDialogFragment() 
 
             val button = Button(requireContext())
             button.text = list[i]
+            //button.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (37*resources.displayMetrics.density).toInt())
 
-            button.setTextSize(TypedValue.COMPLEX_UNIT_PX, 15f)
-            button.setAutoSizeTextTypeUniformWithConfiguration(9f.toInt(), 15f.toInt(), 1, TypedValue.COMPLEX_UNIT_DIP)
+            button.setTextSize(TypedValue.COMPLEX_UNIT_PX, 13f)
+            button.setAutoSizeTextTypeUniformWithConfiguration(9f.toInt(), 13f.toInt(), 1, TypedValue.COMPLEX_UNIT_DIP)
             button.setBackgroundResource(requireContext().resources.getIdentifier("style_reserve_button", "drawable", requireContext().packageName))
 
             tableRow?.addView(button)

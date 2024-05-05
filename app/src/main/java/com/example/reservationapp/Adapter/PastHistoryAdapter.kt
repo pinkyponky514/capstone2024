@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.Model.HistoryItem
@@ -48,7 +47,7 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
         }
     }
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PastHistoryAdapter.ViewHolder {
-        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.history_item, viewGroup, false)
+        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_history, viewGroup, false)
         return ViewHolder(layoutInflater)
     }
 

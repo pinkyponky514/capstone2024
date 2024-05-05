@@ -28,11 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
         android:layout_marginBottom="7dp"
-        android:autoSizeMaxTextSize="15dp"
-        android:autoSizeMinTextSize="9dp"
-        android:autoSizeStepGranularity="1dp"
         android:autoSizeTextType="uniform"
         android:text="협진 병원 이름"
+        android:autoSizeMinTextSize="9dp"
+        android:autoSizeMaxTextSize="13dp"
+        android:autoSizeStepGranularity="1dp"
+        android:maxLines="1"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/date_TextView"
         app:layout_constraintStart_toStartOf="parent" />
@@ -43,8 +44,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="7dp"
         android:text="협진 날짜/시간"
-        android:textColor="@color/white"
         android:textSize="9dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/hospital_name_TextView" />
 

@@ -94,3 +94,11 @@ data class HistoryItem (
     var className: String, //진료과명
     var reserveDate: String, //예약 날짜
 )
+
+//ReviewAdapter
+data class ReviewItem (
+    var starScore: String, //별점
+    var comment: String, //리뷰내용
+    var reviewDate: String, //날짜
+    var userId: String //유저이름
+)

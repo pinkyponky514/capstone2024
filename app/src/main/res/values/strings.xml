@@ -14,6 +14,7 @@
     <string name="past_history">과거 진료내역</string>
     <string name="reserve_history">접수 내역</string>
     <string name="popular_hospital">인기 병원</string>
+    <string name="notReviewText">아직 리뷰가 없어요 첫 리뷰를 작성해 볼까요?</string>
 
     <string name="naver_client_id">2l5wy5359k</string>
 

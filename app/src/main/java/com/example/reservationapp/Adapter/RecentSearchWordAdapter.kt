@@ -59,7 +59,7 @@ class RecentSearchWordAdapter:
         }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.recent_search_item, viewGroup, false)
+        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_recent_search, viewGroup, false)
         return ViewHolder(layoutInflater)
     }
     //ViewHolder에 데이터 연결
