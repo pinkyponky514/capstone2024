@@ -162,7 +162,8 @@ class HomeFragment : Fragment() {
         }
 
         //채팅 서비스 버튼 클릭 이벤트 처리
-        val chatServiceButton = binding.floatingActionButton.setOnClickListener {
+        val chatServiceButton = binding.floatingActionButton
+        chatServiceButton.setOnClickListener {
             val intent = Intent(requireActivity(), ChatActivity::class.java)
             startActivity(intent)
         }

@@ -3,8 +3,6 @@ package com.example.reservationapp.Model
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -58,12 +56,12 @@ data class RecentItem(
 }
 
 //HospitalListAdapter
-data class HospitalItem (
+data class HospitalItem(
     var hospitalName: String, //병원이름
     var starScore: String, //별점(4.0)
     var openingTimes: String, //영업시간
     var hospitalAddress: String, //병원주소
-    var className: String //진료과명
+    var className: List<String> //진료과명
 )
 
 //ChattingAdapter
@@ -101,4 +99,12 @@ data class ReviewItem (
     var comment: String, //리뷰내용
     var reviewDate: String, //날짜
     var userId: String //유저이름
+)
+
+//Filter
+data class FilterItem (
+    var hospitalName: String, //병원이름
+    var hospitalAddress: String, //병원주소
+    var className: List<String>, //진료과
+    var weekTime: HashMap<String, String> //월~금 진료시간
 )

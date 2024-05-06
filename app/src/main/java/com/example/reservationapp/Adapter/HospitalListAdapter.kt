@@ -51,7 +51,11 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
             Star_score_TextView.text = list.starScore
             Opening_time_TextView.text = list.openingTimes
             Hospital_address_TextView.text = list.hospitalAddress
-            class_name_TextView.text = list.className
+            var string = ""
+            for(i in list.className.indices) {
+                string += (list.className[i]+" ")
+            }
+            class_name_TextView.text = string
         }
     }
 
