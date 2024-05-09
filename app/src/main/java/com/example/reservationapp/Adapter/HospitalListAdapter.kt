@@ -34,10 +34,8 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
 
             //병원 itemView 눌렀을때
             itemView.setOnClickListener {
-                //val hospitalNameTextView = itemView.findViewById<TextView>(R.id.hospitalNameTextView)
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
-
                 intent.putExtra("hospitalName", Hospital_name_TextView.text.toString())
                 context.startActivity(intent)
             }
@@ -51,6 +49,7 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
             Star_score_TextView.text = list.starScore
             Opening_time_TextView.text = list.openingTimes
             Hospital_address_TextView.text = list.hospitalAddress
+
             var string = ""
             for(i in list.className.indices) {
                 string += (list.className[i]+" ")

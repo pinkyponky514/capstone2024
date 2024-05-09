@@ -32,7 +32,8 @@ class ChattingAdapter:
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(chatArray[position].user.equals(MainActivity().userName)) {
+        //if(chatArray[position].user.equals(MainActivity().userName)) {
+        if(chatArray[position].user.equals("hansung")) {
             return 1; //나의 메세지
         } else {
             return 0; //AI 메세지

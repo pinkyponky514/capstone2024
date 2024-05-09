@@ -16,13 +16,13 @@ class PastHistoryFragment : Fragment() {
     private lateinit var binding: FragmentPastHistoryBinding
 
     private lateinit var adapter: PastHistoryAdapter
-    private lateinit var historyList: ArrayList<HistoryItem>
+    private lateinit var pastHistoryList: ArrayList<HistoryItem>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPastHistoryBinding.inflate(inflater)
 
 
-        //진료내역 recyclerview
+        //진료내역 recyclerView
         adapter = PastHistoryAdapter()
         val recyclerView = binding.pastHistoryRecyclerView
         val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -30,14 +30,14 @@ class PastHistoryFragment : Fragment() {
         recyclerView.layoutManager = linearLayoutManager
 
         //과거 진료내역 데이터 넣기
-        historyList = ArrayList()
-        historyList.add(HistoryItem("진료완료","강정협내과의원", "내과", "2/14(수) 15:00"))
-        historyList.add(HistoryItem("진료완료","서울모이비인후과", "이비인후과", "3/15(금) 14:30"))
-        historyList.add(HistoryItem("진료완료", "강남성형외과", "성형외과", "3/30(토) 11:00"))
-        historyList.add(HistoryItem("진료완료","강정협내과의원", "내과", "2/14(수) 15:00"))
-        historyList.add(HistoryItem("진료완료","서울모이비인후과", "이비인후과", "3/15(금) 14:30"))
-        historyList.add(HistoryItem("진료완료", "강남성형외과", "성형외과", "3/30(토) 11:00"))
-        adapter.updatelist(historyList)
+        pastHistoryList = ArrayList()
+        pastHistoryList.add(HistoryItem("진료완료","강정협내과의원", "내과", "2024.2.14", "15:00"))
+        pastHistoryList.add(HistoryItem("진료완료","서울모이비인후과", "이비인후과", "2024.3.15", "14:30"))
+        pastHistoryList.add(HistoryItem("진료완료", "강남성형외과", "성형외과", "2024.3.30", "11:00"))
+        pastHistoryList.add(HistoryItem("진료완료","강정협내과의원", "내과", "2024.2.14","15:00"))
+        pastHistoryList.add(HistoryItem("진료완료","서울모이비인후과", "이비인후과", "2024.3.15","14:30"))
+        pastHistoryList.add(HistoryItem("진료완료", "강남성형외과", "성형외과", "2024.3.30","11:00"))
+        adapter.updatelist(pastHistoryList)
 
 
 

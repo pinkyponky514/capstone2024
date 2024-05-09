@@ -23,6 +23,7 @@ import com.example.reservationapp.MainActivity
 import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.R
 import com.example.reservationapp.databinding.FragmentHomeBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMapSdk
 
@@ -44,6 +45,9 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater) //val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        val mainActivity = requireActivity() as MainActivity //MainActivity 접근
+        mainActivity.medicalHistoryFragment = MedicalHistoryFragment.newInstance("")
+
         //지도 API
         NaverMapSdk.getInstance(requireContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
 
@@ -53,24 +57,18 @@ class HomeFragment : Fragment() {
         mapViewMedicine = binding.medicinemap //view.findViewById(R.id.medicinemap)
         mapViewMedicine.onCreate(savedInstanceState)
 
+
         //검색창(텍스트) 눌렀을때 이벤트 처리
         val reserveSearchView = binding.reserveSearchView
         reserveSearchView.setOnQueryTextFocusChangeListener { reserveSearchView, hasFocus ->
             if(hasFocus) { //포커스를 가지고 있으면
-                MainActivity().setActivity(requireActivity(), HospitalSearchActivity())
+                mainActivity.setActivity(requireActivity(), HospitalSearchActivity())
                 reserveSearchView.clearFocus()
             }
         }
         //검색창(이미지) 눌렀을때 이벤트 처리
         reserveSearchView.setOnClickListener {
-            //val intent = Intent(requireActivity(), HospitalSearchActivity())
-            var fragment = HomeFragment()
-            var bundle = Bundle()
-            bundle.putSerializable("searchWordList", MainActivity().searchRecentWordList)
-            fragment.arguments = bundle
-            activity?.supportFragmentManager!!.beginTransaction().replace(R.id.main_content, fragment).commit()
-
-            //MainActivity().setActivity(requireActivity(), HospitalSearchActivity())
+            mainActivity.setActivity(requireActivity(), HospitalSearchActivity())
         }
 
 
@@ -80,25 +78,49 @@ class HomeFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
-
+        //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
 
         // 가까운 예약 순으로 정렬 필요
         // DB 연결 필요
         userReserveAlarm = ArrayList()
-
-        //예약 리스트에 아무것도 없으면 보이지 않게
-        /*
-        val reserveAlarmRecyclerView = binding.reserveAlarmRecyclerView
-        reserveAlarmRecyclerView.visibility = View.VISIBLE
-        if(userReserveAlarm)
-        */
-
         userReserveAlarm.add(ReserveItem("강남대학병원", "수 15:00"))
         userReserveAlarm.add(ReserveItem("서울병원", "목 14:00"))
         userReserveAlarm.add(ReserveItem("별빛한의원", "월 18:40"))
         userReserveAlarm.add(ReserveItem("강남성형외과", "월 13:30"))
         userReserveAlarm.add(ReserveItem("버팀병원", "화 16:20"))
-        adapter.updateList(userReserveAlarm)
+
+
+
+        //예약 리스트에 아무것도 없으면 보이지 않게
+        val reserveAlarmRecyclerView = binding.reserveAlarmRecyclerView
+        val commingReserveTextView = binding.commingReserveTextView
+        val commingMoreTextView = binding.commingMoreTextView
+
+        reserveAlarmRecyclerView.visibility = View.GONE
+        commingReserveTextView.visibility = View.GONE
+        commingMoreTextView.visibility = View.GONE
+
+
+        if(userReserveAlarm .isEmpty()) {
+            reserveAlarmRecyclerView.visibility = View.GONE
+            commingReserveTextView.visibility = View.GONE
+            commingMoreTextView.visibility = View.GONE
+        } else {
+            reserveAlarmRecyclerView.visibility = View.VISIBLE
+            commingReserveTextView.visibility = View.VISIBLE
+            commingMoreTextView.visibility = View.VISIBLE
+            adapter.updateList(userReserveAlarm)
+        }
+
+
+        //예약 더보기 버튼
+        val reserveMoreButton = binding.commingMoreTextView
+        reserveMoreButton.setOnClickListener {
+            mainActivity.navigation.selectedItemId = R.id.checkupFrag
+            mainActivity.medicalHistoryFragment = MedicalHistoryFragment.newInstance("reserve")
+            Log.w("HomeFragment medicalHistoryFragment", "medicalHistoryFragment: ${mainActivity.medicalHistoryFragment}")
+            mainActivity.navigationSetItem()
+        }
 
 
         //진료과별 예약 버튼
@@ -115,7 +137,6 @@ class HomeFragment : Fragment() {
 
             Log.w("Class Button Info", "Button ID: $classButtonId, Text: ${classReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
         }
-
         //진료과별 더보기 버튼
         val classMoreTextView = binding.classMoreTextView
         classMoreTextView.setOnClickListener {
@@ -138,7 +159,6 @@ class HomeFragment : Fragment() {
 
             Log.w("Syptom Button Info", "Button ID: $syptomButtonId, Text: ${syptomReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
         }
-
         //증상 질환별 더보기 버튼
         val syptomMoreTextView = binding.symptomMoreTextView
         syptomMoreTextView.setOnClickListener {

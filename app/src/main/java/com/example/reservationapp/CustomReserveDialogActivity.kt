@@ -19,20 +19,24 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import com.example.reservationapp.Model.HistoryItem
+import com.example.reservationapp.Model.HospitalItem
 
 import com.example.reservationapp.databinding.FragmentCustomReserveDialogBinding
-import java.util.Calendar
+import java.util.*
 
 
 class CustomReserveDialogActivity() : DialogFragment() {
     private lateinit var binding: FragmentCustomReserveDialogBinding
     private var thisHospitalName:String = ""
+    private var thisClassName: String = ""
 
     private var calendar_open_flag: Boolean = false //달력 펼쳐져 있는지 확인하는 flag
     private var time_open_flag: Boolean = false //시간 펼쳐져 있는지 확인하는 flag
     private lateinit var calendarView: CalendarView //달력 calenderView
     private lateinit var timeTableLayout: TableLayout //시간 tableLayout
 
+    //DB에서 데이터 가져오기
     private var reserveTimeList: List<String> = listOf("9:00", "10:00", "10:30", "11:00", "12:00", "14:00", "14:30", "15:30", "18:00") //예약 가능한 시간 넣는 리스트
 
     private var reserveDate: String ?= null //예약 날짜 -> intent할때 쓸 변수
@@ -48,14 +52,17 @@ class CustomReserveDialogActivity() : DialogFragment() {
     private lateinit var reservationButton: Button //예약 버튼
 
     companion object {
-        private const val ARG_STRING = "arg_string"
+        private const val ARG_STRING_HOSPITAL_NAME = "arg_string_hospital_name"
+        private const val ARG_STRING_CLASS_NAME = "arg_string_class_name"
 
-        fun newInstance(hospitalName: String): CustomReserveDialogActivity {
+        fun newInstance(hospitalName: String, className: String): CustomReserveDialogActivity {
             return CustomReserveDialogActivity().apply {
                 arguments = Bundle().apply {//arguments = bundleOf(ARG_LIST to newList)
-                    putString(ARG_STRING, hospitalName)
+                    putString(ARG_STRING_HOSPITAL_NAME, hospitalName)
+                    putString(ARG_STRING_CLASS_NAME, className)
                 }
-                thisHospitalName = arguments?.getString(ARG_STRING) ?: ""
+                thisHospitalName = arguments?.getString(ARG_STRING_HOSPITAL_NAME) ?: ""
+                thisClassName = arguments?.getString(ARG_STRING_CLASS_NAME) ?: ""
             }
         }
     }
@@ -63,13 +70,6 @@ class CustomReserveDialogActivity() : DialogFragment() {
     @SuppressLint("ResourceType")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentCustomReserveDialogBinding.inflate(inflater, container, false)
-
-        /*
-        val dialogWidth = binding.customReserveConstraintLayout.width
-        dialog?.window?.setGravity(Gravity.BOTTOM) //하단에 위치
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) //dialog?.window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        */
 
 
         //달력 선택 가능범위 설정 하기위한 변수
@@ -94,8 +94,9 @@ class CustomReserveDialogActivity() : DialogFragment() {
         reservationButton = binding.reserveButton
         calendarView.setOnDateChangeListener { view, year, month, day -> //view = CalendarView
             val dayOfWeek = getDayOfWeek(year, month, day)
-            val dateString = String.format("%d.%d.%d ", year, month+1, day) + "(" + dayOfWeek + ")"
-            reserveDateTextView.text = dateString
+            val dateString = String.format("%d.%d.%d ", year, month+1, day)
+            val dayOfWeekString = "($dayOfWeek)"
+            reserveDateTextView.text = dateString + dayOfWeekString
             reserveDate = dateString
             reservationButtonEnabled()
         }
@@ -146,7 +147,6 @@ class CustomReserveDialogActivity() : DialogFragment() {
         }
 
 
-
         // 예약 버튼 클릭 이벤트 설정
         reservationButton.setOnClickListener {
             Log.w("reservationButton setOnClickListener", "Date:${reserveDate}, Time:${reserveTime}")
@@ -155,13 +155,29 @@ class CustomReserveDialogActivity() : DialogFragment() {
             startActivity(intent)
             finish()
             */
+            //val reserveDataItem = ArrayList<HistoryItem>()
+            //reserveDataItem.add(HistoryItem("대기중", thisHospitalName, thisClassName, reserveDate.toString(), reserveTime.toString()))
 
+            val reserveDataItem = HistoryItem("대기중", thisHospitalName, thisClassName, reserveDate.toString(), reserveTime.toString())
+            Log.w("CustomReserveDialog reservationButton", "reserveDataItem: $reserveDataItem")
+
+            val intent = Intent(requireActivity(), CheckReservationActivity::class.java)
+            intent.putExtra("reserveDataItem",reserveDataItem)
+            startActivity(intent)
         }
+
+
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
+        /*
+        val dialogWidth = binding.customReserveConstraintLayout.width
+        dialog?.window?.setGravity(Gravity.BOTTOM) //하단에 위치
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) //dialog?.window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        */
 
         val Dialog = dialog?.window
         Dialog?.setGravity(Gravity.BOTTOM) //하단에 위치
@@ -179,14 +195,14 @@ class CustomReserveDialogActivity() : DialogFragment() {
 
 
         val minDate = Calendar.getInstance() //캘린더에서 선택할 수 있는 최소날짜
-        val maxDate = Calendar.getInstance() //캘린더에서 선택할 수 있는 최대날짜 (12/31)
+        val maxDate = Calendar.getInstance() //캘린더에서 선택할 수 있는 최대날짜
 
         //오늘부터 선택 가능하도록
         minDate.set(currentYear, currentMonth,currentDay)
         calendarView.minDate = minDate.timeInMillis
 
-        //올해말까지 선택 가능하도록
-        maxDate.set(currentYear, 12, 31)
+        //올해말까지 선택 가능하도록 (12/31)
+        maxDate.set(currentYear, 11, 31)
         calendarView.maxDate = maxDate.timeInMillis
     }
 
@@ -236,6 +252,7 @@ class CustomReserveDialogActivity() : DialogFragment() {
         if(reserveDate != null && reserveTime != null) { //예약 버튼 활성화
             Log.w("reserveDate && reserveTime", "reserveDate and reserveTime not null")
             reservationButton.isEnabled = true
+
         } else if(reserveDate == null || reserveTime == null) { //예약 버튼 비활성화
             Log.w("reserveDate || reserveTime", "reserveDate or reserveTime is null")
             reservationButton.isEnabled = false

@@ -20,12 +20,12 @@ class HospitalListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHospitalListBinding
 
     private lateinit var adapter: HospitalListAdapter
-    private lateinit var hospitalList : ArrayList<HospitalItem>
+    private lateinit var hospitalList : ArrayList<HospitalItem> //병원 리스트
 
-    private lateinit var intentString: String //최근검색어 추가하기 위한 문자열
+    private lateinit var intentString: String //다른 액티비티로부터 넘겨받은 검색어, 최근검색어 추가하기 위한 문자열
     private lateinit var searchTextField: EditText
 
-    private lateinit var recentSearchWordList: ArrayList<RecentItem>
+    private lateinit var recentSearchWordList: ArrayList<RecentItem> //최근검색어 리스트
     private lateinit var filterList: ArrayList<FilterItem> //필터에 사용할 병원정보
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class HospitalListActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true) //뷰마다 항목 사이즈를 같게함
 
 
-        //Hospital Search Activity에서 검색어 넘겨받기
+        //다른 Activity에서 검색어 넘겨받기
         searchTextField = binding.searchEditTextField
         intentString = ""
         intentString = intent.getStringExtra("searchWord").toString()
@@ -76,33 +76,6 @@ class HospitalListActivity : AppCompatActivity() {
         }
 
 
-
-        //병원 목록 리스트 초기화
-        /*
-        hospitalList = ArrayList()
-
-        hospitalList.add(HospitalItem("삼성드림이비인후과", "4.1", "오전9:30~오후6:30", "역삼동 826-24 화인타워 5,6층", "이비인후과"))
-        hospitalList.add(HospitalItem("강남성모이비인후과의원", "4.4", "오전9:30~오후6:30", "서울특별시", "이비인후과"))
-        hospitalList.add(HospitalItem("강남코모키의원", "4.9", "오전9:30~오후6:30", "서울특별시", "내과"))
-        hospitalList.add(HospitalItem("강남서울이비인후과", "4.5", "오전9:30~오후6:30", "서울특별시", "이비인후과"))
-        hospitalList.add(HospitalItem("청소년내과", "4.0", "오전9:30~오후6:30", "서울특별시", "내과"))
-
-        hospitalList.add(HospitalItem("삼성드림이비인후과", "4.1", "오전9:30~오후6:30", "역삼동 826-24 화인타워 5,6층", "이비인후과"))
-        hospitalList.add(HospitalItem("강남성모이비인후과의원", "4.4", "오전9:30~오후6:30", "서울특별시", "이비인후과"))
-        hospitalList.add(HospitalItem("강남코모키의원", "4.9", "오전9:30~오후6:30", "서울특별시", "내과"))
-        hospitalList.add(HospitalItem("강남서울이비인후과", "4.5", "오전9:30~오후6:30", "서울특별시", "이비인후과"))
-        hospitalList.add(HospitalItem("청소년내과", "4.0", "오전9:30~오후6:30", "서울특별시", "내과"))
-
-        hospitalList.add(HospitalItem("삼성드림이비인후과", "4.1", "오전9:30~오후6:30", "역삼동 826-24 화인타워 5,6층", "이비인후과"))
-        hospitalList.add(HospitalItem("강남성모이비인후과의원", "4.4", "오전9:30~오후6:30", "서울특별시", "이비인후과"))
-        hospitalList.add(HospitalItem("강남코모키의원", "4.9", "오전9:30~오후6:30", "서울특별시", "내과"))
-        hospitalList.add(HospitalItem("강남서울이비인후과", "4.5", "오전9:30~오후6:30", "서울특별시", "이비인후과"))
-        hospitalList.add(HospitalItem("청소년내과", "4.0", "오전9:30~오후6:30", "서울특별시", "내과"))
-
-        adapter.updatelist(hospitalList)
-        */
-
-
         //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
         val backButton = binding.backButtonImageView
         backButton.setOnClickListener {
@@ -116,9 +89,6 @@ class HospitalListActivity : AppCompatActivity() {
         //검색버튼 또 눌렀을때
         val submitButton = binding.searchButtonImageView
         submitButton.setOnClickListener {
-            intentString = searchTextField.toString()
-            recentSearchWordList.add(RecentItem(intentString))
-            //HospitalSearchActivity().getAdapter().updateList(recentSearchWordList)
 
             intentString = searchTextField.text.toString()
             searchTextField.text.clear()
@@ -160,7 +130,8 @@ class HospitalListActivity : AppCompatActivity() {
             val calendar = Calendar.getInstance()
             val currentYear = calendar.get(Calendar.YEAR)
             val currentMonth = calendar.get(Calendar.MONTH)
-            val currentDay = 7 //calendar.get(Calendar.DATE)
+            val currentDay = 30 //calendar.get(Calendar.DATE)
+
             val dayOfWeek = getDayOfWeek(currentYear, currentMonth, currentDay) //현재 요일 구하기
             val dayTime = filteredList[i].weekTime[dayOfWeek] //현재 요일에 맞는 영업시간 가져오기
 

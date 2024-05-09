@@ -19,8 +19,10 @@
         android:theme="@style/FullScreenTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <!--병원 상세페이지 예약 커스텀 다이얼로그 -->
+        <activity
+            android:name=".CheckReservationActivity"
+            android:exported="false" />
+        <!-- 병원 상세페이지 예약 커스텀 다이얼로그 -->
         <activity
             android:name=".CustomReserveDialogActivity"
             android:exported="false" />
@@ -29,10 +31,7 @@
             android:exported="false" />
         <activity
             android:name=".HospitalActivity"
-            android:exported="false" />
-
-
-        <!-- 더보기 버튼 커스텀 다이얼로그 -->
+            android:exported="false" /> <!-- 더보기 버튼 커스텀 다이얼로그 -->
         <activity
             android:name=".CustomMoreDialogActivity"
             android:exported="false" />
@@ -41,18 +40,14 @@
             android:exported="false" />
         <activity
             android:name=".ChatActivity"
-            android:exported="false" />
-
-        <!-- 병원 목록 페이지 액티비티 -->
+            android:exported="false" /> <!-- 병원 목록 페이지 액티비티 -->
         <activity
             android:name=".HospitalListActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- 최근 검색내역, 검색창 액티비티 -->
+        </activity> <!-- 최근 검색내역, 검색창 액티비티 -->
         <activity
             android:name=".HospitalSearchActivity"
             android:exported="true">
@@ -74,63 +69,47 @@
             android:exported="false" />
         <activity
             android:name=".DrugstoreMap"
-            android:exported="false" />
-
-        <!-- 병원 상세 페이지 -->
+            android:exported="false" /> <!-- 병원 상세 페이지 -->
         <activity
             android:name=".Hospital_DetailPage"
             android:exported="false" />
         <activity
             android:name=".HospitalMap"
-            android:exported="false" />
-
-        <!-- 병원 회원가입 액티비티 -->
+            android:exported="false" /> <!-- 병원 회원가입 액티비티 -->
         <activity
             android:name=".SignUpDoctor"
-            android:exported="false" />
-
-        <!-- 환자 회원가입 액티비티 -->
+            android:exported="false" /> <!-- 환자 회원가입 액티비티 -->
         <activity
             android:name=".SignUpPatient"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- 로그인, 회원가입 메인 액티비티 -->
+        </activity> <!-- 로그인, 회원가입 메인 액티비티 -->
         <activity
             android:name=".SignUpActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- 병원, 환자 선택 액티비티 -->
+        </activity> <!-- 병원, 환자 선택 액티비티 -->
         <activity
             android:name=".HPDivisonActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- 병원 로그인 액티비티 -->
+        </activity> <!-- 병원 로그인 액티비티 -->
         <activity
             android:name=".LoginDoctorActivity"
-            android:exported="false" />
-
-        <!-- 환자 로그인 액티비티 -->
+            android:exported="false" /> <!-- 환자 로그인 액티비티 -->
         <activity
             android:name=".LoginPatientActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-
-        <!-- 메인 액티비티 -->
+        </activity> <!-- 메인 액티비티 -->
         <activity
             android:name=".MainActivity"
             android:exported="true">

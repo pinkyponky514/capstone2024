@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TableRow
 import androidx.annotation.RequiresApi
+import androidx.core.view.marginStart
 import androidx.fragment.app.DialogFragment
 import com.example.reservationapp.databinding.FragmentCustomMoreDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -57,6 +58,7 @@ class CustomMoreDialogActivity(): DialogFragment() {
                 tableRow = TableRow(requireContext())
                 tableRow?.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                 tableRow?.gravity = Gravity.CENTER_VERTICAL
+                tableRow?.gravity = Gravity.CENTER_HORIZONTAL
                 listTableLayout.addView(tableRow)
             }
 
@@ -66,10 +68,14 @@ class CustomMoreDialogActivity(): DialogFragment() {
 
             button.setTextSize(TypedValue.COMPLEX_UNIT_PX, 13f)
             button.setAutoSizeTextTypeUniformWithConfiguration(9f.toInt(), 13f.toInt(), 1, TypedValue.COMPLEX_UNIT_DIP)
-            button.setBackgroundResource(requireContext().resources.getIdentifier("style_reserve_button", "drawable", requireContext().packageName))
+            button.setBackgroundResource(requireContext().resources.getIdentifier("style_gray_radius_line_button", "drawable", requireContext().packageName))
 
             tableRow?.addView(button)
             buttonCountInRow++
+        }
+        if(buttonCountInRow != 4) {
+            tableRow?.gravity = Gravity.NO_GRAVITY
+            //tableRow?.marginStart = (TypedValue.COMPLEX_UNIT_PX, 10f)
         }
 
 

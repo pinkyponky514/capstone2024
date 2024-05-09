@@ -18,8 +18,9 @@ class Hospital_DetailPage : AppCompatActivity() {
 
     private var not_review_constraint_flag: Boolean = false //리뷰 개수가 0일때의 constraintLayout flag
     private var review_constraint_flag: Boolean = false //리뷰가 있을 경우 constraintLayout flag
-    private lateinit var notReviewConstraintLayout: ConstraintLayout
-    private lateinit var reviewConstraintLayout: RecyclerView
+
+    private lateinit var notReviewConstraintLayout: ConstraintLayout //리뷰가 없을때 constraintLayout
+    private lateinit var reviewConstraintLayout: RecyclerView //리뷰가 있을때 constraintLayout
 
     private lateinit var adapter: ReviewAdapter
     private lateinit var reviewList: ArrayList<ReviewItem>
@@ -45,6 +46,7 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         //넘겨받은 병원이름으로 DB에서 데이터 가져올 것임
         val hospitalName = intent.getStringExtra("hospitalName").toString()
+        val className = binding.textViewClassName.text.toString()
         hospitalNameTextView = binding.textViewHospitalName
         hospitalNameTextView.text = hospitalName
         Log.w("GetExtra Hospital Name", "GetExtra hospital Name: ${hospitalName}")
@@ -53,7 +55,7 @@ class Hospital_DetailPage : AppCompatActivity() {
         // 예약 버튼 클릭 이벤트 설정
         reservationButton = binding.ReservationButton
         reservationButton.setOnClickListener {
-            val dialog = CustomReserveDialogActivity.newInstance(hospitalName)
+            val dialog = CustomReserveDialogActivity.newInstance(hospitalName, className)
             dialog.show(supportFragmentManager, "CustomReserveDialog")
         }
 
@@ -101,7 +103,7 @@ class Hospital_DetailPage : AppCompatActivity() {
             notReviewConstraintLayout.visibility = View.GONE
 
             adapter.updatelist(reviewList)
-            recyclerView.suppressLayout(true)
+            recyclerView.suppressLayout(true) //스트롤 불가능
         }
     }
 

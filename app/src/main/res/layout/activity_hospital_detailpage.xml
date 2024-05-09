@@ -637,7 +637,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="100dp"
                 android:layout_marginBottom="30dp"
-                android:background="@drawable/style_button"
+                android:background="@drawable/style_dark_green_radius_enabeld_button"
                 android:enabled="false"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"

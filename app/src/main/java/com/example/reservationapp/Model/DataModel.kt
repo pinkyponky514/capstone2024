@@ -3,6 +3,7 @@ package com.example.reservationapp.Model
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -90,8 +91,9 @@ data class HistoryItem (
     var status: String, //진료상태
     var hospitalName: String, //병원이름
     var className: String, //진료과명
-    var reserveDate: String, //예약 날짜
-)
+    var reserveDay: String, //예약 날짜
+    var reserveTime: String, //예약 시간
+): Serializable
 
 //ReviewAdapter
 data class ReviewItem (
