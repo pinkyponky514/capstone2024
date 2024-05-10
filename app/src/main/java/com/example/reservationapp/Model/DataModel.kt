@@ -3,11 +3,8 @@ package com.example.reservationapp.Model
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
-import java.util.Locale
+
 
 
 //Retrofit - Model
@@ -84,8 +81,13 @@ data class ReservationItem(
 data class CommunityItem(
     val imageResource: Int,
     val title: String,
-    //val detail: String
+    val writer: String,
+    val likes : String,
+    val reviews : String,
+    val timestamp : String
+    //val commentNumber: Int
 )
+
 
 //HistoryAdapter
 data class HistoryItem (
@@ -94,3 +96,10 @@ data class HistoryItem (
     var className: String, //진료과명
     var reserveDate: String, //예약 날짜
 )
+
+data class ReviewItem(
+    val title: String, // 리뷰 제목
+    val writer: String, // 리뷰 작성자
+    val timestamp: String // 리뷰 작성 시간
+)
+

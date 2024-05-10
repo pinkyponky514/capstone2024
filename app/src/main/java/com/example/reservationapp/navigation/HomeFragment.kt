@@ -18,7 +18,6 @@ import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.HospitalSearchActivity
 import com.example.reservationapp.MainActivity
-import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.R
 import com.example.reservationapp.databinding.FragmentHomeBinding
@@ -35,7 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var userReserveAlarm: ArrayList<ReserveItem> //유저가 예약한 병원 리스트
 
     //다른 액티비티나 프래그먼트에서 사용할 수 있도록 public
-    val classReserveList: List<String> = listOf("내과", "외과", "이비인후과이비", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
+    val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
     val syptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
 
 

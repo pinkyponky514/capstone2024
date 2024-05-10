@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     var userName: String = "hansung"
 
+    //val intent = Intent(this, CommentDialogActivity::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

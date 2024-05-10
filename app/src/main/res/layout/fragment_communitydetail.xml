@@ -1,63 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".navigation.CommunityDetailFragment">
 
-    <ImageView
-        android:id="@+id/imageViewDetail"
-        android:layout_width="356dp"
-        android:layout_height="223dp"
-        android:layout_marginTop="36dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ex_communityimage1"
-        app:layout_constraintDimensionRatio="H,16:9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:gravity="center"
-        android:text="세균 번식 속도가 얼마나 빠른지 아시나요 ?"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewDetail" />
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="세균의 번식 속도는 여러 요인에 따라 다르지만, 일반적으로 이중나선균과 같은 일부 세균은 20분에서 1시간 사이에 한 번 혹은 그 이상으로 번식할 수 있습니다. 이러한 빠른 번식은 적절한 영양분과 환경 조건이 제공되면 가능합니다. 세균의 빠른 번식 속도는 그들이 짧은 세대 간격과 많은 수의 후손을 생성할 수 있기 때문에 놀라운 것입니다. 이것은 세균이 질병의 전파나 식품 부패 등에 어떻게 영향을 미칠 수 있는지에 대한 중요한 이슈 중 하나입니다."
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
 
-    <Button
-        android:id="@+id/buttonChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="채팅하기"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewContent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
+            app:layout_constraintTop_toBottomOf="@id/textViewContent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/imageViewDetail"
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ex_communityimage1"
+                app:layout_constraintDimensionRatio="H,16:9" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="358dp"
+            android:layout_height="29dp"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
+            android:text="세균 번식 속도가 얼마나 빠른지 아시나요 ?"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/dark_green"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textViewWriter"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewContent"
+            android:layout_width="377dp"
+            android:layout_height="192dp"
+            android:layout_marginTop="24dp"
+            android:text="세균의 번식 속도는 여러 요인에 따라 다르지만, 일반적으로 이중나선균과 같은 일부 세균은 20분에서 1시간 사이에 한 번 혹은 그 이상으로 번식할 수 있습니다. 이러한 빠른 번식은 적절한 영양분과 환경 조건이 제공되면 가능합니다. 세균의 빠른 번식 속도는 그들이 짧은 세대 간격과 많은 수의 후손을 생성할 수 있기 때문에 놀라운 것입니다. 이것은 세균이 질병의 전파나 식품 부패 등에 어떻게 영향을 미칠 수 있는지에 대한 중요한 이슈 중 하나입니다."
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/dark_gray"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="@+id/textViewTitle"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textViewTitle"
+            app:layout_constraintTop_toBottomOf="@+id/timestamp2"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/textViewWriter"
+            android:layout_width="117dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="8dp"
+            android:text="글쓴이: 내가기자다"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+        <TextView
+            android:id="@+id/timestamp2"
+            android:layout_width="163dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWriter" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="44dp"
+            android:background="#CCCCCC"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardview_member" />
+
+        <ToggleButton
+            android:id="@+id/button_favorite"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/ic_likes"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintEnd_toStartOf="@+id/buttonSend"
+            app:layout_constraintHorizontal_bias="0.405"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/buttonSend"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="88dp"
+            android:background="@drawable/ic_add_comment"
+            android:contentDescription="댓글 작성 버튼"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button_favorite" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

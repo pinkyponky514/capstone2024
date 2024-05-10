@@ -1,27 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp">
 
-    <!-- 이미지뷰 -->
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="103dp"
+        android:layout_height="94dp"
+        android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 텍스트뷰 -->
     <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:id="@+id/title"
+        android:layout_width="229dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="16dp"
+        android:text="글의 제목"
         android:textColor="@android:color/black"
-        android:paddingTop="8dp"/>
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        tools:ignore="MissingConstraints" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/writer"
+        android:layout_width="70dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="8dp"
+        android:text="글쓴이"
+        android:textColor="@android:color/black"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:ignore="MissingConstraints" />
 
+    <TextView
+        android:id="@+id/review"
+        android:layout_width="57dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        android:text="리뷰 수 :"
+        android:textColor="@android:color/black"
+        android:textSize="11sp"
+        app:layout_constraintStart_toEndOf="@+id/likes"
+        app:layout_constraintTop_toTopOf="@+id/likes" />
 
+    <TextView
+        android:id="@+id/reviews"
+        android:layout_width="25dp"
+        android:layout_height="22dp"
+        android:text="수"
+        android:textColor="@android:color/black"
+        android:textSize="11sp"
+        app:layout_constraintStart_toEndOf="@+id/review"
+        app:layout_constraintTop_toTopOf="@+id/review" />
+
+    <TextView
+        android:id="@+id/like"
+        android:layout_width="69dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:text="좋아요 수 :"
+        android:textColor="@android:color/black"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@+id/writer"
+        app:layout_constraintTop_toBottomOf="@+id/writer" />
+
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="21dp"
+        android:layout_height="20dp"
+        android:text="수"
+        android:textColor="@android:color/black"
+        android:textSize="11sp"
+        app:layout_constraintStart_toEndOf="@+id/like"
+        app:layout_constraintTop_toTopOf="@+id/like" />
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="0dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/like"
+        app:layout_constraintTop_toBottomOf="@+id/likes" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#CCCCCC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timestamp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

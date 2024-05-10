@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TableRow
 import androidx.annotation.RequiresApi
-import androidx.core.view.marginStart
-import androidx.fragment.app.DialogFragment
 import com.example.reservationapp.databinding.ActivityCustomDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
