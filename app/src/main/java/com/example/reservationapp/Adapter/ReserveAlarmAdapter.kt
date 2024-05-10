@@ -55,7 +55,7 @@ class ReserveAlarmAdapter ():
     //ViewHolder 객체를 생성하고 초기화, ViewHolder는 View를 담는 상자
     override fun onCreateViewHolder(viewgroup: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(viewgroup.context)
-            .inflate(R.layout.reserve_alarm_item, viewgroup, false)
+            .inflate(R.layout.item_reserve_alarm, viewgroup, false)
         return ViewHolder(layoutInflater)
     }
     //ViewHolder에 데이터 연결

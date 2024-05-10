@@ -1,34 +1,66 @@
-<!-- item_review.xml -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_marginTop="10dp"
+    android:background="@color/gray">
 
-    <TextView
-        android:id="@+id/writerTextView"
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="작성자"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:rating="0"
+        android:stepSize="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/contentTextView"
+        android:id="@+id/starScore_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="댓글 내용"
-        android:textSize="14sp"
-        android:layout_marginTop="8dp" />
+        android:layout_marginStart="10dp"
+        android:text="4.0"
+        app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+        app:layout_constraintStart_toEndOf="@+id/ratingBar"
+        app:layout_constraintTop_toTopOf="@+id/ratingBar" />
 
     <TextView
-        android:id="@+id/timestampTextView"
+        android:id="@+id/comment_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintHorizontal_bias="0"
+        android:text="좋은 병원이네요"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ratingBar"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+    <TextView
+        android:id="@+id/reviewDate_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="작성 시간"
-        android:textSize="12sp"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/darker_gray" />
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="28dp"
+        android:text="2024.05.05"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/comment_textView"
+        app:layout_constraintTop_toBottomOf="@+id/comment_textView" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/userId_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="userId"
+        app:layout_constraintBottom_toBottomOf="@+id/reviewDate_textView"
+        app:layout_constraintStart_toEndOf="@+id/reviewDate_textView"
+        app:layout_constraintTop_toTopOf="@+id/reviewDate_textView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

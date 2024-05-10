@@ -42,15 +42,24 @@
         app:layout_constraintTop_toTopOf="@+id/backButtonImageView"
         app:srcCompat="@drawable/ic_search" />
 
+    <ImageView
+        android:id="@+id/filterImageView"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@+id/backButtonImageView"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditTextField"
+        app:srcCompat="@drawable/image_filter"
+        app:tint="@color/dark_green" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/filterRecyclerView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/searchButtonImageView"
+        app:layout_constraintStart_toEndOf="@+id/filterImageView"
         app:layout_constraintTop_toBottomOf="@+id/searchEditTextField" />
 
     <!-- 병원 목록 리스트 -->
@@ -58,12 +67,14 @@
         android:id="@+id/hospitalListRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_constrainedHeight="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterRecyclerView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterImageView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

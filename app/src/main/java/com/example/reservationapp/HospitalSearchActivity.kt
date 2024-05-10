@@ -68,10 +68,9 @@ class HospitalSearchActivity : AppCompatActivity() {
 
 
         //검색 버튼 눌렀을 경우 - 병원 검색목록 페이지 나옴
-        var searchWord: String
         submitButton.setOnClickListener {
-            searchWord = searchEditText.text.toString()
-            recentSearchWordList.add(0, RecentItem(searchWord)) //맨 처음으로 들어가게
+            var searchWord = searchEditText.text.toString()
+            recentSearchWordList.add(0, RecentItem(searchWord)) //맨 앞에 들어가게
             adapter.updateList(recentSearchWordList)
             Log.w("HospitalSearchActivity", "2. $recentSearchWordList")
 

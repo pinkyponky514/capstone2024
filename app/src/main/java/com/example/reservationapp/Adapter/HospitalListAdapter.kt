@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Hospital_DetailPage
@@ -35,10 +34,8 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
 
             //병원 itemView 눌렀을때
             itemView.setOnClickListener {
-                //val hospitalNameTextView = itemView.findViewById<TextView>(R.id.hospitalNameTextView)
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
-
                 intent.putExtra("hospitalName", Hospital_name_TextView.text.toString())
                 context.startActivity(intent)
             }
@@ -52,13 +49,18 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
             Star_score_TextView.text = list.starScore
             Opening_time_TextView.text = list.openingTimes
             Hospital_address_TextView.text = list.hospitalAddress
-            class_name_TextView.text = list.className
+
+            var string = ""
+            for(i in list.className.indices) {
+                string += (list.className[i]+" ")
+            }
+            class_name_TextView.text = string
         }
     }
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): HospitalListAdapter.ViewHolder {
-        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.hospital_list_item_example, viewGroup, false)
+        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_hospital_list, viewGroup, false)
         return ViewHolder(layoutInflater)
     }
     //ViewHolder에 데이터 연결

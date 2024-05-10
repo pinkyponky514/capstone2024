@@ -8,12 +8,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#FFD3D3D3</color>
     <color name="sky">#99CCFF</color>
     <color name="mint">#BCF0F6</color>
+    <color name="gray">#FFD3D3D3</color>
     <color name="dark_gray">#666A73</color>
+    <color name="light_gray">#f1f3f5</color>
     <color name="green">#8AF311</color>
-    <color name="dark_green">#009900</color>
+    <color name="dark_green">#2DB400</color>
+    <color name="light_green">#E2FFED</color>
     <color name="yellow">#FEFD48</color>
     <color name="red">#D1180B</color>
     <color name="pink">#FFC0CB</color>

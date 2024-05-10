@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReviewDialogActivity">
+    tools:context=".CommentDialogActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reviewRecyclerView"
@@ -13,7 +13,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_review" />
+        tools:listitem="@layout/item_comment" />
 
     <EditText
         android:id="@+id/editText"

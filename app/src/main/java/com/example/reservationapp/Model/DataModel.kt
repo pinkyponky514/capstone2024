@@ -3,7 +3,7 @@ package com.example.reservationapp.Model
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.util.Date
+import java.io.Serializable
 
 
 
@@ -55,12 +55,12 @@ data class RecentItem(
 }
 
 //HospitalListAdapter
-data class HospitalItem (
+data class HospitalItem(
     var hospitalName: String, //병원이름
     var starScore: String, //별점(4.0)
     var openingTimes: String, //영업시간
     var hospitalAddress: String, //병원주소
-    var className: String //진료과명
+    var className: List<String> //진료과명
 )
 
 //ChattingAdapter
@@ -94,12 +94,28 @@ data class HistoryItem (
     var status: String, //진료상태
     var hospitalName: String, //병원이름
     var className: String, //진료과명
-    var reserveDate: String, //예약 날짜
+    var reserveDay: String, //예약 날짜
+    var reserveTime: String, //예약 시간
+): Serializable
+
+//ReviewAdapter
+data class ReviewItem (
+    var starScore: String, //별점
+    var comment: String, //리뷰내용
+    var reviewDate: String, //날짜
+    var userId: String //유저이름
 )
 
-data class ReviewItem(
+data class CommentItem(
     val title: String, // 리뷰 제목
     val writer: String, // 리뷰 작성자
     val timestamp: String // 리뷰 작성 시간
 )
 
+//Filter
+data class FilterItem (
+    var hospitalName: String, //병원이름
+    var hospitalAddress: String, //병원주소
+    var className: List<String>, //진료과
+    var weekTime: HashMap<String, String> //월~금 진료시간
+)

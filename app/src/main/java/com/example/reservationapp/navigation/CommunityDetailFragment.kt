@@ -14,7 +14,7 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.reservationapp.R
-import com.example.reservationapp.ReviewDialogActivity
+import com.example.reservationapp.CommentDialogActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -95,7 +95,7 @@ class CommunityDetailFragment : Fragment() {
         buttonSend.setOnClickListener {
             // ReviewDialogActivity로 이동
             val comment = "사용자의 댓글" // 여기에 사용자의 댓글을 가져오세요.
-            val intent = Intent(requireContext(), ReviewDialogActivity::class.java).apply {
+            val intent = Intent(requireContext(), CommentDialogActivity::class.java).apply {
                 putExtra("comment", comment)
             }
             startActivity(intent)

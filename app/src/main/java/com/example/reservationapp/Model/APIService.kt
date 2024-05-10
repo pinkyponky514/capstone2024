@@ -10,6 +10,4 @@ interface APIService {
 
     @POST("/jwt-login/login")
     fun postLogin(@Body user: UserLoginInfo): Call<String>
-
-
 }

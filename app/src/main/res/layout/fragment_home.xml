@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -28,7 +28,7 @@
                 android:layout_margin="20dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:background="@drawable/searchview_style"
+                android:background="@drawable/style_searchview"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:theme="@style/TextView12dpDarkGray"
@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/comming_reserve"
+                android:visibility="visible"
                 android:theme="@style/TextView15dpBlackBold"
                 app:layout_constraintStart_toStartOf="@+id/reserve_searchView"
                 app:layout_constraintTop_toBottomOf="@+id/reserve_searchView" />
@@ -58,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="@string/reserve_more"
+                android:visibility="visible"
                 android:theme="@style/TextView12dpGreenBold"
                 app:layout_constraintBottom_toTopOf="@+id/reserve_alarm_RecyclerView"
                 app:layout_constraintEnd_toEndOf="@+id/reserve_searchView"
@@ -65,8 +67,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reserve_alarm_RecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -81,7 +84,7 @@
                 android:id="@+id/class_reserve_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/class_reserve"
                 android:theme="@style/TextView15dpBlackBold"
                 app:layout_constraintStart_toStartOf="@+id/comming_reserve_TextView"
@@ -118,11 +121,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
 
                     <Button
@@ -132,11 +136,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
 
                     <Button
@@ -146,11 +151,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
 
                     <Button
@@ -160,11 +166,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
                 </TableRow>
 
@@ -213,11 +220,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
 
                     <Button
@@ -227,11 +235,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
 
                     <Button
@@ -241,11 +250,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
 
                     <Button
@@ -255,11 +265,12 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/reserve_button_style"
+                        android:background="@drawable/style_gray_radius_line_button"
+                        android:maxLines="1"
                         android:text="Button"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="15dp"
+                        android:autoSizeMaxTextSize="13dp"
                         android:autoSizeStepGranularity="1dp" />
                 </TableRow>
 
