@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
         searchRecentWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
+        medicalHistoryFragment = MedicalHistoryFragment.newInstance("")
 
         //처음 실행시 홈 선택으로 시작
         navigation = binding.navigation
@@ -74,7 +75,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.checkupFrag -> { //나의 진료내역 버튼 클릭했을 때
                     //setFragment(MedicalHistoryFragment())
-                    Log.w("MainActivity medicalHistoryFragment", "medicalHistoryFragment: ${medicalHistoryFragment}")
                     setFragment(medicalHistoryFragment)
                 }
                 R.id.communityFrag -> { //커뮤니티 버튼 클릭했을 때

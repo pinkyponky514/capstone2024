@@ -1,6 +1,7 @@
 package com.example.reservationapp
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -15,7 +16,6 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TableRow
 import androidx.annotation.RequiresApi
-import androidx.core.view.marginStart
 import androidx.fragment.app.DialogFragment
 import com.example.reservationapp.databinding.FragmentCustomMoreDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -64,6 +64,11 @@ class CustomMoreDialogActivity(): DialogFragment() {
 
             val button = Button(requireContext())
             button.text = list[i]
+            button.setOnClickListener {
+                val intent = Intent(requireActivity(), HospitalListActivity::class.java)
+                intent.putExtra("searchWord", button.text)
+                startActivity(intent)
+            }
             //button.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (37*resources.displayMetrics.density).toInt())
 
             button.setTextSize(TypedValue.COMPLEX_UNIT_PX, 13f)
@@ -76,6 +81,7 @@ class CustomMoreDialogActivity(): DialogFragment() {
         if(buttonCountInRow != 4) {
             tableRow?.gravity = Gravity.NO_GRAVITY
             //tableRow?.marginStart = (TypedValue.COMPLEX_UNIT_PX, 10f)
+            //tableRow?.marginStart(Hospital_DetailPage().changeDP(10))
         }
 
 

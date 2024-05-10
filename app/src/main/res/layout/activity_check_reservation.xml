@@ -8,14 +8,82 @@
     tools:context=".CheckReservationActivity">
 
     <TextView
-        android:id="@+id/checkTextView"
-        android:layout_width="0dp"
+        android:id="@+id/textView_reserveInfo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:text="check reservation Activity입니다"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:text="예약정보"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_hospitalName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="강정협내과의원"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView_reserveInfo"
+        app:layout_constraintTop_toBottomOf="@+id/textView_reserveInfo" />
+
+    <TextView
+        android:id="@+id/textView_className"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="내과"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_hospitalName"
+        app:layout_constraintStart_toEndOf="@+id/textView_hospitalName" />
+
+    <TextView
+        android:id="@+id/textView_reservation_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:text="대기중"
+        android:textSize="12dp"
+        android:textColor="@color/white"
+        android:background="@drawable/style_dark_green_rectangle_status"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_hospitalName"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/reserve_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="예약날짜"
+        app:layout_constraintStart_toStartOf="@+id/textView_hospitalName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_hospitalName" />
+
+    <TextView
+        android:id="@+id/reserve_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="예약시간"
+        app:layout_constraintStart_toStartOf="@+id/reserve_date"
+        app:layout_constraintTop_toBottomOf="@+id/reserve_date" />
+
+    <TextView
+        android:id="@+id/textView_reservation_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:text="2024.05.10"
+        app:layout_constraintBottom_toBottomOf="@+id/reserve_date"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_reservation_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="14:00"
+        app:layout_constraintBottom_toBottomOf="@+id/reserve_time"
+        app:layout_constraintEnd_toEndOf="@+id/textView_reservation_date" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,7 +41,7 @@
                     android:layout_marginTop="28dp"
                     android:text="내과"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,7 +53,7 @@
                     android:layout_marginTop="10dp"
                     android:text="윤홍선 내과"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/textView_class_name"
                     app:layout_constraintTop_toBottomOf="@+id/textView_class_name" />
@@ -76,9 +76,9 @@
                     android:id="@+id/textView_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12sp"
+                    android:layout_marginTop="12dp"
                     android:text="진료중"
-                    android:textSize="10sp"
+                    android:textSize="10dp"
                     app:layout_constraintStart_toStartOf="@+id/textView_hospital_name"
                     app:layout_constraintTop_toBottomOf="@+id/textView_hospital_name" />
 
@@ -89,7 +89,7 @@
                     android:layout_marginEnd="28dp"
                     android:text="n명 대기중"
                     android:textColor="@android:color/holo_green_dark"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/textView_status"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:text="병원 위치 주소"
-                    android:textSize="12sp"
+                    android:textSize="12dp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView_position"
                     app:layout_constraintStart_toEndOf="@+id/imageView_position"
                     app:layout_constraintTop_toTopOf="@+id/imageView_position" />
@@ -131,7 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="월요일 09:00 ~ 18:00"
-                    android:textSize="12sp"
+                    android:textSize="12dp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView_today_time"
                     app:layout_constraintStart_toStartOf="@+id/textView_hospital_pos"
                     app:layout_constraintTop_toTopOf="@+id/imageView_today_time" />
@@ -153,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="02-765-3430"
-                    android:textSize="12sp"
+                    android:textSize="12dp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView_hospital_call"
                     app:layout_constraintStart_toStartOf="@+id/textView_today_time"
                     app:layout_constraintTop_toTopOf="@+id/imageView_hospital_call" />
@@ -205,7 +205,7 @@
                             android:text="점심시간"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </TableRow>
 
@@ -222,7 +222,7 @@
                             android:layout_height="wrap_content"
                             android:text="12:30 ~ 13:30"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
                 </TableLayout>
 
@@ -252,7 +252,7 @@
                             android:text="요일"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -263,7 +263,7 @@
                             android:text="진료시간"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
                     </TableRow>
 
@@ -281,7 +281,7 @@
                             android:layout_height="wrap_content"
                             android:text="월요일"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
                         <TextView
                             android:id="@+id/textView_monday_time"
@@ -290,7 +290,7 @@
                             android:layout_marginStart="100dp"
                             android:text="09:00 ~ 18:00"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
 
                     <!-- 화요일 -->
@@ -316,7 +316,7 @@
                             android:layout_marginStart="100dp"
                             android:text="09:00 ~ 18:00"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
 
                     <!-- 수요일 -->
@@ -333,7 +333,7 @@
                             android:layout_height="wrap_content"
                             android:text="수요일"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
                         <TextView
                             android:id="@+id/textView_wednesday_time"
@@ -342,7 +342,7 @@
                             android:layout_marginStart="100dp"
                             android:text="09:00 ~ 18:00"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
 
                     <!-- 목요일 -->
@@ -359,7 +359,7 @@
                             android:layout_height="wrap_content"
                             android:text="목요일"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
                         <TextView
                             android:id="@+id/textView_thursday_time"
@@ -368,7 +368,7 @@
                             android:layout_marginStart="100dp"
                             android:text="09:00 ~ 18:00"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
 
                     <!-- 금요일 -->
@@ -385,7 +385,7 @@
                             android:layout_height="wrap_content"
                             android:text="금요일"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
                         <TextView
                             android:id="@+id/textView_friday_time"
@@ -394,7 +394,7 @@
                             android:layout_marginStart="100dp"
                             android:text="09:00 ~ 18:00"
                             android:textAlignment="center"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
 
                     <!-- 토요일 -->
@@ -412,7 +412,7 @@
                             android:text="토요일"
                             android:textAlignment="center"
                             android:textColor="@color/blue"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
                         <TextView
                             android:id="@+id/textView_saturday_time"
@@ -422,7 +422,7 @@
                             android:text="09:00 ~ 14:00"
                             android:textAlignment="center"
                             android:textColor="@color/blue"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
 
                     <!-- 일요일 -->
@@ -440,7 +440,7 @@
                             android:text="일요일"
                             android:textAlignment="center"
                             android:textColor="@color/red"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
                         <TextView
                             android:id="@+id/textView_sunday_time"
@@ -450,7 +450,7 @@
                             android:text="정기휴무"
                             android:textAlignment="center"
                             android:textColor="@color/red"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
 
                     <!-- 공휴일 -->
@@ -468,7 +468,7 @@
                             android:text="공휴일"
                             android:textAlignment="center"
                             android:textColor="@color/red"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
                         <TextView
                             android:id="@+id/textView_day_off_time"
@@ -478,7 +478,7 @@
                             android:text="휴무"
                             android:textAlignment="center"
                             android:textColor="@color/red"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </TableRow>
                 </TableLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -662,7 +662,7 @@
             android:paddingBottom="10dp"
             android:text="시간예약"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:background="@drawable/style_dark_green_radius_pressed_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

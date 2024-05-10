@@ -118,7 +118,6 @@ class HomeFragment : Fragment() {
         reserveMoreButton.setOnClickListener {
             mainActivity.navigation.selectedItemId = R.id.checkupFrag
             mainActivity.medicalHistoryFragment = MedicalHistoryFragment.newInstance("reserve")
-            Log.w("HomeFragment medicalHistoryFragment", "medicalHistoryFragment: ${mainActivity.medicalHistoryFragment}")
             mainActivity.navigationSetItem()
         }
 

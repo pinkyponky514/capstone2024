@@ -112,7 +112,7 @@ class Hospital_DetailPage : AppCompatActivity() {
     }
 
     //int를 dp로 바꾸기
-    private fun changeDP(value : Int) : Int{
+    fun changeDP(value : Int) : Int{
         var displayMetrics = resources.displayMetrics
         var dp = (value * displayMetrics.density).toInt() //var dp = Math.round(value * displayMetrics.density)
         return dp

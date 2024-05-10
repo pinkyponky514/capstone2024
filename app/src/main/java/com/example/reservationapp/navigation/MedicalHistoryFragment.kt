@@ -37,7 +37,7 @@ class MedicalHistoryFragment : Fragment() {
         binding = FragmentMedicalHistoryBinding.inflate(inflater)
 
         topNavigation = binding.topNavigation
-        topNavigation.selectedItemId = R.id.past_history
+        topNavigation.selectedItemId = R.id.reserve_history
         /*
         setFragment(PastHistoryFragment())
         topNavigationSetItem() //과거 진료내역, 예약 내역 네비게이션바 선택에 따른 화면전환
