@@ -23,9 +23,6 @@
             android:name=".ReviewDialogActivity"
             android:exported="false" />
         <activity
-            android:name=".navigation.CommunityChatFragment"
-            android:exported="false" />
-        <activity
             android:name=".Hospital_Mypage"
             android:exported="false" />
         <activity
