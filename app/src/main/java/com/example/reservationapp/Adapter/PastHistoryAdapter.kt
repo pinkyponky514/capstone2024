@@ -39,7 +39,6 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
                 val hospitalNameTextView = itemView.findViewById<TextView>(R.id.hospital_name_textView)
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
-
                 intent.putExtra("hospitalName", hospitalNameTextView.text)
                 context.startActivity(intent)
             }

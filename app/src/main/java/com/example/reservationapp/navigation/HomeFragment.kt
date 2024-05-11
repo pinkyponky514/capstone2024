@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
 import com.example.reservationapp.ChatActivity
 import com.example.reservationapp.DrugstoreMap
@@ -20,10 +21,11 @@ import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.HospitalSearchActivity
 import com.example.reservationapp.MainActivity
+import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.ReserveItem
+import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.R
 import com.example.reservationapp.databinding.FragmentHomeBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMapSdk
 
@@ -33,12 +35,13 @@ class HomeFragment : Fragment() {
     private lateinit var mapViewHospital: MapView
     private lateinit var mapViewMedicine: MapView
 
-    private lateinit var adapter: ReserveAlarmAdapter //병원 예약 알림 adapter
+    private lateinit var reserveAlarmAdapter: ReserveAlarmAdapter //병원 예약 알림 adapter
+    private lateinit var popularHospitalAdapter: PopularHospitalAdapter //인기 순위 병원 adapter
     private lateinit var userReserveAlarm: ArrayList<ReserveItem> //유저가 예약한 병원 리스트
 
-    //다른 액티비티나 프래그먼트에서 사용할 수 있도록 public
-    val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
-    val syptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
+
+    private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과이비", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
+    private val syptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -47,6 +50,7 @@ class HomeFragment : Fragment() {
 
         val mainActivity = requireActivity() as MainActivity //MainActivity 접근
         mainActivity.medicalHistoryFragment = MedicalHistoryFragment.newInstance("")
+
 
         //지도 API
         NaverMapSdk.getInstance(requireContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
@@ -73,11 +77,11 @@ class HomeFragment : Fragment() {
 
 
         //병원 예약 알림 recyclerView
-        adapter = ReserveAlarmAdapter()
-        val recyclerView = binding.reserveAlarmRecyclerView //view.findViewById<RecyclerView>(R.id.reserve_alarm_RecyclerView)
-        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = linearLayoutManager
+        reserveAlarmAdapter = ReserveAlarmAdapter()
+        val reserveAlarmRecyclerView = binding.reserveAlarmRecyclerView //view.findViewById<RecyclerView>(R.id.reserve_alarm_RecyclerView)
+        val reserveAlarmLinearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        reserveAlarmRecyclerView.adapter = reserveAlarmAdapter
+        reserveAlarmRecyclerView.layoutManager = reserveAlarmLinearLayoutManager
         //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
 
         // 가까운 예약 순으로 정렬 필요
@@ -92,7 +96,6 @@ class HomeFragment : Fragment() {
 
 
         //예약 리스트에 아무것도 없으면 보이지 않게
-        val reserveAlarmRecyclerView = binding.reserveAlarmRecyclerView
         val commingReserveTextView = binding.commingReserveTextView
         val commingMoreTextView = binding.commingMoreTextView
 
@@ -109,7 +112,7 @@ class HomeFragment : Fragment() {
             reserveAlarmRecyclerView.visibility = View.VISIBLE
             commingReserveTextView.visibility = View.VISIBLE
             commingMoreTextView.visibility = View.VISIBLE
-            adapter.updateList(userReserveAlarm)
+            reserveAlarmAdapter.updateList(userReserveAlarm)
         }
 
 
@@ -180,6 +183,8 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
+
+
         //채팅 서비스 버튼 클릭 이벤트 처리
         val chatServiceButton = binding.floatingActionButton
         chatServiceButton.setOnClickListener {
@@ -190,38 +195,31 @@ class HomeFragment : Fragment() {
         return binding.root //return view
     }
 
-
-
-    //
-    /*
     override fun onResume() {
         super.onResume()
-        mapViewHospital.onResume()
-        mapViewMedicine.onResume()
+
+        //인기 순위 병원 adapter, recyclerView
+        popularHospitalAdapter = PopularHospitalAdapter()
+        val popularHospitalRecyclerView = binding.popularHospitalRecyclerView
+        val popularHospitalLinearLayoutManger = LinearLayoutManager(activity)
+        popularHospitalRecyclerView.adapter = popularHospitalAdapter
+        popularHospitalRecyclerView.layoutManager = popularHospitalLinearLayoutManger
+        popularHospitalRecyclerView.setHasFixedSize(true)
+        popularHospitalRecyclerView.suppressLayout(true) //스트롤 불가능
+
+
+        val sortedFilterList = filterList.sortedByDescending { it.favoriteCount }
+        Log.w("HomeFragment", "sortedFilterList: $sortedFilterList")
+
+        val popularHospitalItemList = sortedFilterList.take(5).mapIndexed { index, filterItem -> //순위 5위까지만
+            PopularHospitalItem(
+                index + 1, // 순위는 1부터 시작하므로 index에 1을 더해줍니다.
+                filterItem.hospitalName
+            )
+        }
+        popularHospitalAdapter.updatelist(popularHospitalItemList)
+
     }
 
-    override fun onPause() {
-        super.onPause()
-        mapViewHospital.onPause()
-        mapViewMedicine.onPause()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mapViewHospital.onDestroy()
-        mapViewMedicine.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapViewHospital.onLowMemory()
-        mapViewMedicine.onLowMemory()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapViewHospital.onSaveInstanceState(outState)
-        mapViewMedicine.onSaveInstanceState(outState)
-    }
-    */
+    //
 }

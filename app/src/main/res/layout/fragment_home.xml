@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -26,8 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_margin="20dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
                 android:background="@drawable/style_searchview"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
@@ -318,6 +317,47 @@
                 app:layout_constraintHorizontal_bias="0.633"
                 app:layout_constraintStart_toEndOf="@+id/textView8"
                 app:layout_constraintTop_toBottomOf="@+id/medicinemap" />
+
+            <!-- 인기 병원 순위 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/popularHospitalScoreConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8">
+
+                <TextView
+                    android:id="@+id/textView_popular_hospital_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="인기 병원 순위"
+                    android:theme="@style/TextView15dpBlackBold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popularHospitalRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/style_gray_rectangle_status"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView_popular_hospital_score"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_popular_hospital_score" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

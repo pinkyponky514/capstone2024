@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-
+import java.util.Calendar
 
 
 //Retrofit - Model
@@ -56,11 +56,12 @@ data class RecentItem(
 
 //HospitalListAdapter
 data class HospitalItem(
-    var hospitalName: String, //병원이름
+    var hospitalName: String, //병원이름 ㅇ
     var starScore: String, //별점(4.0)
-    var openingTimes: String, //영업시간
-    var hospitalAddress: String, //병원주소
-    var className: List<String> //진료과명
+    var openingTimes: String, //영업시간 ㅇ
+    var hospitalAddress: String, //병원주소 ㅇ
+    var className: List<String>, //진료과 ㅇ
+    //var favoriteCount: Int //즐겨찾기 수
 )
 
 //ChattingAdapter
@@ -103,8 +104,8 @@ data class ReviewItem (
     var starScore: String, //별점
     var comment: String, //리뷰내용
     var reviewDate: String, //날짜
-    var userId: String //유저이름
-)
+    var userId: String, //유저이름
+): Serializable
 
 data class CommentItem(
     val title: String, // 리뷰 제목
@@ -113,9 +114,48 @@ data class CommentItem(
 )
 
 //Filter
-data class FilterItem (
+data class FilterItem(
     var hospitalName: String, //병원이름
     var hospitalAddress: String, //병원주소
     var className: List<String>, //진료과
-    var weekTime: HashMap<String, String> //월~금 진료시간
+    var weekTime: HashMap<String, String>, //월~금 진료시간
+    var favoriteCount: Int, //병원 즐겨찾기 수
+    var reviewList: List<ReviewItem>, //해당 병원 리뷰 리스트
+    var starScore: String, //별점 4.0
+    var waitCount: Int, //대기인원
+): Serializable
+
+//PopularHospitalAdapter
+data class PopularHospitalItem(
+    var score: Int, //순위
+    var hospitalName: String //병원이름
 )
+
+
+//년, 월, 일 해당하는 날짜의 요일 구하기
+fun getDayOfWeek(year:Int, month:Int, day: Int): String {
+    val calendar = Calendar.getInstance()
+    calendar.set(year, month, day)
+
+    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+    return when(dayOfWeek) {
+        Calendar.SUNDAY -> "일"
+        Calendar.MONDAY -> "월"
+        Calendar.TUESDAY -> "화"
+        Calendar.WEDNESDAY -> "수"
+        Calendar.THURSDAY -> "목"
+        Calendar.FRIDAY -> "금"
+        Calendar.SATURDAY -> "토"
+        else -> ""
+    }
+}
+
+lateinit var filterList: ArrayList<FilterItem> //필터에 사용할 병원정보
+lateinit var reviewList: ArrayList<ReviewItem> //병원정보의 리뷰정보
+
+/*
+var filterList: ArrayList<FilterItem> = ArrayList() //필터에 사용할 병원정보
+var reviewList: ArrayList<ReviewItem> = ArrayList() //병원정보의 리뷰정보
+*/
+
+var userHospitalFavorite: HashMap<String, Boolean> = hashMapOf()

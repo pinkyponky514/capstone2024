@@ -38,11 +38,6 @@ class ReserveAlarmAdapter ():
             }
         }
 
-        fun getItems(): List<ReserveItem> {
-            return listOf(
-                ReserveItem("강남대학병원", "수 15:00")
-            )
-        }
         fun setContents(list: ReserveItem) {
             Hospital_name.text = list.hospital_name
             Date.text = list.date

@@ -1,17 +1,25 @@
 package com.example.reservationapp
 
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.ReviewAdapter
-import com.example.reservationapp.Model.ReviewItem
+import com.example.reservationapp.Model.filterList
+import com.example.reservationapp.Model.getDayOfWeek
+import com.example.reservationapp.Model.reviewList
+import com.example.reservationapp.Model.userHospitalFavorite
 import com.example.reservationapp.databinding.ActivityHospitalDetailpageExampleAddBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var binding: ActivityHospitalDetailpageExampleAddBinding
@@ -23,7 +31,8 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var reviewConstraintLayout: RecyclerView //리뷰가 있을때 constraintLayout
 
     private lateinit var adapter: ReviewAdapter
-    private lateinit var reviewList: ArrayList<ReviewItem>
+    private lateinit var mainActivity: MainActivity
+
 
     //DB에서 가져온 데이터 넣을 view
     private lateinit var hospitalNameTextView: TextView //병원이름
@@ -33,10 +42,24 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var hospitalPositionTextView: TextView //병원위치
     private lateinit var todayTimeTextView: TextView //금일 운영시간
     private lateinit var hospitalCallTextView: TextView //병원 연락처
+
     private lateinit var reservationButton: Button //예약 버튼
+    private lateinit var favoriteButton: ImageView //즐겨찾기 버튼
+
+
+    private lateinit var lunchTimeTextView: TextView //점심시간
+    private lateinit var mondayTimeTextView: TextView
+    private lateinit var tuesdayTimeTextView: TextView
+    private lateinit var wednesdayTimeTextView: TextView
+    private lateinit var thursdayTimeTextView: TextView
+    private lateinit var fridayTimeTextView: TextView
+    private lateinit var saturdayTimeTextView: TextView
+    private lateinit var sundayTimeTextView: TextView
+    private lateinit var dayOffTimeTextView: TextView //공휴일
 
     private var reviewCount: Int = 0 //리뷰개수
 
+    private var hospitalString: String = ""
 
     //
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,12 +67,90 @@ class Hospital_DetailPage : AppCompatActivity() {
         binding = ActivityHospitalDetailpageExampleAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //넘겨받은 병원이름으로 DB에서 데이터 가져올 것임
+        //초기화
+        mainActivity = MainActivity()
+
+        hospitalNameTextView = binding.textViewHospitalName
+        classNameTextView = binding.textViewClassName
+        statusTextView = binding.textViewStatus
+        waitCountTextView = binding.textViewWaitCount
+        hospitalPositionTextView = binding.textViewHospitalPos
+        todayTimeTextView = binding.textViewTodayTime
+        hospitalCallTextView = binding.textViewHospitalCall
+
+        lunchTimeTextView = binding.textViewLunchTime
+        mondayTimeTextView = binding.textViewMondayTime
+        tuesdayTimeTextView = binding.textViewTuesdayTime
+        wednesdayTimeTextView = binding.textViewWednesdayTime
+        thursdayTimeTextView = binding.textViewThursdayTime
+        fridayTimeTextView = binding.textViewFridayTime
+        saturdayTimeTextView = binding.textViewSaturdayTime
+        sundayTimeTextView = binding.textViewSundayTime
+        dayOffTimeTextView = binding.textViewDayOffTime
+
+
+        //DB에서 데이터 가져올 것임
         val hospitalName = intent.getStringExtra("hospitalName").toString()
         val className = binding.textViewClassName.text.toString()
-        hospitalNameTextView = binding.textViewHospitalName
-        hospitalNameTextView.text = hospitalName
-        Log.w("GetExtra Hospital Name", "GetExtra hospital Name: ${hospitalName}")
+        for(i in filterList.indices) {
+            if(filterList[i].hospitalName == hospitalName) { //넘겨받은 병원이름으로 DB에서 데이터 가져올 것임
+
+                hospitalString = filterList[i].hospitalName
+                hospitalNameTextView.text = filterList[i].hospitalName //병원이름
+
+                //진료과명
+                var className = ""
+                if(filterList[i].className.size > 1) {
+                    for(j in filterList[i].className.indices-1) {
+                        className += "${filterList[i].className[j]} | "
+                    }
+                }
+                className += filterList[i].className[filterList[i].className.lastIndex]
+                classNameTextView.text = className
+
+
+                waitCountTextView.text = "${filterList[i].waitCount}명 대기중" //대기인원
+                hospitalPositionTextView.text = filterList[i].hospitalAddress //병원주소
+
+                //금일 운영시간
+                val calendar = Calendar.getInstance()
+                val currentYear = calendar.get(Calendar.YEAR)
+                val currentMonth = calendar.get(Calendar.MONTH)
+                val currentDay = calendar.get(Calendar.DATE)
+                val dayOfWeek = getDayOfWeek(currentYear, currentMonth, currentDay) //현재 요일 구하기
+                val dayTime = filterList[i].weekTime[dayOfWeek] //현재 요일에 맞는 영업시간 가져오기
+                todayTimeTextView.text = "${dayOfWeek}요일 ${dayTime}"
+
+                //병원 운영상태
+                val timeSplit = dayTime.toString().split("~")
+                val startTime = timeSplit[0]
+                val endTime = timeSplit[1]
+
+                val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                val currentTimeFormatted = dateFormat.format(calendar.time)
+
+                //현재시간이 운영시간 사이에 있는지 확인
+                if(currentTimeFormatted >= startTime && currentTimeFormatted <= endTime) {
+                    statusTextView.text = "진료중"
+                } else {
+                    statusTextView.text = "진료마감"
+                }
+
+
+                //진료시간 table
+                lunchTimeTextView.text = filterList[i].weekTime["점심"]
+                mondayTimeTextView.text = filterList[i].weekTime["월"]
+                tuesdayTimeTextView.text = filterList[i].weekTime["화"]
+                wednesdayTimeTextView.text = filterList[i].weekTime["수"]
+                thursdayTimeTextView.text = filterList[i].weekTime["목"]
+                fridayTimeTextView.text = filterList[i].weekTime["금"]
+                saturdayTimeTextView.text = filterList[i].weekTime["토"]
+                sundayTimeTextView.text = filterList[i].weekTime["일"]
+                dayOffTimeTextView.text = filterList[i].weekTime["공휴일"]
+
+                break
+            }
+        }
 
 
         // 예약 버튼 클릭 이벤트 설정
@@ -59,6 +160,52 @@ class Hospital_DetailPage : AppCompatActivity() {
             dialog.show(supportFragmentManager, "CustomReserveDialog")
         }
 
+        //즐겨찾기 버튼 클릭 이벤트 설정
+        favoriteButton = binding.favoriteImageView
+        if(userHospitalFavorite[hospitalString] == true) {
+            favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
+        } else {
+            favoriteButton.setImageResource(R.drawable.ic_likes)
+        }
+
+        favoriteButton.setOnClickListener {
+
+            if(userHospitalFavorite[hospitalString] == true) { //즐겨찾기 취소
+                userHospitalFavorite[hospitalString] = false
+                favoriteButton.setImageResource(R.drawable.ic_likes)
+
+                for (filterItem in filterList) {
+                    if (filterItem.hospitalName == hospitalString) {
+                        filterItem.favoriteCount--
+                        Log.w("favroiteCount", "count: ${filterItem.favoriteCount}")
+                        break
+                    }
+                }
+
+            } else { //즐겨찾기
+                userHospitalFavorite[hospitalString] = true
+                favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
+
+                for (filterItem in filterList) {
+                    if (filterItem.hospitalName == hospitalString) {
+                        filterItem.favoriteCount++
+                        Log.w("favroiteCount", "count: ${filterItem.favoriteCount}")
+                        break
+                    }
+                }
+            }
+
+            Log.w("Hospital DetailPage", "favorite Button Boolean : ${userHospitalFavorite}")
+/*
+            if(mainActivity.userHospitalFavorite[hospitalNameTextView.text.toString()] == true) { //즐겨찾기함
+                mainActivity.userHospitalFavorite[hospitalNameTextView.text.toString()] = false
+                favoriteButton.setImageResource(R.drawable.ic_likes)
+            } else { //즐겨찾기 안함
+                mainActivity.userHospitalFavorite[hospitalNameTextView.text.toString()] = true
+                favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
+            }
+*/
+        }
 
         //리뷰 설정
         adapter = ReviewAdapter()
@@ -69,14 +216,6 @@ class Hospital_DetailPage : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.setHasFixedSize(true)
 
-        //리뷰 목록 리스트 초기화 (DB에서 가져오기)
-        reviewList = ArrayList()
-        reviewList.add(ReviewItem("4.0", "병원이 너무 좋아요", "2024.04.01", "hansung"))
-        reviewList.add(ReviewItem("3.0", "솔직하게 말하자면 병원이 크고 시설도 다 좋은데, 의사 선생님이나 간호사 분들이 너무 불친절합니다.", "2024.04.05", "user1"))
-        reviewList.add(ReviewItem("4.5", "다닐만 합니다", "2024.04.20", "user2"))
-        reviewList.add(ReviewItem("2.0", "대기 시간도 너무 길고 신설 병원이라 그런지 너무 체계가 엉망입니다", "2024.05.01", "user3"))
-        reviewList.add(ReviewItem("4.0", "병원이 너무 좋아요", "2024.05.03", "user4"))
-        reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
 
         //
         reviewCount = reviewList.size
@@ -107,15 +246,5 @@ class Hospital_DetailPage : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    //int를 dp로 바꾸기
-    fun changeDP(value : Int) : Int{
-        var displayMetrics = resources.displayMetrics
-        var dp = (value * displayMetrics.density).toInt() //var dp = Math.round(value * displayMetrics.density)
-        return dp
-    }
     //
 }
