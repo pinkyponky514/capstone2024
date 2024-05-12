@@ -98,19 +98,19 @@
             android:textColor="@color/dark_green"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/try_reserve_button"
+            app:layout_constraintEnd_toStartOf="@+id/cancel_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <!-- 접수하기 button -->
         <Button
-            android:id="@+id/try_reserve_button"
+            android:id="@+id/cancel_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/style_dark_green_rectangle_pressed_button"
-            android:text="다시 접수하기"
+            android:text="취소하기"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/review_button"

@@ -80,14 +80,15 @@
             android:text="리뷰쓰기"
             android:textColor="@color/dark_green"
             android:textStyle="bold"
+            android:enabled="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/try_reserve_button"
+            app:layout_constraintEnd_toStartOf="@+id/cancel_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <!-- 접수하기 button -->
         <Button
-            android:id="@+id/try_reserve_button"
+            android:id="@+id/cancel_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"

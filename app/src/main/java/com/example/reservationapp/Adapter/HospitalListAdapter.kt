@@ -76,7 +76,6 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
     //
     fun updatelist(newList: ArrayList<HospitalItem>) {
         hospital_list_data = newList
-        Log.w("HospitalListAdapter - updateList :", "${newList}")
         notifyDataSetChanged()
     }
 

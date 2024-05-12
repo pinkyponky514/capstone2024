@@ -44,8 +44,8 @@ class HospitalSearchActivity : AppCompatActivity() {
         //최근 검색어 리스트 초기화
         //recentSearchWordList = ArrayList()
         //recentSearchWordList = adapter.getRecentWorldData() //DB에서 가져오면 됨
-        recentSearchWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
-        Log.w("HospitalSearchActivity", "1. recentSearchWordList : $recentSearchWordList")
+        //recentSearchWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
+        //Log.w("HospitalSearchActivity", "1. recentSearchWordList : $recentSearchWordList")
 
 
         //최근 검색어 보여줄 recyclerView
@@ -72,11 +72,11 @@ class HospitalSearchActivity : AppCompatActivity() {
             var searchWord = searchEditText.text.toString()
             recentSearchWordList.add(0, RecentItem(searchWord)) //맨 앞에 들어가게
             adapter.updateList(recentSearchWordList)
-            Log.w("HospitalSearchActivity", "2. $recentSearchWordList")
+            //Log.w("HospitalSearchActivity", "2. $recentSearchWordList")
 
             val intent = Intent(this, HospitalListActivity::class.java)
             intent.putExtra("searchWord", searchWord)
-            intent.putExtra("searchWordList", recentSearchWordList)
+            //intent.putExtra("searchWordList", recentSearchWordList)
             startActivity(intent)
             recentSearchWordList.clear()
             //finish()

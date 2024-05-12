@@ -50,9 +50,7 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
                 var commingDate = String.format("%d-%d-%d %02d:%02d:00", dateSplit[0].toInt(), dateSplit[1].toInt(), dateSplit[2].toInt(), timeSplit[0].toInt(), timeSplit[1].toInt())
                 val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                 var date = simpleDateFormat.parse(commingDate)
-
                 var calcuDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-                Log.d("test: 날짜!!", "${list.reserveDay}: $calcuDate 일 차이남")
 
                 if(calcuDate.toInt() == 0) {
                     comming_date_TextView.text = "오늘"
@@ -67,6 +65,7 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
                 comming_date_TextView.text = "날짜 오류"
                 }
         }
+        //
     }
 
 

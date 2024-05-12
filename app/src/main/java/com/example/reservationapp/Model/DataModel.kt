@@ -97,6 +97,7 @@ data class HistoryItem (
     var className: String, //진료과명
     var reserveDay: String, //예약 날짜
     var reserveTime: String, //예약 시간
+    var reviewWriteBoolean: Boolean //리뷰 썼는지 확인
 ): Serializable
 
 //ReviewAdapter
@@ -105,7 +106,7 @@ data class ReviewItem (
     var comment: String, //리뷰내용
     var reviewDate: String, //날짜
     var userId: String, //유저이름
-): Serializable
+)
 
 data class CommentItem(
     val title: String, // 리뷰 제목
@@ -120,10 +121,10 @@ data class FilterItem(
     var className: List<String>, //진료과
     var weekTime: HashMap<String, String>, //월~금 진료시간
     var favoriteCount: Int, //병원 즐겨찾기 수
-    var reviewList: List<ReviewItem>, //해당 병원 리뷰 리스트
+    var reviewList: MutableList<ReviewItem>, //해당 병원 리뷰 리스트, MutableList = 변경가능한 리스트
     var starScore: String, //별점 4.0
     var waitCount: Int, //대기인원
-): Serializable
+)
 
 //PopularHospitalAdapter
 data class PopularHospitalItem(
@@ -150,12 +151,12 @@ fun getDayOfWeek(year:Int, month:Int, day: Int): String {
     }
 }
 
+/*
 lateinit var filterList: ArrayList<FilterItem> //필터에 사용할 병원정보
 lateinit var reviewList: ArrayList<ReviewItem> //병원정보의 리뷰정보
+*/
 
-/*
 var filterList: ArrayList<FilterItem> = ArrayList() //필터에 사용할 병원정보
 var reviewList: ArrayList<ReviewItem> = ArrayList() //병원정보의 리뷰정보
-*/
 
 var userHospitalFavorite: HashMap<String, Boolean> = hashMapOf()

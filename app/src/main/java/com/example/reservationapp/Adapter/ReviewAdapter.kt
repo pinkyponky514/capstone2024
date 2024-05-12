@@ -56,9 +56,8 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
     }
 
     //
-    fun updatelist(newList: ArrayList<ReviewItem>) {
-        review_list_data = newList
-        Log.w("ReviewAdapter", "newList: $newList, updateList: $review_list_data")
+    fun updatelist(newList: MutableList<ReviewItem>) {
+        review_list_data = newList as ArrayList<ReviewItem>
         notifyDataSetChanged()
     }
 

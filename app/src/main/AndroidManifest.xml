@@ -20,12 +20,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ReviewWrtieCompletedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReviewWriteDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".CommentDialogActivity"
             android:exported="false" />
         <activity
             android:name=".CheckReservationActivity"
-            android:exported="false" />
-        <!-- 병원 상세페이지 예약 커스텀 다이얼로그 -->
+            android:exported="false" /> <!-- 병원 상세페이지 예약 커스텀 다이얼로그 -->
         <activity
             android:name=".CustomReserveDialogActivity"
             android:exported="false" />

@@ -25,10 +25,7 @@ class MainActivity : AppCompatActivity() {
     var searchRecentWordList = ArrayList<RecentItem>()
 
     lateinit var userName: String
-    //lateinit var userHospitalFavorite: HashMap<String, Boolean>
-
     lateinit var navigation: BottomNavigationView
-    lateinit var medicalHistoryFragment: MedicalHistoryFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,39 +35,41 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
         userName = "" //userId 초기화
-        //userHospitalFavorite = hashMapOf()
 
-        //병원정보 초기화 (DB에서 받아서 넣어야함)
-        reviewList = ArrayList()
-        filterList = ArrayList()
+        if(reviewList.isEmpty() && filterList.isEmpty()) {
+            //병원정보 초기화 (DB에서 받아서 넣어야함)
+/*
+            reviewList = ArrayList()
+            filterList = ArrayList()
+*/
 
-        reviewList.add(ReviewItem("4.0", "병원이 너무 좋아요", "2024.04.01", "hansung"))
-        reviewList.add(ReviewItem("3.0", "솔직하게 말하자면 병원이 크고 시설도 다 좋은데, 의사 선생님이나 간호사 분들이 너무 불친절합니다.", "2024.04.05", "user1"))
-        reviewList.add(ReviewItem("4.5", "다닐만 합니다", "2024.04.20", "user2"))
-        reviewList.add(ReviewItem("2.0", "대기 시간도 너무 길고 신설 병원이라 그런지 너무 체계가 엉망입니다", "2024.05.01", "user3"))
-        reviewList.add(ReviewItem("4.0", "병원이 너무 좋아요", "2024.05.03", "user4"))
-        reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
-        reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
-        reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
-        reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
-        reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
-
-
-        filterList.add(FilterItem("삼성드림이비인후과", "역삼동 826-24 화인타워 5,6층", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 5, reviewList, "4.0", 5))
-        filterList.add(FilterItem("강남성모이비인후과의원", "서울특별시 강남", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 6, reviewList, "4.0", 6))
-        filterList.add(FilterItem("강남코모키의원", "서울특별시 강남", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 4, reviewList, "4.0", 4))
-        filterList.add(FilterItem("강남서울이비인후과", "서울특별시 강남", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 7, reviewList, "4.0", 7))
-        filterList.add(FilterItem("청소년내과", "충청북도 청주시", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 2, reviewList, "4.0", 2))
-        filterList.add(FilterItem("동탄호수소아청소년과의원", "경기도 화성시 송동", listOf("소아청소년과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 10, reviewList, "4.0", 8))
-        filterList.add(FilterItem("우리의원", "경기도 오산시 궐동", listOf("외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 9, reviewList, "4.0", 9))
-        filterList.add(FilterItem("새봄연합의원외과", "경기도 오산시 갈곶동", listOf("가정의학과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 10, reviewList, "4.0", 10))
-        filterList.add(FilterItem("두리이비인후과의원", "경기도 화성시 송동", listOf("이비인후과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 3, reviewList, "4.0", 3))
-        filterList.add(FilterItem("분당서울여성의원", "경기도 성남시 분당구 정자동", listOf("산부인과",), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 1, reviewList, "4.0", 1))
+            reviewList.add(ReviewItem("4.0", "병원이 너무 좋아요", "2024.04.01", "hansung"))
+            reviewList.add(ReviewItem("3.0", "솔직하게 말하자면 병원이 크고 시설도 다 좋은데, 의사 선생님이나 간호사 분들이 너무 불친절합니다.", "2024.04.05", "user1"))
+            reviewList.add(ReviewItem("4.5", "다닐만 합니다", "2024.04.20", "user2"))
+            reviewList.add(ReviewItem("2.0", "대기 시간도 너무 길고 신설 병원이라 그런지 너무 체계가 엉망입니다", "2024.05.01", "user3"))
+            reviewList.add(ReviewItem("4.0", "병원이 너무 좋아요", "2024.05.03", "user4"))
+            reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
+            reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
+            reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
+            reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
+            reviewList.add(ReviewItem("4.5", "병원이 너무 좋아요", "2024.05.05", "user5"))
 
 
+            filterList.add(FilterItem("삼성드림이비인후과", "역삼동 826-24 화인타워 5,6층", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 5, reviewList, "4.0", 5))
+            filterList.add(FilterItem("강남성모이비인후과의원", "서울특별시 강남", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 6, reviewList, "4.0", 6))
+            filterList.add(FilterItem("강남코모키의원", "서울특별시 강남", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 4, reviewList, "4.0", 4))
+            filterList.add(FilterItem("강남서울이비인후과", "서울특별시 강남", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 7, reviewList, "4.0", 7))
+            filterList.add(FilterItem("청소년내과", "충청북도 청주시", listOf("이비인후과", "내과", "외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 2, reviewList, "4.0", 2))
+            filterList.add(FilterItem("동탄호수소아청소년과의원", "경기도 화성시 송동", listOf("소아청소년과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 10, reviewList, "4.0", 8))
+            filterList.add(FilterItem("우리의원", "경기도 오산시 궐동", listOf("외과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 9, ArrayList(), "4.0", 9))
+            filterList.add(FilterItem("새봄연합의원외과", "경기도 오산시 갈곶동", listOf("가정의학과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","휴무")), 10, reviewList, "4.0", 10))
+            filterList.add(FilterItem("두리이비인후과의원", "경기도 화성시 송동", listOf("이비인후과"), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 3, ArrayList(), "4.0", 3))
+            filterList.add(FilterItem("분당서울여성의원", "경기도 성남시 분당구 정자동", listOf("산부인과",), hashMapOf(Pair("월","9:00~15:00"), Pair("화","9:00~16:00"), Pair("수","9:00~17:00"), Pair("목","9:00~18:00"), Pair("금","9:00~19:00"), Pair("토","9:00~14:00"), Pair("일","정기휴무"), Pair("점심","12:00~13:00"), Pair("공휴일","정상영업")), 1, reviewList, "4.0", 1))
+        }
 
-        searchRecentWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
-        medicalHistoryFragment = MedicalHistoryFragment.newInstance("")
+        //최근검색어
+        //searchRecentWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
+
 
         //처음 실행시 홈 선택으로 시작
         navigation = binding.navigation
@@ -85,8 +84,6 @@ class MainActivity : AppCompatActivity() {
     //액티비티 전환 사용자정의 함수
     fun setActivity(context: Context, activity: Any) {
         val intent = Intent(context, activity::class.java)
-        //intent.putExtra("filterList", filterList)
-        //intent.putExtra("reviewList", reviewList)
         context.startActivity(intent)
         //(context as Activity).finish()
     }
@@ -94,15 +91,6 @@ class MainActivity : AppCompatActivity() {
     fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.main_content, fragment).commit()
     }
-    /*
-    fun setFragment(context: Context,fragment: Fragment) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(context,fragment, null)
-            addToBackStack(null)
-        }
-    }
-    */
 
     fun navigationSetItem() {
         navigation.setOnItemSelectedListener { item ->
@@ -111,8 +99,7 @@ class MainActivity : AppCompatActivity() {
                     setFragment(HomeFragment())
                 }
                 R.id.checkupFrag -> { //나의 진료내역 버튼 클릭했을 때
-                    //setFragment(MedicalHistoryFragment())
-                    setFragment(medicalHistoryFragment)
+                    setFragment(MedicalHistoryFragment())
                 }
                 R.id.communityFrag -> { //커뮤니티 버튼 클릭했을 때
                     setFragment(CommunityFragment())

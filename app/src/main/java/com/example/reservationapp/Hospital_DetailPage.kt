@@ -88,15 +88,27 @@ class Hospital_DetailPage : AppCompatActivity() {
         sundayTimeTextView = binding.textViewSundayTime
         dayOffTimeTextView = binding.textViewDayOffTime
 
+        //리뷰 관련 초기화
+        adapter = ReviewAdapter()
+        val recyclerView = binding.reviewRecyclerView
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.setHasFixedSize(true)
+
+
 
         //DB에서 데이터 가져올 것임
         val hospitalName = intent.getStringExtra("hospitalName").toString()
         val className = binding.textViewClassName.text.toString()
+        Log.w("Hospital DetailPage", "filterList: $filterList")
         for(i in filterList.indices) {
             if(filterList[i].hospitalName == hospitalName) { //넘겨받은 병원이름으로 DB에서 데이터 가져올 것임
 
                 hospitalString = filterList[i].hospitalName
-                hospitalNameTextView.text = filterList[i].hospitalName //병원이름
+
+                //병원이름
+                hospitalNameTextView.text = filterList[i].hospitalName
 
                 //진료과명
                 var className = ""
@@ -123,8 +135,15 @@ class Hospital_DetailPage : AppCompatActivity() {
 
                 //병원 운영상태
                 val timeSplit = dayTime.toString().split("~")
-                val startTime = timeSplit[0]
-                val endTime = timeSplit[1]
+                var startTime = ""
+                var endTime = ""
+                if(timeSplit.size > 1) {
+                    startTime = timeSplit[0]
+                    endTime = timeSplit[1]
+                } else {
+                    startTime = timeSplit[0]
+                    endTime = timeSplit[0]
+                }
 
                 val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                 val currentTimeFormatted = dateFormat.format(calendar.time)
@@ -148,9 +167,40 @@ class Hospital_DetailPage : AppCompatActivity() {
                 sundayTimeTextView.text = filterList[i].weekTime["일"]
                 dayOffTimeTextView.text = filterList[i].weekTime["공휴일"]
 
+
+                //리뷰 설정
+                //
+                reviewCount = filterList[i].reviewList.size
+                val reviewCountTextView = binding.reviewCountTextView
+                reviewCountTextView.text = reviewCount.toString() //리뷰개수 textView에 표시
+
+                notReviewConstraintLayout = binding.notReviewConstraintLayout //리뷰가 없을 경우 constraintLayout
+                reviewConstraintLayout = binding.reviewRecyclerView //리뷰가 있을 경우 constraintLayout
+                notReviewConstraintLayout.visibility = View.GONE
+                reviewConstraintLayout.visibility = View.GONE
+
+                if(reviewCount == 0) { //리뷰가 하나도 없을 경우
+                    not_review_constraint_flag = true
+                    notReviewConstraintLayout.visibility = View.VISIBLE
+
+                    review_constraint_flag = false
+                    reviewConstraintLayout.visibility = View.GONE
+
+                } else { //리뷰가 한개이상 있을 경우
+                    review_constraint_flag = true
+                    reviewConstraintLayout.visibility = View.VISIBLE
+
+                    not_review_constraint_flag = false
+                    notReviewConstraintLayout.visibility = View.GONE
+
+                    adapter.updatelist(filterList[i].reviewList)
+                    recyclerView.suppressLayout(true) //스트롤 불가능
+                }
+
                 break
             }
         }
+
 
 
         // 예약 버튼 클릭 이벤트 설정
@@ -170,7 +220,7 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         favoriteButton.setOnClickListener {
 
-            if(userHospitalFavorite[hospitalString] == true) { //즐겨찾기 취소
+            if (userHospitalFavorite[hospitalString] == true) { //즐겨찾기 취소
                 userHospitalFavorite[hospitalString] = false
                 favoriteButton.setImageResource(R.drawable.ic_likes)
 
@@ -196,55 +246,10 @@ class Hospital_DetailPage : AppCompatActivity() {
             }
 
             Log.w("Hospital DetailPage", "favorite Button Boolean : ${userHospitalFavorite}")
-/*
-            if(mainActivity.userHospitalFavorite[hospitalNameTextView.text.toString()] == true) { //즐겨찾기함
-                mainActivity.userHospitalFavorite[hospitalNameTextView.text.toString()] = false
-                favoriteButton.setImageResource(R.drawable.ic_likes)
-            } else { //즐겨찾기 안함
-                mainActivity.userHospitalFavorite[hospitalNameTextView.text.toString()] = true
-                favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
-            }
-*/
         }
 
-        //리뷰 설정
-        adapter = ReviewAdapter()
 
-        val recyclerView = binding.reviewRecyclerView
-        val linearLayoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.setHasFixedSize(true)
-
-
-        //
-        reviewCount = reviewList.size
-        val reviewCountTextView = binding.reviewCountTextView
-        reviewCountTextView.text = reviewCount.toString() //리뷰개수 textView에 표시
-
-        notReviewConstraintLayout = binding.notReviewConstraintLayout //리뷰가 없을 경우 constraintLayout
-        reviewConstraintLayout = binding.reviewRecyclerView //리뷰가 있을 경우 constraintLayout
-        notReviewConstraintLayout.visibility = View.GONE
-        reviewConstraintLayout.visibility = View.GONE
-
-        if(reviewCount == 0) { //리뷰가 하나도 없을 경우
-            not_review_constraint_flag = true
-            notReviewConstraintLayout.visibility = View.VISIBLE
-
-            review_constraint_flag = false
-            reviewConstraintLayout.visibility = View.GONE
-
-        } else { //리뷰가 한개이상 있을 경우
-            review_constraint_flag = true
-            reviewConstraintLayout.visibility = View.VISIBLE
-
-            not_review_constraint_flag = false
-            notReviewConstraintLayout.visibility = View.GONE
-
-            adapter.updatelist(reviewList)
-            recyclerView.suppressLayout(true) //스트롤 불가능
-        }
-    }
 
     //
+    }
 }

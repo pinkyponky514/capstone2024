@@ -158,7 +158,7 @@ class CustomReserveDialogActivity() : DialogFragment() {
             //val reserveDataItem = ArrayList<HistoryItem>()
             //reserveDataItem.add(HistoryItem("대기중", thisHospitalName, thisClassName, reserveDate.toString(), reserveTime.toString()))
 
-            val reserveDataItem = HistoryItem("대기중", thisHospitalName, thisClassName, reserveDate.toString(), reserveTime.toString())
+            val reserveDataItem = HistoryItem("대기중", thisHospitalName, thisClassName, reserveDate.toString(), reserveTime.toString(), false)
             Log.w("CustomReserveDialog reservationButton", "reserveDataItem: $reserveDataItem")
 
             val intent = Intent(requireActivity(), CheckReservationActivity::class.java)

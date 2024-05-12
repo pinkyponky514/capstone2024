@@ -53,7 +53,6 @@ class PopularHospitalAdapter: RecyclerView.Adapter<PopularHospitalAdapter.ViewHo
     //
     fun updatelist(newList: List<PopularHospitalItem>) {
         popular_hospital_list_data = newList as ArrayList<PopularHospitalItem>
-        Log.w("PopularHospitalAdapter", "updateList : ${newList}")
         notifyDataSetChanged()
     }
 //

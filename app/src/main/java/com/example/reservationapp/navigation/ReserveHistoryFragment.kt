@@ -31,11 +31,11 @@ class ReserveHistoryFragment : Fragment() {
 
         //예약 진료내역 데이터 넣기 (DB 데이터 가져와서 넣기)
         reserveHistoryList = ArrayList()
-        reserveHistoryList.add(HistoryItem("예약","강남대학병원", "내과", "2024.2.14","15:00"))
-        reserveHistoryList.add(HistoryItem("예약","서울병원", "이비인후과", "2024.3.14", "14:00"))
-        reserveHistoryList.add(HistoryItem("예약", "별빛한의원", "외과", "2024.3.25", "18:30"))
-        reserveHistoryList.add(HistoryItem("대기중","강남성형외과", "성형외과", "2024.5.13", "13:30"))
-        reserveHistoryList.add(HistoryItem("대기중","버팀병원", "내과", "2024.05.28", "16:20"))
+        reserveHistoryList.add(HistoryItem("예약","강남대학병원", "내과", "2024.2.14","15:00", false))
+        reserveHistoryList.add(HistoryItem("예약","서울병원", "이비인후과", "2024.3.14", "14:00", false))
+        reserveHistoryList.add(HistoryItem("예약", "별빛한의원", "외과", "2024.3.25", "18:30", false))
+        reserveHistoryList.add(HistoryItem("대기중","강남성형외과", "성형외과", "2024.5.13", "13:30", false))
+        reserveHistoryList.add(HistoryItem("대기중","버팀병원", "내과", "2024.05.28", "16:20", false))
         adapter.updatelist(reserveHistoryList)
 
 

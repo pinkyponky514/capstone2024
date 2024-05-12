@@ -49,7 +49,6 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater) //val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val mainActivity = requireActivity() as MainActivity //MainActivity 접근
-        mainActivity.medicalHistoryFragment = MedicalHistoryFragment.newInstance("")
 
 
         //지도 API
@@ -120,7 +119,6 @@ class HomeFragment : Fragment() {
         val reserveMoreButton = binding.commingMoreTextView
         reserveMoreButton.setOnClickListener {
             mainActivity.navigation.selectedItemId = R.id.checkupFrag
-            mainActivity.medicalHistoryFragment = MedicalHistoryFragment.newInstance("reserve")
             mainActivity.navigationSetItem()
         }
 
@@ -137,7 +135,7 @@ class HomeFragment : Fragment() {
                 startActivity(intent)
             }
 
-            Log.w("Class Button Info", "Button ID: $classButtonId, Text: ${classReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
+            Log.w("HomeFragment", "class Button ID: $classButtonId, Text: ${classReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
         }
         //진료과별 더보기 버튼
         val classMoreTextView = binding.classMoreTextView
@@ -159,7 +157,7 @@ class HomeFragment : Fragment() {
                 startActivity(intent)
             }
 
-            Log.w("Syptom Button Info", "Button ID: $syptomButtonId, Text: ${syptomReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
+            Log.w("HomeFragment", "syptom Button ID: $syptomButtonId, Text: ${syptomReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
         }
         //증상 질환별 더보기 버튼
         val syptomMoreTextView = binding.symptomMoreTextView
