@@ -12,15 +12,18 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.UserSignUpInfo
+import com.example.reservationapp.Model.PatientSignupInfoResponse
+import com.example.reservationapp.Model.UserSignUpInfoRequest
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SignUpPatient : AppCompatActivity() {
@@ -109,6 +112,8 @@ class SignUpPatient : AppCompatActivity() {
             val registerPassword = passwordEditText.text.toString()
             val registerName = nameEditText.text.toString()
             val registerPhone = binding.registerPhone.text.toString()
+            val registerBirthday = "$birthdateYear-$birthdateMonth-$birthdateDay"
+            Log.w("SignUpPatient", "Birthday: $registerBirthday")
 
             // 각 필드가 비어 있는지 확인
             if (registerId.isEmpty() || registerEmail.isEmpty() || registerPassword.isEmpty() || registerName.isEmpty() || registerPhone.isEmpty()) {
@@ -136,38 +141,40 @@ class SignUpPatient : AppCompatActivity() {
                 binding.passwordWarning.visibility = View.GONE
             }
 
+
             // 모든 필드가 입력되었을 때 회원가입 성공 처리 수행
-            Log.w("Birthdate : ", "$birthdateYear-$birthdateMonth-$birthdateDay")
-
-
             //Retrofit
             val retrofit = Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080")
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create()) //.addConverterFactory(MoshiConverterFactory.create())
                 .build()
 
-            val userSignupInfo = UserSignUpInfo(registerId, registerPassword, registerName)
-            val call = retrofit.create(APIService::class.java).postSignUp(userSignupInfo)
-            call.enqueue(object: Callback<UserSignUpInfo> {
-                override fun onResponse(call: Call<UserSignUpInfo>, response: Response<UserSignUpInfo>) {
-                    if(response.isSuccessful())
-                        Log.d("Success Response", response.body().toString()) //통신 성공한 경우
+            lateinit var responseBody: PatientSignupInfoResponse
+            val userSignupInfo = UserSignUpInfoRequest(registerId, registerPassword, registerName)
+            val call = retrofit.create(APIService::class.java).postPatientSignUp(userSignupInfo)
+            call.enqueue(object: Callback<PatientSignupInfoResponse> {
+                override fun onResponse(call: Call<PatientSignupInfoResponse>, response: Response<PatientSignupInfoResponse>) {
+                    if(response.isSuccessful()) {
+                        responseBody = response.body()!!
+                        Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
+
+                        //회원가입 성공시 메인 환자 로그인 액티비티로 이동
+                        val intent = Intent(this@SignUpPatient, LoginPatientActivity::class.java)
+                        intent.putExtra("responseData", responseBody)
+                        startActivity(intent)
+                        finish() //현재 액티비티 종료
+                    }
                     else
-                        Log.d("RESPONSE", "FAILURE") //통신 성공, 응답은 실패
+                        Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                 }
 
-                override fun onFailure(call: Call<UserSignUpInfo>, t: Throwable) {
+                override fun onFailure(call: Call<PatientSignupInfoResponse>, t: Throwable) {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }
             })
-
-
-            // 회원가입 성공 시 메인 화면으로 이동
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish() // 현재 액티비티 종료
-
         }
+        //
     }
 
+    //
 }

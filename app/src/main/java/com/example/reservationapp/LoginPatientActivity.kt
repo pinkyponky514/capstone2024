@@ -1,6 +1,6 @@
 package com.example.reservationapp
 
-import RetrofitClient
+import com.example.reservationapp.Retrofit.RetrofitClient
 import android.content.Intent
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -11,23 +11,20 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.UserLoginInfo
-import com.example.reservationapp.Model.UserSignUpInfo
+import com.example.reservationapp.Model.UserLoginInfoRequest
 import com.example.reservationapp.databinding.ActivityLoginPatientBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 //로그인 화면
 class LoginPatientActivity: AppCompatActivity() {
-    lateinit var lContext: Context
     private lateinit var binding: ActivityLoginPatientBinding
 
     lateinit var userId: String //유저가 입력한 아이디
     lateinit var userPassword: String //유저가 입력한 비밀번호
 
+    //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
 
@@ -48,8 +45,7 @@ class LoginPatientActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         //초기화
-        lContext = this
-        IdEditText = binding.EmailEditText
+        IdEditText = binding.IdEditText
         PasswordEditText = binding.PasswordEditText
         PasswordCheckTextView = binding.PasswordCheckTextView
 
@@ -92,15 +88,6 @@ class LoginPatientActivity: AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 LoginButton.isEnabled = idFlag && pwFlag
-                /*
-                if(emailFlag && pwFlag) {//버튼 활성화
-                    LoginButton.isEnabled = true
-                    //LoginButton.setBackgroundColor(Color.parseColor("#8AF311"))
-                } else {//버튼 비활성화
-                    LoginButton.isEnabled = false
-                    //LoginButton.setBackgroundColor(Color.parseColor("#666A73"))
-                }
-                 */
             }
         }
         IdEditText.addTextChangedListener(EmailPasswordWatcher)
@@ -108,36 +95,39 @@ class LoginPatientActivity: AppCompatActivity() {
         //
 
 
-        //로그인 버튼 눌렀을때
+        //로그인 버튼 눌렀을때 onClick
         LoginButton.setOnClickListener {
             userId = IdEditText.text.toString()
             userPassword = PasswordEditText.text.toString()
-            Log.w("userId, userPassword", ": $userId" + ", $userPassword")
+            Log.w("LoginPatientActivity", "userId: $userId, userPassword: $userPassword")
 
-            val userLoginInfo = UserLoginInfo(userId, userPassword)
+            val userLoginInfo = UserLoginInfoRequest(userId, userPassword)
 
-            retrofitClient = RetrofitClient().getInstance()
-            apiService = RetrofitClient().getRetrofitInterface()!!
-
-
-            apiService.postLogin(userLoginInfo).enqueue(object: Callback<String> {
+            retrofitClient = RetrofitClient.getInstance()
+            apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+            apiService.postPatientLogin(userLoginInfo).enqueue(object: Callback<String> {
                     override fun onResponse(call: Call<String>, response: Response<String>) {
-                        if(response.isSuccessful())
-                            Log.d("Success Response", response.body().toString()) //통신 성공한 경우
+                        if(response.isSuccessful()) {
+                            val userToken = response.body().toString()
+                            val intent = Intent(this@LoginPatientActivity, MainActivity::class.java)
+
+                            intent.putExtra("userId", userLoginInfo.id)
+                            intent.putExtra("userToken", userToken)
+
+                            Log.d("LoginPatientActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
+                            Log.d("Success Response", "userToken: ${userToken}, body: ${response.body().toString()}") //통신 성공한 경우
+
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+                            startActivity(intent)
+                            finish()                        }
                         else
-                            Log.d("RESPONSE", "FAILURE") //통신 성공, 응답은 실패
+                            Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                     }
 
                     override fun onFailure(call: Call<String>, t: Throwable) {
                         Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                     }
-
             })
-
-            val intent = Intent(this, MainActivity::class.java)
-            //intent.putExtra("userId", userLoginInfo.id)
-            startActivity(intent)
-            finish()
         }
 
         //회원가입 버튼 눌렀을때

@@ -2,12 +2,20 @@ package com.example.reservationapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.HospitalSignupInfoResponse
+import com.example.reservationapp.Model.UserSignUpInfoRequest
+import com.example.reservationapp.Retrofit.RetrofitClient
 import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SignUpDoctor : AppCompatActivity() {
     private lateinit var registerId: EditText
@@ -16,6 +24,11 @@ class SignUpDoctor : AppCompatActivity() {
     private lateinit var registerName: EditText
     private lateinit var registerPhone: EditText
     private lateinit var passwordWarning: TextView // 비밀번호 경고문을 표시할 TextView
+
+    //Retrofit
+    private lateinit var retrofitClient: RetrofitClient
+    private lateinit var apiService: APIService
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,16 +49,18 @@ class SignUpDoctor : AppCompatActivity() {
         registerButton.setOnClickListener { attemptSignUp() }
     }
 
+    //회원가입 처리 함수
     private fun attemptSignUp() {
         // EditText의 값 가져오기
-        val id = registerId.text.toString()
-        val email = registerEmail.text.toString()
+        val businessNumber = registerId.text.toString()
         val password = registerPassword.text.toString()
-        val name = registerName.text.toString()
+        val hospitalName = registerName.text.toString()
+
+        val email = registerEmail.text.toString()
         val phone = registerPhone.text.toString()
 
         // 각 필드가 비어 있는지 확인
-        if (id.isEmpty() || email.isEmpty() || password.isEmpty() || name.isEmpty() || phone.isEmpty()) {
+        if (businessNumber.isEmpty() || email.isEmpty() || password.isEmpty() || hospitalName.isEmpty() || phone.isEmpty()) {
             // 에러 메시지를 Snackbar를 통해 표시
             Snackbar.make(registerId, "모든 항목을 입력해주세요", Snackbar.LENGTH_SHORT).show()
             return
@@ -53,18 +68,43 @@ class SignUpDoctor : AppCompatActivity() {
 
         // 비밀번호가 8자리 이상인지 확인
         if (password.length < 8) {
-            // 비밀번호가 7자리 미만이므로 경고 메시지 표시
+            // 비밀번호가 8자리 미만이므로 경고 메시지 표시
             passwordWarning.text = "비밀번호는 8자리 이상이어야 합니다"
             passwordWarning.visibility = View.VISIBLE
             return
+        } else {
+            // 비밀번호가 조건을 충족하면 경고 메시지를 숨기고 회원가입 진행
+            passwordWarning.visibility = View.GONE
         }
 
-        // 비밀번호가 조건을 충족하면 경고 메시지를 숨기고 회원가입 진행
-        passwordWarning.visibility = View.GONE
 
-        // 회원가입 성공 시 메인 화면으로 이동
-        val intent = Intent(this@SignUpDoctor, HospitalActivity::class.java)
-        startActivity(intent)
-        finish() // 현재 액티비티 종료
+        val userSignUpInfo = UserSignUpInfoRequest(businessNumber, password, hospitalName)
+        lateinit var responseBody: HospitalSignupInfoResponse
+
+        retrofitClient = RetrofitClient.getInstance()
+        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+        apiService.postHospitalSignUp(userSignUpInfo).enqueue(object: Callback<HospitalSignupInfoResponse> {
+            override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+                if(response.isSuccessful()) {
+                    responseBody = response.body()!!
+                    Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
+
+                    //회원가입 성공시 병원 로그인 액티비티로 이동
+                    val intent = Intent(this@SignUpDoctor, LoginDoctorActivity::class.java)
+                    intent.putExtra("responseData", responseBody)
+                    startActivity(intent)
+                    finish()
+                }
+                else
+                    Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
+            }
+
+            override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+                Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+            }
+        })
     }
+
+
+    //
 }

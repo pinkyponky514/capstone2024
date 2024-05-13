@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/LogoImageView" />
 
     <EditText
-        android:id="@+id/EmailEditText"
+        android:id="@+id/IdEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -58,15 +58,15 @@
         android:text="비밀번호"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/IdTextView"
-        app:layout_constraintTop_toBottomOf="@+id/EmailEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/IdEditText" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/PW_TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="@+id/EmailEditText"
-        app:layout_constraintStart_toStartOf="@+id/EmailEditText"
+        app:layout_constraintEnd_toEndOf="@+id/IdEditText"
+        app:layout_constraintStart_toStartOf="@+id/IdEditText"
         app:layout_constraintTop_toBottomOf="@+id/PasswordTextView"
         app:passwordToggleEnabled="true">
 

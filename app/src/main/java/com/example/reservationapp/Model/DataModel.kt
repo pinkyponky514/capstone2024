@@ -2,21 +2,8 @@ package com.example.reservationapp.Model
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.Calendar
-
-
-//Retrofit - Model
-data class UserSignUpInfo (
-    @SerializedName("id") var id: String,
-    @SerializedName("password") var password: String,
-    @SerializedName("name") var name: String
-)
-data class UserLoginInfo (
-    @SerializedName("id") var id: String,
-    @SerializedName("password") var password: String
-)
 
 //ReserveAlarmAdapter
 data class ReserveItem (

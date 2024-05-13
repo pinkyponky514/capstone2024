@@ -72,7 +72,7 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
                         if(pastHistoryList[j].hospitalName == hospital_name_string) {
                             pastHistoryList[j].reviewWriteBoolean = true
 
-                            //등록하고 액티비티 전환 코드 작성
+                            //등록하고 액티비티 전환
                             val intent = Intent(this, ReviewWrtieCompletedActivity::class.java)
                             startActivity(intent)
                             finish()

@@ -8,7 +8,13 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
+import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.UserLoginInfoRequest
+import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityLoginDoctorBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 //병원측 로그인 화측
 class LoginDoctorActivity : AppCompatActivity() {
@@ -16,6 +22,11 @@ class LoginDoctorActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginDoctorBinding
     private lateinit var userBusinessNumber: String //유저가 직접 입력한 사업자번호
     private lateinit var userPassword: String //유저가 입력한 비밀번호
+
+
+    //Retrofit
+    private lateinit var retrofitClient: RetrofitClient
+    private lateinit var apiService: APIService
 
 
     //onStart() 할 때마다 입력칸 초기화 시키기 위해 전역변수 선언
@@ -27,6 +38,8 @@ class LoginDoctorActivity : AppCompatActivity() {
     private var BusinessNumberFlag: Boolean = false //사업자번호 감지 플래그
     private var pwFlag: Boolean = false //비밀번호 감지 플래그
     private var flag: Boolean = false
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +83,7 @@ class LoginDoctorActivity : AppCompatActivity() {
             }
         }
         PasswordEditText.addTextChangedListener(pwWatcher) //비밀번호 감지할 수 있도록 이벤트 리스너
+
         //둘다 감지 되었을때 버튼 활성화
         val BusinessPasswordWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -88,11 +102,36 @@ class LoginDoctorActivity : AppCompatActivity() {
         LoginButton.setOnClickListener {
             userBusinessNumber = BusinessNumberText.text.toString()
             userPassword = PasswordEditText.text.toString()
+            Log.w("LoginDoctorActivity", "userBusinessNumber: $userBusinessNumber, userPassword: $userPassword")
 
-            Log.w("userBusinessNumber, userPassword", ": $userBusinessNumber" + ", $userPassword")
-            val intent = Intent(this, HospitalActivity::class.java)
-            startActivity(intent)
-            finish()
+            val userLoginInfo = UserLoginInfoRequest(userBusinessNumber, userPassword)
+
+            retrofitClient = RetrofitClient.getInstance()
+            apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+            apiService.postHospitalLogin(userLoginInfo).enqueue(object: Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if(response.isSuccessful()) {
+                        val userToken = response.body().toString()
+                        val intent = Intent(this@LoginDoctorActivity, HospitalActivity::class.java)
+
+                        intent.putExtra("userId", userLoginInfo.id)
+                        intent.putExtra("userToken", userToken)
+
+                        Log.d("LoginDoctorActivity", "userBusinessNumber: ${userLoginInfo.id}, userToken: $userToken")
+                        Log.d("Success Response", "userToken: ${userToken}, body: ${response.body().toString()}") //통신 성공한 경우
+
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+                        startActivity(intent)
+                        finish()
+                    }
+                    else
+                        Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                }
+            })
         }
         //회원가입 버튼 눌렀을때
         SignUpButton.setOnClickListener {
