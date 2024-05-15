@@ -74,7 +74,9 @@ data class ReservationItem(
     val time: String, // 예약 시간
     val patientName: String, // 환자 이름
     val birthDate: String, // 생년월일
-    val reservationDate: String // 예약 날짜
+    val reservationDate: String, // 예약 날짜
+    val status: String // 진료상태
+
 )
 
 // DataModel.kt

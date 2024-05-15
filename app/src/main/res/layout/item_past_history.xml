@@ -22,7 +22,7 @@
 
     <!-- 진료상태 textView -->
     <TextView
-        android:id="@+id/history_status_textView"
+        android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"

@@ -21,6 +21,7 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
         val acceptButton: Button = itemView.findViewById(R.id.acceptButton)
         val cancelButton: Button = itemView.findViewById(R.id.cancelButton)
         val buttonLayout: LinearLayout = itemView.findViewById(R.id.buttonLayout)
+        val historyStatusTextView: TextView = itemView.findViewById(R.id.status)
 
         init {
             // LinearLayout 클릭 이벤트 처리
@@ -56,6 +57,7 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
 
 
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservationViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.hospital_reservation_item, parent, false)
@@ -67,6 +69,7 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
         holder.timeTextView.text = currentItem.time
         holder.nameTextView.text = currentItem.patientName
         holder.birthDateTextView.text = currentItem.birthDate
+        holder.historyStatusTextView.text = currentItem.status
 
         // 예약된 날짜에 따라 배경색 변경
         if (currentItem.reservationDate == selectedDate) {
@@ -74,7 +77,18 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
         }
+
+        // 여기서 status에 따라 배경색 변경
+        if (currentItem.status == "예약") {
+            holder.historyStatusTextView.setBackgroundResource(R.drawable.style_dark_green_rectangle_status)
+        } else if (currentItem.status == "대기") {
+            holder.historyStatusTextView.setBackgroundResource(R.drawable.style_gray_rectangle_status)
+        } else if (currentItem.status == "진료완료"){
+            holder.historyStatusTextView.setBackgroundResource(R.drawable.alarm_hospital_finish)
+        }
     }
+
+
 
     override fun getItemCount(): Int {
         return reservationList.size

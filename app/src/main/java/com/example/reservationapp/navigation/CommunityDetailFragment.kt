@@ -66,7 +66,7 @@ class CommunityDetailFragment : Fragment() {
 
         // 현재 시간을 가져옵니다.
         val currentTime = Calendar.getInstance().time
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val formattedTime = sdf.format(currentTime)
 
         // 작성 시간을 표시하는 TextView를 참조합니다.
@@ -78,17 +78,6 @@ class CommunityDetailFragment : Fragment() {
         scaleAnimation.duration = 500
         bounceInterpolator = BounceInterpolator()
         scaleAnimation.interpolator = bounceInterpolator
-
-//        // buttonSend 클릭 이벤트 핸들러 추가
-//        val buttonSend = view.findViewById<Button>(R.id.buttonSend)
-//        buttonSend.setOnClickListener {
-//            // ReviewDialogActivity로 이동
-//            val comment = "사용자의 댓글" // 여기에 사용자의 댓글을 가져오세요.
-//            val intent = Intent(requireContext(), ReviewDialogActivity::class.java).apply {
-//                putExtra("comment", comment)
-//            }
-//            startActivity(intent)
-//        }
 
         // buttonSend 클릭 이벤트 핸들러 추가
         val buttonSend = view.findViewById<Button>(R.id.buttonSend)

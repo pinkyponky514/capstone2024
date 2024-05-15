@@ -4,6 +4,7 @@ import ReservationAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,11 +28,11 @@ class HospitalActivity : AppCompatActivity() {
 
         // 예약 리스트 초기화 및 임의의 데이터 값 설정
         reservationList = ArrayList()
-        reservationList.add(ReservationItem("10:00", "김철수", "1990-04-11", "2024-04-29"))
-        reservationList.add(ReservationItem("14:30", "이영희", "1985-04-19", "2024-04-29"))
-        reservationList.add(ReservationItem("12:30", "김아무", "1985-04-30", "2024-05-19"))
-        reservationList.add(ReservationItem("11:30", "유재석", "1985-05-23", "2024-06-01"))
-        reservationList.add(ReservationItem("15:30", "이광수", "1985-03-29", "2024-03-01"))
+        reservationList.add(ReservationItem("10:00", "김철수", "1990-04-11", "2024-04-29", "진료완료"))
+        reservationList.add(ReservationItem("14:30", "이영희", "1985-04-19", "2024-04-29", "진료완료"))
+        reservationList.add(ReservationItem("12:30", "김아무", "1985-04-30", "2024-05-19", "예약"))
+        reservationList.add(ReservationItem("15:30", "이광수", "1985-03-29", "2024-05-19", "대기"))
+        reservationList.add(ReservationItem("11:30", "유재석", "1985-05-23", "2024-05-19", "진료완료"))
 
         // 예약된 내역을 표시할 RecyclerView 설정
         reservationAdapter = ReservationAdapter()
@@ -48,8 +49,8 @@ class HospitalActivity : AppCompatActivity() {
             }
         }
 
-        val hospitalNameTextView: TextView = findViewById(R.id.hospital_name)
-        hospitalNameTextView.setOnClickListener {
+        val mypage_button: Button = findViewById(R.id.mypage_button)
+        mypage_button.setOnClickListener {
             val intent = Intent(this, Hospital_Mypage::class.java)
             startActivity(intent)
         }
