@@ -2,7 +2,6 @@ package com.example.reservationapp
 
 import com.example.reservationapp.Retrofit.RetrofitClient
 import android.content.Intent
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -12,14 +11,14 @@ import android.widget.EditText
 import android.widget.TextView
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.UserLoginInfoRequest
-import com.example.reservationapp.databinding.ActivityLoginPatientBinding
+import com.example.reservationapp.databinding.ActivityLoginBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 //로그인 화면
 class LoginPatientActivity: AppCompatActivity() {
-    private lateinit var binding: ActivityLoginPatientBinding
+    private lateinit var binding: ActivityLoginBinding
 
     lateinit var userId: String //유저가 입력한 아이디
     lateinit var userPassword: String //유저가 입력한 비밀번호
@@ -41,7 +40,7 @@ class LoginPatientActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginPatientBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //초기화

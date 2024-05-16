@@ -12,8 +12,8 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.PatientSignUpInfoRequest
 import com.example.reservationapp.Model.PatientSignupInfoResponse
-import com.example.reservationapp.Model.UserSignUpInfoRequest
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -150,9 +150,9 @@ class SignUpPatient : AppCompatActivity() {
                 .build()
 
             lateinit var responseBody: PatientSignupInfoResponse
-            val userSignupInfo = UserSignUpInfoRequest(registerId, registerPassword, registerName)
+            val userSignupInfo = PatientSignUpInfoRequest(registerId, registerPassword, registerName)
             val call = retrofit.create(APIService::class.java).postPatientSignUp(userSignupInfo)
-            call.enqueue(object: Callback<PatientSignupInfoResponse> {
+            val userResponse = call.enqueue(object: Callback<PatientSignupInfoResponse> {
                 override fun onResponse(call: Call<PatientSignupInfoResponse>, response: Response<PatientSignupInfoResponse>) {
                     if(response.isSuccessful()) {
                         responseBody = response.body()!!
@@ -172,6 +172,8 @@ class SignUpPatient : AppCompatActivity() {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }
             })
+
+            Log.w("SignUpPatient", "userResponse: $userResponse")
         }
         //
     }

@@ -22,6 +22,10 @@ var userId: String = ""
 var userName: String = ""
 var userToken: String = ""
 
+var userMapx: Double = 3.0 //사용자 위도
+var userMapy: Double = 127.0 //사용자 경도
+
+
 //메인메뉴
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

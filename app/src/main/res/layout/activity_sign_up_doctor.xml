@@ -34,7 +34,7 @@
         android:drawableLeft="@drawable/ic_email"
         android:drawablePadding="20dp"
         android:ems="10"
-        android:hint="이메일을 입력해주세요"
+        android:hint="우편번호를 입력해주세요"
         android:inputType="none"
         android:paddingLeft="10dp"
         app:layout_constraintEnd_toEndOf="@+id/register_password"

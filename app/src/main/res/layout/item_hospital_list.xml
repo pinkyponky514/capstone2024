@@ -7,25 +7,18 @@
     android:layout_marginTop="10dp"
     android:background="@drawable/style_hospital_list">
 
-    <FrameLayout
+
+    <!-- 병원 대표 사진 -->
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="125dp"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
-    <!-- 병원 대표 사진 -->
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="125dp"
-            android:scaleType="fitXY"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ex_hospital" />
-    </FrameLayout>
+        app:srcCompat="@drawable/ex_hospital" />
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,14 +87,20 @@
             app:layout_constraintStart_toStartOf="@+id/openTimeTextView"
             app:layout_constraintTop_toBottomOf="@+id/openTimeTextView"
             app:srcCompat="@drawable/image_marker" />
+
         <TextView
             android:id="@+id/hospital_address_TextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="15dp"
             android:text="경기도 화성시 장지동"
             android:theme="@style/TextView12dpDarkGray"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toBottomOf="@+id/hospital_position_imageView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/hospital_position_imageView"
             app:layout_constraintTop_toTopOf="@+id/hospital_position_imageView" />
 

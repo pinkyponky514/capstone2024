@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.UserLoginInfoRequest
 import com.example.reservationapp.Retrofit.RetrofitClient
-import com.example.reservationapp.databinding.ActivityLoginDoctorBinding
+import com.example.reservationapp.databinding.ActivityLoginBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,7 +19,7 @@ import retrofit2.Response
 //병원측 로그인 화측
 class LoginDoctorActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityLoginDoctorBinding
+    private lateinit var binding : ActivityLoginBinding
     private lateinit var userBusinessNumber: String //유저가 직접 입력한 사업자번호
     private lateinit var userPassword: String //유저가 입력한 비밀번호
 
@@ -43,11 +43,11 @@ class LoginDoctorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginDoctorBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //초기화
-        BusinessNumberText = binding.BusinessNumberEditText
+        BusinessNumberText = binding.IdEditText
         PasswordEditText = binding.PasswordEditText
         PasswordCheckTextView = binding.PasswordCheckTextView
 

@@ -9,8 +9,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.HospitalSignUpInfoRequest
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
-import com.example.reservationapp.Model.UserSignUpInfoRequest
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
@@ -19,9 +19,9 @@ import retrofit2.Response
 
 class SignUpDoctor : AppCompatActivity() {
     private lateinit var registerId: EditText
-    private lateinit var registerEmail: EditText
     private lateinit var registerPassword: EditText
-    private lateinit var registerName: EditText
+    private lateinit var registerAddNum: EditText //우편번호
+    private lateinit var registerName: EditText //병원이름
     private lateinit var registerPhone: EditText
     private lateinit var passwordWarning: TextView // 비밀번호 경고문을 표시할 TextView
 
@@ -37,9 +37,9 @@ class SignUpDoctor : AppCompatActivity() {
 
         // EditText 참조 가져오기
         registerId = findViewById(R.id.register_id)
-        registerEmail = findViewById(R.id.register_email)
         registerPassword = findViewById(R.id.register_password)
         registerName = findViewById(R.id.register_name)
+        registerAddNum = findViewById(R.id.register_email)
         registerPhone = findViewById(R.id.register_phone)
         passwordWarning = findViewById(R.id.password_warning) // 비밀번호 경고문 TextView 참조
 
@@ -55,12 +55,12 @@ class SignUpDoctor : AppCompatActivity() {
         val businessNumber = registerId.text.toString()
         val password = registerPassword.text.toString()
         val hospitalName = registerName.text.toString()
+        val addNum = registerAddNum.text.toString()
 
-        val email = registerEmail.text.toString()
         val phone = registerPhone.text.toString()
 
         // 각 필드가 비어 있는지 확인
-        if (businessNumber.isEmpty() || email.isEmpty() || password.isEmpty() || hospitalName.isEmpty() || phone.isEmpty()) {
+        if (businessNumber.isEmpty() || addNum.isEmpty() || password.isEmpty() || hospitalName.isEmpty() || phone.isEmpty()) {
             // 에러 메시지를 Snackbar를 통해 표시
             Snackbar.make(registerId, "모든 항목을 입력해주세요", Snackbar.LENGTH_SHORT).show()
             return
@@ -78,7 +78,7 @@ class SignUpDoctor : AppCompatActivity() {
         }
 
 
-        val userSignUpInfo = UserSignUpInfoRequest(businessNumber, password, hospitalName)
+        val userSignUpInfo = HospitalSignUpInfoRequest(businessNumber, password, hospitalName, addNum)
         lateinit var responseBody: HospitalSignupInfoResponse
 
         retrofitClient = RetrofitClient.getInstance()
