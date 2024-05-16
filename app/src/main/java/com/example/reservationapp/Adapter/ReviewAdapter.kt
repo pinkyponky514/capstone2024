@@ -39,7 +39,7 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
             starScoreTextView.text = list.starScore
             commentTextView.text = list.comment
             reviewDateTextView.text = list.reviewDate
-            userIdTextView.text = list.userId
+            userIdTextView.text = list.userName
         }
     }
 
@@ -56,8 +56,8 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
     }
 
     //
-    fun updatelist(newList: MutableList<ReviewItem>) {
-        review_list_data = newList as ArrayList<ReviewItem>
+    fun updatelist(newList: ArrayList<ReviewItem>) {
+        review_list_data = newList// as ArrayList<ReviewItem>
         notifyDataSetChanged()
     }
 

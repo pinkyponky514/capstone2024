@@ -18,6 +18,7 @@ private var hospital_list_data = ArrayList<HospitalItem>()
 //병원 목록 페이지 Adapter
 class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        private var Hospital_Id: Long //병원 레이블 번호 저장
         private var Hospital_name_TextView: TextView //병원이름
         private var Star_score_TextView: TextView //별점
         private var Opening_time_TextView: TextView //영업시간
@@ -26,6 +27,7 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
 
 
         init {
+            Hospital_Id = 0
             Hospital_name_TextView = itemView.findViewById(R.id.hospitalNameTextView)
             Star_score_TextView = itemView.findViewById(R.id.starScopeTextView)
             Opening_time_TextView = itemView.findViewById(R.id.openTimeTextView)
@@ -37,6 +39,7 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
                 intent.putExtra("hospitalName", Hospital_name_TextView.text.toString())
+                intent.putExtra("hospitalId", Hospital_Id)
                 context.startActivity(intent)
             }
         }
@@ -45,6 +48,7 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
 
         //데이터 설정
         fun setContents(list: HospitalItem) {
+            Hospital_Id = list.hospitalId
             Hospital_name_TextView.text = list.hospitalName
             Star_score_TextView.text = list.starScore
             Opening_time_TextView.text = list.openingTimes

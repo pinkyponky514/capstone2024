@@ -43,6 +43,7 @@ data class RecentItem(
 
 //HospitalListAdapter
 data class HospitalItem(
+    var hospitalId: Long, //병원 레이블 번호
     var hospitalName: String, //병원이름 ㅇ
     var starScore: String, //별점(4.0)
     var openingTimes: String, //영업시간 ㅇ
@@ -92,7 +93,7 @@ data class ReviewItem (
     var starScore: String, //별점
     var comment: String, //리뷰내용
     var reviewDate: String, //날짜
-    var userId: String, //유저이름
+    var userName: String, //유저이름
 )
 
 data class CommentItem(

@@ -1,12 +1,14 @@
 package com.example.reservationapp
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HospitalSignUpInfoRequest
@@ -50,6 +52,7 @@ class SignUpDoctor : AppCompatActivity() {
     }
 
     //회원가입 처리 함수
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun attemptSignUp() {
         // EditText의 값 가져오기
         val businessNumber = registerId.text.toString()

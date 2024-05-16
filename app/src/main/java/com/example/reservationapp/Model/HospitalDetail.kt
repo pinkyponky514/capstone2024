@@ -23,10 +23,14 @@ data class HospitalDetail(
     @SerializedName("fri_close") val fri_close: String,
     @SerializedName("sat_open") val sat_open: String, //토요일
     @SerializedName("sat_close") val sat_close: String,
-    @SerializedName("sun_open") val sun_open: String, //토요일
+    @SerializedName("sun_open") val sun_open: String, //일요일
     @SerializedName("sun_close") val sun_close: String,
-    @SerializedName("hol_open") val hol_open: String, //토요일
+    @SerializedName("hol_open") val hol_open: String, //공휴일
     @SerializedName("hol_close") val hol_close: String,
+/*
+    @SerializedName("lun_start") val lunch_start: String, //점심시간
+    @SerializedName("lun_end") val lunch_end: String,
+*/
 
     //병원이미지 추가
     )

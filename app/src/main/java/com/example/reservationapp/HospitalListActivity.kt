@@ -1,10 +1,12 @@
 package com.example.reservationapp
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.HospitalListAdapter
@@ -81,10 +83,12 @@ class HospitalListActivity : AppCompatActivity() {
         //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
         val backButton = binding.backButtonImageView
         backButton.setOnClickListener {
+/*
             val intent = Intent(this, MainActivity()::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             intent.putExtra("searchWordList", recentSearchWordList)
             startActivity(intent) // 인텐트 이동
+*/
             finish()
         }
 
@@ -106,67 +110,37 @@ class HospitalListActivity : AppCompatActivity() {
     //뒤로가기 버튼 눌렀을때
     override fun onBackPressed() {
         super.onBackPressed()
+/*
         val intent = Intent(this, MainActivity::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
         //intent.putExtra("searchWordList", recentSearchWordList)
         startActivity(intent) //인텐트 이동
+*/
         finish() //현재 액티비티 종료
     }
 
     //검색 필터
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun searchFilterAction(string: String) {
         searchTextField.setText(string)
 
-        //필터기능 구현
         val searchString = searchTextField.text.toString().trim() //앞, 뒤 공백 제거
-
-/*
-        val filteredList = filterList.filter { filterItem ->
-            filterItem.hospitalName.contains(searchString, true) ||
-                    filterItem.hospitalAddress.contains(searchString, true) ||
-                    filterItem.className.any { it.contains(searchString, true) } ||
-                    filterItem.weekTime.any { it.value.contains(searchString, true) } ||
-                    filterItem.starScore.contains(searchString, true)
-        }
-
-        hospitalList = ArrayList()
-        for (i in filteredList.indices) {
-            val calendar = Calendar.getInstance()
-            val currentYear = calendar.get(Calendar.YEAR)
-            val currentMonth = calendar.get(Calendar.MONTH)
-            val currentDay = calendar.get(Calendar.DATE)
-
-            val dayOfWeek = getDayOfWeek(currentYear, currentMonth, currentDay) //현재 요일 구하기
-            val dayTime = filteredList[i].weekTime[dayOfWeek] //현재 요일에 맞는 영업시간 가져오기
-
-            hospitalList.add(
-                HospitalItem(
-                    filteredList[i].hospitalName,
-                    filteredList[i].starScore,
-                    dayTime ?: "영업시간 정보 없음",
-                    filteredList[i].hospitalAddress,
-                    filteredList[i].className
-                )
-            )
-        }
-        adapter.updatelist(hospitalList)
-*/
 
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
-        apiService.searchHospital(searchString).enqueue(object : Callback<List<SearchHospital>> {
-            override fun onResponse(
-                call: Call<List<SearchHospital>>,
-                response: Response<List<SearchHospital>>
-            ) {
-                if (response.isSuccessful()) {
+
+        apiService.getSearchHospital(searchString).enqueue(object : Callback<List<SearchHospital>> {
+            override fun onResponse(call: Call<List<SearchHospital>>, response: Response<List<SearchHospital>>) {
+
+                //연결 응답 성공
+                if(response.isSuccessful()) {
                     responseBody = response.body()!!
                     Log.w("HospitalListActivity", "responseBody: ${responseBody}")
 
                     hospitalList = ArrayList()
                     for(responseIndex in responseBody.indices) {
-/*
+                        /*
                         //hospital Detail 작성한 병원만 나옴
                         if(responseBody[responseIndex].hospital != null) {
                             val calendar = Calendar.getInstance()
@@ -189,61 +163,71 @@ class HospitalListActivity : AppCompatActivity() {
                             }
                             hospitalList.add(HospitalItem(hospitalName, reviewAverage.toString(), dayOfWeek, address, listOf(className)))
                         }
-*/
+                        */
 
                         //hospital Detail 작성안한 병원도 나옴
                         val calendar = Calendar.getInstance()
-                        val currentYear = calendar.get(Calendar.YEAR)
-                        val currentMonth = calendar.get(Calendar.MONTH)
-                        val currentDay = calendar.get(Calendar.DATE)
+                        val currentYear = calendar.get(Calendar.YEAR) //현재 년도
+                        val currentMonth = calendar.get(Calendar.MONTH) //현재 월
+                        val currentDay = calendar.get(Calendar.DATE) //현재 일
 
-                        val dayOfWeek = db_getDayOfWeek(currentYear, currentMonth, currentDay, responseIndex) //현재 요일 운영시간 구하기
-                        val openingTime = "${dayOfWeek[0]}~${dayOfWeek[1]}"
-                        Log.w("HospitalActivity !!", "dayTime open: $dayOfWeek")
+                        val dayOfWeekTimeList = db_getDayOfWeek(currentYear, currentMonth, currentDay, responseIndex) //현재 요일 운영시간 구하기
 
 
-                        val hospitalName = responseBody[responseIndex].hospitalName
-                        val className = responseBody[responseIndex]?.hospital?.hospitalDetail?.department ?: "진료과 없음"
-                        val address = responseBody[responseIndex].address
-                        var reviewAverage: Float = 0.0F //리뷰 별점 평균
-                        if(responseBody[responseIndex]?.hospital?.review != null) { //리뷰가 있으면
+                        var hospitalId:Long = 0 //병원 레이블 번호
+                        val hospitalName = responseBody[responseIndex].hospitalName //병원이름
+                        var reviewAverage = 0.0F //리뷰 별점 평균
+                        val openingTime = "${dayOfWeekTimeList[0]}~${dayOfWeekTimeList[1]}" //09:00~18:00 운영시간
+                        val className = responseBody[responseIndex]?.hospital?.hospitalDetail?.department ?: "진료과 없음" //진료과명
+                        val address = responseBody[responseIndex].address //병원주소
+
+
+
+                        if(responseBody[responseIndex].hospital != null) { //병원 상세정보 있으면
+                            hospitalId = responseBody[responseIndex].hospital.hospitalId //병원 레이블 번호
+                        } /*else { //병원 상세정보가 없으면
+
+                        }*/
+
+
+                        //리뷰가 있으면, 평점 구하기
+                        if(responseBody[responseIndex]?.hospital?.review != null) {
                             for (i in responseBody[responseIndex].hospital.review.indices) {
                                 reviewAverage += responseBody[responseIndex].hospital.review[i].starScore
                             }
-                            reviewAverage/responseBody[responseIndex].hospital.review.size
+                            reviewAverage/(responseBody[responseIndex].hospital.review.size)
                         }
-                        hospitalList.add(HospitalItem(hospitalName, reviewAverage.toString(), openingTime, address, listOf(className)))
 
+                        //리스트에 병원 추가
+                        hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), openingTime, address, listOf(className)))
                     }
                     adapter.updatelist(hospitalList)
-
-                } else Log.w("FAILURE Response", "Connect SUCESS, Response FAILURE") //통신 성공, 응답 실패
+                }
+                //통신 성공, 응답 실패
+                else Log.w("FAILURE Response", "Connect SUCESS, Response FAILURE")
             }
 
+            // 통신 실패
             override fun onFailure(call: Call<List<SearchHospital>>, t: Throwable) {
-                Log.w("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                Log.w("HospitalListActivity CONNECTION FAILURE: ", t.localizedMessage)
             }
         })
-
-
-        //
     }
 
-    //년, 월, 일 해당하는 날짜의 요일 구하기
-    //fun db_getDayOfWeek(year:Int, month:Int, day: Int, position: Int): String {
+    //년, 월, 일 해당하는 날짜의 운영시간 구하기
     fun db_getDayOfWeek(year:Int, month:Int, day: Int, position: Int): List<String> {
         val calendar = Calendar.getInstance()
         calendar.set(year, month, day)
 
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         return when(dayOfWeek) {
-            Calendar.SUNDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.sun_open ?: "운영시간 없음", responseBody[position]?.hospital?.hospitalDetail?.sun_close ?: "운영시간 없음")
-            Calendar.MONDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.mon_open ?: "운영시간 없음", responseBody[position]?.hospital?.hospitalDetail?.mon_close ?: "운영시간 없음")
-            Calendar.TUESDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.tue_open ?: "운영시간 없음", responseBody[position]?.hospital?.hospitalDetail?.tue_close ?: "운영시간 없음")
-            Calendar.WEDNESDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.wed_open ?: "운영시간 없음", responseBody[position]?.hospital?.hospitalDetail?.wed_close ?: "운영시간 없음")
-            Calendar.THURSDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.thu_open ?: "운영시간 없음", responseBody[position]?.hospital?.hospitalDetail?.thu_close ?: "운영시간 없음")
-            Calendar.FRIDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.fri_open ?: "운영시간 없음", responseBody[position]?.hospital?.hospitalDetail?.fri_close ?: "운영시간 없음")
-            Calendar.SATURDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.sat_open ?: "운영시간 없음", responseBody[position]?.hospital?.hospitalDetail?.sat_close ?: "운영시간 없음")
+            Calendar.SUNDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.sun_open ?: "운영시간 정보없음", responseBody[position]?.hospital?.hospitalDetail?.sun_close ?: "운영시간 정보없음")
+            Calendar.MONDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.mon_open ?: "운영시간 정보없음", responseBody[position]?.hospital?.hospitalDetail?.mon_close ?: "운영시간 정보없음")
+            Calendar.TUESDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.tue_open ?: "운영시간 정보없음", responseBody[position]?.hospital?.hospitalDetail?.tue_close ?: "운영시간 정보없음")
+            Calendar.WEDNESDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.wed_open ?: "운영시간 정보없음", responseBody[position]?.hospital?.hospitalDetail?.wed_close ?: "운영시간 정보없음")
+            Calendar.THURSDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.thu_open ?: "운영시간 정보없음", responseBody[position]?.hospital?.hospitalDetail?.thu_close ?: "운영시간 정보없음")
+            Calendar.FRIDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.fri_open ?: "운영시간 정보없음", responseBody[position]?.hospital?.hospitalDetail?.fri_close ?: "운영시간 정보없음")
+            Calendar.SATURDAY -> listOf(responseBody[position]?.hospital?.hospitalDetail?.sat_open ?: "운영시간 정보없음", responseBody[position]?.hospital?.hospitalDetail?.sat_close ?: "운영시간 정보없음")
             else -> listOf("")
         }
     }

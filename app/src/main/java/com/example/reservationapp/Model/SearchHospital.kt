@@ -9,5 +9,5 @@ data class SearchHospital(
     @SerializedName("address") val address: String,
     @SerializedName("tel") val tel: String,
     @SerializedName("hospital") val hospital: Hospital, //회원가입 했을때 정보
-    @SerializedName("distance") val distance: Double,
+    @SerializedName("distance") val distance: Double
 )

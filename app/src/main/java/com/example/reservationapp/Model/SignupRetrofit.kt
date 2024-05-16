@@ -1,6 +1,7 @@
 package com.example.reservationapp.Model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serial
 import java.io.Serializable
 
 
@@ -40,12 +41,13 @@ data class HospitalSignupInfoResponse(
     @SerializedName("data") val data: Hospital
 ): Serializable
 data class Hospital(
-    @SerializedName("hospitalid") val userId: Long,
+    @SerializedName("hospitalid") val hospitalId: Long,
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
     @SerializedName("addnum") val addNum: String,
     @SerializedName("role") val role: UserRole,
     @SerializedName("hospitalDetail") val hospitalDetail: HospitalDetail, //병원 상세정보
+    @SerializedName("openApiHospital") val openApiHospital: OpenApiHospital, //병원 api 정보
     @SerializedName("review") val review: List<Review>, //병원 리뷰
     @SerializedName("reservations") val reservations: List<Reservations> //병원 예약리스트
 ): Serializable

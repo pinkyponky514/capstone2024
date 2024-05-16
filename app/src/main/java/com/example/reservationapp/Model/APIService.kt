@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface APIService {
@@ -20,10 +21,13 @@ interface APIService {
     fun postHospitalLogin(@Body user: UserLoginInfoRequest): Call<String> //Token 받음
 
     @GET("/hospitals") //병원 검색
-    fun searchHospital(
+    fun getSearchHospital(
         @Query("query") query: String ?= null,
         @Query("department") className: String ?= null,
         @Query("mapx") mapx: Double = 37.5,
         @Query("mapy") mapy: Double = 126.9
     ): Call<List<SearchHospital>>
+
+    @GET("/hospitals/findhospital/{hospitalid}") //병원 상세정보 검색(가져오기)
+    fun getHospitalDetail(@Path(value = "hospitalid") hospitalId: Long ?= null): Call<HospitalSignupInfoResponse>
 }
