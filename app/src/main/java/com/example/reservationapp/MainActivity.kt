@@ -59,15 +59,6 @@ class MainActivity : AppCompatActivity() {
     fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.main_content, fragment).commit()
     }
-    /*
-    fun setFragment(context: Context,fragment: Fragment) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(context,fragment, null)
-            addToBackStack(null)
-        }
-    }
-    */
 
     fun navigationSetItem() {
         navigation.setOnItemSelectedListener { item ->
@@ -88,12 +79,6 @@ class MainActivity : AppCompatActivity() {
                     } else { //로그인 안했을때 = 유저이름 없을때
                         setActivity(this, HPDivisonActivity())
                     }
-
-                    /*
-                    val intent = Intent(this, HPDivisonActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                    */
                 }
             }
             true

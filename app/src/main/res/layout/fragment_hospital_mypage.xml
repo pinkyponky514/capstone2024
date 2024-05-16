@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="#FFFFFF"
-    tools:context=".Hospital_Mypage">
+    tools:context=".navigation.HospitalMypageFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"

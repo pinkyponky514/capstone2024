@@ -10,8 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="350dp"
-        android:layout_height="65dp"
+        android:layout_width="358dp"
+        android:layout_height="89dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/border"
         android:radius="8dp"
@@ -28,10 +28,10 @@
             android:layout_marginTop="8dp"
             android:text="예약 시간: "
             android:textColor="#000000"
-            android:textSize="13sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.034"
+            app:layout_constraintHorizontal_bias="0.031"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +41,7 @@
             android:layout_height="19dp"
             android:text="TextView"
             android:textColor="#000000"
-            android:textSize="13sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -55,9 +55,9 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/style_gray_rectangle_status"
             android:text="진료 진행상태"
+            android:textColor="#FFFFFF"
             android:textSize="10dp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/timeText" />
 
@@ -65,30 +65,19 @@
             android:id="@+id/nameText"
             android:layout_width="32dp"
             android:layout_height="23dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:text="이름: "
-            android:textColor="#000000"
+            android:textColor="#777777"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@+id/timeText"
             app:layout_constraintTop_toBottomOf="@+id/timeText" />
-
-        <TextView
-            android:id="@+id/birthDateText"
-            android:layout_width="53dp"
-            android:layout_height="22dp"
-            android:layout_marginStart="20dp"
-            android:text="생년월일:"
-            android:textColor="#000000"
-            android:textSize="13sp"
-            app:layout_constraintStart_toEndOf="@+id/nameTextView"
-            app:layout_constraintTop_toTopOf="@+id/nameTextView" />
 
         <TextView
             android:id="@+id/nameTextView"
             android:layout_width="60dp"
             android:layout_height="22dp"
             android:text="TextView"
-            android:textColor="#000000"
+            android:textColor="#777777"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/nameText"
             app:layout_constraintTop_toTopOf="@+id/nameText" />
@@ -98,10 +87,23 @@
             android:layout_width="82dp"
             android:layout_height="22dp"
             android:text="TextView"
-            android:textColor="#000000"
+            android:textColor="#777777"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/birthDateText"
             app:layout_constraintTop_toTopOf="@+id/birthDateText" />
+
+        <TextView
+            android:id="@+id/birthDateText"
+            android:layout_width="53dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="생년월일:"
+            android:textColor="#777777"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/nameText"
+            app:layout_constraintTop_toBottomOf="@+id/nameText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,30 +1,33 @@
-package com.example.reservationapp
+package com.example.reservationapp.navigation
 
 import ReservationAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CalendarView
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Model.ReservationItem
 import com.example.reservationapp.R
+import com.example.reservationapp.databinding.FragmentHospitalBinding
 
-class HospitalActivity : AppCompatActivity() {
+class HospitalFragment : Fragment() {
+    private lateinit var binding: FragmentHospitalBinding
 
     private lateinit var reservationAdapter: ReservationAdapter
     private lateinit var reservationList: ArrayList<ReservationItem>
     private var selectedDate: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_hospital)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentHospitalBinding.inflate(inflater)
 
-        val reservationRecyclerView = findViewById<RecyclerView>(R.id.reservation_list)
-        val calendarView = findViewById<CalendarView>(R.id.calendar_view)
+        val reservationRecyclerView = binding.reservationList//requireView().findViewById<RecyclerView>(R.id.reservation_list)
+        val calendarView = binding.calendarView//requireView().findViewById<CalendarView>(R.id.calendar_view)
 
         // 예약 리스트 초기화 및 임의의 데이터 값 설정
         reservationList = ArrayList()
@@ -36,7 +39,7 @@ class HospitalActivity : AppCompatActivity() {
 
         // 예약된 내역을 표시할 RecyclerView 설정
         reservationAdapter = ReservationAdapter()
-        reservationRecyclerView.layoutManager = LinearLayoutManager(this)
+        reservationRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         reservationRecyclerView.adapter = reservationAdapter
 
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
@@ -48,12 +51,7 @@ class HospitalActivity : AppCompatActivity() {
                 updateReservationList()
             }
         }
-
-        val mypage_button: Button = findViewById(R.id.mypage_button)
-        mypage_button.setOnClickListener {
-            val intent = Intent(this, Hospital_Mypage::class.java)
-            startActivity(intent)
-        }
+        return binding.root
     }
 
     private fun updateReservationList() {

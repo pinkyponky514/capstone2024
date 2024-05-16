@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.reservationapp.navigation.HospitalFragment
 import com.google.android.material.snackbar.Snackbar
 
 class SignUpDoctor : AppCompatActivity() {
@@ -63,7 +64,7 @@ class SignUpDoctor : AppCompatActivity() {
         passwordWarning.visibility = View.GONE
 
         // 회원가입 성공 시 메인 화면으로 이동
-        val intent = Intent(this@SignUpDoctor, HospitalActivity::class.java)
+        val intent = Intent(this@SignUpDoctor, HospitalMainActivity::class.java)
         startActivity(intent)
         finish() // 현재 액티비티 종료
     }

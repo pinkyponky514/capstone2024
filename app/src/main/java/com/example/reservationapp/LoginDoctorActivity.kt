@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import com.example.reservationapp.databinding.ActivityLoginDoctorBinding
+import com.example.reservationapp.navigation.HospitalFragment
 
 //병원측 로그인 화측
 class LoginDoctorActivity : AppCompatActivity() {
@@ -90,7 +91,7 @@ class LoginDoctorActivity : AppCompatActivity() {
             userPassword = PasswordEditText.text.toString()
 
             Log.w("userBusinessNumber, userPassword", ": $userBusinessNumber" + ", $userPassword")
-            val intent = Intent(this, HospitalActivity::class.java)
+            val intent = Intent(this, HospitalMainActivity::class.java)
             startActivity(intent)
             finish()
         }

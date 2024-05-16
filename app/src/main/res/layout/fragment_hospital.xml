@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".HospitalActivity">
+    tools:context=".navigation.HospitalFragment">
 
     <TextView
         android:id="@+id/hospital_name"
@@ -42,17 +42,6 @@
             android:background="#FFFFFF" />
 
     </androidx.cardview.widget.CardView>
-
-    <Button
-        android:id="@+id/mypage_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/ic_hospitalactivity"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/reservation_title"

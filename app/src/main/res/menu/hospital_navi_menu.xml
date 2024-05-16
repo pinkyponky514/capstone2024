@@ -5,6 +5,7 @@
         android:title="메인페이지"
         android:icon="@drawable/ic_home"
         android:enabled="true"
+        android:checked="true"
         />
     <item
         android:id="@+id/hospital_mypage"

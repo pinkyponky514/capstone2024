@@ -20,6 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".navigation.HospitalFragment"
+            android:exported="false" />
+        <activity
             android:name=".HospitalMainActivity"
             android:exported="false" />
         <activity
@@ -32,11 +35,8 @@
             android:name=".CustomReserveDialogActivity"
             android:exported="false" />
         <activity
-            android:name=".Hospital_Mypage"
+            android:name=".navigation.HospitalMypageFragment"
             android:exported="false" />
-        <activity
-            android:name=".HospitalActivity"
-            android:exported="false" /> <!-- 더보기 버튼 커스텀 다이얼로그 -->
         <activity
             android:name=".CustomMoreDialogActivity"
             android:exported="false" />
