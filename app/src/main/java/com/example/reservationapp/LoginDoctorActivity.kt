@@ -1,6 +1,7 @@
 package com.example.reservationapp
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -8,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.UserLoginInfoRequest
 import com.example.reservationapp.Retrofit.RetrofitClient
@@ -41,6 +43,7 @@ class LoginDoctorActivity : AppCompatActivity() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -108,9 +111,10 @@ class LoginDoctorActivity : AppCompatActivity() {
 
             retrofitClient = RetrofitClient.getInstance()
             apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+
             apiService.postHospitalLogin(userLoginInfo).enqueue(object: Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
-                    if(response.isSuccessful()) {
+                    if(response.isSuccessful) {
                         val userToken = response.body().toString()
                         val intent = Intent(this@LoginDoctorActivity, HospitalActivity::class.java)
 

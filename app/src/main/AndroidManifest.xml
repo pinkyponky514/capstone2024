@@ -35,7 +35,7 @@
             android:name=".CheckReservationActivity"
             android:exported="false" /> <!-- 병원 상세페이지 예약 커스텀 다이얼로그 -->
         <activity
-            android:name=".CustomReserveDialogActivity"
+            android:name=".Custom.CustomReserveDialogFragment"
             android:exported="false" />
         <activity
             android:name=".Hospital_Mypage"
@@ -44,7 +44,7 @@
             android:name=".HospitalActivity"
             android:exported="false" /> <!-- 더보기 버튼 커스텀 다이얼로그 -->
         <activity
-            android:name=".CustomMoreDialogActivity"
+            android:name=".Custom.CustomMoreDialogFragment"
             android:exported="false" />
         <activity
             android:name=".Final_Reservation"

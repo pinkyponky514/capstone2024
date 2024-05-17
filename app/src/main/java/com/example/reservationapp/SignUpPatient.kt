@@ -154,7 +154,7 @@ class SignUpPatient : AppCompatActivity() {
             val call = retrofit.create(APIService::class.java).postPatientSignUp(userSignupInfo)
             val userResponse = call.enqueue(object: Callback<PatientSignupInfoResponse> {
                 override fun onResponse(call: Call<PatientSignupInfoResponse>, response: Response<PatientSignupInfoResponse>) {
-                    if(response.isSuccessful()) {
+                    if(response.isSuccessful) {
                         responseBody = response.body()!!
                         Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
 

@@ -21,7 +21,7 @@ object RetrofitClient {
 
 
     init {
-        val gson = GsonBuilder().setLenient().create() //setLenient() 추가
+        //val gson = GsonBuilder().setLenient().create() //setLenient() 추가
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(gsonConverterFactory()) //Gson 변환기 생성 시 적용

@@ -49,6 +49,7 @@ data class HospitalItem(
     var openingTimes: String, //영업시간 ㅇ
     var hospitalAddress: String, //병원주소 ㅇ
     var className: List<String>, //진료과 ㅇ
+    var status: String, //병원 영업 상태
     //var favoriteCount: Int //즐겨찾기 수
 )
 

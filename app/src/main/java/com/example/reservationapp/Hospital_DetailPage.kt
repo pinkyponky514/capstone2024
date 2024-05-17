@@ -14,11 +14,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.ReviewAdapter
+import com.example.reservationapp.Custom.CustomReserveDialogFragment
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReviewItem
 import com.example.reservationapp.Model.filterList
-import com.example.reservationapp.Model.getDayOfWeek
 import com.example.reservationapp.Model.userHospitalFavorite
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalDetailpageExampleAddBinding
@@ -127,7 +127,7 @@ class Hospital_DetailPage : AppCompatActivity() {
         apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
-                if(response.isSuccessful()) {
+                if(response.isSuccessful) {
                     responseBody = response.body()!!
 
                     hospitalString = responseBody.data.name //병원이름 저장
@@ -222,7 +222,7 @@ class Hospital_DetailPage : AppCompatActivity() {
         // 예약 버튼 클릭 이벤트 설정
         reservationButton = binding.ReservationButton
         reservationButton.setOnClickListener {
-            val dialog = CustomReserveDialogActivity.newInstance(hospitalName, className)
+            val dialog = CustomReserveDialogFragment.newInstance(hospitalName, className)
             dialog.show(supportFragmentManager, "CustomReserveDialog")
         }
 
@@ -273,7 +273,7 @@ class Hospital_DetailPage : AppCompatActivity() {
     }
 
     //년, 월, 일 해당하는 날짜의 운영시간 구하기
-    fun db_getDayOfWeek(year:Int, month:Int, day: Int): List<String> {
+    private fun db_getDayOfWeek(year:Int, month:Int, day: Int): List<String> {
         val calendar = Calendar.getInstance()
         calendar.set(year, month, day)
 
@@ -291,7 +291,7 @@ class Hospital_DetailPage : AppCompatActivity() {
     }
 
     //운영시간 테이블 값 구하기
-    fun db_getOpenningTime(open: String, close: String): String {
+    private fun db_getOpenningTime(open: String, close: String): String {
         if(open == "정기휴무" || open == "휴무") {
             return open
         } else {

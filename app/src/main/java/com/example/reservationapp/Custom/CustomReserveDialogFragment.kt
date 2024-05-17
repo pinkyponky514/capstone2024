@@ -1,4 +1,4 @@
-package com.example.reservationapp
+package com.example.reservationapp.Custom
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,14 +19,14 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import com.example.reservationapp.CheckReservationActivity
 import com.example.reservationapp.Model.HistoryItem
-import com.example.reservationapp.Model.HospitalItem
 
 import com.example.reservationapp.databinding.FragmentCustomReserveDialogBinding
 import java.util.*
 
 
-class CustomReserveDialogActivity() : DialogFragment() {
+class CustomReserveDialogFragment() : DialogFragment() {
     private lateinit var binding: FragmentCustomReserveDialogBinding
     private var thisHospitalName:String = ""
     private var thisClassName: String = ""
@@ -55,8 +55,8 @@ class CustomReserveDialogActivity() : DialogFragment() {
         private const val ARG_STRING_HOSPITAL_NAME = "arg_string_hospital_name"
         private const val ARG_STRING_CLASS_NAME = "arg_string_class_name"
 
-        fun newInstance(hospitalName: String, className: String): CustomReserveDialogActivity {
-            return CustomReserveDialogActivity().apply {
+        fun newInstance(hospitalName: String, className: String): CustomReserveDialogFragment {
+            return CustomReserveDialogFragment().apply {
                 arguments = Bundle().apply {//arguments = bundleOf(ARG_LIST to newList)
                     putString(ARG_STRING_HOSPITAL_NAME, hospitalName)
                     putString(ARG_STRING_CLASS_NAME, className)

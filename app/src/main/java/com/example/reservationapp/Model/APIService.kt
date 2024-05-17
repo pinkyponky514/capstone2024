@@ -29,5 +29,5 @@ interface APIService {
     ): Call<List<SearchHospital>>
 
     @GET("/hospitals/findhospital/{hospitalid}") //병원 상세정보 검색(가져오기)
-    fun getHospitalDetail(@Path(value = "hospitalid") hospitalId: Long ?= null): Call<HospitalSignupInfoResponse>
+    fun getHospitalDetail(@Path(value="hospitalid") hospitalId: Long ?= null): Call<HospitalSignupInfoResponse>
 }

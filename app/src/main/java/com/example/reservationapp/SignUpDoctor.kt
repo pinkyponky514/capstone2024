@@ -32,7 +32,7 @@ class SignUpDoctor : AppCompatActivity() {
     private lateinit var apiService: APIService
 
 
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up_doctor)
@@ -88,7 +88,7 @@ class SignUpDoctor : AppCompatActivity() {
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
         apiService.postHospitalSignUp(userSignUpInfo).enqueue(object: Callback<HospitalSignupInfoResponse> {
             override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
-                if(response.isSuccessful()) {
+                if(response.isSuccessful) {
                     responseBody = response.body()!!
                     Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
 
