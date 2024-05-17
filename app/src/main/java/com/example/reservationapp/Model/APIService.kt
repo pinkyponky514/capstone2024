@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface APIService {
     @POST("/jwt-login/user/join") //환자 회원가입
-    @Headers("Auth: false")
+    @Headers("Auth: false") //토큰을 헤더에 안담을 api는 이렇게 표시
     fun postPatientSignUp(@Body user: PatientSignUpInfoRequest): Call<PatientSignupInfoResponse> //환자 정보 받음
 
     @POST("/jwt-hospital-login/hospital/join") //병원 회원가입

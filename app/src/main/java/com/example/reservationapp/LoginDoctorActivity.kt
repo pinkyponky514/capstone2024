@@ -115,23 +115,10 @@ class LoginDoctorActivity : AppCompatActivity() {
                     if(response.isSuccessful()) {
                         val userToken = response.body().toString()
 
-//                        // SharedPreferences에 토큰 저장
-//                        val sharedPreferences = applicationContext.getSharedPreferences(App.SP_TAG, Context.MODE_PRIVATE)
-//                        val editor = sharedPreferences.edit()
-//                        editor.putString(App.X_ACCESS_TOKEN, userToken)
-//                        editor.apply()
-//
-//                        val storedToken = sharedPreferences.getString(App.X_ACCESS_TOKEN, null)
-//                        Log.d("Stored Token", "Token: $storedToken") // 저장된 토큰 로그 출력
-
-                        App.prefs.token = "Bearer "+userToken
+                        App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
 
                         val intent = Intent(this@LoginDoctorActivity, HospitalActivity::class.java)
 
-//                        retrofitClient.headerInterceptor.setAuthToken(userToken) //받은 토큰 저장
-//
-//                        val tokencheck = retrofitClient.headerInterceptor.getAuthToken()
-//
                         intent.putExtra("userId", userLoginInfo.id)
                         intent.putExtra("userToken", userToken)
 
