@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-
 }
 
 
@@ -92,7 +91,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0' //로그를 남기기 위한 라이브러리
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.1"
+    implementation 'com.google.dagger:hilt-android:2.38.1'
+    annotationProcessor 'com.google.dagger:hilt-android-compiler:2.38.1'
+
+//    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0' //로그를 남기기 위한 라이브러리
 
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0' // 일반 문자열용 변환기
     implementation 'com.squareup.retrofit2:converter-moshi:2.1.0'

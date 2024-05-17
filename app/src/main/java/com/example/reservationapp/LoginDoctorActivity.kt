@@ -1,5 +1,6 @@
 package com.example.reservationapp
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.UserLoginInfoRequest
+//import com.example.reservationapp.Retrofit.App
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityLoginBinding
 import retrofit2.Call
@@ -112,8 +114,24 @@ class LoginDoctorActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if(response.isSuccessful()) {
                         val userToken = response.body().toString()
+
+//                        // SharedPreferences에 토큰 저장
+//                        val sharedPreferences = applicationContext.getSharedPreferences(App.SP_TAG, Context.MODE_PRIVATE)
+//                        val editor = sharedPreferences.edit()
+//                        editor.putString(App.X_ACCESS_TOKEN, userToken)
+//                        editor.apply()
+//
+//                        val storedToken = sharedPreferences.getString(App.X_ACCESS_TOKEN, null)
+//                        Log.d("Stored Token", "Token: $storedToken") // 저장된 토큰 로그 출력
+
+                        App.prefs.token = "Bearer "+userToken
+
                         val intent = Intent(this@LoginDoctorActivity, HospitalActivity::class.java)
 
+//                        retrofitClient.headerInterceptor.setAuthToken(userToken) //받은 토큰 저장
+//
+//                        val tokencheck = retrofitClient.headerInterceptor.getAuthToken()
+//
                         intent.putExtra("userId", userLoginInfo.id)
                         intent.putExtra("userToken", userToken)
 

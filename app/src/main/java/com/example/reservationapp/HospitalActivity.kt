@@ -17,10 +17,13 @@ class HospitalActivity : AppCompatActivity() {
     private lateinit var reservationAdapter: ReservationAdapter
     private lateinit var reservationList: ArrayList<ReservationItem>
     private var selectedDate: String? = null
-
+    private var userId: String? = null
+    private var userToken: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hospital)
+
+        userId = intent.getStringExtra("userId")
 
         val reservationRecyclerView = findViewById<RecyclerView>(R.id.reservation_list)
         val calendarView = findViewById<CalendarView>(R.id.calendar_view)
@@ -51,6 +54,9 @@ class HospitalActivity : AppCompatActivity() {
         val hospitalNameTextView: TextView = findViewById(R.id.hospital_name)
         hospitalNameTextView.setOnClickListener {
             val intent = Intent(this, Hospital_Mypage::class.java)
+
+            intent.putExtra("userToken", userToken)
+
             startActivity(intent)
         }
     }
