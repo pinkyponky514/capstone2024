@@ -94,7 +94,6 @@ class SignUpDoctor : AppCompatActivity() {
 
                     //회원가입 성공시 병원 로그인 액티비티로 이동
                     val intent = Intent(this@SignUpDoctor, LoginDoctorActivity::class.java)
-                    intent.putExtra("responseData", responseBody)
                     startActivity(intent)
                     finish()
                 }

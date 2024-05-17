@@ -17,6 +17,7 @@ import com.example.reservationapp.Adapter.ReviewAdapter
 import com.example.reservationapp.Custom.CustomReserveDialogFragment
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
+import com.example.reservationapp.Model.MyBookmarkResponse
 import com.example.reservationapp.Model.ReviewItem
 import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.Model.userHospitalFavorite
@@ -44,7 +45,8 @@ class Hospital_DetailPage : AppCompatActivity() {
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
-    private lateinit var responseBody: HospitalSignupInfoResponse
+    private lateinit var responseBodyDetail: HospitalSignupInfoResponse
+    private lateinit var responseBodyMyBookmark: MyBookmarkResponse
 
     //DB에서 가져온 데이터 넣을 view
     private lateinit var hospitalNameTextView: TextView //병원이름
@@ -124,18 +126,20 @@ class Hospital_DetailPage : AppCompatActivity() {
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+
+        //상세정보 채우기
         apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
                 if(response.isSuccessful) {
-                    responseBody = response.body()!!
+                    responseBodyDetail = response.body()!!
 
-                    hospitalString = responseBody.data.name //병원이름 저장
-                    hospitalNameTextView.text = responseBody.data.hospitalDetail.department //병원 진료과 설정
-                    hospitalNameTextView.text = responseBody.data.name //병원 이름 설정
-                    waitCountTextView.text = "${responseBody.data.reservations.size}명 대기중" //대기인원 설정
-                    hospitalPositionTextView.text = responseBody.data.openApiHospital.address //병원 주소 설정
-                    hospitalCallTextView.text = responseBody.data.openApiHospital.tel //병원 전화번호 설정
+                    hospitalString = responseBodyDetail.data.name //병원이름 저장
+                    hospitalNameTextView.text = responseBodyDetail.data.hospitalDetail.department //병원 진료과 설정
+                    hospitalNameTextView.text = responseBodyDetail.data.name //병원 이름 설정
+                    waitCountTextView.text = "${responseBodyDetail.data.reservations.size}명 대기중" //대기인원 설정
+                    hospitalPositionTextView.text = responseBodyDetail.data.openApiHospital.address //병원 주소 설정
+                    hospitalCallTextView.text = responseBodyDetail.data.openApiHospital.tel //병원 전화번호 설정
 
                     //금일 운영시간 설정
                     val calendar = Calendar.getInstance()
@@ -168,19 +172,19 @@ class Hospital_DetailPage : AppCompatActivity() {
                     }
 
                     //진료시간 table 설정
-                    //lunchTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.lunch_start, responseBody.data.hospitalDetail.lunch_end) //점심시간
-                    mondayTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.mon_open, responseBody.data.hospitalDetail.mon_close) //월요일
-                    tuesdayTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.tue_open, responseBody.data.hospitalDetail.tue_close) //화요일
-                    wednesdayTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.wed_open, responseBody.data.hospitalDetail.wed_close) //수요일
-                    thursdayTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.thu_open, responseBody.data.hospitalDetail.thu_close) //목요일
-                    fridayTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.fri_open, responseBody.data.hospitalDetail.fri_close) //금요일
-                    saturdayTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.sat_open, responseBody.data.hospitalDetail.sat_close) //토요일
-                    sundayTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.sun_open, responseBody.data.hospitalDetail.sun_close) //일요일
-                    dayOffTimeTextView.text = db_getOpenningTime(responseBody.data.hospitalDetail.hol_open, responseBody.data.hospitalDetail.hol_close) //공휴일
+                    //lunchTimeTextView.text = db_getOpenningTime(HospitalSignupInfoResponseBody.data.hospitalDetail.lunch_start, HospitalSignupInfoResponseBody.data.hospitalDetail.lunch_end) //점심시간
+                    mondayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.mon_open, responseBodyDetail.data.hospitalDetail.mon_close) //월요일
+                    tuesdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.tue_open, responseBodyDetail.data.hospitalDetail.tue_close) //화요일
+                    wednesdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.wed_open, responseBodyDetail.data.hospitalDetail.wed_close) //수요일
+                    thursdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.thu_open, responseBodyDetail.data.hospitalDetail.thu_close) //목요일
+                    fridayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.fri_open, responseBodyDetail.data.hospitalDetail.fri_close) //금요일
+                    saturdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.sat_open, responseBodyDetail.data.hospitalDetail.sat_close) //토요일
+                    sundayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.sun_open, responseBodyDetail.data.hospitalDetail.sun_close) //일요일
+                    dayOffTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.hol_open, responseBodyDetail.data.hospitalDetail.hol_close) //공휴일
 
 
                     //리뷰 설정
-                    reviewCount = responseBody.data.review.size
+                    reviewCount = responseBodyDetail.data.review.size
                     reviewCountTextView.text = reviewCount.toString()
 
                     notReviewConstraintLayout = binding.notReviewConstraintLayout //리뷰가 없을 경우 constraintLayout
@@ -197,10 +201,10 @@ class Hospital_DetailPage : AppCompatActivity() {
                         notReviewConstraintLayout.visibility = View.GONE
 
                         val reviewList: ArrayList<ReviewItem> = ArrayList()
-                        for(reviewIndex in responseBody.data.review.indices) {
-                            val starScore = responseBody.data.review[reviewIndex].starScore.toString()
-                            val comment = responseBody.data.review[reviewIndex].comment
-                            val reviewDate = responseBody.data.review[reviewIndex].registerDate
+                        for(reviewIndex in responseBodyDetail.data.review.indices) {
+                            val starScore = responseBodyDetail.data.review[reviewIndex].starScore.toString()
+                            val comment = responseBodyDetail.data.review[reviewIndex].comment
+                            val reviewDate = responseBodyDetail.data.review[reviewIndex].registerDate
                             //val userName = responseBody.data.review[reviewIndex].user.name
 
                             reviewList.add(ReviewItem(starScore, comment, reviewDate.toString(), userName))
@@ -209,13 +213,32 @@ class Hospital_DetailPage : AppCompatActivity() {
                         recyclerView.suppressLayout(true) //스트롤 불가능
                     }
 
-                } else Log.w("FAILURE Response", "Connect SUCESS, Response FAILURE") //통신 성공, 응답 실패
+                } else Log.w("Hospital_DetailPage FAILURE Response", "Detail Connect SUCESS, Response FAILURE") //통신 성공, 응답 실패
             }
 
             override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
-                Log.w("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                Log.w("Hospital_DetailPage CONNECTION FAILURE: ", "Detail Connect FAILURE : ${t.localizedMessage}") //통신 실패
             }
         })
+
+        //즐겨찾기 버튼 설정하기
+        apiService.getMyHospitalBookmarkList(userToken).enqueue(object: Callback<MyBookmarkResponse> {
+            override fun onResponse(call: Call<MyBookmarkResponse>, response: Response<MyBookmarkResponse>) {
+                //통신, 응답 성공
+                if(response.isSuccessful) {
+                    responseBodyMyBookmark = response.body()!!
+                    Log.w("Hospital_DetailPage", "responseBody MyBookmark : $responseBodyMyBookmark")
+                }
+                //통신 성공, 응답 실패
+                Log.w("Hospital_DetailPage FAILURE Response", "MyBookmark Connect SUCESS, Response FAILURE")
+            }
+
+            //통신 실패
+            override fun onFailure(call: Call<MyBookmarkResponse>, t: Throwable) {
+                Log.w("Hospital_DetailPage CONNECTION FAILURE: ", "MyBookmark Connect FAILURE : ${t.localizedMessage}")
+            }
+        })
+
 
 
 
@@ -228,6 +251,7 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         //즐겨찾기 버튼 클릭 이벤트 설정
         favoriteButton = binding.favoriteImageView
+
         if(userHospitalFavorite[hospitalString] == true) {
             favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
         } else {
@@ -235,8 +259,8 @@ class Hospital_DetailPage : AppCompatActivity() {
         }
 
         favoriteButton.setOnClickListener {
-
-            if (userHospitalFavorite[hospitalString] == true) { //즐겨찾기 취소
+            //즐겨찾기 취소
+            if (userHospitalFavorite[hospitalString] == true) {
                 userHospitalFavorite[hospitalString] = false
                 favoriteButton.setImageResource(R.drawable.ic_likes)
 
@@ -247,8 +271,9 @@ class Hospital_DetailPage : AppCompatActivity() {
                         break
                     }
                 }
-
-            } else { //즐겨찾기
+            }
+            //즐겨찾기
+            else {
                 userHospitalFavorite[hospitalString] = true
                 favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
 
@@ -279,13 +304,13 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         return when(dayOfWeek) {
-            Calendar.SUNDAY -> listOf("일", responseBody.data.hospitalDetail.sun_open, responseBody.data.hospitalDetail.sun_close)
-            Calendar.MONDAY -> listOf("월", responseBody.data.hospitalDetail.mon_open, responseBody.data.hospitalDetail.mon_close)
-            Calendar.TUESDAY -> listOf("화", responseBody.data.hospitalDetail.tue_open, responseBody.data.hospitalDetail.tue_close)
-            Calendar.WEDNESDAY -> listOf("수", responseBody.data.hospitalDetail.wed_open, responseBody.data.hospitalDetail.wed_close)
-            Calendar.THURSDAY -> listOf("목", responseBody.data.hospitalDetail.thu_open, responseBody.data.hospitalDetail.thu_close)
-            Calendar.FRIDAY -> listOf("금", responseBody.data.hospitalDetail.fri_open, responseBody.data.hospitalDetail.fri_close)
-            Calendar.SATURDAY -> listOf("토", responseBody.data.hospitalDetail.sat_open, responseBody.data.hospitalDetail.sat_close)
+            Calendar.SUNDAY -> listOf("일", responseBodyDetail.data.hospitalDetail.sun_open, responseBodyDetail.data.hospitalDetail.sun_close)
+            Calendar.MONDAY -> listOf("월", responseBodyDetail.data.hospitalDetail.mon_open, responseBodyDetail.data.hospitalDetail.mon_close)
+            Calendar.TUESDAY -> listOf("화", responseBodyDetail.data.hospitalDetail.tue_open, responseBodyDetail.data.hospitalDetail.tue_close)
+            Calendar.WEDNESDAY -> listOf("수", responseBodyDetail.data.hospitalDetail.wed_open, responseBodyDetail.data.hospitalDetail.wed_close)
+            Calendar.THURSDAY -> listOf("목", responseBodyDetail.data.hospitalDetail.thu_open, responseBodyDetail.data.hospitalDetail.thu_close)
+            Calendar.FRIDAY -> listOf("금", responseBodyDetail.data.hospitalDetail.fri_open, responseBodyDetail.data.hospitalDetail.fri_close)
+            Calendar.SATURDAY -> listOf("토", responseBodyDetail.data.hospitalDetail.sat_open, responseBodyDetail.data.hospitalDetail.sat_close)
             else -> listOf("")
         }
     }
@@ -297,7 +322,8 @@ class Hospital_DetailPage : AppCompatActivity() {
         } else {
             return "$open ~ $close"
         }
-
     }
+
+
     //
 }

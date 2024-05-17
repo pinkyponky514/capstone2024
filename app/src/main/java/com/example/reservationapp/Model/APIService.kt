@@ -3,6 +3,8 @@ package com.example.reservationapp.Model
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -30,4 +32,11 @@ interface APIService {
 
     @GET("/hospitals/findhospital/{hospitalid}") //병원 상세정보 검색(가져오기)
     fun getHospitalDetail(@Path(value="hospitalid") hospitalId: Long ?= null): Call<HospitalSignupInfoResponse>
+
+    @POST("/bookmarks/{hospitalid}") //병원 즐겨찾기 등록
+    fun postHospitalBookmark(@Path(value="hospitalid") hospitalId: Long ?= null): Call<String>
+
+    @GET("/bookmarks") //나의 즐겨찾기 병원 가져오기
+    fun getMyHospitalBookmarkList(@Header("token") token: String): Call<MyBookmarkResponse>
+
 }
