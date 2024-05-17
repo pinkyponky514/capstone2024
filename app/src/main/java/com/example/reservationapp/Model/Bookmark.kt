@@ -35,5 +35,5 @@ data class BookmarkResponse(
     @SerializedName("result") val result: Result
 )
 data class Result(
-    @SerializedName("datat") val data: String
+    @SerializedName("data") val data: String
 )

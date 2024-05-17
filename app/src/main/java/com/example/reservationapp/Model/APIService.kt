@@ -35,15 +35,16 @@ interface APIService {
         @Query("mapy") mapy: Double = 126.9
     ): Call<List<SearchHospital>>
 
-    @POST("/hospitals/hospitaldetail") //병원 상세정보 입력
+    @POST("/hospitals/hospitaldetail") //병원 상세정보 입력 (토큰필요)
     fun postHospitalDetail(@Body hospital: HospitalDetail2): Call<HospitalDetailResponse>
 
-    @GET("/hospitals/findhospital/{hospitalid}") //병원 상세정보 검색(가져오기)
+    @GET("/hospitals/findhospital/{hospitalid}") //병원 상세정보 검색
+    @Headers("Auth: false")
     fun getHospitalDetail(@Path(value="hospitalid") hospitalId: Long ?= null): Call<HospitalSignupInfoResponse>
 
-    @POST("/bookmarks/{hospitalid}") //병원 즐겨찾기 등록
-    fun postHospitalBookmark(@Path(value="hospitalid") hospitalId: Long ?= null): Call<String>
+    @POST("/bookmarks/{hospitalid}") //병원 즐겨찾기 등록 (토큰필요)
+    fun postHospitalBookmark(@Path(value="hospitalid") hospitalId: Long ?= null): Call<BookmarkResponse>
 
-    @GET("/bookmarks") //나의 즐겨찾기 병원 가져오기
-    fun getMyHospitalBookmarkList(@Header("token") token: String): Call<MyBookmarkResponse>
+    @GET("/bookmarks") //나의 즐겨찾기 병원 가져오기 (토큰필요)
+    fun getMyHospitalBookmarkList(): Call<MyBookmarkResponse>
 }

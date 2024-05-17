@@ -22,6 +22,8 @@ import com.example.reservationapp.Model.SearchHospital
 import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -138,9 +140,9 @@ class HospitalListActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<SearchHospital>>, response: Response<List<SearchHospital>>) {
 
                 //연결 응답 성공
-                if(response.isSuccessful()) {
+                if(response.isSuccessful) {
                     responseBody = response.body()!!
-                    Log.w("HospitalListActivity", "responseBody: ${responseBody}")
+                    Log.w("HospitalListActivity", "responseBody: $responseBody")
 
                     hospitalList = ArrayList()
                     for(responseIndex in responseBody.indices) {
@@ -231,10 +233,29 @@ class HospitalListActivity : AppCompatActivity() {
                             }
                         }
                     })
-
                 }
+
                 //통신 성공, 응답 실패
-                else Log.w("FAILURE Response", "Connect SUCESS, Response FAILURE")
+                else {
+                    //Log.w("Hospital_DetailPage FAILURE Response", "MyBookmark Connect SUCESS, Response FAILURE")
+
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                    if (errorBody != null) {
+                        try {
+                            val jsonObject = JSONObject(errorBody)
+                            val timestamp = jsonObject.optString("timestamp")
+                            val status = jsonObject.optInt("status")
+                            val error = jsonObject.optString("error")
+                            val message = jsonObject.optString("message")
+                            val path = jsonObject.optString("path")
+
+                            Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                        } catch (e: JSONException) {
+                            Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                        }
+                    }
+                }
             }
 
             // 통신 실패

@@ -112,6 +112,8 @@ class LoginPatientActivity: AppCompatActivity() {
                     override fun onResponse(call: Call<String>, response: Response<String>) {
                         if(response.isSuccessful) {
                             val userToken = response.body().toString()
+                            App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
+
                             val intent = Intent(this@LoginPatientActivity, MainActivity::class.java)
 
                             intent.putExtra("userId", userLoginInfo.id)
@@ -122,7 +124,8 @@ class LoginPatientActivity: AppCompatActivity() {
 
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                             startActivity(intent)
-                            finish()                        }
+                            finish()
+                        }
                         else
                             Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                     }

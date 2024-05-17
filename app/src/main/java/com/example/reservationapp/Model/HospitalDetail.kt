@@ -38,8 +38,6 @@ data class HospitalDetail2(
 //병원 상세정보
 data class HospitalDetail(
     @SerializedName("id") val hospitalId: Long?,
-
-    @SerializedName("hospital_id") val hospital: Hospital, //병원 회원가입 정보
     @SerializedName("hospitalInfo") val hospitalInfo: String, //병원 설명
     @SerializedName("department") val department: String, //진료과명
     @SerializedName("doctorInfo") val doctorInfo: String, //의사 정보
@@ -60,9 +58,8 @@ data class HospitalDetail(
     @SerializedName("sun_close") val sun_close: String,
     @SerializedName("hol_open") val hol_open: String, //공휴일
     @SerializedName("hol_close") val hol_close: String,
-/*
-    @SerializedName("lun_start") val lunch_start: String, //점심시간
-    @SerializedName("lun_end") val lunch_end: String,
-*/
+    @SerializedName("lunch_start") val lunch_start: String, //점심시간
+    @SerializedName("lunch_end") val lunch_end: String,
+
     //병원이미지 추가
     )

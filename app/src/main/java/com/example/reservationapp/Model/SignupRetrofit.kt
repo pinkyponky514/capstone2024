@@ -3,6 +3,7 @@ package com.example.reservationapp.Model
 import com.google.gson.annotations.SerializedName
 import java.io.Serial
 import java.io.Serializable
+import java.time.LocalDate
 
 
 /*회원가입*/
@@ -10,7 +11,8 @@ import java.io.Serializable
 data class PatientSignUpInfoRequest (
     @SerializedName("id") var id: String,
     @SerializedName("password") var password: String,
-    @SerializedName("name") var name: String
+    @SerializedName("name") var name: String,
+    @SerializedName("birthday") var birthday: String
 )
 //병원 - request
 data class HospitalSignUpInfoRequest (
@@ -30,6 +32,7 @@ data class Patient(
     @SerializedName("userid") val userId: Long,
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
+    @SerializedName("birthday") var birthday: LocalDate,
     @SerializedName("role") val role: UserRole,
     @SerializedName("reservations") val reservations: List<Any>
 )

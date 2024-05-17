@@ -1,5 +1,6 @@
 package com.example.reservationapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,16 @@ class MyProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val textView = binding.infoTextView
-        textView.text = "userId: ${userId}, userToken: ${userToken}, userName: ${userName}"
+        textView.text = "userToken: ${App.prefs.token}" //textView.text = "userId: ${userId}, userToken: ${userToken}, userName: ${userName}"
+
+
+        //로그아웃 버튼 onClick
+        val logoutButton = binding.logoutButton
+        logoutButton.setOnClickListener {
+            App.prefs.clearToken(this)
+            val intent = Intent(this, HPDivisonActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }
