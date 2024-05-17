@@ -1,16 +1,10 @@
 package com.example.reservationapp.navigation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.reservationapp.CustomMoreDialogActivity
-import com.example.reservationapp.Model.FilterItem
-import com.example.reservationapp.Model.ReviewItem
-import com.example.reservationapp.Model.filterList
-import com.example.reservationapp.Model.reviewList
 import com.example.reservationapp.R
 import com.example.reservationapp.databinding.FragmentMedicalHistoryBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView

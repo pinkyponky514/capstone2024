@@ -1,4 +1,4 @@
-package com.example.reservationapp
+package com.example.reservationapp.Custom
 
 import android.content.Context
 import android.content.Intent
@@ -17,10 +17,10 @@ import android.widget.Button
 import android.widget.TableRow
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
+import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.databinding.FragmentCustomMoreDialogBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class CustomMoreDialogActivity(): DialogFragment() {
+class CustomMoreDialogFragment(): DialogFragment() {
 //class CustomMoreDialogActivity(val list: List<String>): DialogFragment() {
 //class CustomMoreDialogActivity(val list: List<String>): BottomSheetDialogFragment() {
 
@@ -30,8 +30,8 @@ class CustomMoreDialogActivity(): DialogFragment() {
     companion object {
         private const val ARG_LIST = "arg_list"
 
-        fun newInstance(newList: List<String>): CustomMoreDialogActivity {
-            return CustomMoreDialogActivity().apply {
+        fun newInstance(newList: List<String>): CustomMoreDialogFragment {
+            return CustomMoreDialogFragment().apply {
                 arguments = Bundle().apply {//arguments = bundleOf(ARG_LIST to newList)
                     putStringArrayList(ARG_LIST, ArrayList(newList))
                 }

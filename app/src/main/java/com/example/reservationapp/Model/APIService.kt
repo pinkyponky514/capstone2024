@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface APIService {
@@ -27,13 +28,22 @@ interface APIService {
 
     @GET("/hospitals") //병원 검색
     @Headers("Auth: false")
-    fun searchHospital(
+    fun getSearchHospital(
         @Query("query") query: String ?= null,
         @Query("department") className: String ?= null,
         @Query("mapx") mapx: Double = 37.5,
         @Query("mapy") mapy: Double = 126.9
     ): Call<List<SearchHospital>>
 
-    @POST("/hospitals/hospitaldetail")
+    @POST("/hospitals/hospitaldetail") //병원 상세정보 입력
     fun postHospitalDetail(@Body hospital: HospitalDetail2): Call<HospitalDetailResponse>
+
+    @GET("/hospitals/findhospital/{hospitalid}") //병원 상세정보 검색(가져오기)
+    fun getHospitalDetail(@Path(value="hospitalid") hospitalId: Long ?= null): Call<HospitalSignupInfoResponse>
+
+    @POST("/bookmarks/{hospitalid}") //병원 즐겨찾기 등록
+    fun postHospitalBookmark(@Path(value="hospitalid") hospitalId: Long ?= null): Call<String>
+
+    @GET("/bookmarks") //나의 즐겨찾기 병원 가져오기
+    fun getMyHospitalBookmarkList(@Header("token") token: String): Call<MyBookmarkResponse>
 }

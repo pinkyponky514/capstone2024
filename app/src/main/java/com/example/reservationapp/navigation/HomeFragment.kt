@@ -1,7 +1,7 @@
 package com.example.reservationapp.navigation
 
 
-import com.example.reservationapp.CustomMoreDialogActivity
+import com.example.reservationapp.Custom.CustomMoreDialogFragment
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -140,7 +140,7 @@ class HomeFragment : Fragment() {
         //진료과별 더보기 버튼
         val classMoreTextView = binding.classMoreTextView
         classMoreTextView.setOnClickListener {
-            val dialog = CustomMoreDialogActivity.newInstance(classReserveList) //val dialog = CustomMoreDialogActivity(classReserveList)
+            val dialog = CustomMoreDialogFragment.newInstance(classReserveList) //val dialog = CustomMoreDialogActivity(classReserveList)
             dialog.show(parentFragmentManager,  "CustomMoreDialog")
         }
 
@@ -162,7 +162,7 @@ class HomeFragment : Fragment() {
         //증상 질환별 더보기 버튼
         val syptomMoreTextView = binding.symptomMoreTextView
         syptomMoreTextView.setOnClickListener {
-            val dialog = CustomMoreDialogActivity.newInstance(syptomReserveList)
+            val dialog = CustomMoreDialogFragment.newInstance(syptomReserveList)
             dialog.show(parentFragmentManager,  "CustomDialog")
         }
 

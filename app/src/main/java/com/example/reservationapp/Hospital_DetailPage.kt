@@ -1,22 +1,31 @@
 package com.example.reservationapp
 
-import android.media.Image
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.ReviewAdapter
+import com.example.reservationapp.Custom.CustomReserveDialogFragment
+import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.HospitalSignupInfoResponse
+import com.example.reservationapp.Model.MyBookmarkResponse
+import com.example.reservationapp.Model.ReviewItem
 import com.example.reservationapp.Model.filterList
-import com.example.reservationapp.Model.getDayOfWeek
-import com.example.reservationapp.Model.reviewList
 import com.example.reservationapp.Model.userHospitalFavorite
+import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalDetailpageExampleAddBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -33,19 +42,23 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var adapter: ReviewAdapter
     private lateinit var mainActivity: MainActivity
 
+    //Retrofit
+    private lateinit var retrofitClient: RetrofitClient
+    private lateinit var apiService: APIService
+    private lateinit var responseBodyDetail: HospitalSignupInfoResponse
+    private lateinit var responseBodyMyBookmark: MyBookmarkResponse
 
     //DB에서 가져온 데이터 넣을 view
     private lateinit var hospitalNameTextView: TextView //병원이름
     private lateinit var classNameTextView: TextView //진료과명
     private lateinit var statusTextView: TextView //진료가능 상태
     private lateinit var waitCountTextView: TextView //대기인원
-    private lateinit var hospitalPositionTextView: TextView //병원위치
+    private lateinit var hospitalPositionTextView: TextView //병원주소
     private lateinit var todayTimeTextView: TextView //금일 운영시간
     private lateinit var hospitalCallTextView: TextView //병원 연락처
 
     private lateinit var reservationButton: Button //예약 버튼
     private lateinit var favoriteButton: ImageView //즐겨찾기 버튼
-
 
     private lateinit var lunchTimeTextView: TextView //점심시간
     private lateinit var mondayTimeTextView: TextView
@@ -57,11 +70,15 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var sundayTimeTextView: TextView
     private lateinit var dayOffTimeTextView: TextView //공휴일
 
+    private lateinit var reviewCountTextView: TextView //리뷰 숫자
+
     private var reviewCount: Int = 0 //리뷰개수
+
 
     private var hospitalString: String = ""
 
     //
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHospitalDetailpageExampleAddBinding.inflate(layoutInflater)
@@ -88,6 +105,8 @@ class Hospital_DetailPage : AppCompatActivity() {
         sundayTimeTextView = binding.textViewSundayTime
         dayOffTimeTextView = binding.textViewDayOffTime
 
+        reviewCountTextView = binding.reviewCountTextView
+
         //리뷰 관련 초기화
         adapter = ReviewAdapter()
         val recyclerView = binding.reviewRecyclerView
@@ -99,119 +118,140 @@ class Hospital_DetailPage : AppCompatActivity() {
 
 
         //DB에서 데이터 가져올 것임
+        val hospitalId = intent.getLongExtra("hospitalId", 0)
         val hospitalName = intent.getStringExtra("hospitalName").toString()
         val className = binding.textViewClassName.text.toString()
-        Log.w("Hospital DetailPage", "filterList: $filterList")
-        for(i in filterList.indices) {
-            if(filterList[i].hospitalName == hospitalName) { //넘겨받은 병원이름으로 DB에서 데이터 가져올 것임
+        Log.w("Hospital DetailPage", "hospitalId: $hospitalId")
 
-                hospitalString = filterList[i].hospitalName
+        //Retrofit
+        retrofitClient = RetrofitClient.getInstance()
+        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
-                //병원이름
-                hospitalNameTextView.text = filterList[i].hospitalName
+        //상세정보 채우기
+        apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+                if(response.isSuccessful) {
+                    responseBodyDetail = response.body()!!
 
-                //진료과명
-                var className = ""
-                if(filterList[i].className.size > 1) {
-                    for(j in filterList[i].className.indices-1) {
-                        className += "${filterList[i].className[j]} | "
+                    hospitalString = responseBodyDetail.data.name //병원이름 저장
+                    hospitalNameTextView.text = responseBodyDetail.data.hospitalDetail.department //병원 진료과 설정
+                    hospitalNameTextView.text = responseBodyDetail.data.name //병원 이름 설정
+                    waitCountTextView.text = "${responseBodyDetail.data.reservations.size}명 대기중" //대기인원 설정
+                    hospitalPositionTextView.text = responseBodyDetail.data.openApiHospital.address //병원 주소 설정
+                    hospitalCallTextView.text = responseBodyDetail.data.openApiHospital.tel //병원 전화번호 설정
+
+                    //금일 운영시간 설정
+                    val calendar = Calendar.getInstance()
+                    val currentYear = calendar.get(Calendar.YEAR)
+                    val currentMonth = calendar.get(Calendar.MONTH)
+                    val currentDay = calendar.get(Calendar.DATE)
+                    val dayOfWeekTimeList = db_getDayOfWeek(currentYear, currentMonth, currentDay) //현재 요일 오픈, 마감시간 구하기
+
+                    if(dayOfWeekTimeList[1].equals("휴무") || dayOfWeekTimeList[1].equals("정기휴무")) { //금일 시간 설정, 정기휴무나 휴무인 날짜일 경우
+                        todayTimeTextView.text = "휴무"
+                    } else {
+                        todayTimeTextView.text = "${dayOfWeekTimeList[0]}요일 ${dayOfWeekTimeList[1]} ~ ${dayOfWeekTimeList[2]}"
                     }
-                }
-                className += filterList[i].className[filterList[i].className.lastIndex]
-                classNameTextView.text = className
+
+                    //병원 운영상태 설정
+                    var startTime = dayOfWeekTimeList[1]
+                    var endTime = dayOfWeekTimeList[2]
+                    val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    val currentTimeFormatted = dateFormat.format(calendar.time)
+
+                    //휴무 날짜인지 확인
+                    if(dayOfWeekTimeList[1].equals("휴무") || dayOfWeekTimeList[1].equals("정기휴무")) {
+                        statusTextView.text = "진료마감"
+                    }
+                    //현재시간이 운영시간 사이에 있는지 확인
+                    if(currentTimeFormatted >= startTime && currentTimeFormatted <= endTime) {
+                        statusTextView.text = "진료중"
+                    } else {
+                        statusTextView.text = "진료마감"
+                    }
+
+                    //진료시간 table 설정
+                    //lunchTimeTextView.text = db_getOpenningTime(HospitalSignupInfoResponseBody.data.hospitalDetail.lunch_start, HospitalSignupInfoResponseBody.data.hospitalDetail.lunch_end) //점심시간
+                    mondayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.mon_open, responseBodyDetail.data.hospitalDetail.mon_close) //월요일
+                    tuesdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.tue_open, responseBodyDetail.data.hospitalDetail.tue_close) //화요일
+                    wednesdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.wed_open, responseBodyDetail.data.hospitalDetail.wed_close) //수요일
+                    thursdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.thu_open, responseBodyDetail.data.hospitalDetail.thu_close) //목요일
+                    fridayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.fri_open, responseBodyDetail.data.hospitalDetail.fri_close) //금요일
+                    saturdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.sat_open, responseBodyDetail.data.hospitalDetail.sat_close) //토요일
+                    sundayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.sun_open, responseBodyDetail.data.hospitalDetail.sun_close) //일요일
+                    dayOffTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.hol_open, responseBodyDetail.data.hospitalDetail.hol_close) //공휴일
 
 
-                waitCountTextView.text = "${filterList[i].waitCount}명 대기중" //대기인원
-                hospitalPositionTextView.text = filterList[i].hospitalAddress //병원주소
+                    //리뷰 설정
+                    reviewCount = responseBodyDetail.data.review.size
+                    reviewCountTextView.text = reviewCount.toString()
 
-                //금일 운영시간
-                val calendar = Calendar.getInstance()
-                val currentYear = calendar.get(Calendar.YEAR)
-                val currentMonth = calendar.get(Calendar.MONTH)
-                val currentDay = calendar.get(Calendar.DATE)
-                val dayOfWeek = getDayOfWeek(currentYear, currentMonth, currentDay) //현재 요일 구하기
-                val dayTime = filterList[i].weekTime[dayOfWeek] //현재 요일에 맞는 영업시간 가져오기
-                todayTimeTextView.text = "${dayOfWeek}요일 ${dayTime}"
-
-                //병원 운영상태
-                val timeSplit = dayTime.toString().split("~")
-                var startTime = ""
-                var endTime = ""
-                if(timeSplit.size > 1) {
-                    startTime = timeSplit[0]
-                    endTime = timeSplit[1]
-                } else {
-                    startTime = timeSplit[0]
-                    endTime = timeSplit[0]
-                }
-
-                val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                val currentTimeFormatted = dateFormat.format(calendar.time)
-
-                //현재시간이 운영시간 사이에 있는지 확인
-                if(currentTimeFormatted >= startTime && currentTimeFormatted <= endTime) {
-                    statusTextView.text = "진료중"
-                } else {
-                    statusTextView.text = "진료마감"
-                }
-
-
-                //진료시간 table
-                lunchTimeTextView.text = filterList[i].weekTime["점심"]
-                mondayTimeTextView.text = filterList[i].weekTime["월"]
-                tuesdayTimeTextView.text = filterList[i].weekTime["화"]
-                wednesdayTimeTextView.text = filterList[i].weekTime["수"]
-                thursdayTimeTextView.text = filterList[i].weekTime["목"]
-                fridayTimeTextView.text = filterList[i].weekTime["금"]
-                saturdayTimeTextView.text = filterList[i].weekTime["토"]
-                sundayTimeTextView.text = filterList[i].weekTime["일"]
-                dayOffTimeTextView.text = filterList[i].weekTime["공휴일"]
-
-
-                //리뷰 설정
-                //
-                reviewCount = filterList[i].reviewList.size
-                val reviewCountTextView = binding.reviewCountTextView
-                reviewCountTextView.text = reviewCount.toString() //리뷰개수 textView에 표시
-
-                notReviewConstraintLayout = binding.notReviewConstraintLayout //리뷰가 없을 경우 constraintLayout
-                reviewConstraintLayout = binding.reviewRecyclerView //리뷰가 있을 경우 constraintLayout
-                notReviewConstraintLayout.visibility = View.GONE
-                reviewConstraintLayout.visibility = View.GONE
-
-                if(reviewCount == 0) { //리뷰가 하나도 없을 경우
-                    not_review_constraint_flag = true
-                    notReviewConstraintLayout.visibility = View.VISIBLE
-
-                    review_constraint_flag = false
+                    notReviewConstraintLayout = binding.notReviewConstraintLayout //리뷰가 없을 경우 constraintLayout
+                    reviewConstraintLayout = binding.reviewRecyclerView //리뷰가 있을 경우 constraintLayout
+                    notReviewConstraintLayout.visibility = View.GONE
                     reviewConstraintLayout.visibility = View.GONE
 
-                } else { //리뷰가 한개이상 있을 경우
-                    review_constraint_flag = true
-                    reviewConstraintLayout.visibility = View.VISIBLE
+                    if(reviewCount == 0) { //리뷰가 하나도 없을 경우
+                        notReviewConstraintLayout.visibility = View.VISIBLE
+                        reviewConstraintLayout.visibility = View.GONE
 
-                    not_review_constraint_flag = false
-                    notReviewConstraintLayout.visibility = View.GONE
+                    } else { //리뷰가 한개이상 있을 경우
+                        reviewConstraintLayout.visibility = View.VISIBLE
+                        notReviewConstraintLayout.visibility = View.GONE
 
-                    adapter.updatelist(filterList[i].reviewList)
-                    recyclerView.suppressLayout(true) //스트롤 불가능
-                }
+                        val reviewList: ArrayList<ReviewItem> = ArrayList()
+                        for(reviewIndex in responseBodyDetail.data.review.indices) {
+                            val starScore = responseBodyDetail.data.review[reviewIndex].starScore.toString()
+                            val comment = responseBodyDetail.data.review[reviewIndex].comment
+                            val reviewDate = responseBodyDetail.data.review[reviewIndex].registerDate
+                            //val userName = responseBody.data.review[reviewIndex].user.name
 
-                break
+                            reviewList.add(ReviewItem(starScore, comment, reviewDate.toString(), userName))
+                        }
+                        adapter.updatelist(reviewList)
+                        recyclerView.suppressLayout(true) //스트롤 불가능
+                    }
+
+                } else Log.w("Hospital_DetailPage FAILURE Response", "Detail Connect SUCESS, Response FAILURE") //통신 성공, 응답 실패
             }
-        }
+
+            override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+                Log.w("Hospital_DetailPage CONNECTION FAILURE: ", "Detail Connect FAILURE : ${t.localizedMessage}") //통신 실패
+            }
+        })
+
+        //즐겨찾기 버튼 설정하기
+        apiService.getMyHospitalBookmarkList(userToken).enqueue(object: Callback<MyBookmarkResponse> {
+            override fun onResponse(call: Call<MyBookmarkResponse>, response: Response<MyBookmarkResponse>) {
+                //통신, 응답 성공
+                if(response.isSuccessful) {
+                    responseBodyMyBookmark = response.body()!!
+                    Log.w("Hospital_DetailPage", "responseBody MyBookmark : $responseBodyMyBookmark")
+                }
+                //통신 성공, 응답 실패
+                Log.w("Hospital_DetailPage FAILURE Response", "MyBookmark Connect SUCESS, Response FAILURE")
+            }
+
+            //통신 실패
+            override fun onFailure(call: Call<MyBookmarkResponse>, t: Throwable) {
+                Log.w("Hospital_DetailPage CONNECTION FAILURE: ", "MyBookmark Connect FAILURE : ${t.localizedMessage}")
+            }
+        })
+
 
 
 
         // 예약 버튼 클릭 이벤트 설정
         reservationButton = binding.ReservationButton
         reservationButton.setOnClickListener {
-            val dialog = CustomReserveDialogActivity.newInstance(hospitalName, className)
+            val dialog = CustomReserveDialogFragment.newInstance(hospitalName, className)
             dialog.show(supportFragmentManager, "CustomReserveDialog")
         }
 
         //즐겨찾기 버튼 클릭 이벤트 설정
         favoriteButton = binding.favoriteImageView
+
         if(userHospitalFavorite[hospitalString] == true) {
             favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
         } else {
@@ -219,8 +259,8 @@ class Hospital_DetailPage : AppCompatActivity() {
         }
 
         favoriteButton.setOnClickListener {
-
-            if (userHospitalFavorite[hospitalString] == true) { //즐겨찾기 취소
+            //즐겨찾기 취소
+            if (userHospitalFavorite[hospitalString] == true) {
                 userHospitalFavorite[hospitalString] = false
                 favoriteButton.setImageResource(R.drawable.ic_likes)
 
@@ -231,8 +271,9 @@ class Hospital_DetailPage : AppCompatActivity() {
                         break
                     }
                 }
-
-            } else { //즐겨찾기
+            }
+            //즐겨찾기
+            else {
                 userHospitalFavorite[hospitalString] = true
                 favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
 
@@ -247,9 +288,42 @@ class Hospital_DetailPage : AppCompatActivity() {
 
             Log.w("Hospital DetailPage", "favorite Button Boolean : ${userHospitalFavorite}")
         }
+    //
+    }
 
+    //뒤로가기 버튼 눌렀을때
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish() //현재 액티비티 종료
+    }
+
+    //년, 월, 일 해당하는 날짜의 운영시간 구하기
+    private fun db_getDayOfWeek(year:Int, month:Int, day: Int): List<String> {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        return when(dayOfWeek) {
+            Calendar.SUNDAY -> listOf("일", responseBodyDetail.data.hospitalDetail.sun_open, responseBodyDetail.data.hospitalDetail.sun_close)
+            Calendar.MONDAY -> listOf("월", responseBodyDetail.data.hospitalDetail.mon_open, responseBodyDetail.data.hospitalDetail.mon_close)
+            Calendar.TUESDAY -> listOf("화", responseBodyDetail.data.hospitalDetail.tue_open, responseBodyDetail.data.hospitalDetail.tue_close)
+            Calendar.WEDNESDAY -> listOf("수", responseBodyDetail.data.hospitalDetail.wed_open, responseBodyDetail.data.hospitalDetail.wed_close)
+            Calendar.THURSDAY -> listOf("목", responseBodyDetail.data.hospitalDetail.thu_open, responseBodyDetail.data.hospitalDetail.thu_close)
+            Calendar.FRIDAY -> listOf("금", responseBodyDetail.data.hospitalDetail.fri_open, responseBodyDetail.data.hospitalDetail.fri_close)
+            Calendar.SATURDAY -> listOf("토", responseBodyDetail.data.hospitalDetail.sat_open, responseBodyDetail.data.hospitalDetail.sat_close)
+            else -> listOf("")
+        }
+    }
+
+    //운영시간 테이블 값 구하기
+    private fun db_getOpenningTime(open: String, close: String): String {
+        if(open == "정기휴무" || open == "휴무") {
+            return open
+        } else {
+            return "$open ~ $close"
+        }
+    }
 
 
     //
-    }
 }

@@ -152,15 +152,14 @@ class SignUpPatient : AppCompatActivity() {
             lateinit var responseBody: PatientSignupInfoResponse
             val userSignupInfo = PatientSignUpInfoRequest(registerId, registerPassword, registerName)
             val call = retrofit.create(APIService::class.java).postPatientSignUp(userSignupInfo)
-            val userResponse = call.enqueue(object: Callback<PatientSignupInfoResponse> {
+            call.enqueue(object: Callback<PatientSignupInfoResponse> {
                 override fun onResponse(call: Call<PatientSignupInfoResponse>, response: Response<PatientSignupInfoResponse>) {
-                    if(response.isSuccessful()) {
+                    if(response.isSuccessful) {
                         responseBody = response.body()!!
                         Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
 
                         //회원가입 성공시 메인 환자 로그인 액티비티로 이동
                         val intent = Intent(this@SignUpPatient, LoginPatientActivity::class.java)
-                        intent.putExtra("responseData", responseBody)
                         startActivity(intent)
                         finish() //현재 액티비티 종료
                     }
@@ -172,8 +171,6 @@ class SignUpPatient : AppCompatActivity() {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }
             })
-
-            Log.w("SignUpPatient", "userResponse: $userResponse")
         }
         //
     }
