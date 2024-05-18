@@ -118,6 +118,7 @@ data class FilterItem(
 //PopularHospitalAdapter
 data class PopularHospitalItem(
     var score: Int, //순위
+    var hospitalId: Long, //병원 레이블 번호
     var hospitalName: String //병원이름
 )
 

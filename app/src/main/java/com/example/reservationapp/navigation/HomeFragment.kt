@@ -60,7 +60,6 @@ class HomeFragment : Fragment() {
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
     private lateinit var responseBody: AllBookmarkResponse
-    private lateinit var responseBodySortedHospitalDeatil: HospitalSignupInfoResponse
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -207,7 +206,7 @@ class HomeFragment : Fragment() {
             val intent = Intent(requireActivity(), ChatActivity::class.java)
             startActivity(intent)
         }
-        
+
 
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
@@ -221,11 +220,9 @@ class HomeFragment : Fragment() {
         popularHospitalRecyclerView.adapter = popularHospitalAdapter
         popularHospitalRecyclerView.layoutManager = popularHospitalLinearLayoutManger
         popularHospitalRecyclerView.setHasFixedSize(true)
-        popularHospitalRecyclerView.suppressLayout(true) //스트롤 불가능
 
 
         //인기 순위 병원 설정
-        //var sortedHospitalList: List<Long>
         apiService.getAllHospitalBookmark().enqueue(object: Callback<AllBookmarkResponse> {
             override fun onResponse(call: Call<AllBookmarkResponse>, response: Response<AllBookmarkResponse>) {
                 //통신, 응답 성공
@@ -238,12 +235,12 @@ class HomeFragment : Fragment() {
                         val hospitalId = bookmark.hospitalId
                         hospitalBookmarkCountMap[hospitalId] = hospitalBookmarkCountMap.getOrDefault(hospitalId, 0) +1
                     }
-                    Log.w("HomeFragment", "hospitalBookmarkCountMap: $hospitalBookmarkCountMap")
+                    Log.w("HomeFragment", "hospitalId에 따른 즐겨찾기 개수 hospitalBookmarkCountMap: $hospitalBookmarkCountMap")
 
 
                     //즐겨찾기 내림차순 정렬
                     val sortedHospitalIdList = hospitalBookmarkCountMap.entries.sortedByDescending { it.value }.map { it.key } // [1, 3, 4, 2, 5]
-                    Log.w("HomeFragment", "sortedFilterList: $sortedHospitalIdList")
+                    Log.w("HomeFragment", "즐겨찾기 내림차순 hospitalId 정렬 sortedFilterList: $sortedHospitalIdList")
 
 
                     //병원 상세정보 가져오기, 순차적으로 진행
@@ -258,13 +255,13 @@ class HomeFragment : Fragment() {
                         var bookmarkItemList = ArrayList<PopularHospitalItem>() //adapter와 연결할 ItemList
                         if(sortedHospitalDetailList.size >= 5) { //병원 목록 리스트가 5개 이상이면
                             bookmarkItemList = sortedHospitalDetailList.take(5).mapIndexed { takeIndex, hospitalSignupInfoResponse ->
-                                    PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.name)
+                                    PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospitalId, hospitalSignupInfoResponse.data.name)
                                 } as ArrayList
                             Log.w("HomeFragment", "take문 bookmarkItemList: $bookmarkItemList")
                         }
                         else { //병원 목록 리스트가 5개 미만이면
                             for(forIndex in sortedHospitalDetailList.indices) {
-                                bookmarkItemList.add(PopularHospitalItem(forIndex+1, sortedHospitalDetailList[forIndex].data.name))
+                                bookmarkItemList.add(PopularHospitalItem(forIndex+1, sortedHospitalDetailList[forIndex].data.hospitalId, sortedHospitalDetailList[forIndex].data.name))
                                 Log.w("HomeFragment", "for문 bookmarkItemList: $bookmarkItemList")
                             }
                         }
