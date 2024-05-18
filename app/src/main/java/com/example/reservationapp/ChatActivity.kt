@@ -1,6 +1,8 @@
 package com.example.reservationapp
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,7 +10,7 @@ import com.example.capstone2024.ChattingAdapter
 import com.example.reservationapp.Model.ChatItem
 import com.example.reservationapp.databinding.ActivityChatBinding
 
-//챗gpt 채팅 페이지 액티비티
+// 챗gpt 채팅 페이지 액티비티
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
 
@@ -20,20 +22,18 @@ class ChatActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //초기화
+        // 초기화
         adapter = ChattingAdapter()
 
-        //채팅 recyclerView
+        // 채팅 recyclerView
         val recyclerView = binding.chatRecyclerView
         val linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.stackFromEnd = true //가장 최근 대화 맨 아래로 정렬
-        recyclerView.setHasFixedSize(true);
+        linearLayoutManager.stackFromEnd = true // 가장 최근 대화 맨 아래로 정렬
+        recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
 
-
-
-        //주고 받은 채팅 임의의 데이터 초기화
+        // 주고 받은 채팅 임의의 데이터 초기화
         chatList = ArrayList()
         chatList.add(ChatItem("AI", "안녕하세요. 캐치닥터 챗봇입니다. 당신의 증상을 알려주세요. 캐치닥터 챗봇이 진료과목을 추천해드립니다!"))
         chatList.add(ChatItem("hansung", "머리가 아프고, 기침이 나와 어디로 가야하니?"))
@@ -49,22 +49,38 @@ class ChatActivity : AppCompatActivity() {
         chatList.add(ChatItem("AI", "메세지"))
         adapter.updateList(chatList)
 
-        //recyclerView.scrollTo(0, 0) //채팅창 하단으로 이동
-
-        //메세지 보내기
+        // 메세지 보내기
         val messageEditText = binding.messageEditText
         val sendButton = binding.sendButton
+
+        sendButton.isEnabled = false // 초기 상태에서 비활성화
+
+        messageEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().trim().isNotEmpty()) {
+                    sendButton.isEnabled = true
+                    sendButton.setBackgroundResource(R.drawable.rounded_button_active)
+                } else {
+                    sendButton.isEnabled = false
+                    sendButton.setBackgroundResource(R.drawable.rounded_button_inactive)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         sendButton.setOnClickListener {
             val messageString = messageEditText.text.toString()
-            if(messageString != null) {
+            if (messageString.trim().isNotEmpty()) {
                 chatList.add(ChatItem("hansung", messageString))
                 adapter.updateList(chatList)
                 messageEditText.setText("")
             } else {
                 Log.w("Message Send Error", "$messageString")
             }
-            recyclerView.scrollToPosition(chatList.size-1)
+            recyclerView.scrollToPosition(chatList.size - 1)
         }
     }
-
 }

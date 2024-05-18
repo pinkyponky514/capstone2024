@@ -48,6 +48,7 @@ class ChattingAdapter:
         }
         return ViewHolder(layoutInflater)
     }
+
     //ViewHolder에 데이터 연결
     override fun onBindViewHolder(holder: ChattingAdapter.ViewHolder, position: Int) {
         holder.setContents(chatArray[position])
