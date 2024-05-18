@@ -18,13 +18,6 @@ import com.example.reservationapp.navigation.HomeFragment
 import com.example.reservationapp.navigation.MedicalHistoryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-/*
-var userId: String = ""
-var userName: String = ""
-var userToken: String = ""
-*/
-var userToken: String = ""
-
 var userMapx: Double = 3.0 //사용자 위도
 var userMapy: Double = 127.0 //사용자 경도
 
@@ -44,19 +37,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
-/*
-        val intentUserId = intent.getStringExtra("userId") //userId 초기화
-        val intentUserToken = intent.getStringExtra("userToken") //userToken 초기화
-        Log.w("MainActivity", "intentUserId: $intentUserId, intentUserToken: $intentUserToken")
-
-        if(intentUserId != null) { userId = intentUserId.toString() }
-        if(intentUserToken != null) { userToken = intentUserToken.toString() }
-*/
 
         if(App.prefs.token != null) {
             Log.w("MainActivity", "App.prefs.token: ${App.prefs.token}")
         }
-        //Log.w("MainActivity", "userId: $userId, userToken: $userToken, userName: $userName")
 
 
         if(reviewList.isEmpty() && filterList.isEmpty()) {

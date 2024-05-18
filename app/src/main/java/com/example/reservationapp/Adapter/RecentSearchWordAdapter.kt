@@ -9,7 +9,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.HospitalListActivity
+import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.RecentItem
+import com.example.reservationapp.Model.SearchHospital
 import com.example.reservationapp.R
 
 
