@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/dark_gray"/> <!-- 원형 버튼 색상 -->
+            <solid android:color="@android:color/darker_gray"/> <!-- 원형 버튼 색상 -->
         </shape>
     </item>
 </selector>

@@ -1,9 +1,11 @@
 package com.example.reservationapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capstone2024.ChattingAdapter
@@ -41,12 +43,13 @@ class ChatActivity : AppCompatActivity() {
         chatList.add(ChatItem("AI", "제가 생각하기로는 코로나입니다. 당신은 이비인후과를 방문하십시오."))
         chatList.add(ChatItem("hansung", "코로나는 아닌거 같아. 심각하게 기침이 나오지 않거든"))
         chatList.add(ChatItem("AI", "아닙니다. 당신은 코로나입니다. 격리하세요."))
-        chatList.add(ChatItem("hansung", "메세지"))
-        chatList.add(ChatItem("hansung", "메세지"))
-        chatList.add(ChatItem("hansung", "메세지"))
-        chatList.add(ChatItem("AI", "메세지"))
-        chatList.add(ChatItem("AI", "메세지"))
-        chatList.add(ChatItem("AI", "메세지"))
+        chatList.add(ChatItem("hansung", "오늘 병원에 꼭 가야겠어."))
+        chatList.add(ChatItem("hansung", "오늘 영업하는 병원 중 가장 가까운 병원을 알려줘"))
+        chatList.add(ChatItem("hansung", "빨리 가야하니까 빨리 !"))
+        chatList.add(ChatItem("AI", "잠시만 기달려주세요"))
+        chatList.add(ChatItem("AI", "삼성드림이비인후과가 제일 괜찮은거 같아요"))
+        chatList.add(ChatItem("AI", "지금은 점심시간이니 미리 접수하시겠습니까?"))
+        chatList.add(ChatItem("AI", "chatdoctor를 이용해서 미리 접수 하세요 ~"))
         adapter.updateList(chatList)
 
         // 메세지 보내기
@@ -81,6 +84,14 @@ class ChatActivity : AppCompatActivity() {
                 Log.w("Message Send Error", "$messageString")
             }
             recyclerView.scrollToPosition(chatList.size - 1)
+        }
+
+        // 아이콘 클릭 이벤트 설정
+        val backIcon: ImageView = findViewById(R.id.backIcon)
+        backIcon.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()  // Optional: if you want to finish the current activity
         }
     }
 }
