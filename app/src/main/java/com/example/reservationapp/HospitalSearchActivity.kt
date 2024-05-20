@@ -27,6 +27,9 @@ class HospitalSearchActivity : AppCompatActivity() {
     private lateinit var submitButton: ImageView //검색버튼
     private lateinit var backButton: ImageView //뒤로가기 버튼
 
+    //Retrofit
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHospitalSearchBinding.inflate(layoutInflater)
@@ -78,7 +81,7 @@ class HospitalSearchActivity : AppCompatActivity() {
             //intent.putExtra("searchWordList", recentSearchWordList)
             startActivity(intent)
             recentSearchWordList.clear()
-            //finish()
+            finish()
         }
 
         //뒤로가기 버튼 눌렀을 경우 - 메인화면이 나옴

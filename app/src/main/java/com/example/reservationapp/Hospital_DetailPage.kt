@@ -13,7 +13,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.ReviewAdapter
 import com.example.reservationapp.Custom.CustomReserveDialogFragment
 import com.example.reservationapp.Model.APIService
@@ -35,16 +34,29 @@ import java.util.Locale
 class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var binding: ActivityHospitalDetailpageExampleAddBinding
 
+    //리뷰
     private var not_review_constraint_flag: Boolean = false //리뷰 개수가 0일때의 constraintLayout flag
     private var review_constraint_flag: Boolean = false //리뷰가 있을 경우 constraintLayout flag
 
     private lateinit var notReviewConstraintLayout: ConstraintLayout //리뷰가 없을때 constraintLayout
-    private lateinit var reviewConstraintLayout: RecyclerView //리뷰가 있을때 constraintLayout
+    private lateinit var reviewConstraintLayout: ConstraintLayout //리뷰가 있을때 constraintLayout
+    //private lateinit var reviewConstraintLayout: RecyclerView //리뷰가 있을때 constraintLayout
 
-    private var bookmark_flag: Boolean = false
+    private lateinit var noReviewWriteButton: Button //리뷰 없을때 리뷰쓰기 버튼
+    private lateinit var reviewWriteButton: Button //리뷰 한개라도 있을때 리뷰쓰기 버튼
+    private lateinit var reviewCountTextView: TextView //리뷰 숫자
+    private var reviewCount: Int = 0 //리뷰개수
 
     private lateinit var adapter: ReviewAdapter
+
+
+    //즐겨찾기
+    private var bookmark_flag: Boolean = false
+
+
+    //
     private lateinit var mainActivity: MainActivity
+
 
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
@@ -75,9 +87,6 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var sundayTimeTextView: TextView
     private lateinit var dayOffTimeTextView: TextView //공휴일
 
-    private lateinit var reviewCountTextView: TextView //리뷰 숫자
-
-    private var reviewCount: Int = 0 //리뷰개수
 
     private var hospitalString: String = ""
 
@@ -131,6 +140,7 @@ class Hospital_DetailPage : AppCompatActivity() {
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+
 
         //상세정보 채우기
         apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
@@ -193,7 +203,7 @@ class Hospital_DetailPage : AppCompatActivity() {
                     reviewCountTextView.text = reviewCount.toString()
 
                     notReviewConstraintLayout = binding.notReviewConstraintLayout //리뷰가 없을 경우 constraintLayout
-                    reviewConstraintLayout = binding.reviewRecyclerView //리뷰가 있을 경우 constraintLayout
+                    reviewConstraintLayout = binding.reviewConstraintLayout //리뷰가 있을 경우 constraintLayout
                     notReviewConstraintLayout.visibility = View.GONE
                     reviewConstraintLayout.visibility = View.GONE
 
@@ -343,11 +353,50 @@ class Hospital_DetailPage : AppCompatActivity() {
             }
         }
 
+
+        //리뷰 하나도 없을때 리뷰쓰기 버튼 onClick
+        noReviewWriteButton = binding.noReviewWriteButton
+        noReviewWriteButton.setOnClickListener {
+            if(App.prefs.token != null) {
+                val intent = Intent(this, ReviewWriteDetailActivity::class.java)
+                intent.putExtra("hospitalId", hospitalId)
+                startActivity(intent)
+            }
+            else {
+                val intent = Intent(this, HPDivisonActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        //리뷰 한개라도 있을때 리뷰쓰기 버튼 onClick
+        reviewWriteButton = binding.reviewWriteButton
+        reviewWriteButton.setOnClickListener {
+            if(App.prefs.token != null) {
+                val intent = Intent(this, ReviewWriteDetailActivity::class.java)
+                intent.putExtra("hospitalId", hospitalId)
+                startActivity(intent)
+            }
+            else {
+                val intent = Intent(this, HPDivisonActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+
         // 예약 버튼 클릭 이벤트 설정
         reservationButton = binding.ReservationButton
         reservationButton.setOnClickListener {
-            val dialog = CustomReserveDialogFragment.newInstance(hospitalName, className)
-            dialog.show(supportFragmentManager, "CustomReserveDialog")
+            //로그인 되어있으면
+            if(App.prefs.token != null) {
+                val dialog = CustomReserveDialogFragment.newInstance(hospitalName, className, hospitalId)
+                dialog.show(supportFragmentManager, "CustomReserveDialog")
+            }
+
+            //로그인 안되어있으면 로그인부터
+            else {
+                val intent = Intent(this, HPDivisonActivity::class.java)
+                startActivity(intent)
+            }
         }
 
 

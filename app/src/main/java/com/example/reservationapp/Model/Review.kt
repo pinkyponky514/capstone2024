@@ -11,3 +11,8 @@ data class Review(
     @SerializedName("regDate") val registerDate: LocalDate, //리뷰 등록 날짜
     @SerializedName("modDate") val modifyDate: LocalDate, //리뷰 수정 날짜
 )
+
+data class ReviewRequest(
+    @SerializedName("grade") val starScore: Float, //별점
+    @SerializedName("text") val comment: String //내용
+)

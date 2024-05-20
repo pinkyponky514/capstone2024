@@ -48,9 +48,6 @@
             android:name=".Custom.CustomMoreDialogFragment"
             android:exported="false" />
         <activity
-            android:name=".Final_Reservation"
-            android:exported="false" />
-        <activity
             android:name=".ChatActivity"
             android:exported="false" /> <!-- 병원 목록 페이지 액티비티 -->
         <activity

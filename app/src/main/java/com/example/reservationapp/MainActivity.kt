@@ -18,8 +18,8 @@ import com.example.reservationapp.navigation.HomeFragment
 import com.example.reservationapp.navigation.MedicalHistoryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-var userMapx: Double = 3.0 //사용자 위도
-var userMapy: Double = 127.0 //사용자 경도
+var userMapx: Double = 37.5 //사용자 위도
+var userMapy: Double = 126.9 //사용자 경도
 
 
 //메인메뉴

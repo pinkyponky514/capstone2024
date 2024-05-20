@@ -30,6 +30,7 @@ class PopularHospitalAdapter: RecyclerView.Adapter<PopularHospitalAdapter.ViewHo
                 val intent = Intent(context, Hospital_DetailPage::class.java)
                 intent.putExtra("hospitalName", hospitalName_textView.text.toString())
                 intent.putExtra("hospitalId", hospitalId)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                 context.startActivity(intent)
             }
         }
