@@ -76,7 +76,7 @@ class CommunityFragment : Fragment() {
         adapter = CommunityImageAdapter(itemList) { position ->
             // RecyclerView의 아이템 클릭 시 동작 정의
             val item = itemList[position]
-            val fragment = CommunityDetailFragment.newInstance(item.imageResource, item.title)
+            val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title)
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.main, fragment)
                 .addToBackStack(null)
