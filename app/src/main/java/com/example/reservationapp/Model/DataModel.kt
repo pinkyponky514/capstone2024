@@ -65,9 +65,11 @@ data class HospitalItem(
 
 //ChattingAdapter
 data class ChatItem (
-    var user : String, //사람11
-    var text : String //메세지
+    var user: String,
+    var text: String? = null,
+    var imageResource: Int? = null // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
 )
+
 
 // 예약된 내역 모델 클래스
 data class ReservationItem(

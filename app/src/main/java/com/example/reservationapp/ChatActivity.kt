@@ -38,18 +38,14 @@ class ChatActivity : AppCompatActivity() {
         // 주고 받은 채팅 임의의 데이터 초기화
         chatList = ArrayList()
         chatList.add(ChatItem("AI", "안녕하세요. 캐치닥터 챗봇입니다. 당신의 증상을 알려주세요. 캐치닥터 챗봇이 진료과목을 추천해드립니다!"))
-        chatList.add(ChatItem("hansung", "머리가 아프고, 기침이 나와 어디로 가야하니?"))
-        chatList.add(ChatItem("hansung", "그리고 배도 아파"))
-        chatList.add(ChatItem("AI", "제가 생각하기로는 코로나입니다. 당신은 이비인후과를 방문하십시오."))
-        chatList.add(ChatItem("hansung", "코로나는 아닌거 같아. 심각하게 기침이 나오지 않거든"))
-        chatList.add(ChatItem("AI", "아닙니다. 당신은 코로나입니다. 격리하세요."))
-        chatList.add(ChatItem("hansung", "오늘 병원에 꼭 가야겠어."))
-        chatList.add(ChatItem("hansung", "오늘 영업하는 병원 중 가장 가까운 병원을 알려줘"))
-        chatList.add(ChatItem("hansung", "빨리 가야하니까 빨리 !"))
-        chatList.add(ChatItem("AI", "잠시만 기달려주세요"))
-        chatList.add(ChatItem("AI", "삼성드림이비인후과가 제일 괜찮은거 같아요"))
-        chatList.add(ChatItem("AI", "지금은 점심시간이니 미리 접수하시겠습니까?"))
-        chatList.add(ChatItem("AI", "chatdoctor를 이용해서 미리 접수 하세요 ~"))
+        chatList.add(ChatItem("hansung", "머리가 아프고, 기침이 나와. 어디로 가야하니?"))
+        chatList.add(ChatItem("AI", "해당 증상에 대한 진료과목은 '내과'입니다."))
+        chatList.add(ChatItem("hansung", "그러면 병원 좀 추천해줘"))
+        chatList.add(ChatItem("AI", "현 위치에서 가까운 병원을 추천드리겠습니다."))
+        chatList.add(ChatItem("AI",null, R.drawable.ex_hospital))
+        chatList.add(ChatItem("AI", "윤홍선내과가 제일 가까운 병원으로 파악됩니다."))
+        chatList.add(ChatItem("AI", "빨리 쾌차하시기 바랍니다. 좋은 하루 되세요 ~"))
+
         adapter.updateList(chatList)
 
         // 메세지 보내기
