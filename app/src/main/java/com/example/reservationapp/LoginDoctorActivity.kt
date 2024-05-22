@@ -1,6 +1,5 @@
 package com.example.reservationapp
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import androidx.annotation.RequiresApi
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HospitalUserLoginResponse
 import com.example.reservationapp.Model.UserLoginInfoRequest
-//import com.example.reservationapp.Retrofit.App
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityLoginBinding
 import retrofit2.Call
@@ -25,7 +23,7 @@ import retrofit2.Response
 class LoginDoctorActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityLoginBinding
-    private lateinit var userBusinessNumber: String //유저가 직접 입력한 사업자번호
+    private lateinit var userId: String //유저가 직접 입력한 사업자번호
     private lateinit var userPassword: String //유저가 입력한 비밀번호
 
 
@@ -106,33 +104,28 @@ class LoginDoctorActivity : AppCompatActivity() {
         //
         //로그인 버튼 눌렀을때
         LoginButton.setOnClickListener {
-            userBusinessNumber = BusinessNumberText.text.toString()
+            userId = BusinessNumberText.text.toString()
             userPassword = PasswordEditText.text.toString()
-            Log.w("LoginDoctorActivity", "userBusinessNumber: $userBusinessNumber, userPassword: $userPassword")
+            Log.w("LoginDoctorActivity", "userBusinessNumber: $userId, userPassword: $userPassword")
 
-            val userLoginInfo = UserLoginInfoRequest(userBusinessNumber, userPassword)
+            val userLoginInfo = UserLoginInfoRequest(userId, userPassword)
 
             App.prefs.token = null
-
             retrofitClient = RetrofitClient.getInstance()
             apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
             apiService.postHospitalLogin(userLoginInfo).enqueue(object: Callback<HospitalUserLoginResponse> {
                 override fun onResponse(call: Call<HospitalUserLoginResponse>, response: Response<HospitalUserLoginResponse>) {
                     if(response.isSuccessful) {
-                     //   val userToken = response.body().toString()
                         val response = response.body()!!
                         val data = response.data
-
                         val userToken = data.token
 
                         App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
 
-                        val intent = Intent(this@LoginDoctorActivity, HospitalActivity::class.java)
-
+                        val intent = Intent(this@LoginDoctorActivity, HospitalMainActivity::class.java)
                         intent.putExtra("hospitalId", data.hospitalId) //hospitalId(기본키) 넘겨주기
-
-                        Log.d("LoginDoctorActivity", "userBusinessNumber: ${userLoginInfo.id}, userToken: $userToken")
+                        Log.d("LoginDoctorActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
 
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                         startActivity(intent)

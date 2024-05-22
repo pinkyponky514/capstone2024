@@ -126,7 +126,7 @@ class SignUpPatient : AppCompatActivity() {
             //Log.w("SignUpPatient", "Birthday: $registerBirthday")
 
             // 생년월일을 LocalDate로 변환
-            val registerBirthday: LocalDate = LocalDate.of(birthdateYear.toInt(), birthdateMonth.toInt(), birthdateDay.toInt()) //2024-05-12
+            val registerBirthday = LocalDate.of(birthdateYear.toInt(), birthdateMonth.toInt(), birthdateDay.toInt()) //2024-05-12
 
             // 각 필드가 비어 있는지 확인
             if (registerId.isEmpty() || registerEmail.isEmpty() || registerPassword.isEmpty() || registerName.isEmpty() || registerPhone.isEmpty()) {

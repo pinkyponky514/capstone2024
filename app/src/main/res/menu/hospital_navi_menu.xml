@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/hospital_main"
+        android:title="메인페이지"
+        android:icon="@drawable/ic_home"
+        android:enabled="true"
+        android:checked="true"
+        />
+    <item
+        android:id="@+id/hospital_mypage"
+        android:title="마이페이지"
+        android:icon="@drawable/ic_more"
+        android:enabled="true"
+        />
+</menu>

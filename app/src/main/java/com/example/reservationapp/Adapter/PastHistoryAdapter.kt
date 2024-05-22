@@ -29,7 +29,7 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
 
 
         init {
-            status_TextView = itemView.findViewById(R.id.history_status_textView)
+            status_TextView = itemView.findViewById(R.id.status)
             hospital_name_TextView = itemView.findViewById(R.id.hospital_name_textView)
             class_name_TextView = itemView.findViewById(R.id.class_textView)
             reserve_date_TextView = itemView.findViewById(R.id.reserve_date_textView)

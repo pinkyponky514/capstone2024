@@ -104,9 +104,9 @@ class LoginPatientActivity: AppCompatActivity() {
             userPassword = PasswordEditText.text.toString()
             Log.w("LoginPatientActivity", "userId: $userId, userPassword: $userPassword")
 
-            App.prefs.token = null
-
             val userLoginInfo = UserLoginInfoRequest(userId, userPassword)
+
+            App.prefs.token = null
             retrofitClient = RetrofitClient.getInstance()
             apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
@@ -124,7 +124,6 @@ class LoginPatientActivity: AppCompatActivity() {
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                         startActivity(intent)
                         finish()
-
                     }
                     else {
                         //Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")

@@ -25,6 +25,11 @@
         <item name="android:textColorHint">@color/dark_gray</item>
     </style>
 
+    <style name="TextView15dpDarkGray">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColorHint">@color/dark_gray</item>
+    </style>
+
     <style name="TextView14dpBlackBold">
         <item name="android:textSize">14dp</item>
         <item name="android:textStyle">bold</item>

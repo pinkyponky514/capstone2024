@@ -1,5 +1,6 @@
 package com.example.reservationapp.Model
 
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import java.io.Serializable
@@ -55,34 +56,29 @@ data class HospitalItem(
 
 //ChattingAdapter
 data class ChatItem (
-    var user : String, //사람11
-    var text : String //메세지
+    var user: String,
+    var text: String? = null,
+    var imageResource: Int? = null // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
 )
+
 
 // 예약된 내역 모델 클래스
 data class ReservationItem(
     val time: String, // 예약 시간
     val patientName: String, // 환자 이름
     val birthDate: String, // 생년월일
-    val reservationDate: String // 예약 날짜
-) : Comparable<ReservationItem> {
+    val reservationDate: String, // 예약 날짜
+    val status: String // 진료상태
+): Comparable<ReservationItem> {
     override fun compareTo(other: ReservationItem): Int {
-        // 이 비교는 시간 문자열의 사전 순서에 따라 정렬됩니다.
-        return this.time.compareTo(other.time)
+        return this.time.compareTo(other.time) //이 비교는 시간 문자열의 사전 순서에 따라 정렬
     }
 }
 
-// DataModel.kt
-data class CommunityItem(
-    val imageResource: Int,
-    val title: String,
-    val writer: String,
-    val likes : String,
-    val reviews : String,
-    val timestamp : String
-    //val commentNumber: Int
+data class ImageData(
+    val uri: Uri
+    // 필요한 경우 다른 메타데이터를 추가할 수 있습니다.
 )
-
 
 //HistoryAdapter
 data class HistoryItem (
@@ -103,9 +99,20 @@ data class ReviewItem (
 )
 
 data class CommentItem(
-    val title: String, // 리뷰 제목
-    val writer: String, // 리뷰 작성자
-    val timestamp: String // 리뷰 작성 시간
+    val content: String, // 댓글 내용
+    val author: String, // 댓글 작성자
+    val timestamp: String // 댓글 작성 시간
+)
+
+// DataModel.kt
+data class CommunityItem(
+    val imageResource: Int,
+    val title: String,
+    val writer: String,
+    val likes : String,
+    val reviews : String,
+    val timestamp : String
+    //val commentNumber: Int
 )
 
 //Filter

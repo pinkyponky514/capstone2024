@@ -15,8 +15,6 @@ import com.example.reservationapp.Model.HospitalSignUpInfoRequest
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.google.android.material.snackbar.Snackbar
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -87,9 +85,9 @@ class SignUpDoctor : AppCompatActivity() {
         lateinit var responseBody: HospitalSignupInfoResponse
 
         App.prefs.token = null
-
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+
         apiService.postHospitalSignUp(userSignUpInfo).enqueue(object: Callback<HospitalSignupInfoResponse> {
             override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
                 if(response.isSuccessful) {

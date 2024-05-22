@@ -33,12 +33,8 @@ class CommunityFragment : Fragment() {
     private lateinit var timestamp: TextView
 
     private lateinit var boardItems: List<BoardContent>
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // item_community 레이아웃을 inflate하여 View 객체를 생성합니다.
-        val view = inflater.inflate(R.layout.fragment_community, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_community, container, false) // item_community 레이아웃을 inflate하여 View 객체를 생성
 
 //        // 작성 시간을 표시하는 TextView를 찾아 변수에 할당합니다.
 //        timestamp = view.findViewById(R.id.timestamp)
@@ -47,8 +43,7 @@ class CommunityFragment : Fragment() {
     }
 
 
-
-    // onViewCreated 메서드는 그대로 유지합니다.
+    // onViewCreated 메서드는 그대로 유지
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeRecyclerView()
@@ -62,9 +57,10 @@ class CommunityFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
     }
 
+
+    //
     private fun initializeRecyclerView() {
         // RecyclerView 참조 가져오기
         recyclerView = requireView().findViewById(R.id.recyclerViewCommunity)
@@ -74,8 +70,9 @@ class CommunityFragment : Fragment() {
 
         // 현재 시간을 가져와서 형식을 맞춘 후 TextView에 설정합니다.
         val currentTime = Calendar.getInstance().time
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val formattedTime = sdf.format(currentTime)
+
 
 //        // RecyclerView에 Adapter 설정
 //        val itemList = listOf(
@@ -101,7 +98,8 @@ class CommunityFragment : Fragment() {
 //        fetchCommunityItems()
     }
 
-    fun fetchCommunityItems(){
+    //
+    fun fetchCommunityItems() {
         val apiService = App.apiService
 
         apiService.getAllBoards().enqueue(object :
@@ -133,7 +131,7 @@ class CommunityFragment : Fragment() {
 
                     adapter = CommunityImageAdapter(itemList) { position ->
                         val item = itemList[position]
-                        val fragment = CommunityDetailFragment.newInstance(item.imageResource, item.title)
+                        val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title)
                         requireActivity().supportFragmentManager.beginTransaction()
                             .replace(R.id.main, fragment)
                             .addToBackStack(null)
@@ -143,10 +141,11 @@ class CommunityFragment : Fragment() {
 
                     Log.d("Success Response", responseBody.toString())
 
-                } else {
-                    Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                 }
+
+                else Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
             }
+
             override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
                 Log.d("CONNECTION FAILURE: ", t.localizedMessage)
             }
@@ -154,4 +153,5 @@ class CommunityFragment : Fragment() {
     }
 
 
+    //
 }

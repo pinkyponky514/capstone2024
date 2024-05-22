@@ -40,8 +40,7 @@ class Hospital_Mypage : AppCompatActivity() {
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_hospital_mypage)
+        setContentView(R.layout.fragment_hospital_mypage)
 
         hospitalName = intent.getStringExtra("hospitalName")
 
@@ -122,7 +121,7 @@ class Hospital_Mypage : AppCompatActivity() {
                             val reponse = response.body()!!
                             val message = response.message()
 
-                            val intent = Intent(this@Hospital_Mypage, HospitalActivity::class.java)
+                            val intent = Intent(this@Hospital_Mypage, HospitalMainActivity::class.java)
                             startActivity(intent)
                         }
                     } else {

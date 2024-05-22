@@ -30,7 +30,13 @@
             android:name=".ReviewWriteDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".CommentDialogActivity"
+            android:name=".navigation.CommunityDetailCommentFragment"
+            android:exported="false" />
+        <activity
+            android:name=".navigation.HospitalFragment"
+            android:exported="false" />
+        <activity
+            android:name=".HospitalMainActivity"
             android:exported="false" />
         <activity
             android:name=".CheckReservationActivity"
@@ -39,11 +45,8 @@
             android:name=".Custom.CustomReserveDialogFragment"
             android:exported="false" />
         <activity
-            android:name=".Hospital_Mypage"
+            android:name=".navigation.HospitalMypageFragment"
             android:exported="false" />
-        <activity
-            android:name=".HospitalActivity"
-            android:exported="false" /> <!-- 더보기 버튼 커스텀 다이얼로그 -->
         <activity
             android:name=".Custom.CustomMoreDialogFragment"
             android:exported="false" />
@@ -66,9 +69,6 @@
         </activity>
         <activity
             android:name=".navigation.CommunityPostFragment"
-            android:exported="false" />
-        <activity
-            android:name=".navigation.CommunityDetailFragment"
             android:exported="false" />
         <activity
             android:name=".navigation.CommunityFragment"
