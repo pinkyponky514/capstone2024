@@ -55,7 +55,6 @@ class LoginPatientActivity: AppCompatActivity() {
         val SignUpButton = binding.SingupButton
 
 
-
         //email 변경 감지 되었을때
         val emailWatcher = object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -105,31 +104,35 @@ class LoginPatientActivity: AppCompatActivity() {
 
             val userLoginInfo = UserLoginInfoRequest(userId, userPassword)
 
+            App.prefs.token = null
+
             retrofitClient = RetrofitClient.getInstance()
             apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
             apiService.postPatientLogin(userLoginInfo).enqueue(object: Callback<String> {
-                    override fun onResponse(call: Call<String>, response: Response<String>) {
-                        if(response.isSuccessful) {
-                            val userToken = response.body().toString()
-                            val intent = Intent(this@LoginPatientActivity, MainActivity::class.java)
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if(response.isSuccessful) {
+                        val userToken = response.body().toString()
+                        App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
 
-                            intent.putExtra("userId", userLoginInfo.id)
-                            intent.putExtra("userToken", userToken)
+                        val intent = Intent(this@LoginPatientActivity, MainActivity::class.java)
 
-                            Log.d("LoginPatientActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
-                            Log.d("Success Response", "userToken: ${userToken}, body: ${response.body().toString()}") //통신 성공한 경우
+                        Log.d("LoginPatientActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
+                        Log.d("Success Response", "userToken: ${userToken}, body: ${response.body().toString()}") //통신 성공한 경우
 
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
-                            startActivity(intent)
-                            finish()                        }
-                        else
-                            Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+                        startActivity(intent)
+                        finish()
+
                     }
+                    //통신 성공, 응답은 실패
+                    else Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
+                }
 
-                    override fun onFailure(call: Call<String>, t: Throwable) {
-                        Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
-                    }
+                //통신 실패
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+                }
             })
         }
 

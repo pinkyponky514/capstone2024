@@ -12,10 +12,13 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.ChatBotResponse
 import com.example.reservationapp.Model.PatientSignUpInfoRequest
 import com.example.reservationapp.Model.PatientSignupInfoResponse
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
 import com.google.android.material.snackbar.Snackbar
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -144,17 +147,19 @@ class SignUpPatient : AppCompatActivity() {
 
             // 모든 필드가 입력되었을 때 회원가입 성공 처리 수행
             //Retrofit
-            val retrofit = Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080")
-                .addConverterFactory(GsonConverterFactory.create()) //.addConverterFactory(MoshiConverterFactory.create())
-                .build()
+//            val retrofit = Retrofit.Builder()
+//                .baseUrl("http://10.0.2.2:8080")
+//                .addConverterFactory(GsonConverterFactory.create()) //.addConverterFactory(MoshiConverterFactory.create())
+//                .build()
 
+
+            App.prefs.token = null
             lateinit var responseBody: PatientSignupInfoResponse
             val userSignupInfo = PatientSignUpInfoRequest(registerId, registerPassword, registerName)
-            val call = retrofit.create(APIService::class.java).postPatientSignUp(userSignupInfo)
-            call.enqueue(object: Callback<PatientSignupInfoResponse> {
+     //       val call = retrofit.create(APIService::class.java).postPatientSignUp(userSignupInfo)
+            App.apiService.postPatientSignUp(userSignupInfo).enqueue(object: Callback<PatientSignupInfoResponse> {
                 override fun onResponse(call: Call<PatientSignupInfoResponse>, response: Response<PatientSignupInfoResponse>) {
-                    if(response.isSuccessful) {
+                    if (response.isSuccessful) {
                         responseBody = response.body()!!
                         Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
 
@@ -162,11 +167,14 @@ class SignUpPatient : AppCompatActivity() {
                         val intent = Intent(this@SignUpPatient, LoginPatientActivity::class.java)
                         startActivity(intent)
                         finish() //현재 액티비티 종료
+                    } else {
+                        Log.d(
+                            "FAILURE Response",
+                            "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}"
+                        ) //통신 성공, 응답은 실패
+                        handleErrorResponse(response)
                     }
-                    else
-                        Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                 }
-
                 override fun onFailure(call: Call<PatientSignupInfoResponse>, t: Throwable) {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }
@@ -175,5 +183,23 @@ class SignUpPatient : AppCompatActivity() {
         //
     }
 
+
+    private fun handleErrorResponse(response: Response<PatientSignupInfoResponse>) {
+        val errorBody = response.errorBody()?.string()
+        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: $errorBody")
+        if (errorBody != null) {
+            try {
+                val jsonObject = JSONObject(errorBody)
+                val timestamp = jsonObject.optString("timestamp")
+                val status = jsonObject.optInt("status")
+                val error = jsonObject.optString("error")
+                val message = jsonObject.optString("message")
+                val path = jsonObject.optString("path")
+                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+            } catch (e: JSONException) {
+                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+            }
+        }
+    }
     //
 }

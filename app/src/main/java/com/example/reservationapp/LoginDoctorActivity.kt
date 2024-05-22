@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.HospitalUserLoginResponse
 import com.example.reservationapp.Model.UserLoginInfoRequest
 //import com.example.reservationapp.Retrofit.App
 import com.example.reservationapp.Retrofit.RetrofitClient
@@ -111,23 +112,27 @@ class LoginDoctorActivity : AppCompatActivity() {
 
             val userLoginInfo = UserLoginInfoRequest(userBusinessNumber, userPassword)
 
+            App.prefs.token = null
+
             retrofitClient = RetrofitClient.getInstance()
             apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
-            apiService.postHospitalLogin(userLoginInfo).enqueue(object: Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+            apiService.postHospitalLogin(userLoginInfo).enqueue(object: Callback<HospitalUserLoginResponse> {
+                override fun onResponse(call: Call<HospitalUserLoginResponse>, response: Response<HospitalUserLoginResponse>) {
                     if(response.isSuccessful) {
-                        val userToken = response.body().toString()
+                     //   val userToken = response.body().toString()
+                        val response = response.body()!!
+                        val data = response.data
+
+                        val userToken = data.token
 
                         App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
 
                         val intent = Intent(this@LoginDoctorActivity, HospitalActivity::class.java)
 
-                        intent.putExtra("userId", userLoginInfo.id)
-                        intent.putExtra("userToken", userToken)
+                        intent.putExtra("hospitalId", data.hospitalId) //hospitalId(기본키) 넘겨주기
 
                         Log.d("LoginDoctorActivity", "userBusinessNumber: ${userLoginInfo.id}, userToken: $userToken")
-                        Log.d("Success Response", "userToken: ${userToken}, body: ${response.body().toString()}") //통신 성공한 경우
 
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                         startActivity(intent)
@@ -137,7 +142,7 @@ class LoginDoctorActivity : AppCompatActivity() {
                         Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                 }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<HospitalUserLoginResponse>, t: Throwable) {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }
             })

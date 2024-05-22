@@ -6,8 +6,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.ReservationItem
 import com.example.reservationapp.R
+import com.example.reservationapp.Retrofit.RetrofitClient
 
 class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>() {
 

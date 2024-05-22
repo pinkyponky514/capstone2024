@@ -24,7 +24,7 @@ interface APIService {
 
     @POST("/jwt-hospital-login/login") //병원 로그인
     @Headers("Auth: false")
-    fun postHospitalLogin(@Body user: UserLoginInfoRequest): Call<String> //Token 받음
+    fun postHospitalLogin(@Body user: UserLoginInfoRequest): Call<HospitalUserLoginResponse> //Token 받음
 
     @GET("/hospitals") //병원 검색
     @Headers("Auth: false")
@@ -46,4 +46,16 @@ interface APIService {
 
     @GET("/bookmarks") //나의 즐겨찾기 병원 가져오기
     fun getMyHospitalBookmarkList(@Header("token") token: String): Call<MyBookmarkResponse>
+
+    @GET("/bot/chat") //챗봇 - 진료과목 가져오기
+    @Headers("Auth: false")
+    fun getChatBotAnswer( @Query("prompt") prompt: String?= null): Call<ChatBotResponse>
+
+    @POST("/boards/write") //게시글 작성하기
+    fun postBoard(@Body board: BoardContent): Call<BoardResponse>
+
+    @GET("/boards") //전체 게시글 가져오기
+    fun getAllBoards():Call<BoardResponse>
+
+
 }

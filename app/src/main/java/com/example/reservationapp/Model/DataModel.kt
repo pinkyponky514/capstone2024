@@ -65,7 +65,12 @@ data class ReservationItem(
     val patientName: String, // 환자 이름
     val birthDate: String, // 생년월일
     val reservationDate: String // 예약 날짜
-)
+) : Comparable<ReservationItem> {
+    override fun compareTo(other: ReservationItem): Int {
+        // 이 비교는 시간 문자열의 사전 순서에 따라 정렬됩니다.
+        return this.time.compareTo(other.time)
+    }
+}
 
 // DataModel.kt
 data class CommunityItem(

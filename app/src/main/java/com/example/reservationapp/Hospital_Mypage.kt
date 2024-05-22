@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,9 +12,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.Hospital
 import com.example.reservationapp.Model.HospitalDetail
 import com.example.reservationapp.Model.HospitalDetail2
 import com.example.reservationapp.Model.HospitalDetailResponse
@@ -25,24 +29,24 @@ import retrofit2.Callback
 import retrofit2.Response
 class Hospital_Mypage : AppCompatActivity() {
 
-    private var userToken: String? = null
-    private var userId: String? = null
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
 
-
+    private var hospitalName:  String? = null
     private lateinit var department: String
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_hospital_mypage)
 
-        userToken = intent.getStringExtra("userToken")
-        userId = intent.getStringExtra("userId")
+        hospitalName = intent.getStringExtra("hospitalName")
 
+        val hospitalNameTextView = findViewById<TextView>(R.id.textViewHospitalName)
+        hospitalNameTextView.text = "병원이름: ${hospitalName}"
         val saveButton = findViewById<Button>(R.id.button)
 
         val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과")
