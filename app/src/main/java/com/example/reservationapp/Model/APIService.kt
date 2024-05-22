@@ -69,4 +69,7 @@ interface APIService {
 
     @GET("/boards") //전체 게시글 가져오기
     fun getAllBoards():Call<BoardResponse>
+
+    @POST("/reservations/hospital/confirm") //예약 확정
+    fun postConfirmReservation(@Body reservation: ConfirmReservationRequest):Call<ConfirmReservationResponse>
 }

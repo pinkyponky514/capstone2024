@@ -68,7 +68,7 @@ data class ReservationItem(
     val patientName: String, // 환자 이름
     val birthDate: String, // 생년월일
     val reservationDate: String, // 예약 날짜
-    val status: String // 진료상태
+    var status: String // 진료상태
 ): Comparable<ReservationItem> {
     override fun compareTo(other: ReservationItem): Int {
         return this.time.compareTo(other.time) //이 비교는 시간 문자열의 사전 순서에 따라 정렬

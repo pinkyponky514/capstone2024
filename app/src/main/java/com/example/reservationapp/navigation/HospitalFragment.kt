@@ -80,18 +80,20 @@ class HospitalFragment : Fragment() {
         // 상태 복원을 위해 onRestoreInstanceState 호출을 대기
         if (savedInstanceState == null) {  //savedInstanceState가 null이 아닌 경우 hospitalName을 복원
             // 병원 정보를 가져와서 UI를 업데이트하는 메소드 호출
-            fetchHospitalDetails(HospitalMainActivity().hospitalId, hospitalNameTextView)
+            val hospitalMainActivity = requireActivity() as HospitalMainActivity
+            val hospitalId = hospitalMainActivity.hospitalId
+            fetchHospitalDetails(hospitalId, hospitalNameTextView)
         } else {
             // 액티비티가 다시 포그라운드로 돌아올 때 hospitalName이 유지
             hospitalName = savedInstanceState.getString("hospitalName", "")
             hospitalNameTextView.text = hospitalName
         }
 
-        hospitalNameTextView.setOnClickListener {
-            val intent = Intent(requireContext(), Hospital_Mypage::class.java)
-            intent.putExtra("hospitalName", hospitalName)
-            startActivity(intent)
-        }
+//        hospitalNameTextView.setOnClickListener {
+//            val intent = Intent(requireContext(), Hospital_Mypage::class.java)
+//            intent.putExtra("hospitalName", hospitalName)
+//            startActivity(intent)
+//        }
 
 
         return binding.root
@@ -122,13 +124,15 @@ class HospitalFragment : Fragment() {
 
                         val time = reservation.reservationTime
                         val date = reservation.reservationDate
+                        val status = reservation.status
+                        val user = reservation.user
                         reservationList.add(
                             ReservationItem(
                                 time.toString(),
-                                "kk",
-                                "2024-05-20",
+                                user.name,
+                                user.birthday,
                                 date.toString(),
-                                ""
+                                status
                             )
                         )
 
@@ -177,6 +181,7 @@ class HospitalFragment : Fragment() {
     private fun filterReservationList(selectedDate: String?): List<ReservationItem> {
         return reservationList.filter { it.reservationDate == selectedDate }
     }
+
 
 
 }

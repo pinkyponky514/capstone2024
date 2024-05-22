@@ -30,6 +30,7 @@ class HospitalSearchActivity : AppCompatActivity() {
     //Retrofit
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHospitalSearchBinding.inflate(layoutInflater)
