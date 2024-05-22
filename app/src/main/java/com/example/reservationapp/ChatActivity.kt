@@ -39,11 +39,9 @@ class ChatActivity : AppCompatActivity() {
         chatList = ArrayList()
         chatList.add(ChatItem("AI", "안녕하세요. 캐치닥터 챗봇입니다. 당신의 증상을 알려주세요. 캐치닥터 챗봇이 진료과목을 추천해드립니다!"))
         chatList.add(ChatItem("hansung", "머리가 아프고, 기침이 나와. 어디로 가야하니?"))
-        chatList.add(ChatItem("AI", "해당 증상에 대한 진료과목은 '내과'입니다."))
-        chatList.add(ChatItem("hansung", "그러면 병원 좀 추천해줘"))
-        chatList.add(ChatItem("AI", "현 위치에서 가까운 병원을 추천드리겠습니다."))
+        chatList.add(ChatItem("AI", "당신의 증상에 대해 캐치닥터 챗봇이 추천하는 진료과목은 '내과'입니다."))
+        chatList.add(ChatItem("AI", "현 위치에서 가까운 내과를 추천드리겠습니다."))
         chatList.add(ChatItem("AI",null, R.drawable.ex_hospital))
-        chatList.add(ChatItem("AI", "윤홍선내과가 제일 가까운 병원으로 파악됩니다."))
         chatList.add(ChatItem("AI", "빨리 쾌차하시기 바랍니다. 좋은 하루 되세요 ~"))
 
         adapter.updateList(chatList)

@@ -1,5 +1,6 @@
 package com.example.reservationapp.Model
 
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -79,6 +80,11 @@ data class ReservationItem(
     val reservationDate: String, // 예약 날짜
     val status: String // 진료상태
 
+)
+
+data class ImageData(
+    val uri: Uri
+    // 필요한 경우 다른 메타데이터를 추가할 수 있습니다.
 )
 
 //HistoryAdapter

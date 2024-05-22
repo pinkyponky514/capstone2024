@@ -2,63 +2,96 @@ package com.example.reservationapp.navigation
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Adapter.MultiImageAdapter
+import com.example.reservationapp.Model.ImageData
 import com.example.reservationapp.R
 
-@Suppress("DEPRECATION") //컴파일러가 deprecated된 메서드 사용에 대한 경고를 무시
+@Suppress("DEPRECATION")
 class CommunityPostFragment : Fragment() {
 
-    private lateinit var imageView: ImageView
     private lateinit var submitButton: Button
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var getImageButton: Button
+    private val imageDataList = ArrayList<ImageData>()
+    private lateinit var adapter: MultiImageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Fragment의 레이아웃을 인플레이트합니다.
         val view = inflater.inflate(R.layout.fragment_communitypost, container, false)
 
-        // 이미지뷰를 참조합니다.
-        imageView = view.findViewById(R.id.imageView)
-
-        // 제출 버튼을 참조합니다.
         submitButton = view.findViewById(R.id.submit_button)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        getImageButton = view.findViewById(R.id.getImage)
 
-        // 이미지뷰 클릭 이벤트 처리
-        imageView.setOnClickListener {
-            // 갤러리에서 이미지 선택하는 Intent 호출
+        getImageButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             startActivityForResult(intent, REQUEST_IMAGE_PICK)
         }
 
-        // 제출 버튼 클릭 이벤트 처리
         submitButton.setOnClickListener {
-            // FragmentManager를 사용하여 CommunityFragment로 이동
-            fragmentManager?.popBackStack() // 이전 프래그먼트로 이동
+            fragmentManager?.popBackStack()
         }
 
         return view
     }
 
-    // 갤러리에서 이미지를 선택한 결과를 처리합니다.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
-            // 이미지 선택 결과를 이미지뷰에 설정합니다.
-            val selectedImageUri = data.data
-            imageView.setImageURI(selectedImageUri)
+            if (data.clipData == null) { // Single image selected
+                Log.e("single choice: ", data.data.toString())
+                val imageUri = data.data
+                imageDataList.add(ImageData(imageUri!!))
+
+                adapter = MultiImageAdapter(imageDataList, requireContext())
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+            } else { // Multiple images selected
+                val clipData = data.clipData
+                Log.e("clipData", clipData!!.itemCount.toString())
+
+                if (clipData.itemCount > 10) { // More than 10 images selected
+                    Toast.makeText(context, "사진은 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.e(TAG, "multiple choice")
+
+                    for (i in 0 until clipData.itemCount) {
+                        val imageUri = clipData.getItemAt(i).uri
+                        try {
+                            imageDataList.add(ImageData(imageUri))
+                        } catch (e: Exception) {
+                            Log.e(TAG, "File select error", e)
+                        }
+                    }
+
+                    adapter = MultiImageAdapter(imageDataList, requireContext())
+                    recyclerView.adapter = adapter
+                    recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+                }
+            }
         }
     }
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 100
+        private const val TAG = "CommunityPostFragment"
     }
 }
