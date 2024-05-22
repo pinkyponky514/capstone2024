@@ -15,6 +15,7 @@ import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.ChatBotResponse
 import com.example.reservationapp.Model.PatientSignUpInfoRequest
 import com.example.reservationapp.Model.PatientSignupInfoResponse
+import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
 import com.google.android.material.snackbar.Snackbar
 import org.json.JSONException
@@ -22,11 +23,11 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SignUpPatient : AppCompatActivity() {
@@ -37,6 +38,11 @@ class SignUpPatient : AppCompatActivity() {
     private lateinit var birthdateYear: String
     private lateinit var birthdateMonth: String
     private lateinit var birthdateDay: String
+
+    //Retrofit
+    private lateinit var retrofitClient: RetrofitClient
+    private lateinit var apiService: APIService
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,8 +121,12 @@ class SignUpPatient : AppCompatActivity() {
             val registerPassword = passwordEditText.text.toString()
             val registerName = nameEditText.text.toString()
             val registerPhone = binding.registerPhone.text.toString()
-            val registerBirthday = "$birthdateYear-$birthdateMonth-$birthdateDay"
-            Log.w("SignUpPatient", "Birthday: $registerBirthday")
+            //val registerBirthday = "$birthdateYear-$birthdateMonth-$birthdateDay"
+            //val registerBirthday = LocalDate.of(birthdateYear.toInt(), birthdateDay.toInt(), birthdateDay.toInt())
+            //Log.w("SignUpPatient", "Birthday: $registerBirthday")
+
+            // 생년월일을 LocalDate로 변환
+            val registerBirthday: LocalDate = LocalDate.of(birthdateYear.toInt(), birthdateMonth.toInt(), birthdateDay.toInt()) //2024-05-12
 
             // 각 필드가 비어 있는지 확인
             if (registerId.isEmpty() || registerEmail.isEmpty() || registerPassword.isEmpty() || registerName.isEmpty() || registerPhone.isEmpty()) {
@@ -145,36 +155,50 @@ class SignUpPatient : AppCompatActivity() {
             }
 
 
-            // 모든 필드가 입력되었을 때 회원가입 성공 처리 수행
-            //Retrofit
-//            val retrofit = Retrofit.Builder()
-//                .baseUrl("http://10.0.2.2:8080")
-//                .addConverterFactory(GsonConverterFactory.create()) //.addConverterFactory(MoshiConverterFactory.create())
-//                .build()
-
+            //Retrofit, 모든 필드가 입력되었을 때 회원가입 성공 처리 수행
+            val userSignupInfo = PatientSignUpInfoRequest(registerId, registerPassword, registerName, registerBirthday.toString())
 
             App.prefs.token = null
+
             lateinit var responseBody: PatientSignupInfoResponse
-            val userSignupInfo = PatientSignUpInfoRequest(registerId, registerPassword, registerName)
-     //       val call = retrofit.create(APIService::class.java).postPatientSignUp(userSignupInfo)
-            App.apiService.postPatientSignUp(userSignupInfo).enqueue(object: Callback<PatientSignupInfoResponse> {
+            retrofitClient = RetrofitClient.getInstance()
+            apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+
+            apiService.postPatientSignUp(userSignupInfo).enqueue(object: Callback<PatientSignupInfoResponse> {
                 override fun onResponse(call: Call<PatientSignupInfoResponse>, response: Response<PatientSignupInfoResponse>) {
-                    if (response.isSuccessful) {
+                    //연결, 응답 성공
+                    if(response.isSuccessful) {
                         responseBody = response.body()!!
-                        Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
+                        Log.d("SingUpPatient Success Response", "response: $responseBody") //통신 성공한 경우
 
                         //회원가입 성공시 메인 환자 로그인 액티비티로 이동
                         val intent = Intent(this@SignUpPatient, LoginPatientActivity::class.java)
                         startActivity(intent)
                         finish() //현재 액티비티 종료
-                    } else {
-                        Log.d(
-                            "FAILURE Response",
-                            "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}"
-                        ) //통신 성공, 응답은 실패
-                        handleErrorResponse(response)
+                    }
+
+                    //통신 성공, 응답은 실패
+                    else {
+                        //Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
+                        val errorBody = response.errorBody()?.string()
+                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                        if (errorBody != null) {
+                            try {
+                                val jsonObject = JSONObject(errorBody)
+                                val timestamp = jsonObject.optString("timestamp")
+                                val status = jsonObject.optInt("status")
+                                val error = jsonObject.optString("error")
+                                val message = jsonObject.optString("message")
+                                val path = jsonObject.optString("path")
+
+                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                            } catch (e: JSONException) {
+                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                            }
+                        }
                     }
                 }
+
                 override fun onFailure(call: Call<PatientSignupInfoResponse>, t: Throwable) {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }

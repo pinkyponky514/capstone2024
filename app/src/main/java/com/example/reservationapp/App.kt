@@ -9,7 +9,7 @@ import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Retrofit.Prefs
 import com.example.reservationapp.Retrofit.RetrofitClient
 
-
+//싱글톤 패턴을 사용
 class App :Application(){
 
 

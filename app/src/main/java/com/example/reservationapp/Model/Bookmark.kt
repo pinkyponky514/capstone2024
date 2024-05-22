@@ -27,7 +27,6 @@ data class PageInfoDto(
 )
 
 
-
 //즐겨찾기 등록
 data class BookmarkResponse(
     @SerializedName("success") val success: Boolean,
@@ -35,5 +34,19 @@ data class BookmarkResponse(
     @SerializedName("result") val result: Result
 )
 data class Result(
-    @SerializedName("datat") val data: String
+    @SerializedName("data") val data: String
+)
+
+
+
+//모든 즐겨찾기 요청
+data class AllBookmarkResponse(
+    @SerializedName("success") val success: Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: List<Bookmark>,
+)
+data class Bookmark(
+    @SerializedName("bookmarkid") val bookmarkid: Long,
+    @SerializedName("hospitalid") val hospitalId: Long,
+    @SerializedName("userid") val userId: Long,
 )

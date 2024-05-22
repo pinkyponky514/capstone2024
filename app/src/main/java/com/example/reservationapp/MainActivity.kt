@@ -18,12 +18,8 @@ import com.example.reservationapp.navigation.HomeFragment
 import com.example.reservationapp.navigation.MedicalHistoryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-var userId: String = ""
-var userName: String = ""
-var userToken: String = ""
-
-var userMapx: Double = 3.0 //사용자 위도
-var userMapy: Double = 127.0 //사용자 경도
+var userMapx: Double = 37.5 //사용자 위도
+var userMapy: Double = 126.9 //사용자 경도
 
 
 //메인메뉴
@@ -41,14 +37,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
-        val intentUserId = intent.getStringExtra("userId") //userId 초기화
-        val intentUserToken = intent.getStringExtra("userToken") //userToken 초기화
-        Log.w("MainActivity", "intentUserId: $intentUserId, intentUserToken: $intentUserToken")
-
-        if(intentUserId != null) { userId = intentUserId.toString() }
-        if(intentUserToken != null) { userToken = intentUserToken.toString() }
-        Log.w("MainActivity", "userId: $userId, userToken: $userToken, userName: $userName")
-
+        if(App.prefs.token != null) {
+            Log.w("MainActivity", "App.prefs.token: ${App.prefs.token}")
+        }
 
         if(reviewList.isEmpty() && filterList.isEmpty()) {
             //병원정보 초기화 (DB에서 받아서 넣어야함)
@@ -119,7 +110,8 @@ class MainActivity : AppCompatActivity() {
                     setFragment(CommunityFragment())
                 }
                 R.id.moreFrag -> { //더보기 버튼 클릭했을때
-                    if(userId == "" || userToken == "") { //userId가 비어 있을 경우 = 로그인 안한 경우
+                    //if(userId == "" || userToken == "") { //userId가 비어 있을 경우 = 로그인 안한 경우
+                    if(App.prefs.token == null) {
                         setActivity(this, HPDivisonActivity())
                     } else {  //userId가 있는 경우 = 로그인 한 경우
                         setActivity(this, MyProfileActivity())

@@ -16,17 +16,21 @@ private var popular_hospital_list_data = ArrayList<PopularHospitalItem>()
 class PopularHospitalAdapter: RecyclerView.Adapter<PopularHospitalAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var score_textView: TextView //순위
+        private var hospitalId: Long //병원 레이블 번호
         private var hospitalName_textView: TextView //병원이름
 
 
         init {
             score_textView = itemView.findViewById(R.id.score_textView)
+            hospitalId = 0
             hospitalName_textView = itemView.findViewById(R.id.hospitalName_textView)
 
             itemView.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
                 intent.putExtra("hospitalName", hospitalName_textView.text.toString())
+                intent.putExtra("hospitalId", hospitalId)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                 context.startActivity(intent)
             }
         }
@@ -34,6 +38,7 @@ class PopularHospitalAdapter: RecyclerView.Adapter<PopularHospitalAdapter.ViewHo
         //데이터 설정
         fun setContents(list: PopularHospitalItem) {
             score_textView.text = list.score.toString()
+            hospitalId = list.hospitalId
             hospitalName_textView.text = list.hospitalName
         }
 
@@ -52,7 +57,8 @@ class PopularHospitalAdapter: RecyclerView.Adapter<PopularHospitalAdapter.ViewHo
 
     //
     fun updatelist(newList: List<PopularHospitalItem>) {
-        popular_hospital_list_data = newList as ArrayList<PopularHospitalItem>
+        popular_hospital_list_data = newList as ArrayList
+        Log.w("PopularHospitalAdapter", "병원 인기 순위 Adapter: $popular_hospital_list_data")
         notifyDataSetChanged()
     }
 //

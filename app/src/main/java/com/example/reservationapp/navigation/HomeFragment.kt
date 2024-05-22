@@ -21,13 +21,26 @@ import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.HospitalSearchActivity
 import com.example.reservationapp.MainActivity
+import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.AllBookmarkResponse
+import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.R
+import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHomeBinding
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMapSdk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -42,6 +55,11 @@ class HomeFragment : Fragment() {
 
     private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과이비", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
     private val syptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
+
+    //Retrofit
+    private lateinit var retrofitClient: RetrofitClient
+    private lateinit var apiService: APIService
+    private lateinit var responseBody: AllBookmarkResponse
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -83,8 +101,7 @@ class HomeFragment : Fragment() {
         reserveAlarmRecyclerView.layoutManager = reserveAlarmLinearLayoutManager
         //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
 
-        // 가까운 예약 순으로 정렬 필요
-        // DB 연결 필요
+        // 가까운 예약 순으로 정렬 필요 (DB 연결 필요)
         userReserveAlarm = ArrayList()
         userReserveAlarm.add(ReserveItem("강남대학병원", "수 15:00"))
         userReserveAlarm.add(ReserveItem("서울병원", "목 14:00"))
@@ -190,34 +207,101 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        return binding.root //return view
-    }
 
-    override fun onResume() {
-        super.onResume()
+        //Retrofit
+        retrofitClient = RetrofitClient.getInstance()
+        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
-        //인기 순위 병원 adapter, recyclerView
+
+        //인기 순위 병원 adapter, recyclerView 초기화
         popularHospitalAdapter = PopularHospitalAdapter()
         val popularHospitalRecyclerView = binding.popularHospitalRecyclerView
         val popularHospitalLinearLayoutManger = LinearLayoutManager(activity)
         popularHospitalRecyclerView.adapter = popularHospitalAdapter
         popularHospitalRecyclerView.layoutManager = popularHospitalLinearLayoutManger
         popularHospitalRecyclerView.setHasFixedSize(true)
-        popularHospitalRecyclerView.suppressLayout(true) //스트롤 불가능
 
 
-        val sortedFilterList = filterList.sortedByDescending { it.favoriteCount }
-        Log.w("HomeFragment", "sortedFilterList: $sortedFilterList")
+        //인기 순위 병원 설정
+        apiService.getAllHospitalBookmark().enqueue(object: Callback<AllBookmarkResponse> {
+            override fun onResponse(call: Call<AllBookmarkResponse>, response: Response<AllBookmarkResponse>) {
+                //통신, 응답 성공
+                if(response.isSuccessful) {
+                    responseBody = response.body()!!
+                    Log.w("HomeFragment", "responseBody: $responseBody")
 
-        val popularHospitalItemList = sortedFilterList.take(5).mapIndexed { index, filterItem -> //순위 5위까지만
-            PopularHospitalItem(
-                index + 1, // 순위는 1부터 시작하므로 index에 1을 더해줍니다.
-                filterItem.hospitalName
-            )
-        }
-        popularHospitalAdapter.updatelist(popularHospitalItemList)
+                    val hospitalBookmarkCountMap = mutableMapOf<Long, Int>()
+                    for(bookmark in responseBody.data) {
+                        val hospitalId = bookmark.hospitalId
+                        hospitalBookmarkCountMap[hospitalId] = hospitalBookmarkCountMap.getOrDefault(hospitalId, 0) +1
+                    }
+                    Log.w("HomeFragment", "hospitalId에 따른 즐겨찾기 개수 hospitalBookmarkCountMap: $hospitalBookmarkCountMap")
 
+
+                    //즐겨찾기 내림차순 정렬
+                    val sortedHospitalIdList = hospitalBookmarkCountMap.entries.sortedByDescending { it.value }.map { it.key } // [1, 3, 4, 2, 5]
+                    Log.w("HomeFragment", "즐겨찾기 내림차순 hospitalId 정렬 sortedFilterList: $sortedHospitalIdList")
+
+
+                    //병원 상세정보 가져오기, 순차적으로 진행
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val sortedHospitalDetailList = ArrayList<HospitalSignupInfoResponse>() //정렬된 병원 상세정보 리스트
+
+                        sortedHospitalIdList.forEach { hospitalId ->
+                            val response = withContext(Dispatchers.IO) { apiService.getHospitalDetail(hospitalId).execute() }
+                            if (response.isSuccessful) { response.body()?.let { sortedHospitalDetailList.add(it) } }
+                        }
+
+                        var bookmarkItemList = ArrayList<PopularHospitalItem>() //adapter와 연결할 ItemList
+                        if(sortedHospitalDetailList.size >= 5) { //병원 목록 리스트가 5개 이상이면
+                            bookmarkItemList = sortedHospitalDetailList.take(5).mapIndexed { takeIndex, hospitalSignupInfoResponse ->
+                                    PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospitalId, hospitalSignupInfoResponse.data.name)
+                                } as ArrayList
+                            Log.w("HomeFragment", "take문 bookmarkItemList: $bookmarkItemList")
+                        }
+                        else { //병원 목록 리스트가 5개 미만이면
+                            for(forIndex in sortedHospitalDetailList.indices) {
+                                bookmarkItemList.add(PopularHospitalItem(forIndex+1, sortedHospitalDetailList[forIndex].data.hospitalId, sortedHospitalDetailList[forIndex].data.name))
+                                Log.w("HomeFragment", "for문 bookmarkItemList: $bookmarkItemList")
+                            }
+                        }
+
+                        popularHospitalAdapter.updatelist(bookmarkItemList)
+                        Log.w("HomeFragment", "updateList bookmarkItemList: $bookmarkItemList")
+                    }
+                }
+
+                //통신 성공, 응답 실패
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("HomeFragment FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                    if (errorBody != null) {
+                        try {
+                            val jsonObject = JSONObject(errorBody)
+                            val timestamp = jsonObject.optString("timestamp")
+                            val status = jsonObject.optInt("status")
+                            val error = jsonObject.optString("error")
+                            val message = jsonObject.optString("message")
+                            val path = jsonObject.optString("path")
+
+                            Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                        } catch (e: JSONException) {
+                            Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                        }
+                    }
+                }
+            }
+
+            //통신 실패
+            override fun onFailure(call: Call<AllBookmarkResponse>, t: Throwable) {
+                Log.w("HomeFragment CONNECTION FAILURE: ", "Connect FAILURE : ${t.localizedMessage}")
+            }
+        })
+
+
+        return binding.root //return view
     }
+
 
     //
 }

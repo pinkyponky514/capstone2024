@@ -12,12 +12,13 @@ import com.example.reservationapp.R
 private var reserve_data = ArrayList<ReserveItem>()
 
 //HomeFragment에서 RecyclerView에 사용할 Adapter
-class ReserveAlarmAdapter ():
-    RecyclerView.Adapter<ReserveAlarmAdapter.ViewHolder>() {
+class ReserveAlarmAdapter (): RecyclerView.Adapter<ReserveAlarmAdapter.ViewHolder>() {
 
     //클릭했을때 일어나는 리스너
     interface OnItemClickListener {
-        fun onItemClick(position: Int) {}
+        fun onItemClick(position: Int) {
+
+        }
     }
     var itemClickListener: OnItemClickListener ?= null
 

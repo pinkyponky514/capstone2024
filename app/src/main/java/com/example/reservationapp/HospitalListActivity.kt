@@ -22,6 +22,8 @@ import com.example.reservationapp.Model.SearchHospital
 import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -87,12 +89,6 @@ class HospitalListActivity : AppCompatActivity() {
         //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
         val backButton = binding.backButtonImageView
         backButton.setOnClickListener {
-/*
-            val intent = Intent(this, MainActivity()::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            intent.putExtra("searchWordList", recentSearchWordList)
-            startActivity(intent) // 인텐트 이동
-*/
             finish()
         }
 
@@ -114,12 +110,6 @@ class HospitalListActivity : AppCompatActivity() {
     //뒤로가기 버튼 눌렀을때
     override fun onBackPressed() {
         super.onBackPressed()
-/*
-        val intent = Intent(this, MainActivity::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
-        //intent.putExtra("searchWordList", recentSearchWordList)
-        startActivity(intent) //인텐트 이동
-*/
         finish() //현재 액티비티 종료
     }
 
@@ -138,9 +128,9 @@ class HospitalListActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<SearchHospital>>, response: Response<List<SearchHospital>>) {
 
                 //연결 응답 성공
-                if(response.isSuccessful()) {
+                if(response.isSuccessful) {
                     responseBody = response.body()!!
-                    Log.w("HospitalListActivity", "responseBody: ${responseBody}")
+                    Log.w("HospitalListActivity", "responseBody: $responseBody")
 
                     hospitalList = ArrayList()
                     for(responseIndex in responseBody.indices) {
@@ -227,14 +217,34 @@ class HospitalListActivity : AppCompatActivity() {
                                 val intent = Intent(this@HospitalListActivity, Hospital_DetailPage::class.java)
                                 intent.putExtra("hospitalName", hospitalList[position].hospitalName)
                                 intent.putExtra("hospitalId", hospitalList[position].hospitalId)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                                 startActivity(intent)
                             }
                         }
                     })
-
                 }
+
                 //통신 성공, 응답 실패
-                else Log.w("FAILURE Response", "Connect SUCESS, Response FAILURE")
+                else {
+                    //Log.w("Hospital_DetailPage FAILURE Response", "MyBookmark Connect SUCESS, Response FAILURE")
+
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                    if (errorBody != null) {
+                        try {
+                            val jsonObject = JSONObject(errorBody)
+                            val timestamp = jsonObject.optString("timestamp")
+                            val status = jsonObject.optInt("status")
+                            val error = jsonObject.optString("error")
+                            val message = jsonObject.optString("message")
+                            val path = jsonObject.optString("path")
+
+                            Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                        } catch (e: JSONException) {
+                            Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                        }
+                    }
+                }
             }
 
             // 통신 실패

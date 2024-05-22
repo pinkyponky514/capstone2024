@@ -12,4 +12,9 @@ class Prefs(context: Context) {
         set(value){
             prefs.edit().putString("token",value).apply()
         }
+
+    //로그아웃
+    fun clearToken(context: Context) {
+        prefs.edit().remove("token").apply()
+    }
 }

@@ -11,5 +11,4 @@ data class OpenApiHospital(
     @SerializedName("addnum") val addNum: String, //우편번호
     @SerializedName("mapX") val mapX: Double, //위도
     @SerializedName("mapY") val mapY: Double, //경도
-    @SerializedName("hospital") val hospital: Hospital //병원 회원가입 정보
 )

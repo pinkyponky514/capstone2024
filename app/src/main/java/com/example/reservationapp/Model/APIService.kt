@@ -1,5 +1,7 @@
 package com.example.reservationapp.Model
 
+import com.example.reservationapp.userMapx
+import com.example.reservationapp.userMapy
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,21 +33,32 @@ interface APIService {
     fun getSearchHospital(
         @Query("query") query: String ?= null,
         @Query("department") className: String ?= null,
-        @Query("mapx") mapx: Double = 37.5,
-        @Query("mapy") mapy: Double = 126.9
+        @Query("mapx") mapx: Double = userMapx,
+        @Query("mapy") mapy: Double = userMapy
     ): Call<List<SearchHospital>>
 
-    @POST("/hospitals/hospitaldetail") //병원 상세정보 입력
+    @POST("/hospitals/hospitaldetail") //병원 상세정보 입력 (토큰필요)
     fun postHospitalDetail(@Body hospital: HospitalDetail2): Call<HospitalDetailResponse>
 
-    @GET("/hospitals/findhospital/{hospitalid}") //병원 상세정보 검색(가져오기)
-    fun getHospitalDetail(@Path(value="hospitalid") hospitalId: Long ?= null): Call<HospitalSignupInfoResponse>
+    @GET("/hospitals/findhospital/{hospitalId}") //특정 병원 상세정보 검색
+    @Headers("Auth: false")
+    fun getHospitalDetail(@Path(value="hospitalId") hospitalId: Long = 0): Call<HospitalSignupInfoResponse>
 
-    @POST("/bookmarks/{hospitalid}") //병원 즐겨찾기 등록
-    fun postHospitalBookmark(@Path(value="hospitalid") hospitalId: Long ?= null): Call<String>
+    @POST("/bookmarks/{hospitalId}") //병원 즐겨찾기 등록 (토큰필요)
+    fun postHospitalBookmark(@Path(value="hospitalId") hospitalId: Long = 0): Call<BookmarkResponse>
 
-    @GET("/bookmarks") //나의 즐겨찾기 병원 가져오기
-    fun getMyHospitalBookmarkList(@Header("token") token: String): Call<MyBookmarkResponse>
+    @GET("/bookmarks") //나의 즐겨찾기 병원 가져오기 (토큰필요)
+    fun getMyHospitalBookmarkList(): Call<MyBookmarkResponse>
+
+    @GET("/bookmarks/all") //모든 유저의 즐겨찾기 가져오기
+    @Headers("Auth: false")
+    fun getAllHospitalBookmark(@Query(value="page") page: Int = 0): Call<AllBookmarkResponse>
+
+    @POST("/reviews/{hospitalId}") //리뷰작성 (토큰필요)
+    fun postReviewWrite(@Path(value="hospitalId") hospitalId: Long = 0, @Body review: ReviewRequest): Call<Long>
+
+    @POST("/reservations") //병원 예약 (토큰필요)
+    fun postReservation(@Body reservation: ReservationRequest): Call<ReservationResponse>
 
     @GET("/bot/chat") //챗봇 - 진료과목 가져오기
     @Headers("Auth: false")
@@ -56,6 +69,4 @@ interface APIService {
 
     @GET("/boards") //전체 게시글 가져오기
     fun getAllBoards():Call<BoardResponse>
-
-
 }

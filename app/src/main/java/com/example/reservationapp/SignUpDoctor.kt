@@ -83,7 +83,7 @@ class SignUpDoctor : AppCompatActivity() {
         }
 
 
-        val userSignUpInfo = HospitalSignUpInfoRequest(businessNumber, password, hospitalName, addNum)
+        val userSignUpInfo = HospitalSignUpInfoRequest(businessNumber, password, hospitalName) //, addNum)
         lateinit var responseBody: HospitalSignupInfoResponse
 
         App.prefs.token = null
