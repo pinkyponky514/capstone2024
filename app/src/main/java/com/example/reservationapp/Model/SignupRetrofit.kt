@@ -1,14 +1,12 @@
 package com.example.reservationapp.Model
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serial
-import java.io.Serializable
 import java.time.LocalDate
 
 
 /*회원가입*/
 //환자 - request
-data class PatientSignUpInfoRequest (
+data class PatientSignUpInfoRequest(
     @SerializedName("id") var id: String,
     @SerializedName("password") var password: String,
     @SerializedName("name") var name: String,
@@ -19,7 +17,7 @@ data class HospitalSignUpInfoRequest (
     @SerializedName("id") var id: String,
     @SerializedName("password") var password: String,
     @SerializedName("name") var name: String,
-    @SerializedName("addnum") var addnum: String //우편번호
+    //@SerializedName("addnum") var addnum: String //우편번호
 )
 
 //환자 - response

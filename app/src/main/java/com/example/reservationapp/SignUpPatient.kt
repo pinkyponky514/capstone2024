@@ -22,12 +22,11 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SignUpPatient : AppCompatActivity() {
@@ -121,9 +120,12 @@ class SignUpPatient : AppCompatActivity() {
             val registerPassword = passwordEditText.text.toString()
             val registerName = nameEditText.text.toString()
             val registerPhone = binding.registerPhone.text.toString()
-            val registerBirthday = "$birthdateYear-$birthdateMonth-$birthdateDay"
+            //val registerBirthday = "$birthdateYear-$birthdateMonth-$birthdateDay"
             //val registerBirthday = LocalDate.of(birthdateYear.toInt(), birthdateDay.toInt(), birthdateDay.toInt())
-            Log.w("SignUpPatient", "Birthday: $registerBirthday")
+            //Log.w("SignUpPatient", "Birthday: $registerBirthday")
+
+            // 생년월일을 LocalDate로 변환
+            val registerBirthday: LocalDate = LocalDate.of(birthdateYear.toInt(), birthdateMonth.toInt(), birthdateDay.toInt()) //2024-05-12
 
             // 각 필드가 비어 있는지 확인
             if (registerId.isEmpty() || registerEmail.isEmpty() || registerPassword.isEmpty() || registerName.isEmpty() || registerPhone.isEmpty()) {
@@ -152,9 +154,9 @@ class SignUpPatient : AppCompatActivity() {
             }
 
 
-            // 모든 필드가 입력되었을 때 회원가입 성공 처리 수행
-            //Retrofit
-            val userSignupInfo = PatientSignUpInfoRequest(registerId, registerPassword, registerName, registerBirthday)
+
+            //Retrofit, 모든 필드가 입력되었을 때 회원가입 성공 처리 수행
+            val userSignupInfo = PatientSignUpInfoRequest(registerId, registerPassword, registerName, registerBirthday.toString())
 
             lateinit var responseBody: PatientSignupInfoResponse
             retrofitClient = RetrofitClient.getInstance()

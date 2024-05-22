@@ -14,6 +14,8 @@ import androidx.annotation.RequiresApi
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.UserLoginInfoRequest
 import com.example.reservationapp.databinding.ActivityLoginBinding
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -124,7 +126,25 @@ class LoginPatientActivity: AppCompatActivity() {
 
                     }
                     //통신 성공, 응답은 실패
-                    else Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
+                    else {
+                        //Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
+                        val errorBody = response.errorBody()?.string()
+                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                        if (errorBody != null) {
+                            try {
+                                val jsonObject = JSONObject(errorBody)
+                                val timestamp = jsonObject.optString("timestamp")
+                                val status = jsonObject.optInt("status")
+                                val error = jsonObject.optString("error")
+                                val message = jsonObject.optString("message")
+                                val path = jsonObject.optString("path")
+
+                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                            } catch (e: JSONException) {
+                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                            }
+                        }
+                    }
                 }
 
                 //통신 실패

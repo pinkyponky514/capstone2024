@@ -55,6 +55,7 @@ class CustomReserveDialogFragment() : DialogFragment() {
     private var reserveDate: String ?= null //예약 날짜 -> intent할때 쓸 변수
     private var reserveTime: String ?= null //예약 시간 -> intent할때 쓸 변수
 
+    private var selectedButton: Button ?= null //선택된 시간 버튼
     //오늘날짜 변수
     private var currentYear: Int = 0
     private var currentMonth: Int = 0
@@ -129,11 +130,11 @@ class CustomReserveDialogFragment() : DialogFragment() {
         reservationButton = binding.reserveButton
         calendarView.setOnDateChangeListener { view, year, month, day -> //view = CalendarView
             val dayOfWeek = getDayOfWeek(year, month, day) //월
-            val dateString = String.format("%d-%d-%d", year, month+1, day) //2024-05-20
+            val dateString = String.format("%d-%d-%d", year, month+1, day) //2024-5-20
             val dayOfWeekString = " ($dayOfWeek)" //(월)
 
             reserveDateTextView.text = String.format("%d.%d.%d ", year, month+1, day) + dayOfWeekString //2024.05.20
-            reserveDate = dateString //2024-05-20
+            reserveDate = dateString //2024-5-20
 
             //날짜에 따른 예약 가능한 시간 다르게
             apiService.getHospitalDetail(thisHospitalId).enqueue(object: Callback<HospitalSignupInfoResponse> {
@@ -143,6 +144,7 @@ class CustomReserveDialogFragment() : DialogFragment() {
                         reserveTime = null; reserveTimeTextView.text = null //새로운 날짜 선택으로 인해 시간 지우기
                         timeTableLayout.removeAllViews() //이전의 시간 테이블 모두 지우기
                         responseBodyHospitalDetail = response.body()!!
+                        Log.w("CustomREserveDialogFragment", "responseBodyHospitalDetail: $responseBodyHospitalDetail")
 
                         val startEndTimeList =  getDBDayOfWeek(year, month, day)
                         val startTime =  startEndTimeList[1]
@@ -158,7 +160,7 @@ class CustomReserveDialogFragment() : DialogFragment() {
                             val endHour = endTimeParts[0].toInt() //문닫는 hour
 
                             val startMinute = startTimeParts[1].toInt() //오픈하는 minute
-                            val endMinute = endTimeParts[1].toInt() //문다는 minute
+                            val endMinute = endTimeParts[1].toInt() //문닫는 minute
 
                             //시간 동적으로 넣기 (시간이 다 찼을 경우는 안그리기 위해서)
                             val rowSize = 4 //한 행에 들어갈 버튼 수
@@ -167,7 +169,7 @@ class CustomReserveDialogFragment() : DialogFragment() {
                             var buttonCount = 0 //현재 버튼 개수
 
                             for (hour in startHour..endHour) {
-                                for (minute in arrayOf(0, 30)) {
+                                for (minute in arrayOf(0, 30)) { //30분 단위로 추가
                                     if (buttonCountInRow == rowSize || buttonCount%4 == 0) {
                                         buttonCountInRow = 0 //한 행에 버튼 개수 초기화
                                     }
@@ -189,15 +191,23 @@ class CustomReserveDialogFragment() : DialogFragment() {
                                     val timeString = String.format("%02d:%02d", hour, minute)
                                     button.text = timeString
                                     button.setOnClickListener {
-                                        val timeString = button.text
-                                        reserveTimeTextView.text = timeString
-                                        reserveTime = timeString.toString()
+                                        //val timeString = button.text
+                                        reserveTimeTextView.text = timeString //시간 선택 textView
+                                        reserveTime = timeString
                                         reservationButtonEnabled()
+                                        selectButtonColor(button) //시간 선택하면 색 변경하도록
                                     }
-
                                     tableRow?.addView(button)
                                     buttonCountInRow++
                                     buttonCount++
+
+/*
+                                    for(i in responseBodyHospitalDetail.data.reservations.indices) {
+                                        Log.w("responseBodyHospitalDetail", "$i, ${responseBodyHospitalDetail.data.reservations[i].reservationDate}, ${responseBodyHospitalDetail.data.reservations[i].reservationTime}")
+                                    }
+*/
+
+
                                 }
                             }
                         }
@@ -251,8 +261,8 @@ class CustomReserveDialogFragment() : DialogFragment() {
             Log.d("Date, Time", "reserveDate: $reserveDate, reserveTime: $reserveTime")
 
             // reserveDate와 reserveTime을 LocalDate와 LocalTime으로 파싱
-            val reservationLocalDate = LocalDate.parse(reserveDate, DateTimeFormatter.ofPattern("yyyy-M-d"))
-            val reservationLocalTime = LocalTime.parse(reserveTime, DateTimeFormatter.ofPattern("H:mm"))
+            val reservationLocalDate = LocalDate.parse(reserveDate, DateTimeFormatter.ofPattern("yyyy-M-d")) //yyyy-M-d
+            val reservationLocalTime = LocalTime.parse(reserveTime, DateTimeFormatter.ofPattern("H:mm")) //H:mm
 
             // LocalDate와 LocalTime을 LocalDateTime으로 변환
             val reservationLocalDateTime = LocalDateTime.of(reservationLocalDate, reservationLocalTime)
@@ -411,6 +421,15 @@ class CustomReserveDialogFragment() : DialogFragment() {
         }
     }
 
+    //예약 시간 클릭시 버튼 색상 변경
+    private fun selectButtonColor(clickedButton: Button) {
+        //선택된 버튼이 없거나 클릭된 버튼이 아닐 경우
+        if(selectedButton == null || selectedButton != clickedButton) {
+            selectedButton?.setBackgroundResource(android.R.drawable.btn_default_small) //이전에 선택된 버튼의 색을 원래대로 되돌림
+            clickedButton.setBackgroundColor(Color.GREEN) //현재 클릭된 버튼 색 변경
+            selectedButton = clickedButton
+        }
+    }
 
     //
 }

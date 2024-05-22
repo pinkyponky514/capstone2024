@@ -37,11 +37,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
-
         if(App.prefs.token != null) {
             Log.w("MainActivity", "App.prefs.token: ${App.prefs.token}")
         }
-
 
         if(reviewList.isEmpty() && filterList.isEmpty()) {
             //병원정보 초기화 (DB에서 받아서 넣어야함)
