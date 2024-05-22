@@ -1,6 +1,7 @@
 package com.example.reservationapp.navigation
 
 import ReservationAdapter
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.HospitalMainActivity
 import com.example.reservationapp.Hospital_Mypage
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.Hospital
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReservationItem
 import com.example.reservationapp.Model.Reservations
@@ -25,6 +27,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 
 class HospitalFragment : Fragment() {
@@ -47,7 +50,6 @@ class HospitalFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHospitalBinding.inflate(inflater)
 
-
         val reservationRecyclerView = binding.reservationList //requireView().findViewById<RecyclerView>(R.id.reservation_list)
         val calendarView = binding.calendarView //requireView().findViewById<CalendarView>(R.id.calendar_view)
         val hospitalNameTextView =  binding.hospitalName
@@ -65,7 +67,6 @@ class HospitalFragment : Fragment() {
         reservationAdapter = ReservationAdapter()
         reservationRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         reservationRecyclerView.adapter = reservationAdapter
-
 
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val newSelectedDate = String.format("%d-%02d-%02d", year, month+1, dayOfMonth) // 새로 선택된 날짜 문자열로 변환

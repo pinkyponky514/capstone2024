@@ -55,6 +55,8 @@ class HospitalListActivity : AppCompatActivity() {
         binding = ActivityHospitalListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        MainActivity().tokenCheck() //토큰 만료 검사
+
         Log.w("HospitalListActivity", "filterList: ${filterList}")
 
         //adapter

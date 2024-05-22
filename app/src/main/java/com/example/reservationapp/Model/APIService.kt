@@ -62,11 +62,23 @@ interface APIService {
 
     @GET("/bot/chat") //챗봇 - 진료과목 가져오기
     @Headers("Auth: false")
-    fun getChatBotAnswer( @Query("prompt") prompt: String?= null): Call<ChatBotResponse>
+    fun getChatBotAnswer(@Query("prompt") prompt: String?= null): Call<ChatBotResponse>
 
     @POST("/boards/write") //게시글 작성하기
     fun postBoard(@Body board: BoardContent): Call<BoardResponse>
 
     @GET("/boards") //전체 게시글 가져오기
     fun getAllBoards():Call<BoardResponse>
+
+/*
+    @GET("/reservations/check") //유저의 예약 조회 (토큰필요)
+    suspend fun getUserReservation(): List<UserReservationResponse> //비동기 처리
+*/
+
+    @GET("/reservations/check") //유저의 예약 조회 (토큰필요)
+    fun getUserReservation(): Call<List<UserReservationResponse>>
+
+    @GET("/tokencheck") //토큰 유효기간 체크
+    @Headers("Auth: false")
+    fun getTokenCheck(): Call<String>
 }

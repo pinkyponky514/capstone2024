@@ -82,6 +82,9 @@ data class ImageData(
 
 //HistoryAdapter
 data class HistoryItem (
+    var reservationId: Long, //예약 레이블 번호
+    var hospitalId: Long, //병원 레이블 번호
+
     var status: String, //진료상태
     var hospitalName: String, //병원이름
     var className: String, //진료과명

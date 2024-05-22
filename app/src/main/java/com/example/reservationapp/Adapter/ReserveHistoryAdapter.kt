@@ -16,6 +16,9 @@ private var reserve_history_list_data = ArrayList<HistoryItem>()
 
 class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        private var reservationId: Long //예약 레이블 번호
+        private var hospitalLId: Long //병원 레이블 번호
+
         private var status_TextView: TextView //진료상태
         private var hospital_name_TextView: TextView //병원이름
         private var class_name_TextView: TextView //진료과명
@@ -26,6 +29,8 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
 
 
         init {
+            reservationId = 0
+            hospitalLId = 0
             status_TextView = itemView.findViewById(R.id.status)
             hospital_name_TextView = itemView.findViewById(R.id.hospital_name_textView)
             class_name_TextView = itemView.findViewById(R.id.class_textView)
@@ -35,22 +40,25 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
 
         //데이터 설정
         fun setContents(list: HistoryItem) {
+            reservationId = list.reservationId
+            hospitalLId = list.hospitalId
             status_TextView.text = list.status
             hospital_name_TextView.text = list.hospitalName
             class_name_TextView.text = " | " + list.className
 
-            val dateSplit = list.reserveDay.split(".")
-            val timeSplit = list.reserveTime.split(":")
+            val dateSplit = list.reserveDay.split("-")
             val dayOfWeek = getDayOfWeek(dateSplit)
-            reserve_date_TextView.text = list.reserveDay + " (" + dayOfWeek + ") " + list.reserveTime
+
+            reserve_date_TextView.text = "${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]} ($dayOfWeek) ${list.reserveTime}"
 
             //날짜 세팅
             try {
                 var today = Calendar.getInstance()
-                var commingDate = String.format("%d-%d-%d %02d:%02d:00", dateSplit[0].toInt(), dateSplit[1].toInt(), dateSplit[2].toInt(), timeSplit[0].toInt(), timeSplit[1].toInt())
-                val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                var date = simpleDateFormat.parse(commingDate)
-                var calcuDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
+                var commingDate = "${list.reserveDay} ${list.reserveTime}:00" //String.format("%d-%d-%d %02d:%02d:00", dateSplit[0].toInt(), dateSplit[1].toInt(), dateSplit[2].toInt(), timeSplit[0].toInt(), timeSplit[1].toInt())
+
+                val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()) //SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                var date = simpleDateFormat.parse(commingDate) //예약한 날짜
+                var calcuDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000) //몇일 남았는지 계산
 
                 if(calcuDate.toInt() == 0) {
                     comming_date_TextView.text = "오늘"

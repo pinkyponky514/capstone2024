@@ -14,5 +14,6 @@ data class Review(
 
 data class ReviewRequest(
     @SerializedName("grade") val starScore: Float, //별점
-    @SerializedName("text") val comment: String //내용
+    @SerializedName("text") val comment: String, //내용
+    @SerializedName("reservation_id") val reservationId: Long //예약 레이블 번호
 )

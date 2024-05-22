@@ -35,12 +35,8 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var binding: ActivityHospitalDetailpageExampleAddBinding
 
     //리뷰
-    private var not_review_constraint_flag: Boolean = false //리뷰 개수가 0일때의 constraintLayout flag
-    private var review_constraint_flag: Boolean = false //리뷰가 있을 경우 constraintLayout flag
-
     private lateinit var notReviewConstraintLayout: ConstraintLayout //리뷰가 없을때 constraintLayout
     private lateinit var reviewConstraintLayout: ConstraintLayout //리뷰가 있을때 constraintLayout
-    //private lateinit var reviewConstraintLayout: RecyclerView //리뷰가 있을때 constraintLayout
 
     private lateinit var noReviewWriteButton: Button //리뷰 없을때 리뷰쓰기 버튼
     private lateinit var reviewWriteButton: Button //리뷰 한개라도 있을때 리뷰쓰기 버튼
@@ -313,13 +309,13 @@ class Hospital_DetailPage : AppCompatActivity() {
                         //통신, 응답 성공
                         if(response.isSuccessful) {
                             responseBodyBookmark = response.body()!!
-                            Log.w("Hospital_DetailPage", "responseBookmakr: $responseBodyBookmark")
+                            Log.w("Hospital_DetailPage", "responseBookmark: $responseBodyBookmark")
                         }
 
                         //통신 성공, 응답 실패
                         else {
                             val errorBody = response.errorBody()?.string()
-                            Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                            Log.d("FAILURE Response", "Bookmark onClick Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
                             if (errorBody != null) {
                                 try {
                                     val jsonObject = JSONObject(errorBody)

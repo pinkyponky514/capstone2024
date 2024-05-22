@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.reservationapp.MainActivity
 import com.example.reservationapp.R
 import com.example.reservationapp.databinding.FragmentMedicalHistoryBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,6 +19,9 @@ class MedicalHistoryFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentMedicalHistoryBinding.inflate(inflater)
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.tokenCheck()
 
         topNavigation = binding.topNavigation
         topNavigation.selectedItemId = R.id.reserve_history

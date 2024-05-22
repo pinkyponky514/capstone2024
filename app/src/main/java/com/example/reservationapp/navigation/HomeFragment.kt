@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
+import com.example.reservationapp.App
 import com.example.reservationapp.ChatActivity
 import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalListActivity
@@ -30,6 +31,7 @@ import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHomeBinding
+import com.example.reservationapp.isTokenExpired
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMapSdk
 import kotlinx.coroutines.Dispatchers
@@ -67,7 +69,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater) //val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val mainActivity = requireActivity() as MainActivity //MainActivity 접근
-
+        mainActivity.tokenCheck()
 
         //지도 API
         NaverMapSdk.getInstance(requireContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
