@@ -4,6 +4,7 @@ import com.example.reservationapp.userMapx
 import com.example.reservationapp.userMapy
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -56,6 +57,14 @@ interface APIService {
 
     @POST("/reviews/{hospitalId}") //리뷰작성 (토큰필요)
     fun postReviewWrite(@Path(value="hospitalId") hospitalId: Long = 0, @Body review: ReviewRequest): Call<Long>
+
+    //Delete /reviews/{review_id}/{reservation_id} -> 병원 리뷰 삭제 ( user 본인만 가능 )
+    @DELETE("/reviews/{reviewId}/{reservationId}")
+    fun deleteReview(@Path(value="reviewId") reviewId: Long = 0, @Path(value="reservationId") reservationId: Long = 0)
+
+    @GET("/reviews/{hospitalId}/all") //병원의 모든 리뷰 조회
+    @Headers("Auth: false")
+    fun getHospitalReviewAll(@Path(value="hospitalId") hospitalId: Long = 0): Call<List<HospitalReviewAllResponse>>
 
     @POST("/reservations") //병원 예약 (토큰필요)
     fun postReservation(@Body reservation: ReservationRequest): Call<ReservationResponse>

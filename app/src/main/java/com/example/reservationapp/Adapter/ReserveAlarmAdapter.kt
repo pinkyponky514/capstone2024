@@ -8,20 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.R
+import java.util.Calendar
 
 private var reserve_data = ArrayList<ReserveItem>()
 
 //HomeFragment에서 RecyclerView에 사용할 Adapter
 class ReserveAlarmAdapter (): RecyclerView.Adapter<ReserveAlarmAdapter.ViewHolder>() {
-
-    //클릭했을때 일어나는 리스너
-    interface OnItemClickListener {
-        fun onItemClick(position: Int) {
-
-        }
-    }
-    var itemClickListener: OnItemClickListener ?= null
-
     //
     //뷰를 담아두는 상자
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,8 +32,11 @@ class ReserveAlarmAdapter (): RecyclerView.Adapter<ReserveAlarmAdapter.ViewHolde
         }
 
         fun setContents(list: ReserveItem) {
+            val dateSplit = list.reservationDate.split("-")
+            val dayOfWeek = getDayOfWeek(dateSplit)
+
             Hospital_name.text = list.hospital_name
-            Date.text = list.date
+            Date.text = "($dayOfWeek) ${list.reservationTime}"
         }
 
     }
@@ -68,5 +63,29 @@ class ReserveAlarmAdapter (): RecyclerView.Adapter<ReserveAlarmAdapter.ViewHolde
         Log.w("updataList", "$newList")
         notifyDataSetChanged()
     }
+
+    //
+    //년, 월, 일 해당하는 날짜의 요일 구하기
+    private fun getDayOfWeek(dateSplit: List<String>): String {
+        val year = dateSplit[0].toInt()
+        val month = dateSplit[1].toInt()-1
+        val day = dateSplit[2].toInt()
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        return when(dayOfWeek) {
+            Calendar.SUNDAY -> "일"
+            Calendar.MONDAY -> "월"
+            Calendar.TUESDAY -> "화"
+            Calendar.WEDNESDAY -> "수"
+            Calendar.THURSDAY -> "목"
+            Calendar.FRIDAY -> "금"
+            Calendar.SATURDAY -> "토"
+            else -> ""
+        }
+    }
+
 
 }

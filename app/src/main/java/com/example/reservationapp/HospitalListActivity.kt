@@ -8,18 +8,15 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.HospitalListAdapter
 import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.HospitalDetail
 import com.example.reservationapp.Model.HospitalItem
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.Model.SearchHospital
-import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
 import org.json.JSONException
@@ -56,8 +53,6 @@ class HospitalListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         MainActivity().tokenCheck() //토큰 만료 검사
-
-        Log.w("HospitalListActivity", "filterList: ${filterList}")
 
         //adapter
         adapter = HospitalListAdapter()
@@ -217,7 +212,6 @@ class HospitalListActivity : AppCompatActivity() {
                             }
                             else { //병원 정보가 있을때
                                 val intent = Intent(this@HospitalListActivity, Hospital_DetailPage::class.java)
-                                intent.putExtra("hospitalName", hospitalList[position].hospitalName)
                                 intent.putExtra("hospitalId", hospitalList[position].hospitalId)
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                                 startActivity(intent)

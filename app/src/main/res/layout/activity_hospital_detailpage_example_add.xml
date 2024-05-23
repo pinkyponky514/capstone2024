@@ -529,7 +529,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView_postion" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- 예약하기 -->
+
 
             <!-- 리뷰쓰기 -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -652,21 +652,6 @@
                     <!-- app:layout_constraintTop_toBottomOf="@+id/textView_review" /> -->
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                <!--
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/reviewConstraintLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/dark_green"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView_review">
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-                -->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

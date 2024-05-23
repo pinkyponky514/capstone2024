@@ -11,8 +11,8 @@ data class Reservations(
     @SerializedName("reservationDate") val reservationDate: LocalDate,
     @SerializedName("reservationTime") val reservationTime: LocalTime,
     @SerializedName("status") val status: String, //예약상태
-    //@SerializedName("userid") val user: Patient, //환자 회원가입 정보
-    //@SerializedName("hospitalid") val hospital: Hospital, //병원 회원가입 정보
+    @SerializedName("userid") val user: Patient, //환자 회원가입 정보
+    @SerializedName("hospitalid") val hospital: Hospital, //병원 회원가입 정보
 )
 
 data class ReservationRequest( //예약 등록

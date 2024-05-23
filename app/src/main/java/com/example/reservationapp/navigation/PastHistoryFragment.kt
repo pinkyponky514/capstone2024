@@ -103,22 +103,6 @@ class PastHistoryFragment : Fragment() {
             }
         })
 
-
-/*
-        //pastHistoryList = ArrayList()
-        if(pastHistoryList.isEmpty()) {
-            pastHistoryList.add(HistoryItem("진료완료","삼성드림이비인후과", "내과", "2024.2.14", "15:00", true))
-            pastHistoryList.add(HistoryItem("진료완료","강남성모이비인후과의원", "이비인후과", "2024.3.15", "14:30", false))
-            pastHistoryList.add(HistoryItem("진료완료", "청소년내과", "성형외과", "2024.3.30", "11:00", true))
-            pastHistoryList.add(HistoryItem("진료완료","우리의원", "외과", "2024.2.14","15:00", false))
-            pastHistoryList.add(HistoryItem("진료완료","새봄연합의원외과", "가정의학과", "2024.3.15","14:30", false))
-            pastHistoryList.add(HistoryItem("진료완료", "두리이비인후과의원", "이비인후과", "2024.3.30","11:00", false))
-        }
-        adapter.updatelist(pastHistoryList)
-*/
-
-
-
         return binding.root
     }
 }
