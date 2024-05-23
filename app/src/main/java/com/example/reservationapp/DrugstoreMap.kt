@@ -30,7 +30,7 @@ class DrugstoreMap : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_drugstore_map)
+        setContentView(R.layout.activity_pharmacymap)
 
         val fm: FragmentManager = supportFragmentManager
         var mapFragment: MapFragment? = fm.findFragmentById(R.id.map_fragment) as MapFragment?

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.MultiImageAdapter
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.BoardPost
 import com.example.reservationapp.Model.ImageData
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
@@ -72,7 +73,7 @@ class CommunityPostFragment : Fragment() {
             val title = view.findViewById<EditText>(R.id.editTextTitle).text.toString()
             val content = view.findViewById<EditText>(R.id.editTextContent).text.toString()
 
-            val boardContent = BoardContent(title, content, null)
+            val boardContent = BoardPost(title, content)
             apiService.postBoard(boardContent).enqueue(object :
                 Callback<BoardResponse> {
                 override fun onResponse(call: Call<BoardResponse>, response: Response<BoardResponse>) {
@@ -80,7 +81,8 @@ class CommunityPostFragment : Fragment() {
                         val responseBody = response.body()!!
                         val message = responseBody.message
 
-                        fragmentManager?.popBackStack() // 이전 프래그먼트로 이동
+                       // fragmentManager?.popBackStack() // 이전 프래그먼트로 이동
+
                     } else {
                         handleErrorResponse(response)
                         Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패

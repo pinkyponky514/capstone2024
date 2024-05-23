@@ -111,8 +111,9 @@ data class CommunityItem(
     val writer: String,
     val likes : String,
     val reviews : String,
-    val timestamp : String
+    val timestamp : String,
     //val commentNumber: Int
+    val boardId: Long
 )
 
 //Filter

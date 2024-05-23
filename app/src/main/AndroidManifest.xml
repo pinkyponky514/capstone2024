@@ -74,6 +74,9 @@
             android:name=".navigation.CommunityFragment"
             android:exported="false" />
         <activity
+            android:name=".PharmacyMapActivity"
+            android:exported="false" />
+        <activity
             android:name=".DrugstoreMap"
             android:exported="false" /> <!-- 병원 상세 페이지 -->
         <activity
@@ -128,9 +131,12 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+<!--            <meta-data-->
+<!--                android:name="com.naver.maps.map.CLIENT_ID"-->
+<!--                android:value="2l5wy5359k" />-->
             <meta-data
                 android:name="com.naver.maps.map.CLIENT_ID"
-                android:value="2l5wy5359k" />
+                android:value="zdtopanxhc" />
             <meta-data
                 android:name="com.naver.maps.map.CLIENT_TYPE"
                 android:value="gov" />

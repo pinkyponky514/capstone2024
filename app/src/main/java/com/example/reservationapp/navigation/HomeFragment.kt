@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.reservationapp.PharmacyMapActivity
 import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
 import com.example.reservationapp.ChatActivity
@@ -26,7 +27,6 @@ import com.example.reservationapp.Model.AllBookmarkResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.ReserveItem
-import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHomeBinding
@@ -194,7 +194,7 @@ class HomeFragment : Fragment() {
         //주변에 위치한 약국지도
         val textViewMap2 = binding.textView9 //view.findViewById<TextView>(R.id.textView9)
         textViewMap2.setOnClickListener {
-            val intent = Intent(requireActivity(), DrugstoreMap::class.java)
+            val intent = Intent(requireActivity(), PharmacyMapActivity::class.java)
             startActivity(intent)
         }
 
