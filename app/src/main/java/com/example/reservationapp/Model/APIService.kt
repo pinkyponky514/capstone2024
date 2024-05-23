@@ -69,6 +69,11 @@ interface APIService {
     @POST("/reservations") //병원 예약 (토큰필요)
     fun postReservation(@Body reservation: ReservationRequest): Call<ReservationResponse>
 
+    //Delete /reservations/cancel/{reservationId} -> 예약 취소
+    @DELETE("/reservations/cancel/{reservationId}") //예약 취소 (토큰필요(
+    fun deleteReservation(@Path(value="reservationId") reservationId: Long = 0): Call<DeleteReservationResponse>
+
+
     @GET("/bot/chat") //챗봇 - 진료과목 가져오기
     @Headers("Auth: false")
     fun getChatBotAnswer(@Query("prompt") prompt: String?= null): Call<ChatBotResponse>

@@ -43,16 +43,8 @@ data class UserReservationResponse( //유저별 예약 조회
     @SerializedName("reviewWrite") val reviewWriteBoolean: Boolean //리뷰 썼는지 확인
 )
 
-/*
-[
-    {
-        "reservationId": 1,
-        "reservationDate": "2024-05-30",
-        "reservationTime": "09:00:00",
-        "status": "예약신청",
-        "hospitalid": 1,
-        "hospitalName": "삼성서울병원",
-        "userName": "한이"
-    }
-]
- */
+data class DeleteReservationResponse( //예약 취소
+    @SerializedName("id") val reservationId: Long, //예약 레이블 번호
+    @SerializedName("message") val message: String,
+    @SerializedName("status") val status: String //
+)

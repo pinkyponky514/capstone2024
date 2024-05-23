@@ -6,9 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.DeleteReservationResponse
 import com.example.reservationapp.Model.HistoryItem
 import com.example.reservationapp.R
+import com.example.reservationapp.Retrofit.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.*
 import java.util.*
 
@@ -25,8 +32,11 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
         private var reserve_date_TextView: TextView //예약 날짜
         private var comming_date_TextView: TextView //다가오는 날짜 계산
 
-        private lateinit var cancel_Button: Button //예약 취소 버튼
+        private var cancel_Button: Button //예약 취소 버튼
 
+        //Retrofit
+        private var retrofitClient: RetrofitClient = RetrofitClient.getInstance()
+        private var apiService: APIService = retrofitClient.getRetrofitInterface()
 
         init {
             reservationId = 0
@@ -36,6 +46,7 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
             class_name_TextView = itemView.findViewById(R.id.class_textView)
             reserve_date_TextView = itemView.findViewById(R.id.reserve_date_textView)
             comming_date_TextView = itemView.findViewById(R.id.comming_date_textView)
+            cancel_Button = itemView.findViewById(R.id.cancel_button)
         }
 
         //데이터 설정
@@ -50,6 +61,14 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
             val dayOfWeek = getDayOfWeek(dateSplit)
 
             reserve_date_TextView.text = "${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]} ($dayOfWeek) ${list.reserveTime}"
+
+            if(list.status == "예약취소") {
+                cancel_Button.text = "예약 취소완료"
+                cancel_Button.isEnabled = false
+                cancel_Button.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                cancel_Button.setBackgroundResource(R.drawable.style_gray_rectangle_radius)
+            }
+
 
             //날짜 세팅
             try {
@@ -66,6 +85,20 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
                     comming_date_TextView.text = ((calcuDate).toInt()).toString() + "일 지남"
                 } else {
                     comming_date_TextView.text = ((calcuDate*-1).toInt()).toString() + "일전"
+                }
+
+                cancel_Button.setOnClickListener {
+                    apiService.deleteReservation(reservationId).enqueue(object: Callback<DeleteReservationResponse> {
+                        override fun onResponse(call: Call<DeleteReservationResponse>, response: Response<DeleteReservationResponse>) {
+                            if(response.isSuccessful) {
+                                val responseBody = response.body()!!
+                                Log.w("ReserveHistoryAdapter", "cancel button onclick responseBody : $responseBody")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<DeleteReservationResponse>, t: Throwable) {
+                        }
+                    })
                 }
 
             } catch (e: ParseException) {
