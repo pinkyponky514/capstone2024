@@ -27,6 +27,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.ParseException
 import java.util.Calendar
 import java.util.Locale
 
@@ -169,6 +170,7 @@ class HospitalListActivity : AppCompatActivity() {
                         var startTime = dayOfWeekTimeList[0] //시작시간
                         var endTime = dayOfWeekTimeList[1] //끝나는시간
 
+
                         //금일 영업시간
                         var operatingTime: String
                         if(startTime.startsWith("정") || startTime.startsWith("휴")) { //"정"이나 "휴"으로 시작하는 글자면
@@ -276,10 +278,24 @@ class HospitalListActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun operatingStatus(calendar: Calendar, startTime: String, endTime: String): String {
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val currentTimeFormatted = dateFormat.format(calendar.time)
+        val currentTime = calendar.time
 
+        try {
+            val startTimeDate = dateFormat.parse(startTime)
+            val endTimeDate = dateFormat.parse(endTime)
+
+            if (currentTime in startTimeDate..endTimeDate) return "진료중"
+            else return "진료마감"
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return ""
+
+/*
         if(currentTimeFormatted >= startTime && currentTimeFormatted <= endTime) return "진료중"
         else return "진료마감"
+*/
     }
 //
 }
