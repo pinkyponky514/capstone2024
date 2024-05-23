@@ -27,6 +27,7 @@ import com.example.reservationapp.Model.AllBookmarkResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.ReserveItem
+import com.example.reservationapp.Model.UserReservationResponse
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHomeBinding
@@ -41,6 +42,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -60,6 +62,7 @@ class HomeFragment : Fragment() {
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
     private lateinit var responseBody: AllBookmarkResponse
+    private lateinit var responseBodyReservation: List<UserReservationResponse>
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,6 +70,11 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater) //val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val mainActivity = requireActivity() as MainActivity //MainActivity 접근
+        mainActivity.tokenCheck()
+
+        //Retrofit
+        retrofitClient = RetrofitClient.getInstance()
+        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
 
         //지도 API
@@ -101,15 +109,15 @@ class HomeFragment : Fragment() {
         reserveAlarmRecyclerView.layoutManager = reserveAlarmLinearLayoutManager
         //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
 
-        // 가까운 예약 순으로 정렬 필요 (DB 연결 필요)
+        // 가까운 예약 순으로 정렬
+/*
         userReserveAlarm = ArrayList()
         userReserveAlarm.add(ReserveItem("강남대학병원", "수 15:00"))
         userReserveAlarm.add(ReserveItem("서울병원", "목 14:00"))
         userReserveAlarm.add(ReserveItem("별빛한의원", "월 18:40"))
         userReserveAlarm.add(ReserveItem("강남성형외과", "월 13:30"))
         userReserveAlarm.add(ReserveItem("버팀병원", "화 16:20"))
-
-
+*/
 
         //예약 리스트에 아무것도 없으면 보이지 않게
         val commingReserveTextView = binding.commingReserveTextView
@@ -120,16 +128,39 @@ class HomeFragment : Fragment() {
         commingMoreTextView.visibility = View.GONE
 
 
-        if(userReserveAlarm .isEmpty()) {
-            reserveAlarmRecyclerView.visibility = View.GONE
-            commingReserveTextView.visibility = View.GONE
-            commingMoreTextView.visibility = View.GONE
-        } else {
-            reserveAlarmRecyclerView.visibility = View.VISIBLE
-            commingReserveTextView.visibility = View.VISIBLE
-            commingMoreTextView.visibility = View.VISIBLE
-            reserveAlarmAdapter.updateList(userReserveAlarm)
-        }
+        apiService.getUserReservation().enqueue(object: Callback<List<UserReservationResponse>> {
+            override fun onResponse(call: Call<List<UserReservationResponse>>, response: Response<List<UserReservationResponse>>) {
+                if(response.isSuccessful) {
+                    userReserveAlarm = ArrayList()
+                    responseBodyReservation = response.body()!!
+
+                    for(reservation in responseBodyReservation) {
+                        if(reservation.status == "예약신청" || reservation.status == "예약확정") {
+                            userReserveAlarm.add(ReserveItem(reservation.hospitalName, reservation.reservationDate.toString(), reservation.reservationTime.toString()))
+                        }
+                    }
+
+                    if(userReserveAlarm .isEmpty()) {
+                        reserveAlarmRecyclerView.visibility = View.GONE
+                        commingReserveTextView.visibility = View.GONE
+                        commingMoreTextView.visibility = View.GONE
+                    } else {
+                        reserveAlarmRecyclerView.visibility = View.VISIBLE
+                        commingReserveTextView.visibility = View.VISIBLE
+                        commingMoreTextView.visibility = View.VISIBLE
+                        reserveAlarmAdapter.updateList(userReserveAlarm)
+                    }
+                }
+
+                else {
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserReservationResponse>>, t: Throwable) {
+
+            }
+        })
 
 
         //예약 더보기 버튼
@@ -208,9 +239,6 @@ class HomeFragment : Fragment() {
         }
 
 
-        //Retrofit
-        retrofitClient = RetrofitClient.getInstance()
-        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
 
         //인기 순위 병원 adapter, recyclerView 초기화
@@ -301,7 +329,6 @@ class HomeFragment : Fragment() {
 
         return binding.root //return view
     }
-
 
     //
 }

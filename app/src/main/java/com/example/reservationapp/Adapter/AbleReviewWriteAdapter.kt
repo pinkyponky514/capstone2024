@@ -9,17 +9,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.reservationapp.Hospital_DetailPage
-import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HistoryItem
 import com.example.reservationapp.R
-import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.ReviewWriteDetailActivity
 import java.util.Calendar
 
-private var past_history_list_data = ArrayList<HistoryItem>()
+private var able_review_write_list_data = ArrayList<HistoryItem>()
 
-class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() {
+class AbleReviewWriteAdapter: RecyclerView.Adapter<AbleReviewWriteAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var reservationId: Long //예약 레이블 번호
         private var hospitalId: Long //병원 레이블 번호
@@ -29,7 +26,6 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
         private var class_name_TextView: TextView //진료과명
         private var reserve_date_TextView: TextView //예약 날짜
 
-        private var try_reserve_Button: Button //다시 접수하기
         private var review_Button: Button //리뷰쓰기
 
         private lateinit var historyItem: HistoryItem
@@ -37,31 +33,21 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
         init {
             reservationId = 0
             hospitalId = 0
-            status_TextView = itemView.findViewById(R.id.status)
-            hospital_name_TextView = itemView.findViewById(R.id.hospital_name_textView)
-            class_name_TextView = itemView.findViewById(R.id.class_textView)
-            reserve_date_TextView = itemView.findViewById(R.id.reserve_date_textView)
-
-
-            //다시 접수하기 버튼 onClick
-            try_reserve_Button = itemView.findViewById(R.id.cancel_button)
-            try_reserve_Button.setOnClickListener {
-                val context = itemView.context
-                val intent = Intent(context, Hospital_DetailPage::class.java)
-                intent.putExtra("hospitalId", hospitalId)
-                //intent.putExtra("historyItem", historyItem)
-                context.startActivity(intent)
-            }
+            status_TextView = itemView.findViewById(R.id.able_review_status)
+            hospital_name_TextView = itemView.findViewById(R.id.able_review_hospital_name_textView)
+            class_name_TextView = itemView.findViewById(R.id.able_review_class_textView)
+            reserve_date_TextView = itemView.findViewById(R.id.able_review_reserve_date_textView)
 
             //리뷰쓰기 버튼 onClick
-            review_Button = itemView.findViewById(R.id.review_button)
+            review_Button = itemView.findViewById(R.id.able_review_write_button)
             review_Button.setOnClickListener {
                 val context = itemView.context
-                val intent = Intent(context, ReviewWriteDetailActivity::class.java) //전환되는 액티비티 변경하기
+                val intent = Intent(context, ReviewWriteDetailActivity::class.java)
                 intent.putExtra("historyItem", historyItem)
                 context.startActivity(intent)
             }
         }
+
 
         //데이터 설정
         fun setContents(list: HistoryItem) {
@@ -85,27 +71,24 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
                 review_Button.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                 review_Button.setBackgroundResource(R.drawable.style_gray_rectangle_radius)
             }
-        }
 
-        //
+        }
     }
 
-
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PastHistoryAdapter.ViewHolder {
-        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_past_history, viewGroup, false)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+        val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_able_review_write, viewGroup, false)
         return ViewHolder(layoutInflater)
     }
-    override fun onBindViewHolder(holder: PastHistoryAdapter.ViewHolder, position: Int) {
-        holder.setContents(past_history_list_data[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.setContents(able_review_write_list_data[position])
     }
     override fun getItemCount(): Int {
-        return past_history_list_data.size
+        return able_review_write_list_data.size
     }
-
 
     //
     fun updatelist(newList: ArrayList<HistoryItem>) {
-        past_history_list_data = newList
+        able_review_write_list_data = newList
         notifyDataSetChanged()
     }
 

@@ -12,6 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.App
 import com.example.reservationapp.Model.*
+import com.example.reservationapp.MainActivity
+import com.example.reservationapp.Model.BoardContent
+import com.example.reservationapp.Model.BoardResponse
+import com.example.reservationapp.Model.ChatBotResponse
+import com.example.reservationapp.Model.ChatItem
+import com.example.reservationapp.Model.CommunityItem
 import com.example.reservationapp.R
 import org.json.JSONException
 import org.json.JSONObject
@@ -45,6 +51,13 @@ class CommunityFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.tokenCheck()
+
+//        // 작성 시간을 표시하는 TextView를 찾아 변수에 할당합니다.
+//        timestamp = view.findViewById(R.id.timestamp)
+
 
         return view
     }

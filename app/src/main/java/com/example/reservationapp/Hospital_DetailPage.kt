@@ -35,12 +35,8 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var binding: ActivityHospitalDetailpageExampleAddBinding
 
     //리뷰
-    private var not_review_constraint_flag: Boolean = false //리뷰 개수가 0일때의 constraintLayout flag
-    private var review_constraint_flag: Boolean = false //리뷰가 있을 경우 constraintLayout flag
-
     private lateinit var notReviewConstraintLayout: ConstraintLayout //리뷰가 없을때 constraintLayout
     private lateinit var reviewConstraintLayout: ConstraintLayout //리뷰가 있을때 constraintLayout
-    //private lateinit var reviewConstraintLayout: RecyclerView //리뷰가 있을때 constraintLayout
 
     private lateinit var noReviewWriteButton: Button //리뷰 없을때 리뷰쓰기 버튼
     private lateinit var reviewWriteButton: Button //리뷰 한개라도 있을때 리뷰쓰기 버튼
@@ -48,6 +44,7 @@ class Hospital_DetailPage : AppCompatActivity() {
     private var reviewCount: Int = 0 //리뷰개수
 
     private lateinit var adapter: ReviewAdapter
+    private lateinit var hospitalNameString: String
 
 
     //즐겨찾기
@@ -88,7 +85,7 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var dayOffTimeTextView: TextView //공휴일
 
 
-    private var hospitalString: String = ""
+
 
 
     //
@@ -133,7 +130,6 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         //DB에서 데이터 가져올 것임
         val hospitalId = intent.getLongExtra("hospitalId", 0)
-        val hospitalName = intent.getStringExtra("hospitalName").toString()
         val className = binding.textViewClassName.text.toString()
         Log.w("Hospital DetailPage", "hospitalId: $hospitalId")
 
@@ -149,12 +145,19 @@ class Hospital_DetailPage : AppCompatActivity() {
                 if(response.isSuccessful) {
                     responseBodyDetail = response.body()!!
 
-                    hospitalString = responseBodyDetail.data.name //병원이름 저장
+                    hospitalNameString = responseBodyDetail.data.name //병원이름 저장
                     hospitalNameTextView.text = responseBodyDetail.data.hospitalDetail.department //병원 진료과 설정
                     hospitalNameTextView.text = responseBodyDetail.data.name //병원 이름 설정
-                    waitCountTextView.text = "${responseBodyDetail.data.reservations.size}명 대기중" //대기인원 설정
                     hospitalPositionTextView.text = responseBodyDetail.data.openApiHospital.address //병원 주소 설정
                     hospitalCallTextView.text = responseBodyDetail.data.openApiHospital.tel //병원 전화번호 설정
+
+                    var reservationCount = 0
+                    for(reservation in responseBodyDetail.data.reservations) {
+                        if(reservation.status != "진료완료" && reservation.status != "예약취소") {
+                            reservationCount++
+                        }
+                    }
+                    waitCountTextView.text = "${reservationCount}명 대기중" //대기인원 설정
 
                     //금일 운영시간 설정
                     val calendar = Calendar.getInstance()
@@ -216,13 +219,9 @@ class Hospital_DetailPage : AppCompatActivity() {
                         notReviewConstraintLayout.visibility = View.GONE
 
                         val reviewList: ArrayList<ReviewItem> = ArrayList()
-                        for(reviewIndex in responseBodyDetail.data.review.indices) {
-                            val starScore = responseBodyDetail.data.review[reviewIndex].starScore.toString()
-                            val comment = responseBodyDetail.data.review[reviewIndex].comment
-                            val reviewDate = responseBodyDetail.data.review[reviewIndex].registerDate
-                            val userName = responseBodyDetail.data.review[reviewIndex].user.name
-
-                            reviewList.add(ReviewItem(starScore, comment, reviewDate.toString(), userName))
+                        for(review in responseBodyDetail.data.review) {
+                            val reviewId = review.id //리뷰 레이블 번호
+                            reviewList.add(ReviewItem(hospitalId, reviewId))
                         }
                         adapter.updatelist(reviewList)
                         recyclerView.suppressLayout(true) //스트롤 불가능
@@ -313,13 +312,13 @@ class Hospital_DetailPage : AppCompatActivity() {
                         //통신, 응답 성공
                         if(response.isSuccessful) {
                             responseBodyBookmark = response.body()!!
-                            Log.w("Hospital_DetailPage", "responseBookmakr: $responseBodyBookmark")
+                            Log.w("Hospital_DetailPage", "responseBookmark: $responseBodyBookmark")
                         }
 
                         //통신 성공, 응답 실패
                         else {
                             val errorBody = response.errorBody()?.string()
-                            Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                            Log.d("FAILURE Response", "Bookmark onClick Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
                             if (errorBody != null) {
                                 try {
                                     val jsonObject = JSONObject(errorBody)
@@ -358,8 +357,9 @@ class Hospital_DetailPage : AppCompatActivity() {
         noReviewWriteButton = binding.noReviewWriteButton
         noReviewWriteButton.setOnClickListener {
             if(App.prefs.token != null) {
-                val intent = Intent(this, ReviewWriteDetailActivity::class.java)
+                val intent = Intent(this, ReviewAbleListActivity::class.java)
                 intent.putExtra("hospitalId", hospitalId)
+                intent.putExtra("hospitalName", hospitalNameString)
                 startActivity(intent)
             }
             else {
@@ -372,7 +372,7 @@ class Hospital_DetailPage : AppCompatActivity() {
         reviewWriteButton = binding.reviewWriteButton
         reviewWriteButton.setOnClickListener {
             if(App.prefs.token != null) {
-                val intent = Intent(this, ReviewWriteDetailActivity::class.java)
+                val intent = Intent(this, ReviewAbleListActivity::class.java)
                 intent.putExtra("hospitalId", hospitalId)
                 startActivity(intent)
             }
@@ -388,7 +388,7 @@ class Hospital_DetailPage : AppCompatActivity() {
         reservationButton.setOnClickListener {
             //로그인 되어있으면
             if(App.prefs.token != null) {
-                val dialog = CustomReserveDialogFragment.newInstance(hospitalName, className, hospitalId)
+                val dialog = CustomReserveDialogFragment.newInstance(hospitalNameString, className, hospitalId)
                 dialog.show(supportFragmentManager, "CustomReserveDialog")
             }
 

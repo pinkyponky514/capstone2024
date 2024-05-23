@@ -26,7 +26,8 @@
         android:layout_marginEnd="15dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="searchTextField"
+        android:hint="검색어를 입력하세요."
+        android:textSize="14dp"
         app:layout_constraintEnd_toStartOf="@+id/searchButtonImageView"
         app:layout_constraintStart_toEndOf="@+id/backButtonImageView"
         app:layout_constraintTop_toTopOf="parent" />

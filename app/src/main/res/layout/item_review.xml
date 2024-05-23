@@ -72,4 +72,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/reviewDate_textView"
         app:layout_constraintStart_toEndOf="@+id/reviewDate_textView"
         app:layout_constraintTop_toTopOf="@+id/reviewDate_textView" />
+
+    <ImageView
+        android:id="@+id/review_delete_ImageView"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginEnd="18dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ratingBar"
+        app:srcCompat="@drawable/image_delete"
+        app:tint="@color/gray" />
 </androidx.constraintlayout.widget.ConstraintLayout>

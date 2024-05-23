@@ -5,103 +5,88 @@
     android:layout_width="350dp"
     android:layout_height="150dp"
     android:layout_marginTop="20dp"
-    android:layout_marginBottom="10dp"
     android:background="@drawable/style_white_rectangle">
 
     <!-- 병원이름 textView -->
     <TextView
-        android:id="@+id/hospital_name_textView"
+        android:id="@+id/able_review_hospital_name_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:text="병원이름"
-        android:textColor="@color/black"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 진료상태 textView -->
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/able_review_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
-        android:background="@drawable/style_dark_green_rectangle_status"
+        android:background="@drawable/style_gray_rectangle_status"
         android:text="진료 진행상태"
         android:textSize="10dp"
         android:textStyle="bold"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/hospital_name_textView"
+        app:layout_constraintBottom_toBottomOf="@+id/able_review_hospital_name_textView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/hospital_name_textView" />
+        app:layout_constraintTop_toTopOf="@+id/able_review_hospital_name_textView" />
 
     <!-- 진료과목 textView -->
     <TextView
-        android:id="@+id/class_textView"
+        android:id="@+id/able_review_class_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="진료과 명"
         android:textSize="12dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/hospital_name_textView"
-        app:layout_constraintStart_toEndOf="@+id/hospital_name_textView"
-        app:layout_constraintTop_toTopOf="@+id/hospital_name_textView" />
+        app:layout_constraintBottom_toBottomOf="@+id/able_review_reserve_date_textView"
+        app:layout_constraintStart_toEndOf="@+id/able_review_reserve_date_textView"
+        app:layout_constraintTop_toTopOf="@+id/able_review_reserve_date_textView" />
 
     <!-- 예약 날짜 textView -->
     <TextView
-        android:id="@+id/reserve_date_textView"
+        android:id="@+id/able_review_reserve_date_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="예약 날짜"
         android:textSize="12dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/hospital_name_textView"
-        app:layout_constraintTop_toBottomOf="@+id/hospital_name_textView" />
-
-    <!-- 남은 날짜 textView -->
-    <TextView
-        android:id="@+id/comming_date_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="1일전"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        android:textColor="@color/red"
-        app:layout_constraintBottom_toBottomOf="@+id/reserve_date_textView"
-        app:layout_constraintStart_toEndOf="@+id/reserve_date_textView"
-        app:layout_constraintTop_toTopOf="@+id/reserve_date_textView" />
-
+        app:layout_constraintStart_toStartOf="@+id/able_review_hospital_name_textView"
+        app:layout_constraintTop_toBottomOf="@+id/able_review_hospital_name_textView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/reservation_button_ConstraintLayout"
+        android:id="@+id/able_review_reservation_button_ConstraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/reserve_date_textView"
+        app:layout_constraintTop_toBottomOf="@+id/able_review_reserve_date_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="1" >
 
-        <!-- 접수하기 button -->
+        <!-- 리뷰쓰기 button -->
         <Button
-            android:id="@+id/cancel_button"
+            android:id="@+id/able_review_write_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/style_dark_green_rectangle_pressed_button"
-            android:text="예약 취소하기"
+            android:background="@drawable/style_light_green_rectangle_pressed_button"
             android:enabled="true"
-            android:textColor="#FFFFFF"
+            android:text="리뷰쓰기"
+            android:textColor="@color/dark_green"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
