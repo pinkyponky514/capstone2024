@@ -1,11 +1,13 @@
 package com.example.reservationapp.Adapter
 
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Model.APIService
@@ -22,6 +24,7 @@ import java.util.*
 private var reserve_history_list_data = ArrayList<HistoryItem>()
 
 class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHolder>() {
+    @RequiresApi(Build.VERSION_CODES.O)
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var reservationId: Long //예약 레이블 번호
         private var hospitalLId: Long //병원 레이블 번호
@@ -111,10 +114,12 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_reserve_history, viewGroup, false)
         return ViewHolder(layoutInflater)
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setContents(reserve_history_list_data[position])
     }
