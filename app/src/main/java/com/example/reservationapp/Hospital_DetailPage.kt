@@ -108,8 +108,8 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         lunchTimeTextView = binding.textViewLunchTime
         mondayTimeTextView = binding.textViewMondayTime
-        tuesdayTimeTextView = binding.textViewTuesdayTime
-        wednesdayTimeTextView = binding.textViewWednesdayTime
+        tuesdayTimeTextView = binding.textViewMondayTime
+        wednesdayTimeTextView = binding.textViewTuesdayTime
         thursdayTimeTextView = binding.textViewThursdayTime
         fridayTimeTextView = binding.textViewFridayTime
         saturdayTimeTextView = binding.textViewSaturdayTime

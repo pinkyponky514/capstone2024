@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,13 +17,12 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import com.example.reservationapp.Model.NaverMapApiInterface
 import com.example.reservationapp.Model.NaverMapRequest
 import com.example.reservationapp.Model.PharmacyMap.NaverMapData
 import com.example.reservationapp.Model.PharmacyMap.NaverMapItem
+import com.example.reservationapp.databinding.ActivityPharmacymapBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -35,6 +32,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,6 +52,7 @@ enum class DayOfWeek(val value: Int) {
 }
 
 class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.OnClickListener*/ {
+    private lateinit var binding: ActivityPharmacymapBinding
 
     // 필터 상태를 나타내는 변수
     private var isFilterApplied = false
@@ -80,64 +79,95 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
     private val markers: MutableList<Marker> = mutableListOf() // 추가된 부분
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
-    private lateinit var textView4: TextView
-    private lateinit var textView5: TextView
-    private lateinit var textView: TextView
-    private lateinit var button: Button
+    private lateinit var pharmacyNameTextView: TextView //약국이름
+    private lateinit var operatingTimeTextView: TextView //운영시간
+    private lateinit var addressTextView: TextView //약국주소
+    private lateinit var button: Button //전화문의 버튼
+
+    private lateinit var lunchTimeTextView: TextView
+    private lateinit var monTimeTextView: TextView
+    private lateinit var tueTimeTextView: TextView
+    private lateinit var wedTimeTextView: TextView
+    private lateinit var thuTimeTextView: TextView
+    private lateinit var friTimeTextView: TextView
+    private lateinit var satTimeTextView: TextView
+    private lateinit var sunTimeTextView: TextView
+    private lateinit var holTimeTextView: TextView
 
     private var clickedMarker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pharmacymap)
+        binding = ActivityPharmacymapBinding.inflate(layoutInflater)
+        setContentView(binding.root) //setContentView(R.layout.activity_pharmacymap)
 
 
-        var fm: FragmentManager = supportFragmentManager
-        var mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
+        //var fm: FragmentManager = supportFragmentManager
+        //var mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
+        var mapFragment = supportFragmentManager.findFragmentById(R.id.map) as MapFragment?
 
+
+        //위치권한 상태 확인
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting()
         } else {
             checkRunTimePermission()
         }
 
+        //지도 프래그먼트 초기화
         if (mapFragment == null) {
             mapFragment = MapFragment.newInstance()
-            fm.beginTransaction().add(R.id.map, mapFragment).commit()
+            supportFragmentManager.beginTransaction().add(R.id.map, mapFragment).commit()
         }
         mapFragment?.getMapAsync(this)
 
-        mLocationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
+        //현재 위치 정보 제공
+        mLocationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE) //현재 액티비티 기반
 
         // Bottom Sheet 초기화
-     val bottomSheetView: View = findViewById(R.id.persistent_bottom_sheet)
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
-        bottomSheetBehavior.isHideable = true
-       bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        val bottomSheetView = binding.persistentBottomSheet //val bottomSheetView: View = findViewById(R.id.persistent_bottom_sheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView) //해당 뷰에 대한 BottomSheetBehavior 객체를 반환
+        bottomSheetBehavior.isHideable = true //숨김 여부
+        //bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height) //bottomsheet 보여지는 높이
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN //숨겨진 상태로 앱 시작
 
+        //검색창 초기화
+        val searchView = binding.searchView
+        //searchView.height = resources.getDimensionPixelSize(R.dimen.search_view_height)
 
-        textView4 = findViewById(R.id.textView4)
-        textView5= findViewById(R.id.textView5)
-        textView = findViewById(R.id.textView)
-        button = findViewById(R.id.button)
+        pharmacyNameTextView = binding.pharmacyNameTextView //findViewById(R.id.pharmacy_name_textView)
+        operatingTimeTextView = binding.operatingTimeTextView //findViewById(R.id.operating_time_textView)
+        addressTextView = binding.addressTextView //findViewById(R.id.address_textView)
+        button = binding.button //findViewById(R.id.button)
 
-       //  필터 버튼 클릭 시 이벤트 설정
-//        findViewById<ExtendedFloatingActionButton>(R.id.filter_btn).setOnClickListener {
-//            // 필터 상태 업데이트
-//            isFilterApplied = !isFilterApplied
-//
-//            // 필터 상태에 따라 플로팅 버튼 배경색 변경
-//            val filterBtn = findViewById<ExtendedFloatingActionButton>(R.id.filter_btn)
-//            if (isFilterApplied) {
-//                filterBtn.backgroundTintList = ColorStateList.valueOf(Color.rgb(128, 128, 128))
-//            } else {
-//                filterBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
-//            }
-//
-//            // 필터링된 마커 표시/숨기기
-//            updateMarkers2()
-//        }
+        lunchTimeTextView = binding.lunchTimeTextView
+        monTimeTextView = binding.mondayTimeTextView
+        tueTimeTextView = binding.tuesdayTimeTextView
+        wedTimeTextView = binding.wednesdayTimeTextView
+        thuTimeTextView = binding.thursdayTimeTextView
+        friTimeTextView = binding.fridayTimeTextView
+        satTimeTextView = binding.saturdayTimeTextView
+        sunTimeTextView = binding.sundayTimeTextView
+        holTimeTextView = binding.dayOffTimeTextView
+
+        /*
+               //  필터 버튼 클릭 시 이벤트 설정
+                findViewById<ExtendedFloatingActionButton>(R.id.filter_btn).setOnClickListener {
+                    // 필터 상태 업데이트
+                    isFilterApplied = !isFilterApplied
+
+                    // 필터 상태에 따라 플로팅 버튼 배경색 변경
+                    val filterBtn = findViewById<ExtendedFloatingActionButton>(R.id.filter_btn)
+                    if (isFilterApplied) {
+                        filterBtn.backgroundTintList = ColorStateList.valueOf(Color.rgb(128, 128, 128))
+                    } else {
+                        filterBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
+                    }
+
+                    // 필터링된 마커 표시/숨기기
+                    updateMarkers2()
+                }
+        */
     }
 
     // 마커 필터링 함수
@@ -167,6 +197,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         return openHours.startsWith("영업중")
     }
 
+    //네이버 지도가 준비되었을때 동작
     override fun onMapReady(@NonNull naverMap: NaverMap) {
         mNaverMap = naverMap
 
@@ -277,14 +308,27 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
 //        }
     }
 
+
     //마커 클릭시 bottomsheet 보여주기
     private fun showBottomSheet(pharmacy: NaverMapData, clickedMarker: Marker) {
         val dayOfWeek = getCurrentDayOfWeek()
         val openHours = getOpenHoursForDay(dayOfWeek, pharmacy)
+
         // Bottom sheet에 데이터 표시
-        textView4.text = pharmacy.pharmacyname
-        textView5.text = openHours
-        textView.text = pharmacy.address
+        pharmacyNameTextView.text = pharmacy.pharmacyname
+        operatingTimeTextView.text = openHours
+        addressTextView.text = pharmacy.address
+
+        //lunchTimeTextView.text = getOpenHoursForDay(DayOfWeek.MONDAY, pharmacy)
+        monTimeTextView.text = getOpenHoursForDay(DayOfWeek.MONDAY, pharmacy)
+        tueTimeTextView.text = getOpenHoursForDay(DayOfWeek.THURSDAY, pharmacy)
+        wedTimeTextView.text = getOpenHoursForDay(DayOfWeek.WEDNESDAY, pharmacy)
+        thuTimeTextView.text = getOpenHoursForDay(DayOfWeek.THURSDAY, pharmacy)
+        friTimeTextView.text = getOpenHoursForDay(DayOfWeek.FRIDAY, pharmacy)
+        satTimeTextView.text = getOpenHoursForDay(DayOfWeek.SATURDAY, pharmacy)
+        sunTimeTextView.text = getOpenHoursForDay(DayOfWeek.SUNDAY, pharmacy)
+        //holTimeTextView.text = getOpenHoursForDay(DayOfWeek.MONDAY, pharmacy)
+
 
         // 클릭 시 동작 정의
         button.setOnClickListener {

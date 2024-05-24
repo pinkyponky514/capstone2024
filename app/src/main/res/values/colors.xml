@@ -9,6 +9,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="sky">#99CCFF</color>
+    <color name="light_sky">#daf1ff</color>
     <color name="mint">#BCF0F6</color>
     <color name="gray">#FFD3D3D3</color>
     <color name="dark_gray">#666A73</color>

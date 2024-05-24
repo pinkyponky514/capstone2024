@@ -17,7 +17,6 @@ import com.example.reservationapp.PharmacyMapActivity
 import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
 import com.example.reservationapp.ChatActivity
-import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.HospitalSearchActivity
@@ -42,7 +41,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Calendar
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
