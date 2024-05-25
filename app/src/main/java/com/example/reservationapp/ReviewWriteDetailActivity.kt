@@ -7,13 +7,11 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.HistoryItem
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
-import com.example.reservationapp.Model.ReviewItem
 import com.example.reservationapp.Model.ReviewRequest
-import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityReviewWriteDetailBinding
-import com.example.reservationapp.navigation.pastHistoryList
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -50,8 +48,10 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
         val register_button = binding.registerButton
 
         //전달받은 값
-        val hospitalId = intent.getLongExtra("hospitalId", 0)
+        val historyItem = intent.getSerializableExtra("historyItem") as HistoryItem
+        Log.w("ReviewWriteDetailActivity", "historyItem: $historyItem")
 
+        val hospitalId = historyItem.hospitalId //intent.getLongExtra("hospitalId", 0)
 
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
@@ -64,7 +64,12 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
                 if(response.isSuccessful) {
                     responseBodyHospitalDetail = response.body()!!
                     hospital_name_textView.text = responseBodyHospitalDetail.data.name
-                    class_name_textView.text = responseBodyHospitalDetail.data.hospitalDetail.department
+                    class_name_textView.text = historyItem.className
+
+                    val dateSplit = historyItem.reserveDay.split("-")
+                    val dayOfWeek = getDayOfWeek(dateSplit)
+                    reserve_date_textView.text = "${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]} ($dayOfWeek) ${historyItem.reserveTime}"
+
                     Log.w("ReviewWriteDetailActivity", "hospitalName: ${hospital_name_textView.text}, className: ${class_name_textView.text}")
                 }
                 else Log.w("ReviewWriteDetailActivity", "getHospitalDetail Connect SUCCESS, Response FAILURE - response.body(): ${response.body()}")
@@ -77,57 +82,11 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
 
 
         //등록버튼 눌렀을때 onClick
-/*
-        register_button.setOnClickListener {
-            for(i in filterList.indices) {
-                if(filterList[i].hospitalName == hospital_name_string) { //넘겨받은 병원이름을 DB 병원 리스트에서 검색, 같으면 if문 수행하고 중단
-                    val rating_count = rating_bar.rating //별점
-                    val review_content = review_content_editText.text.toString() //리뷰내용
-
-                    val calendar = Calendar.getInstance()
-                    val currentYear = calendar.get(Calendar.YEAR)
-                    val currentMonth = calendar.get(Calendar.MONTH)+1
-                    val currentDay = calendar.get(Calendar.DATE)
-                    Log.w("ReviewWrtieDetailActivity", "year: $currentYear, month: $currentMonth, day: $currentDay")
-                    //val dayOfWeek = getDayOfWeek(currentYear, currentMonth, currentDay) //현재 요일 구하기
-
-                    val date = "$currentYear.$currentMonth.$currentDay"//리뷰 쓴 날짜
-                    val username = "hansung" //리뷰 쓴 사용자 이름
-
-                    val review = ReviewItem(rating_count.toString(), review_content, date, username)
-                    Log.w("ReviewWrtieDetailActivity", "review: $review")
-
-                    //DB에 리뷰 추가하기
-                    Log.w("ReviewWriteDetailActivity", "리뷰추가:  ${filterList[i].reviewList}")
-                    filterList[i].reviewList.add(review)
-                    Log.w("ReviewWriteDetailActivity", "리뷰추가:  ${filterList[i].reviewList}")
-
-
-                    //과거진료내역 리뷰쓰기버튼 리뷰작성완료로 변경
-                    for(j in pastHistoryList.indices) {
-                        if(pastHistoryList[j].hospitalName == hospital_name_string) {
-                            pastHistoryList[j].reviewWriteBoolean = true
-
-                            //등록하고 액티비티 전환
-                            val intent = Intent(this, ReviewWrtieCompletedActivity::class.java)
-                            startActivity(intent)
-                            finish()
-
-                            break
-                        }
-                    }
-
-                    break
-                }
-            }
-        }
-*/
-
         register_button.setOnClickListener {
             val rating_count = rating_bar.rating //별점
             val review_content = review_content_editText.text.toString() //리뷰내용
 
-            val review = ReviewRequest(rating_count, review_content)
+            val review = ReviewRequest(rating_count, review_content, historyItem.reservationId)
             apiService.postReviewWrite(hospitalId, review).enqueue(object: Callback<Long> {
                 override fun onResponse(call: Call<Long>, response: Response<Long>) {
                     //통신, 응답 성공
@@ -179,6 +138,30 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish() // 현재 액티비티 종료
+    }
+
+    //
+    //년, 월, 일 해당하는 날짜의 요일 구하기
+    private fun getDayOfWeek(dateSplit: List<String>): String {
+        val year = dateSplit[0].toInt()
+        val month = dateSplit[1].toInt()-1
+        val day = dateSplit[2].toInt()
+        Log.w("PastHistoryAdapter", "dateSplit year: $year, month: ${month}, day: $day")
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        return when(dayOfWeek) {
+            Calendar.SUNDAY -> "일"
+            Calendar.MONDAY -> "월"
+            Calendar.TUESDAY -> "화"
+            Calendar.WEDNESDAY -> "수"
+            Calendar.THURSDAY -> "목"
+            Calendar.FRIDAY -> "금"
+            Calendar.SATURDAY -> "토"
+            else -> ""
+        }
     }
 
 

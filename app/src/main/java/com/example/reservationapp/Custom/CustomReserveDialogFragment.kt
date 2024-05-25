@@ -26,6 +26,7 @@ import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReservationRequest
 import com.example.reservationapp.Model.ReservationResponse
+import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 
 import com.example.reservationapp.databinding.FragmentCustomReserveDialogBinding
@@ -414,10 +415,12 @@ class CustomReserveDialogFragment() : DialogFragment() {
         if(reserveDate != null && reserveTime != null) { //예약 버튼 활성화
             Log.w("reserveDate && reserveTime", "reserveDate and reserveTime not null")
             reservationButton.isEnabled = true
+            buttonEnabledBackgroundResource()
 
         } else if(reserveDate == null || reserveTime == null) { //예약 버튼 비활성화
             Log.w("reserveDate || reserveTime", "reserveDate or reserveTime is null")
             reservationButton.isEnabled = false
+            buttonEnabledBackgroundResource()
         }
     }
 
@@ -431,5 +434,13 @@ class CustomReserveDialogFragment() : DialogFragment() {
         }
     }
 
+    //버튼 비활성화, 활성화 배경 색
+    private fun buttonEnabledBackgroundResource() {
+        if(reservationButton.isEnabled) {
+            reservationButton.setBackgroundResource(R.drawable.style_dark_green_radius_pressed_button)
+        } else {
+            reservationButton.setBackgroundResource(R.drawable.style_gray_radius)
+        }
+    }
     //
 }

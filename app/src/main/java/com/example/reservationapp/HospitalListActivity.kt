@@ -8,18 +8,15 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.HospitalListAdapter
 import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.HospitalDetail
 import com.example.reservationapp.Model.HospitalItem
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.Model.SearchHospital
-import com.example.reservationapp.Model.filterList
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
 import org.json.JSONException
@@ -27,6 +24,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.ParseException
 import java.util.Calendar
 import java.util.Locale
 
@@ -55,7 +53,7 @@ class HospitalListActivity : AppCompatActivity() {
         binding = ActivityHospitalListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.w("HospitalListActivity", "filterList: ${filterList}")
+        MainActivity().tokenCheck() //토큰 만료 검사
 
         //adapter
         adapter = HospitalListAdapter()
@@ -169,6 +167,7 @@ class HospitalListActivity : AppCompatActivity() {
                         var startTime = dayOfWeekTimeList[0] //시작시간
                         var endTime = dayOfWeekTimeList[1] //끝나는시간
 
+
                         //금일 영업시간
                         var operatingTime: String
                         if(startTime.startsWith("정") || startTime.startsWith("휴")) { //"정"이나 "휴"으로 시작하는 글자면
@@ -215,7 +214,6 @@ class HospitalListActivity : AppCompatActivity() {
                             }
                             else { //병원 정보가 있을때
                                 val intent = Intent(this@HospitalListActivity, Hospital_DetailPage::class.java)
-                                intent.putExtra("hospitalName", hospitalList[position].hospitalName)
                                 intent.putExtra("hospitalId", hospitalList[position].hospitalId)
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                                 startActivity(intent)
@@ -276,10 +274,24 @@ class HospitalListActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun operatingStatus(calendar: Calendar, startTime: String, endTime: String): String {
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val currentTimeFormatted = dateFormat.format(calendar.time)
+        val currentTime = calendar.time
 
+        try {
+            val startTimeDate = dateFormat.parse(startTime)
+            val endTimeDate = dateFormat.parse(endTime)
+
+            if (currentTime in startTimeDate..endTimeDate) return "진료중"
+            else return "진료마감"
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return ""
+
+/*
         if(currentTimeFormatted >= startTime && currentTimeFormatted <= endTime) return "진료중"
         else return "진료마감"
+*/
     }
 //
 }

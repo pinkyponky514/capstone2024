@@ -148,7 +148,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="28dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/style_dark_green_radius_enabeld_button"
+            android:background="@drawable/style_gray_radius"
             android:enabled="false"
             android:paddingStart="20dp"
             android:paddingTop="10dp"

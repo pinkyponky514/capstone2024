@@ -7,12 +7,8 @@
     tools:context=".LoginPatientActivity"
     android:background="@color/white" >
 
-    <!--
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    -->
     <ImageView
-        android:id="@+id/LogoImageView"
+        android:id="@+id/loginLogoImageView"
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_marginStart="32dp"
@@ -24,59 +20,65 @@
         app:srcCompat="@android:drawable/ic_input_add" />
 
 
-    <!-- 이메일 입력 -->
-    <TextView
-        android:id="@+id/IdTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="75dp"
-        android:text="아이디"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/LogoImageView"
-        app:layout_constraintTop_toBottomOf="@+id/LogoImageView" />
-
+    <!-- 아이디 입력 -->
     <EditText
         android:id="@+id/IdEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/style_edit_text_focuse"
+        android:drawableLeft="@drawable/ic_id"
+        android:drawablePadding="20dp"
+        android:drawableTint="@color/gray"
         android:ems="10"
+        android:hint="아이디를 입력해주세요"
         android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="@+id/LogoImageView"
-        app:layout_constraintStart_toStartOf="@+id/IdTextView"
-        app:layout_constraintTop_toBottomOf="@+id/IdTextView" />
+        android:paddingLeft="10dp"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="@+id/loginLogoImageView"
+        app:layout_constraintStart_toStartOf="@+id/loginLogoImageView"
+        app:layout_constraintTop_toBottomOf="@+id/loginLogoImageView" />
+
+    <TextView
+        android:id="@+id/IdCheckTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/red"
+        android:textSize="10dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/IdEditText"
+        app:layout_constraintTop_toBottomOf="@+id/IdEditText" />
 
 
     <!-- 비밀번호 입력 -->
-    <TextView
-        android:id="@+id/PasswordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="비밀번호"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/IdTextView"
-        app:layout_constraintTop_toBottomOf="@+id/IdEditText" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/PW_TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
+        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="@+id/IdEditText"
         app:layout_constraintStart_toStartOf="@+id/IdEditText"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordTextView"
-        app:passwordToggleEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/IdCheckTextView"
+        app:passwordToggleEnabled="false">
 
         <EditText
             android:id="@+id/PasswordEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginTop="15dp"
-            android:hint="비밀번호"
+            android:background="@drawable/style_edit_text_focuse"
+            android:drawableLeft="@drawable/ic_password"
+            android:drawablePadding="20dp"
+            android:drawableTint="@color/gray"
+            android:hint="비밀번호를 입력해주세요"
             android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textSize="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/PasswordTextView" />
@@ -87,9 +89,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
-        android:textSize="8dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/red"
+        android:textSize="10dp"
         app:layout_constraintStart_toStartOf="@+id/PW_TextInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/PW_TextInputLayout" />
 
@@ -100,13 +102,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="40dp"
-        android:background="@drawable/style_dark_green_radius_enabeld_button"
+        android:background="@drawable/style_gray_radius"
+        android:enabled="false"
         android:text="로그인"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PasswordCheckTextView" />
@@ -123,6 +125,7 @@
         app:layout_constraintEnd_toEndOf="@+id/LoginButton"
         app:layout_constraintStart_toStartOf="@+id/LoginButton"
         app:layout_constraintTop_toBottomOf="@+id/LoginButton" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

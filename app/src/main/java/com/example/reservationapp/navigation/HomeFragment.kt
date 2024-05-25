@@ -13,12 +13,13 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.reservationapp.PharmacyMapActivity
 import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
 import com.example.reservationapp.ChatActivity
-import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
+import com.example.reservationapp.HospitalMapActivity
 import com.example.reservationapp.HospitalSearchActivity
 import com.example.reservationapp.MainActivity
 import com.example.reservationapp.Model.APIService
@@ -26,7 +27,7 @@ import com.example.reservationapp.Model.AllBookmarkResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.ReserveItem
-import com.example.reservationapp.Model.filterList
+import com.example.reservationapp.Model.UserReservationResponse
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHomeBinding
@@ -53,13 +54,14 @@ class HomeFragment : Fragment() {
     private lateinit var userReserveAlarm: ArrayList<ReserveItem> //유저가 예약한 병원 리스트
 
 
-    private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과이비", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
+    private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
     private val syptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
 
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
     private lateinit var responseBody: AllBookmarkResponse
+    private lateinit var responseBodyReservation: List<UserReservationResponse>
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,6 +69,11 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater) //val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val mainActivity = requireActivity() as MainActivity //MainActivity 접근
+        mainActivity.tokenCheck()
+
+        //Retrofit
+        retrofitClient = RetrofitClient.getInstance()
+        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
 
         //지도 API
@@ -101,15 +108,6 @@ class HomeFragment : Fragment() {
         reserveAlarmRecyclerView.layoutManager = reserveAlarmLinearLayoutManager
         //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
 
-        // 가까운 예약 순으로 정렬 필요 (DB 연결 필요)
-        userReserveAlarm = ArrayList()
-        userReserveAlarm.add(ReserveItem("강남대학병원", "수 15:00"))
-        userReserveAlarm.add(ReserveItem("서울병원", "목 14:00"))
-        userReserveAlarm.add(ReserveItem("별빛한의원", "월 18:40"))
-        userReserveAlarm.add(ReserveItem("강남성형외과", "월 13:30"))
-        userReserveAlarm.add(ReserveItem("버팀병원", "화 16:20"))
-
-
 
         //예약 리스트에 아무것도 없으면 보이지 않게
         val commingReserveTextView = binding.commingReserveTextView
@@ -120,16 +118,39 @@ class HomeFragment : Fragment() {
         commingMoreTextView.visibility = View.GONE
 
 
-        if(userReserveAlarm .isEmpty()) {
-            reserveAlarmRecyclerView.visibility = View.GONE
-            commingReserveTextView.visibility = View.GONE
-            commingMoreTextView.visibility = View.GONE
-        } else {
-            reserveAlarmRecyclerView.visibility = View.VISIBLE
-            commingReserveTextView.visibility = View.VISIBLE
-            commingMoreTextView.visibility = View.VISIBLE
-            reserveAlarmAdapter.updateList(userReserveAlarm)
-        }
+        apiService.getUserReservation().enqueue(object: Callback<List<UserReservationResponse>> {
+            override fun onResponse(call: Call<List<UserReservationResponse>>, response: Response<List<UserReservationResponse>>) {
+                if(response.isSuccessful) {
+                    userReserveAlarm = ArrayList()
+                    responseBodyReservation = response.body()!!
+
+                    for(reservation in responseBodyReservation) {
+                        if(reservation.status == "예약신청" || reservation.status == "예약확정") {
+                            userReserveAlarm.add(ReserveItem(reservation.hospitalName, reservation.reservationDate.toString(), reservation.reservationTime.toString()))
+                        }
+                    }
+
+                    if(userReserveAlarm .isEmpty()) {
+                        reserveAlarmRecyclerView.visibility = View.GONE
+                        commingReserveTextView.visibility = View.GONE
+                        commingMoreTextView.visibility = View.GONE
+                    } else {
+                        reserveAlarmRecyclerView.visibility = View.VISIBLE
+                        commingReserveTextView.visibility = View.VISIBLE
+                        commingMoreTextView.visibility = View.VISIBLE
+                        reserveAlarmAdapter.updateList(userReserveAlarm)
+                    }
+                }
+
+                else {
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserReservationResponse>>, t: Throwable) {
+
+            }
+        })
 
 
         //예약 더보기 버튼
@@ -187,14 +208,14 @@ class HomeFragment : Fragment() {
         //주변에 위치한 병원지도
         val textViewMap = binding.textView8 //view.findViewById<TextView>(R.id.textView8)
         textViewMap.setOnClickListener {
-            val intent = Intent(requireActivity(), HospitalMap::class.java)
+            val intent = Intent(requireActivity(), HospitalMapActivity::class.java)
             startActivity(intent)
         }
 
         //주변에 위치한 약국지도
         val textViewMap2 = binding.textView9 //view.findViewById<TextView>(R.id.textView9)
         textViewMap2.setOnClickListener {
-            val intent = Intent(requireActivity(), DrugstoreMap::class.java)
+            val intent = Intent(requireActivity(), PharmacyMapActivity::class.java)
             startActivity(intent)
         }
 
@@ -208,9 +229,6 @@ class HomeFragment : Fragment() {
         }
 
 
-        //Retrofit
-        retrofitClient = RetrofitClient.getInstance()
-        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
 
         //인기 순위 병원 adapter, recyclerView 초기화
@@ -221,6 +239,7 @@ class HomeFragment : Fragment() {
         popularHospitalRecyclerView.layoutManager = popularHospitalLinearLayoutManger
         popularHospitalRecyclerView.setHasFixedSize(true)
 
+        val bookmarkHospitalScoreTextView = binding.textViewPopularHospitalScore
 
         //인기 순위 병원 설정
         apiService.getAllHospitalBookmark().enqueue(object: Callback<AllBookmarkResponse> {
@@ -267,6 +286,13 @@ class HomeFragment : Fragment() {
                         }
 
                         popularHospitalAdapter.updatelist(bookmarkItemList)
+                        if(bookmarkItemList.isEmpty()) { //인기순위 비어있으면
+                            bookmarkHospitalScoreTextView.visibility = View.GONE
+                            popularHospitalRecyclerView.visibility = View.GONE
+                        } else {
+                            bookmarkHospitalScoreTextView.visibility = View.VISIBLE
+                            popularHospitalRecyclerView.visibility = View.VISIBLE
+                        }
                         Log.w("HomeFragment", "updateList bookmarkItemList: $bookmarkItemList")
                     }
                 }
@@ -301,7 +327,6 @@ class HomeFragment : Fragment() {
 
         return binding.root //return view
     }
-
 
     //
 }

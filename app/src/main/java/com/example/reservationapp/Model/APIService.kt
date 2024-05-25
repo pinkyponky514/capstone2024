@@ -4,6 +4,7 @@ import com.example.reservationapp.userMapx
 import com.example.reservationapp.userMapy
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -57,16 +58,68 @@ interface APIService {
     @POST("/reviews/{hospitalId}") //리뷰작성 (토큰필요)
     fun postReviewWrite(@Path(value="hospitalId") hospitalId: Long = 0, @Body review: ReviewRequest): Call<Long>
 
+    //Delete /reviews/{review_id}/{reservation_id} -> 병원 리뷰 삭제 ( user 본인만 가능 )
+    @DELETE("/reviews/{reviewId}/{reservationId}")
+    fun deleteReview(@Path(value="reviewId") reviewId: Long = 0, @Path(value="reservationId") reservationId: Long = 0)
+
+    @GET("/reviews/{hospitalId}/all") //병원의 모든 리뷰 조회
+    @Headers("Auth: false")
+    fun getHospitalReviewAll(@Path(value="hospitalId") hospitalId: Long = 0): Call<List<HospitalReviewAllResponse>>
+
     @POST("/reservations") //병원 예약 (토큰필요)
     fun postReservation(@Body reservation: ReservationRequest): Call<ReservationResponse>
 
+    //Delete /reservations/cancel/{reservationId} -> 예약 취소
+    @DELETE("/reservations/cancel/{reservationId}") //예약 취소 (토큰필요(
+    fun deleteReservation(@Path(value="reservationId") reservationId: Long = 0): Call<DeleteReservationResponse>
+
+
     @GET("/bot/chat") //챗봇 - 진료과목 가져오기
     @Headers("Auth: false")
-    fun getChatBotAnswer( @Query("prompt") prompt: String?= null): Call<ChatBotResponse>
+    fun getChatBotAnswer(@Query("prompt") prompt: String?= null): Call<ChatBotResponse>
 
-    @POST("/boards/write") //게시글 작성하기
-    fun postBoard(@Body board: BoardContent): Call<BoardResponse>
+    @POST("/boards/write") //커뮤니티 게시글 작성하기
+    fun postBoard(@Body board: BoardPost): Call<BoardResponse>
 
     @GET("/boards") //전체 게시글 가져오기
+    @Headers("Auth: false")
     fun getAllBoards():Call<BoardResponse>
+
+    @POST("/reservations/hospital/confirm") //예약 확정
+    fun postConfirmReservation(@Body reservation: ConfirmReservationRequest):Call<ConfirmReservationResponse>
+
+    @POST("/boardlike/{boardId}") //커뮤니티 게시글 좋아요
+    fun postBoardLike(@Path(value="boardId") boardId:Long): Call<BoardLikeResponse>
+
+    @GET("/boards/{boardId}") //개별 게시글 가져오기
+    @Headers("Auth: false")
+    fun getBoaradContent(@Path(value="boardId") boardId:Long): Call<BoardContentResponse>
+
+    @POST("/comments/write/{boardId}") //게시글 댓글 작성
+    fun postComment(@Path(value="boardId") boardId:Long, @Body comment: CommentRequest): Call<CommunityCommentRequest>
+
+    @GET("/comments/{boardId}") //게시글 댓글 불러오기
+    @Headers("Auth: false")
+    fun getComments(@Path(value="boardId") boardId:Long): Call<CommentsRequest>
+
+    @GET("/boardlike/find/{boardId}") //게시글별 좋아요 가져오기
+    @Headers("Auth: false")
+    fun getBoardLikes(@Path(value="boardId") boardId:Long): Call<BoardLikesResponset>
+
+/*
+    @GET("/reservations/check") //유저의 예약 조회 (토큰필요)
+    suspend fun getUserReservation(): List<UserReservationResponse> //비동기 처리
+*/
+
+    @GET("/reservations/check") //유저의 예약 조회 (토큰필요)
+    fun getUserReservation(): Call<List<UserReservationResponse>>
+
+    @GET("/tokencheck") //토큰 유효기간 체크
+    @Headers("Auth: false")
+    fun getTokenCheck(): Call<String>
+
+    @GET("/api/hospitals")
+    @Headers("Auth: false") //병원 api테이블에서 모든 데이터 가져오기
+    fun getAllHospitlas():Call<ApiHospitalResponse>
+
 }

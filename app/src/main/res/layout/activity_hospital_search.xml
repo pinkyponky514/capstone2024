@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back" />
@@ -20,13 +20,16 @@
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
+        android:background="@drawable/style_search_view_radius"
         android:ems="10"
+        android:hint="검색어를 입력하세요."
         android:inputType="textPersonName"
-        android:text="Name"
+        android:paddingLeft="20dp"
+        android:theme="@style/TextView16dpDarkGray"
         app:layout_constraintEnd_toStartOf="@+id/submit_button_imageView"
         app:layout_constraintStart_toEndOf="@+id/back_button_imageView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,10 +52,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="@string/recent_search_list"
-        android:textSize="12sp"
-        android:textStyle="bold"
+        android:theme="@style/TextView15dpBlackBold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchEditText" />
 

@@ -10,8 +10,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Hospital_DetailPage
+import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HistoryItem
 import com.example.reservationapp.R
+import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.ReviewWriteDetailActivity
 import java.util.Calendar
 
@@ -19,6 +21,9 @@ private var past_history_list_data = ArrayList<HistoryItem>()
 
 class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        private var reservationId: Long //예약 레이블 번호
+        private var hospitalId: Long //병원 레이블 번호
+
         private var status_TextView: TextView //진료상태
         private var hospital_name_TextView: TextView //병원이름
         private var class_name_TextView: TextView //진료과명
@@ -27,8 +32,11 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
         private var try_reserve_Button: Button //다시 접수하기
         private var review_Button: Button //리뷰쓰기
 
+        private lateinit var historyItem: HistoryItem
 
         init {
+            reservationId = 0
+            hospitalId = 0
             status_TextView = itemView.findViewById(R.id.status)
             hospital_name_TextView = itemView.findViewById(R.id.hospital_name_textView)
             class_name_TextView = itemView.findViewById(R.id.class_textView)
@@ -40,7 +48,8 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
             try_reserve_Button.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, Hospital_DetailPage::class.java)
-                intent.putExtra("hospitalName", hospital_name_TextView.text)
+                intent.putExtra("hospitalId", hospitalId)
+                //intent.putExtra("historyItem", historyItem)
                 context.startActivity(intent)
             }
 
@@ -49,21 +58,26 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
             review_Button.setOnClickListener {
                 val context = itemView.context
                 val intent = Intent(context, ReviewWriteDetailActivity::class.java) //전환되는 액티비티 변경하기
-                intent.putExtra("hospitalName", hospital_name_TextView.text)
-                intent.putExtra("className", class_name_TextView.text)
-                intent.putExtra("reserveDate", reserve_date_TextView.text)
+                intent.putExtra("historyItem", historyItem)
                 context.startActivity(intent)
             }
         }
 
         //데이터 설정
         fun setContents(list: HistoryItem) {
+            historyItem = list
+
+            reservationId = list.reservationId
+            hospitalId = list.hospitalId
             status_TextView.text = list.status
             hospital_name_TextView.text = list.hospitalName
-            class_name_TextView.text = " | " + list.className
+            class_name_TextView.text = "| " + list.className
 
-            val dayOfWeek = getDayOfWeek(list.reserveDay)
-            reserve_date_TextView.text = list.reserveDay + " (" + dayOfWeek + ") " + list.reserveTime
+            val dateSplit = list.reserveDay.split("-")
+            Log.w("PastHistoryAdapter", "dateSplit: $dateSplit")
+
+            val dayOfWeek = getDayOfWeek(dateSplit)
+            reserve_date_TextView.text = "${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]} ($dayOfWeek) ${list.reserveTime}"
 
             if(list.reviewWriteBoolean) { //리뷰를 썼으면
                 review_Button.isEnabled = false
@@ -97,15 +111,14 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
 
     //
     //년, 월, 일 해당하는 날짜의 요일 구하기
-    private fun getDayOfWeek(date: String): String {
-        val dateSplit = date.split(".")
+    private fun getDayOfWeek(dateSplit: List<String>): String {
         val year = dateSplit[0].toInt()
         val month = dateSplit[1].toInt()-1
         val day = dateSplit[2].toInt()
-        Log.w("PastHistoryAdapter", "dateSplit year: $year, month: $month, day: $day")
+        Log.w("PastHistoryAdapter", "dateSplit year: $year, month: ${month}, day: $day")
 
         val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
+        calendar.set(year, month-1, day)
 
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         return when(dayOfWeek) {

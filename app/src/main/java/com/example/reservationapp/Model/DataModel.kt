@@ -9,7 +9,8 @@ import java.util.Calendar
 //ReserveAlarmAdapter
 data class ReserveItem (
     var hospital_name : String, //예약한 병원이름
-    var date : String //예약한 날짜
+    var reservationDate: String, //예약한 날짜
+    var reservationTime: String, //예약한 시간
 )
 
 /*
@@ -68,7 +69,7 @@ data class ReservationItem(
     val patientName: String, // 환자 이름
     val birthDate: String, // 생년월일
     val reservationDate: String, // 예약 날짜
-    val status: String // 진료상태
+    var status: String // 진료상태
 ): Comparable<ReservationItem> {
     override fun compareTo(other: ReservationItem): Int {
         return this.time.compareTo(other.time) //이 비교는 시간 문자열의 사전 순서에 따라 정렬
@@ -80,8 +81,11 @@ data class ImageData(
     // 필요한 경우 다른 메타데이터를 추가할 수 있습니다.
 )
 
-//HistoryAdapter
+//HistoryAdapter, AbleReviewWriteAdapter
 data class HistoryItem (
+    var reservationId: Long, //예약 레이블 번호
+    var hospitalId: Long, //병원 레이블 번호
+
     var status: String, //진료상태
     var hospitalName: String, //병원이름
     var className: String, //진료과명
@@ -91,11 +95,18 @@ data class HistoryItem (
 ): Serializable
 
 //ReviewAdapter
-data class ReviewItem (
+/*data class ReviewItem (
+    val hospitalId: Long, //병원 레이블 번호
+    //val reservationId: Long, //예약 레이블 번호
+    val reviewId: Long, //리뷰 레이블 번호
     var starScore: String, //별점
     var comment: String, //리뷰내용
     var reviewDate: String, //날짜
     var userName: String, //유저이름
+)*/
+data class ReviewItem (
+    val hospitalId: Long, //병원 레이블 번호
+    val reviewId: Long //리뷰 레이블 번호
 )
 
 data class CommentItem(
@@ -111,8 +122,9 @@ data class CommunityItem(
     val writer: String,
     val likes : String,
     val reviews : String,
-    val timestamp : String
+    val timestamp : String,
     //val commentNumber: Int
+    val boardId: Long
 )
 
 //Filter
@@ -152,13 +164,3 @@ fun getDayOfWeek(year:Int, month:Int, day: Int): String {
         else -> ""
     }
 }
-
-/*
-lateinit var filterList: ArrayList<FilterItem> //필터에 사용할 병원정보
-lateinit var reviewList: ArrayList<ReviewItem> //병원정보의 리뷰정보
-*/
-
-var filterList: ArrayList<FilterItem> = ArrayList() //필터에 사용할 병원정보
-var reviewList: ArrayList<ReviewItem> = ArrayList() //병원정보의 리뷰정보
-
-var userHospitalFavorite: HashMap<String, Boolean> = hashMapOf()

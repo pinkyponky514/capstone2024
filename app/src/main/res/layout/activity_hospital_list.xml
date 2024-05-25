@@ -11,8 +11,8 @@
         android:id="@+id/backButtonImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back" />
@@ -20,13 +20,16 @@
     <EditText
         android:id="@+id/searchEditTextField"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
+        android:background="@drawable/style_search_view_radius"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="searchTextField"
+        android:hint="검색어를 입력하세요."
+        android:theme="@style/TextView16dpDarkGray"
+        android:paddingLeft="20dp"
         app:layout_constraintEnd_toStartOf="@+id/searchButtonImageView"
         app:layout_constraintStart_toEndOf="@+id/backButtonImageView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +40,7 @@
         android:id="@+id/searchButtonImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/backButtonImageView"
         app:srcCompat="@drawable/ic_search" />
@@ -68,13 +71,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="0dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/searchButtonImageView"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterImageView" />
+        app:layout_constraintStart_toStartOf="@+id/backButtonImageView"
+        app:layout_constraintTop_toBottomOf="@+id/filterImageView"
+        app:layout_constraintVertical_bias="0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
