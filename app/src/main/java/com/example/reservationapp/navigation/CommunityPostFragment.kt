@@ -82,6 +82,8 @@ class CommunityPostFragment : Fragment() {
 
         submitButton.setOnClickListener {
             // FragmentManager를 사용하여 CommunityFragment로 이동
+            fragmentManager?.popBackStack()
+
             val title = view.findViewById<EditText>(R.id.editTextTitle).text.toString()
             val content = view.findViewById<EditText>(R.id.editTextContent).text.toString()
 
