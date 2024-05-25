@@ -57,9 +57,11 @@ object RetrofitClient {
             .registerTypeAdapter(LocalTime::class.java, JsonDeserializer { json, _, _ ->
                 LocalTime.parse(json.asString, DateTimeFormatter.ofPattern("HH:mm:ss"))
             })
+/*
             .registerTypeAdapter(LocalTime::class.java, JsonDeserializer { json, _, _ ->
                 LocalTime.parse(json.asString, DateTimeFormatter.ofPattern("HH:mm"))
             })
+*/
             .setLenient()
             .create()
 
