@@ -17,7 +17,7 @@ object RetrofitClient {
     private var instance: RetrofitClient? = null
     private var apiService: APIService? = null
     private var retrofit: Retrofit
-    private const val baseUrl = "http://10.0.2.2:8080"
+    private const val baseUrl ="http://192.168.35.240:8080"
 
 
     init {
@@ -57,11 +57,9 @@ object RetrofitClient {
             .registerTypeAdapter(LocalTime::class.java, JsonDeserializer { json, _, _ ->
                 LocalTime.parse(json.asString, DateTimeFormatter.ofPattern("HH:mm:ss"))
             })
-/*
             .registerTypeAdapter(LocalTime::class.java, JsonDeserializer { json, _, _ ->
                 LocalTime.parse(json.asString, DateTimeFormatter.ofPattern("HH:mm"))
             })
-*/
             .setLenient()
             .create()
 

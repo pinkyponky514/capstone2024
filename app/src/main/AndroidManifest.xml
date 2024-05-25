@@ -92,6 +92,9 @@
             android:name=".HospitalMap"
             android:exported="false" /> <!-- 병원 회원가입 액티비티 -->
         <activity
+            android:name=".HospitalMapActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignUpDoctor"
             android:exported="false" /> <!-- 환자 회원가입 액티비티 -->
         <activity

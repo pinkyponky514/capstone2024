@@ -20,6 +20,7 @@ import com.example.reservationapp.ChatActivity
 import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
+import com.example.reservationapp.HospitalMapActivity
 import com.example.reservationapp.HospitalSearchActivity
 import com.example.reservationapp.MainActivity
 import com.example.reservationapp.Model.APIService
@@ -218,7 +219,7 @@ class HomeFragment : Fragment() {
         //주변에 위치한 병원지도
         val textViewMap = binding.textView8 //view.findViewById<TextView>(R.id.textView8)
         textViewMap.setOnClickListener {
-            val intent = Intent(requireActivity(), HospitalMap::class.java)
+            val intent = Intent(requireActivity(), HospitalMapActivity::class.java)
             startActivity(intent)
         }
 
