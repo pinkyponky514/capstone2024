@@ -17,7 +17,6 @@ import com.example.reservationapp.PharmacyMapActivity
 import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
 import com.example.reservationapp.ChatActivity
-import com.example.reservationapp.DrugstoreMap
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
 import com.example.reservationapp.HospitalMapActivity
@@ -43,7 +42,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Calendar
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -56,7 +54,7 @@ class HomeFragment : Fragment() {
     private lateinit var userReserveAlarm: ArrayList<ReserveItem> //유저가 예약한 병원 리스트
 
 
-    private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과이비", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
+    private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
     private val syptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
 
     //Retrofit
@@ -110,15 +108,6 @@ class HomeFragment : Fragment() {
         reserveAlarmRecyclerView.layoutManager = reserveAlarmLinearLayoutManager
         //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
 
-        // 가까운 예약 순으로 정렬
-/*
-        userReserveAlarm = ArrayList()
-        userReserveAlarm.add(ReserveItem("강남대학병원", "수 15:00"))
-        userReserveAlarm.add(ReserveItem("서울병원", "목 14:00"))
-        userReserveAlarm.add(ReserveItem("별빛한의원", "월 18:40"))
-        userReserveAlarm.add(ReserveItem("강남성형외과", "월 13:30"))
-        userReserveAlarm.add(ReserveItem("버팀병원", "화 16:20"))
-*/
 
         //예약 리스트에 아무것도 없으면 보이지 않게
         val commingReserveTextView = binding.commingReserveTextView
@@ -250,6 +239,7 @@ class HomeFragment : Fragment() {
         popularHospitalRecyclerView.layoutManager = popularHospitalLinearLayoutManger
         popularHospitalRecyclerView.setHasFixedSize(true)
 
+        val bookmarkHospitalScoreTextView = binding.textViewPopularHospitalScore
 
         //인기 순위 병원 설정
         apiService.getAllHospitalBookmark().enqueue(object: Callback<AllBookmarkResponse> {
@@ -296,6 +286,13 @@ class HomeFragment : Fragment() {
                         }
 
                         popularHospitalAdapter.updatelist(bookmarkItemList)
+                        if(bookmarkItemList.isEmpty()) { //인기순위 비어있으면
+                            bookmarkHospitalScoreTextView.visibility = View.GONE
+                            popularHospitalRecyclerView.visibility = View.GONE
+                        } else {
+                            bookmarkHospitalScoreTextView.visibility = View.VISIBLE
+                            popularHospitalRecyclerView.visibility = View.VISIBLE
+                        }
                         Log.w("HomeFragment", "updateList bookmarkItemList: $bookmarkItemList")
                     }
                 }

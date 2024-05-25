@@ -25,12 +25,12 @@
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/reserve_searchView"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="50dp"
                 android:layout_margin="20dp"
                 android:background="@drawable/style_searchview"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:theme="@style/TextView12dpDarkGray"
+                android:theme="@style/TextView16dpDarkGray"
                 app:iconifiedByDefault="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,10 +45,11 @@
                 android:id="@+id/comming_reserve_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/comming_reserve"
+                android:textSize="18dp"
                 android:visibility="visible"
-                android:theme="@style/TextView15dpBlackBold"
+                android:theme="@style/TextView18dpBlackBold"
                 app:layout_constraintStart_toStartOf="@+id/reserve_searchView"
                 app:layout_constraintTop_toBottomOf="@+id/reserve_searchView" />
 
@@ -58,8 +59,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="@string/reserve_more"
+                android:textSize="15dp"
                 android:visibility="visible"
-                android:theme="@style/TextView12dpGreenBold"
+                android:theme="@style/TextView15dpGreenBold"
                 app:layout_constraintBottom_toTopOf="@+id/reserve_alarm_RecyclerView"
                 app:layout_constraintEnd_toEndOf="@+id/reserve_searchView"
                 app:layout_constraintTop_toTopOf="@+id/comming_reserve_TextView" />
@@ -79,22 +81,35 @@
 
 
             <!-- 진료과별 예약 -->
+            <ImageView
+                android:id="@+id/class_imageView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/comming_reserve_TextView"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_alarm_RecyclerView"
+                app:srcCompat="@drawable/image_class"
+                app:tint="@color/dark_green" />
+
             <TextView
                 android:id="@+id/class_reserve_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/class_reserve"
-                android:theme="@style/TextView15dpBlackBold"
-                app:layout_constraintStart_toStartOf="@+id/comming_reserve_TextView"
-                app:layout_constraintTop_toBottomOf="@+id/reserve_alarm_RecyclerView" />
+                android:textSize="18dp"
+                android:theme="@style/TextView18dpBlackBold"
+                app:layout_constraintBottom_toBottomOf="@+id/class_imageView"
+                app:layout_constraintStart_toEndOf="@+id/class_imageView"
+                app:layout_constraintTop_toTopOf="@+id/class_imageView" />
 
             <TextView
                 android:id="@+id/class_more_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reserve_more"
-                android:theme="@style/TextView12dpGreenBold"
+                android:textSize="15dp"
+                android:theme="@style/TextView15dpGreenBold"
                 app:layout_constraintEnd_toEndOf="@+id/comming_more_TextView"
                 app:layout_constraintTop_toTopOf="@+id/class_reserve_TextView" />
 
@@ -104,96 +119,108 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/class_more_TextView"
-                app:layout_constraintStart_toStartOf="@+id/class_reserve_TextView"
+                app:layout_constraintStart_toStartOf="@+id/class_imageView"
                 app:layout_constraintTop_toBottomOf="@+id/class_reserve_TextView">
 
                 <TableRow
-                    android:id="@+id/tableRow_lunch_time"
+                    android:id="@+id/lunch_time_tableRow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <Button
                         android:id="@+id/class_button1"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
 
                     <Button
                         android:id="@+id/class_button2"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
 
                     <Button
                         android:id="@+id/class_button3"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
 
                     <Button
                         android:id="@+id/class_button4"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
                 </TableRow>
 
             </TableLayout>
 
 
             <!-- 증상별 예약 -->
+            <ImageView
+                android:id="@+id/symptom_imageView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/class_imageView"
+                app:layout_constraintTop_toBottomOf="@+id/tableLayout_hospital_time_guide"
+                app:srcCompat="@drawable/image_symptom"
+                app:tint="@color/dark_green" />
+
             <TextView
                 android:id="@+id/symptom_reserve_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/symptom_reserve"
-                android:theme="@style/TextView15dpBlackBold"
-                app:layout_constraintStart_toStartOf="@+id/class_reserve_TextView"
-                app:layout_constraintTop_toBottomOf="@+id/tableLayout_hospital_time_guide" />
+                android:theme="@style/TextView18dpBlackBold"
+                app:layout_constraintBottom_toBottomOf="@+id/symptom_imageView"
+                app:layout_constraintStart_toEndOf="@+id/symptom_imageView"
+                app:layout_constraintTop_toTopOf="@+id/symptom_imageView" />
 
             <TextView
                 android:id="@+id/symptom_more_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reserve_more"
-                android:theme="@style/TextView12dpGreenBold"
+                android:textSize="15dp"
+                android:theme="@style/TextView15dpGreenBold"
                 app:layout_constraintEnd_toEndOf="@+id/class_more_TextView"
                 app:layout_constraintTop_toTopOf="@+id/symptom_reserve_TextView" />
 
@@ -203,98 +230,116 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/symptom_more_TextView"
-                app:layout_constraintStart_toStartOf="@+id/symptom_reserve_TextView"
+                app:layout_constraintStart_toStartOf="@+id/symptom_imageView"
                 app:layout_constraintTop_toBottomOf="@+id/symptom_reserve_TextView">
 
                 <TableRow
                     android:id="@+id/symptom_reserve_TableRow1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <Button
                         android:id="@+id/symptom_button1"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
 
                     <Button
                         android:id="@+id/symptom_button2"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
 
                     <Button
                         android:id="@+id/symptom_button3"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
 
                     <Button
                         android:id="@+id/symptom_button4"
                         android:layout_width="wrap_content"
                         android:layout_height="37dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
+                        android:autoSizeMaxTextSize="13dp"
+                        android:autoSizeMinTextSize="9dp"
+                        android:autoSizeStepGranularity="1dp"
+                        android:autoSizeTextType="uniform"
                         android:background="@drawable/style_gray_radius_line_button"
                         android:maxLines="1"
-                        android:text="Button"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="9dp"
-                        android:autoSizeMaxTextSize="13dp"
-                        android:autoSizeStepGranularity="1dp" />
+                        android:text="Button" />
                 </TableRow>
 
             </TableLayout>
 
 
-
             <!-- 지도 -->
+            <TextView
+                android:id="@+id/map_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="가까운 병원 및 약국"
+                android:theme="@style/TextView18dpBlackBold"
+                app:layout_constraintBottom_toBottomOf="@+id/marker_imageView"
+                app:layout_constraintStart_toEndOf="@+id/marker_imageView"
+                app:layout_constraintTop_toTopOf="@+id/marker_imageView" />
+
+            <ImageView
+                android:id="@+id/marker_imageView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/class_imageView"
+                app:layout_constraintTop_toBottomOf="@+id/symptom_reserve_TableLayout"
+                app:srcCompat="@drawable/image_map_marker"
+                app:tint="@color/dark_green" />
+
             <com.naver.maps.map.MapView
                 android:id="@+id/destinationmap"
                 android:layout_width="172dp"
                 android:layout_height="163dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/symptom_reserve_TableLayout" />
+                app:layout_constraintStart_toStartOf="@+id/marker_imageView"
+                app:layout_constraintTop_toBottomOf="@+id/map_textView" />
 
             <com.naver.maps.map.MapView
                 android:id="@+id/medicinemap"
                 android:layout_width="172dp"
                 android:layout_height="163dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/symptom_reserve_TableLayout"
                 app:layout_constraintTop_toTopOf="@+id/destinationmap" />
 
             <TextView
@@ -323,25 +368,37 @@
                 android:id="@+id/popularHospitalScoreConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
-                android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8">
 
+                <ImageView
+                    android:id="@+id/bookmark_imageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/image_star"
+                    app:tint="@color/dark_green"/>
+
+
                 <TextView
                     android:id="@+id/textView_popular_hospital_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="8dp"
                     android:text="인기 병원 순위"
-                    android:theme="@style/TextView15dpBlackBold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                    android:textSize="18dp"
+                    android:theme="@style/TextView18dpBlackBold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/bookmark_imageView"
+                    app:layout_constraintStart_toEndOf="@+id/bookmark_imageView"
+                    app:layout_constraintTop_toTopOf="@+id/bookmark_imageView" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/popularHospitalRecyclerView"
@@ -349,12 +406,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="15dp"
-                    android:background="@drawable/style_gray_rectangle_status"
+                    android:background="@drawable/style_light_gray_rectangle_status"
                     android:nestedScrollingEnabled="false"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView_popular_hospital_score"
+                    app:layout_constraintStart_toStartOf="@+id/bookmark_imageView"
                     app:layout_constraintTop_toBottomOf="@+id/textView_popular_hospital_score" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 package com.example.reservationapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -33,15 +37,30 @@ class LoginDoctorActivity : AppCompatActivity() {
 
 
     //onStart() 할 때마다 입력칸 초기화 시키기 위해 전역변수 선언
-    private lateinit var BusinessNumberText: EditText
+    private lateinit var idEditText: EditText
     private lateinit var PasswordEditText: EditText
     private lateinit var PasswordCheckTextView: TextView
+    private lateinit var IdCheckTextview: TextView
 
     //감지 플래그
     private var BusinessNumberFlag: Boolean = false //사업자번호 감지 플래그
     private var pwFlag: Boolean = false //비밀번호 감지 플래그
     private var flag: Boolean = false
 
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) { // 화면을 터치했을 때 포커스 해제
+            idEditText.clearFocus()
+            PasswordEditText.clearFocus()
+            currentFocus?.clearFocus()
+            hideKeyboard()
+        }
+        return super.onTouchEvent(event)
+    }
+    private fun hideKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,7 +70,7 @@ class LoginDoctorActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //초기화
-        BusinessNumberText = binding.IdEditText
+        idEditText = binding.IdEditText
         PasswordEditText = binding.PasswordEditText
         PasswordCheckTextView = binding.PasswordCheckTextView
 
@@ -60,16 +79,24 @@ class LoginDoctorActivity : AppCompatActivity() {
 
 
         //
-        //사업자번호 textview 변경 감지되었을때
+        //아이디 textview 변경 감지되었을때
         val BusinessNumberWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             //변경된 순간
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                BusinessNumberFlag = BusinessNumberText.text.toString() != "" //BusinessNumberText 비어 있지 않으면 true
+                if(idEditText.text.toString() != "") {
+                    IdCheckTextview.text = ""
+                    IdCheckTextview.visibility = View.GONE
+                    BusinessNumberFlag = true
+                } else {
+                    IdCheckTextview.text = "아이디를 입력하시오."
+                    IdCheckTextview.visibility = View.VISIBLE
+                    BusinessNumberFlag = false
+                }
             }
         }
-        BusinessNumberText.addTextChangedListener(BusinessNumberWatcher) //사업자번호 변경 감지 이벤트 리스너
+        idEditText.addTextChangedListener(BusinessNumberWatcher) //사업자번호 변경 감지 이벤트 리스너
 
         //비밀번호 editText 변경 감지되었을때
         val pwWatcher = object: TextWatcher {
@@ -88,15 +115,21 @@ class LoginDoctorActivity : AppCompatActivity() {
         }
         PasswordEditText.addTextChangedListener(pwWatcher) //비밀번호 감지할 수 있도록 이벤트 리스너
 
+
         //둘다 감지 되었을때 버튼 활성화
         val BusinessPasswordWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 LoginButton.isEnabled = BusinessNumberFlag && pwFlag
+                if(!LoginButton.isEnabled) { //false이면 배경색 gray로
+                    LoginButton.setBackgroundResource(R.drawable.style_gray_radius)
+                } else {
+                    LoginButton.setBackgroundResource(R.drawable.style_dark_green_radius_pressed_button)
+                }
             }
         }
-        BusinessNumberText.addTextChangedListener(BusinessPasswordWatcher)
+        idEditText.addTextChangedListener(BusinessPasswordWatcher)
         PasswordEditText.addTextChangedListener(BusinessPasswordWatcher)
         //
 
@@ -104,7 +137,7 @@ class LoginDoctorActivity : AppCompatActivity() {
         //
         //로그인 버튼 눌렀을때
         LoginButton.setOnClickListener {
-            userId = BusinessNumberText.text.toString()
+            userId = idEditText.text.toString()
             userPassword = PasswordEditText.text.toString()
             Log.w("LoginDoctorActivity", "userBusinessNumber: $userId, userPassword: $userPassword")
 
@@ -147,6 +180,15 @@ class LoginDoctorActivity : AppCompatActivity() {
             finish()
         }
         //
-
     }
+
+    //뒤로가기 버튼 눌렀을때
+    override fun onBackPressed() {
+        super.onBackPressed()
+        idEditText.clearFocus()
+        PasswordEditText.clearFocus()
+        currentFocus?.clearFocus()
+        finish() //현재 액티비티 종료
+    }
+
 }

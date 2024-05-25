@@ -9,8 +9,8 @@
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="320dp"
-        android:layout_height="250dp"
+        android:layout_width="355dp"
+        android:layout_height="270dp"
         android:layout_marginTop="10dp">
 
         <!-- 병원 대표 사진 -->
@@ -25,7 +25,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="0dp"
-                android:layout_height="125dp"
+                android:layout_height="135dp"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="125dp"
+            android:layout_height="135dp"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,12 +48,14 @@
             <!-- 병원 이름 -->
             <TextView
                 android:id="@+id/hospitalNameTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="원소아청소년과의원"
-                android:theme="@style/TextView14dpBlackBold"
+                android:theme="@style/TextView16dpBlackBold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,9 +65,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginEnd="15dp"
                 android:text="4.5"
-                android:theme="@style/TextView12dpDarkGray"
+                android:theme="@style/TextView15dpDarkGray"
                 app:layout_constraintBottom_toBottomOf="@+id/hospitalNameTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@+id/hospitalNameTextView"
                 app:layout_constraintTop_toTopOf="@+id/hospitalNameTextView" />
 
@@ -76,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="목요일 09:00~18:00"
-                android:theme="@style/TextView12dpDarkGray"
+                android:theme="@style/TextView15dpDarkGray"
                 app:layout_constraintStart_toStartOf="@+id/hospitalNameTextView"
                 app:layout_constraintTop_toBottomOf="@+id/hospitalNameTextView" />
 
@@ -87,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="소아청소년과"
-                android:theme="@style/TextView12dpDarkGray"
+                android:theme="@style/TextView15dpDarkGray"
                 app:layout_constraintBottom_toBottomOf="@+id/openTimeTextView"
                 app:layout_constraintStart_toEndOf="@+id/openTimeTextView"
                 app:layout_constraintTop_toTopOf="@+id/openTimeTextView" />
@@ -111,7 +116,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="15dp"
                 android:text="경기도 화성시 장지동"
-                android:theme="@style/TextView12dpDarkGray"
+                android:theme="@style/TextView15dpDarkGray"
                 android:maxLines="1"
                 android:ellipsize="end"
                 app:layout_constraintHorizontal_bias="0"
@@ -137,7 +142,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="5dp"
                     android:text="진료중"
-                    android:theme="@style/TextView12dpDarkGray"
+                    android:theme="@style/TextView15dpDarkGray"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
