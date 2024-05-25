@@ -13,7 +13,7 @@ import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.databinding.ActivityHospitalSearchBinding
 
 
-var adapter: RecentSearchWordAdapter = RecentSearchWordAdapter()
+//var adapter: RecentSearchWordAdapter = RecentSearchWordAdapter()
 //lateinit var adapter: RecentSearchWordAdapter
 
 //병원 검색 페이지 액티비티
@@ -21,7 +21,7 @@ class HospitalSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHospitalSearchBinding
 
-    private var recentSearchWordList: ArrayList<RecentItem> = ArrayList() //최근 검색어 리스트
+    //private var recentSearchWordList: ArrayList<RecentItem> = ArrayList() //최근 검색어 리스트
 
     private lateinit var searchEditText: EditText //검색창
     private lateinit var submitButton: ImageView //검색버튼
@@ -52,11 +52,13 @@ class HospitalSearchActivity : AppCompatActivity() {
         //Log.w("HospitalSearchActivity", "1. recentSearchWordList : $recentSearchWordList")
 
 
+/*
         //최근 검색어 보여줄 recyclerView
         val recyclerView = binding.recentSearchRecyclerView
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
+*/
 
 
 /*
@@ -74,14 +76,14 @@ class HospitalSearchActivity : AppCompatActivity() {
         //검색 버튼 눌렀을 경우 - 병원 검색목록 페이지 나옴
         submitButton.setOnClickListener {
             var searchWord = searchEditText.text.toString()
-            recentSearchWordList.add(0, RecentItem(searchWord)) //맨 앞에 들어가게
-            adapter.updateList(recentSearchWordList)
+//            recentSearchWordList.add(0, RecentItem(searchWord)) //맨 앞에 들어가게
+//            adapter.updateList(recentSearchWordList)
 
             val intent = Intent(this, HospitalListActivity::class.java)
             intent.putExtra("searchWord", searchWord)
             //intent.putExtra("searchWordList", recentSearchWordList)
             startActivity(intent)
-            recentSearchWordList.clear()
+//            recentSearchWordList.clear()
             finish()
         }
 
@@ -100,11 +102,6 @@ class HospitalSearchActivity : AppCompatActivity() {
         //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // 인텐트 플래그 설정
         //startActivity(intent) // 인텐트 이동
         finish() // 현재 액티비티 종료
-    }
-
-
-    fun getAdapter(): RecentSearchWordAdapter {
-        return adapter
     }
 
 //

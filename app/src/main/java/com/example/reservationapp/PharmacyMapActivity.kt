@@ -1,6 +1,7 @@
 package com.example.reservationapp
 
 import android.Manifest
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,13 +9,18 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.reservationapp.Model.NaverMapApiInterface
@@ -23,6 +29,7 @@ import com.example.reservationapp.Model.PharmacyMap.NaverMapData
 import com.example.reservationapp.Model.PharmacyMap.NaverMapItem
 import com.example.reservationapp.databinding.ActivityPharmacymapBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -51,7 +58,8 @@ enum class DayOfWeek(val value: Int) {
     SATURDAY(7)
 }
 
-class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.OnClickListener*/ {
+
+class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.OnClickListener*/ {
     private lateinit var binding: ActivityPharmacymapBinding
 
     // 필터 상태를 나타내는 변수
@@ -96,11 +104,60 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
 
     private var clickedMarker: Marker? = null
 
+
+    //
+/*
+    private val bottomSheetCallback = object: BottomSheetBehavior.BottomSheetCallback() {
+        //BottomSheet를 드래그 할때 동작
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            when(newState) {
+                //접혀져 있을때
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    moveButtonToPeekHeight()
+                }
+                //펼쳐져 있을때
+                BottomSheetBehavior.STATE_EXPANDED -> {
+                    moveButtonToBottom()
+                }
+                //그외
+                else -> {
+                    moveButtonToBottom()
+                }
+            }
+        }
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            //슬라이드 동작 시 추가 작업
+        }
+    }
+
+    // 버튼을 214dp 높이에 위치하도록 설정
+    private fun moveButtonToPeekHeight() {
+        val params = binding.callAskConstraintLayout.layoutParams as ConstraintLayout.LayoutParams
+        params.bottomMargin = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
+        binding.callAskConstraintLayout.layoutParams = params
+    }
+    // 버튼을 맨 아래에 위치하도록 설정
+    private fun moveButtonToBottom() {
+        val params = binding.callAskConstraintLayout.layoutParams as ConstraintLayout.LayoutParams
+        params.bottomMargin = 0 // 혹은 원하는 값으로 설정
+        binding.callAskConstraintLayout.layoutParams = params
+    }
+    //dp 변환 함수
+    private fun Int.dpToPx(): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            resources.displayMetrics
+        ).toInt()
+    }
+*/
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPharmacymapBinding.inflate(layoutInflater)
         setContentView(binding.root) //setContentView(R.layout.activity_pharmacymap)
-
 
         //var fm: FragmentManager = supportFragmentManager
         //var mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
@@ -128,8 +185,10 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         val bottomSheetView = binding.persistentBottomSheet //val bottomSheetView: View = findViewById(R.id.persistent_bottom_sheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView) //해당 뷰에 대한 BottomSheetBehavior 객체를 반환
         bottomSheetBehavior.isHideable = true //숨김 여부
-        //bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height) //bottomsheet 보여지는 높이
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN //숨겨진 상태로 앱 시작
+        //bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback) // Bottom Sheet의 콜백 설정
+
+
 
         //검색창 초기화
         val searchView = binding.searchView
@@ -551,5 +610,5 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         builder.create().show()
     }
 
-
+    //
 }

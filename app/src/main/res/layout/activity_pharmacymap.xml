@@ -30,17 +30,18 @@
         android:id="@+id/search_ConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:elevation="15dp" >
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="45dp"
             android:layout_margin="20dp"
             android:background="@drawable/style_searchview"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:theme="@style/TextView12dpDarkGray"
+            android:theme="@style/TextView15dpDarkGray"
             app:iconifiedByDefault="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +70,7 @@
         android:elevation="15dp"
         android:orientation="vertical"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="214dp"
+        app:behavior_peekHeight="175dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -118,8 +119,7 @@
                         android:gravity="center"
                         android:text="강남백년가약국"
                         android:textColor="#272727"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
+                        android:theme="@style/TextView18dpBlackBold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -127,10 +127,10 @@
                         android:id="@+id/operating_time_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="20dp"
                         android:text="영업종료 09:00 ~ 20:00"
                         android:textColor="#7C7C7C"
-                        android:textSize="12sp"
+                        android:theme="@style/TextView15dpDarkGray"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/pharmacy_name_textView"
                         app:layout_constraintTop_toBottomOf="@+id/pharmacy_name_textView" />
@@ -140,11 +140,11 @@
                         android:id="@+id/address_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="20dp"
                         android:text="서울 관악구 신림동"
                         android:textColor="#BCBCBC"
-                        android:textSize="11sp"
+                        android:theme="@style/TextView14dpDarkGray"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/pharmacy_name_textView"
                         app:layout_constraintTop_toBottomOf="@+id/operating_time_textView" />
@@ -169,7 +169,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:text="영업 시간"
-                        android:theme="@style/TextView14dpBlackBold"
+                        android:theme="@style/TextView16dpBlackBold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -198,8 +198,7 @@
                                 android:text="점심시간"
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
-                                android:textSize="12dp"
-                                android:textStyle="bold"
+                                android:theme="@style/TextView14dpBlackBold"
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp"/>
                         </TableRow>
@@ -216,8 +215,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="12:30 ~ 13:30"
                                 android:textAlignment="center"
-                                android:textColor="@color/black"
-                                android:textSize="12dp"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp"/>
                         </TableRow>
@@ -248,9 +246,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="요일"
                                 android:textAlignment="center"
-                                android:textColor="@color/black"
-                                android:textSize="12dp"
-                                android:textStyle="bold"
+                                android:theme="@style/TextView14dpBlackBold"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -261,9 +257,7 @@
                                 android:layout_marginStart="100dp"
                                 android:text="진료시간"
                                 android:textAlignment="center"
-                                android:textColor="@color/black"
-                                android:textSize="12dp"
-                                android:textStyle="bold"
+                                android:theme="@style/TextView14dpBlackBold"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -281,8 +275,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="월요일"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -293,8 +286,7 @@
                                 android:layout_marginStart="100dp"
                                 android:text="09:00 ~ 18:00"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -312,8 +304,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="화요일"
                                 android:textAlignment="center"
-                                android:textSize="12sp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -324,8 +315,7 @@
                                 android:layout_marginStart="100dp"
                                 android:text="09:00 ~ 18:00"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -343,8 +333,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="수요일"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -355,8 +344,7 @@
                                 android:layout_marginStart="100dp"
                                 android:text="09:00 ~ 18:00"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -374,8 +362,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="목요일"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -386,8 +373,7 @@
                                 android:layout_marginStart="100dp"
                                 android:text="09:00 ~ 18:00"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -405,8 +391,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="금요일"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -417,8 +402,7 @@
                                 android:layout_marginStart="100dp"
                                 android:text="09:00 ~ 18:00"
                                 android:textAlignment="center"
-                                android:textSize="12dp"
-                                android:textColor="@color/black"
+                                android:theme="@style/TextView14dpBlack"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -437,7 +421,7 @@
                                 android:text="토요일"
                                 android:textAlignment="center"
                                 android:textColor="@color/blue"
-                                android:textSize="12dp"
+                                android:textSize="14dp"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -449,7 +433,7 @@
                                 android:text="09:00 ~ 14:00"
                                 android:textAlignment="center"
                                 android:textColor="@color/blue"
-                                android:textSize="12dp"
+                                android:textSize="14dp"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -468,7 +452,7 @@
                                 android:text="일요일"
                                 android:textAlignment="center"
                                 android:textColor="@color/red"
-                                android:textSize="12dp"
+                                android:textSize="14dp"
                                 android:paddingTop="5dp"
                                 android:paddingBottom="5dp" />
 
@@ -480,7 +464,7 @@
                                 android:text="정기휴무"
                                 android:textAlignment="center"
                                 android:textColor="@color/red"
-                                android:textSize="12dp"
+                                android:textSize="14dp"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
@@ -499,7 +483,7 @@
                                 android:text="공휴일"
                                 android:textAlignment="center"
                                 android:textColor="@color/red"
-                                android:textSize="12dp"
+                                android:textSize="14dp"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
 
@@ -511,43 +495,12 @@
                                 android:text="휴무"
                                 android:textAlignment="center"
                                 android:textColor="@color/red"
-                                android:textSize="12dp"
+                                android:textSize="14dp"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp" />
                         </TableRow>
                     </TableLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-<!--
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/call_ask_ConstraintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pharmacy_info_ConstraintLayout">
-
-                    <Button
-                        android:id="@+id/button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="#C4DFC5"
-                        android:backgroundTint="#C4DFC5"
-                        android:text="전화문의"
-                        android:textColor="#114513"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
--->
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -556,38 +509,33 @@
 
 
         <!-- 전화문의 -->
-<!--
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/call_ask_ConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray"
-            app:layout_constraintVertical_bias="1.0"
-
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="#C4DFC5"
-                android:backgroundTint="#C4DFC5"
+                android:background="@drawable/style_light_green_rectangle_pressed_button"
                 android:text="전화문의"
                 android:textColor="#114513"
+                android:theme="@style/TextView14dpBlack"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
--->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

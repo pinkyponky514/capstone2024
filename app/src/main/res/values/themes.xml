@@ -20,14 +20,40 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="TextView12dpDarkGray">
-        <item name="android:textSize">12dp</item>
-        <item name="android:textColorHint">@color/dark_gray</item>
+
+    <style name="TextView14dpBlack">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextView15dpBlack">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextView16dpBlack">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextView18dpBlack">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
+
+    <style name="TextView14dpDarkGray">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
     <style name="TextView15dpDarkGray">
         <item name="android:textSize">15dp</item>
-        <item name="android:textColorHint">@color/dark_gray</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+    <style name="TextView16dpDarkGray">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+    <style name="TextView18dpDarkGray">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
     </style>
 
     <style name="TextView14dpBlackBold">
@@ -35,15 +61,34 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
-
     <style name="TextView15dpBlackBold">
         <item name="android:textSize">15dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="TextView16dpBlackBold">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="TextView18dpBlackBold">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 
-    <style name="TextView12dpGreenBold">
-        <item name="android:textSize">12dp</item>
+    <style name="TextView15dpGreenBold">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/dark_green</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextView16dpGreenBold">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/dark_green</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextView18dpGreenBold">
+        <item name="android:textSize">18dp</item>
         <item name="android:textColor">@color/dark_green</item>
         <item name="android:textStyle">bold</item>
     </style>
