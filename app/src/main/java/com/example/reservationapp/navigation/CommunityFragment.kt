@@ -19,6 +19,7 @@ import com.example.reservationapp.Model.ChatBotResponse
 import com.example.reservationapp.Model.ChatItem
 import com.example.reservationapp.Model.CommunityItem
 import com.example.reservationapp.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,13 +32,21 @@ class CommunityFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CommunityImageAdapter
     private lateinit var timestamp: TextView
-
     private lateinit var boardItems: List<BoardContent>
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_community, container, false) // item_community 레이아웃을 inflate하여 View 객체를 생성
 
 //        // 작성 시간을 표시하는 TextView를 찾아 변수에 할당합니다.
 //        timestamp = view.findViewById(R.id.timestamp)
+
+        val floatingActionButton: FloatingActionButton = view.findViewById(R.id.floatingActionButton)
+        floatingActionButton.setOnClickListener {
+            val fragment = CommunityPostFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.main, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
 
         return view
     }
@@ -50,7 +59,7 @@ class CommunityFragment : Fragment() {
 
 
         // floatingActionButton 클릭 시 CommunityPostFragment로 이동
-        view.findViewById<View>(R.id.floatingActionButton2)?.setOnClickListener {
+        view.findViewById<View>(R.id.floatingActionButton)?.setOnClickListener {
             val fragment = CommunityPostFragment()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.main, fragment)

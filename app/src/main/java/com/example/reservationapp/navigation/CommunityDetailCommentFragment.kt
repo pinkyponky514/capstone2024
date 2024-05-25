@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.CommunityDetailCommentAdapter
 import com.example.reservationapp.Model.CommentItem
 import com.example.reservationapp.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -29,6 +30,7 @@ class CommunityDetailCommentFragment : Fragment() {
     private lateinit var editText: EditText
     private lateinit var sendButton2: Button
     private lateinit var adapter: CommunityDetailCommentAdapter
+    private lateinit var floatingActionButton: FloatingActionButton
 
     // newInstance 메서드를 Fragment 클래스 내에 정의합니다.
     companion object {
@@ -101,12 +103,28 @@ class CommunityDetailCommentFragment : Fragment() {
             if (commentContent.isNotEmpty()) {
                 val currentTime = System.currentTimeMillis()
                 val formattedTime = android.text.format.DateFormat.format("yyyy-MM-dd HH:mm", currentTime).toString()
-                val comment = CommentItem(commentContent, "pinky", formattedTime) // 작성자 정보는 나중에 변경 가능
+                val comment = CommentItem(commentContent, "혜인공주", formattedTime) // 작성자 정보는 나중에 변경 가능
                 adapter.addComment(comment)
                 editText.text.clear()
             }
         }
 
+        adapter = CommunityDetailCommentAdapter(
+            onItemDelete = { position ->
+                adapter.removeComment(position)
+            }
+        )
+        commentRecyclerView.adapter = adapter
+
         return view
+    }
+    override fun onResume() {
+        super.onResume()
+        floatingActionButton.hide() // Hide FloatingActionButton
+    }
+
+    override fun onPause() {
+        super.onPause()
+        floatingActionButton.show() // Show FloatingActionButton
     }
 }

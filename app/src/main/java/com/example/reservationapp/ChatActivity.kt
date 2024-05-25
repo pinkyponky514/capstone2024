@@ -60,7 +60,8 @@ class ChatActivity : AppCompatActivity() {
         chatList.add(ChatItem("AI", "당신의 증상에 대해 캐치닥터 챗봇이 추천하는 진료과목은 '내과'입니다."))
         chatList.add(ChatItem("AI", "현 위치에서 가까운 내과를 추천드리겠습니다."))
         chatList.add(ChatItem("AI",null, R.drawable.ex_hospital))
-        chatList.add(ChatItem("AI", "빨리 쾌차하시기 바랍니다. 좋은 하루 되세요 ~"))
+        // chatList.add(ChatItem("AI", "빨리 쾌차하시기 바랍니다. 좋은 하루 되세요 ~"))
+
         adapter.updateList(chatList)
 
         // 메세지 보내기
@@ -91,6 +92,7 @@ class ChatActivity : AppCompatActivity() {
                 chatList.add(ChatItem("hansung", messageString))
                 adapter.updateList(chatList)
                 messageEditText.setText("")
+
 
                 apiService.getChatBotAnswer(prompt = messageString).enqueue(object : Callback<ChatBotResponse> {
                     override fun onResponse(call: Call<ChatBotResponse>, response: Response<ChatBotResponse>) {

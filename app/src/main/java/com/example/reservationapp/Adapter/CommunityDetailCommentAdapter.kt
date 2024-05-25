@@ -3,6 +3,7 @@ package com.example.reservationapp.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,8 @@ import com.example.reservationapp.R
 
 class CommunityDetailCommentAdapter(
     private val items: MutableList<Any> = mutableListOf(),
-    private val onItemClick: (Int) -> Unit = {}
+    private val onItemClick: (Int) -> Unit = {},
+    private val onItemDelete: (Int) -> Unit = {}
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -61,6 +63,13 @@ class CommunityDetailCommentAdapter(
         notifyItemInserted(items.size - 1)
     }
 
+    fun removeComment(position: Int) {
+        if (items[position] is CommentItem) {
+            items.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
     inner class CommunityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.imageView)
         private val title: TextView = itemView.findViewById(R.id.title)
@@ -83,12 +92,16 @@ class CommunityDetailCommentAdapter(
         private val contentTextView: TextView = itemView.findViewById(R.id.commentContent)
         private val authorTextView: TextView = itemView.findViewById(R.id.commentAuthor)
         private val timestampTextView: TextView = itemView.findViewById(R.id.commentTimestamp)
+        private val deleteButton: Button = itemView.findViewById(R.id.commentDeleteButton)
 
         fun bind(item: CommentItem) {
             contentTextView.text = item.content
             authorTextView.text = item.author
             // 댓글 작성 시간을 timestampTextView에 표시
             timestampTextView.text = item.timestamp
+            deleteButton.setOnClickListener {
+                onItemDelete(adapterPosition)
+            }
         }
     }
 }

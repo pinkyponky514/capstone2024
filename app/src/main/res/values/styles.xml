@@ -26,4 +26,13 @@
         <!-- 원하는 다른 에딧텍스트 스타일 속성 추가 -->
     </style>
 
+    <style name="RoundedCorner" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/RoundedShapeAppearanceOverlay</item>
+    </style>
+
+    <style name="RoundedShapeAppearanceOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

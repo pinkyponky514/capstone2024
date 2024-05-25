@@ -3,14 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="400dp"
+    android:layout_width="366dp"
     android:layout_height="100dp"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@drawable/rounded_border"
+    android:layout_marginBottom="8dp">
 
     <TextView
         android:id="@+id/commentAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:text="작성자"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -19,15 +23,18 @@
 
     <TextView
         android:id="@+id/commentContent"
-        android:layout_width="382dp"
-        android:layout_height="39dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="326dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
         android:text="댓글 내용"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/commentAuthor" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentAuthor"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/commentTimestamp"
@@ -39,5 +46,17 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/commentAuthor"
         app:layout_constraintStart_toEndOf="@+id/commentAuthor" />
+
+    <Button
+        android:id="@+id/commentDeleteButton"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/image_delete"
+        android:backgroundTint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.057" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
