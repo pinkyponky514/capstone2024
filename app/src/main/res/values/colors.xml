@@ -27,6 +27,9 @@
     <color name="chat_message_background_color">#FF4081</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="select_button_color">#FF018086</color>
+    <color name="checkbox_checked_color">#99CCFF</color>
+    <color name="checkbox_unchecked_color">#FFFFFF</color>
+
 
 
 </resources>

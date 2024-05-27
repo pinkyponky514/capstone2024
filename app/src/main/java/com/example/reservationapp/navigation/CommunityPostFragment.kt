@@ -129,7 +129,7 @@ class CommunityPostFragment : Fragment() {
     }
 
     private fun updateImageCount() {
-        imageCountTextView.text = "${imageDataList.size}/10"
+        imageCountTextView.text = "${imageDataList.size}/5"
     }
 
     override fun onResume() {
@@ -224,9 +224,10 @@ class CommunityPostFragment : Fragment() {
                 }
             }
 
-            // 초과된 이미지 제외
-            if (selectedImages.size > 10) {
-                Toast.makeText(context, "사진은 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
+            // 이미지 개수 확인
+            val totalImages = imageDataList.size + selectedImages.size
+            if (totalImages > 5) {
+                Toast.makeText(context, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
                 return
             }
 

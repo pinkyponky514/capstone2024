@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
@@ -26,7 +28,7 @@ class HospitalMypageFragment : Fragment() {
             listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과")
 
         // 진료과별 예약 버튼 설정
-        for (i in 0 until classReserveList.size) {
+        for (i in classReserveList.indices) {
             val classButtonId =
                 resources.getIdentifier("class_button${i + 1}", "id", requireContext().packageName)
             val button = view.findViewById<Button>(classButtonId)
@@ -46,7 +48,7 @@ class HospitalMypageFragment : Fragment() {
                 // 상태에 따라 배경색 변경
                 if (isSelected) {
                     // 버튼이 선택된 상태라면 원래의 배경색으로 변경
-                    button.setBackgroundResource(R.drawable.button_shadow) // 버튼 배경색 변경
+                    button.setBackgroundResource(R.drawable.rounded_button_background3) // 버튼 배경색 변경
                 } else {
                     // 버튼이 선택되지 않은 상태라면 새로운 배경색으로 변경
                     button.setBackgroundResource(R.drawable.button_shadow) // 버튼 배경색 변경
@@ -54,13 +56,199 @@ class HospitalMypageFragment : Fragment() {
             }
         }
 
-        // 라디오 버튼 그룹 찾기
-        val restdayRadioGroup = view.findViewById<RadioGroup>(R.id.restday_radio_group)
-        // 라디오 버튼 클릭 이벤트 처리
-        restdayRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            val selectedRadioButton = view.findViewById<RadioButton>(checkedId)
-            val restday = selectedRadioButton.text.toString()
-            Log.d("Hospital_Mypage", "공휴일: $restday")
+        // 월요일 영업/휴무 체크박스 그룹 찾기
+        val workingCheckbox_mon = view.findViewById<CheckBox>(R.id.checkbox_working_mon)
+        val restCheckbox_mon = view.findViewById<CheckBox>(R.id.checkbox_rest_mon)
+        val startMonEditText = view.findViewById<EditText>(R.id.StartMon)
+        val finishMonEditText = view.findViewById<EditText>(R.id.FinishMon)
+
+        // 초기에는 EditText 뷰를 숨김
+        startMonEditText.visibility = View.GONE
+        finishMonEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes_mon = listOf(workingCheckbox_mon, restCheckbox_mon)
+        checkboxes_mon.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes_mon.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == R.id.checkbox_working_mon
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startMonEditText.visibility = visibility
+                    finishMonEditText.visibility = visibility
+                    Log.d("Hospital_Mypage", "화요일: ${buttonView.text}")
+                }
+            }
+        }
+        // 화요일 영업/휴무 체크박스 그룹 찾기
+        val workingCheckbox_tue = view.findViewById<CheckBox>(R.id.checkbox_working_tue)
+        val restCheckbox_tue = view.findViewById<CheckBox>(R.id.checkbox_rest_tue)
+        val startTueEditText = view.findViewById<EditText>(R.id.StartTue)
+        val finishTueEditText = view.findViewById<EditText>(R.id.FinishTue)
+
+        // 초기에는 EditText 뷰를 숨김
+        startTueEditText.visibility = View.GONE
+        finishTueEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes_tue = listOf(workingCheckbox_tue, restCheckbox_tue)
+        checkboxes_tue.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes_tue.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == R.id.checkbox_working_tue
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startTueEditText.visibility = visibility
+                    finishTueEditText.visibility = visibility
+                    Log.d("Hospital_Mypage", "화요일: ${buttonView.text}")
+                }
+            }
+        }
+
+        // 수요일 영업/휴무 체크박스 그룹 찾기
+        val workingCheckbox_wed = view.findViewById<CheckBox>(R.id.checkbox_working_wed)
+        val restCheckbox_wed = view.findViewById<CheckBox>(R.id.checkbox_rest_wed)
+        val startWedEditText = view.findViewById<EditText>(R.id.StartWed)
+        val finishWedEditText = view.findViewById<EditText>(R.id.FinishWed)
+
+        // 초기에는 EditText 뷰를 숨김
+        startWedEditText.visibility = View.GONE
+        finishWedEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes_wed = listOf(workingCheckbox_wed, restCheckbox_wed)
+        checkboxes_wed.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes_wed.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == R.id.checkbox_working_wed
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startWedEditText.visibility = visibility
+                    finishWedEditText.visibility = visibility
+                    Log.d("Hospital_Mypage", "수요일: ${buttonView.text}")
+                }
+            }
+        }
+
+        // 목요일 영업/휴무 체크박스 그룹 찾기
+        val workingCheckbox_thu = view.findViewById<CheckBox>(R.id.checkbox_working_thu)
+        val restCheckbox_thu = view.findViewById<CheckBox>(R.id.checkbox_rest_thu)
+        val startThuEditText = view.findViewById<EditText>(R.id.StartThu)
+        val finishThuEditText = view.findViewById<EditText>(R.id.FinishThu)
+
+        // 초기에는 EditText 뷰를 숨김
+        startThuEditText.visibility = View.GONE
+        finishThuEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes_thu = listOf(workingCheckbox_thu, restCheckbox_thu)
+        checkboxes_thu.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes_thu.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == R.id.checkbox_working_thu
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startThuEditText.visibility = visibility
+                    finishThuEditText.visibility = visibility
+                    Log.d("Hospital_Mypage", "목요일: ${buttonView.text}")
+                }
+            }
+        }
+
+        // 금요일 영업/휴무 체크박스 그룹 찾기
+        val workingCheckbox_fri = view.findViewById<CheckBox>(R.id.checkbox_working_fri)
+        val restCheckbox_fri = view.findViewById<CheckBox>(R.id.checkbox_rest_fri)
+        val startFriEditText = view.findViewById<EditText>(R.id.StartFri)
+        val finishFriEditText = view.findViewById<EditText>(R.id.FinishFri)
+
+        // 초기에는 EditText 뷰를 숨김
+        startFriEditText.visibility = View.GONE
+        finishFriEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes_fri = listOf(workingCheckbox_fri, restCheckbox_fri)
+        checkboxes_fri.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes_fri.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == R.id.checkbox_working_fri
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startFriEditText.visibility = visibility
+                    finishFriEditText.visibility = visibility
+                    Log.d("Hospital_Mypage", "금요일: ${buttonView.text}")
+                }
+            }
+        }
+
+        // 토요일 영업/휴무 체크박스 그룹 찾기
+        val workingCheckbox_sat = view.findViewById<CheckBox>(R.id.checkbox_working_sat)
+        val restCheckbox_sat = view.findViewById<CheckBox>(R.id.checkbox_rest_sat)
+        val startSatEditText = view.findViewById<EditText>(R.id.StartSat)
+        val finishSatEditText = view.findViewById<EditText>(R.id.FinishSat)
+
+        // 초기에는 EditText 뷰를 숨김
+        startSatEditText.visibility = View.GONE
+        finishSatEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes_sat = listOf(workingCheckbox_sat, restCheckbox_sat)
+        checkboxes_sat.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes_sat.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == R.id.checkbox_working_sat
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startSatEditText.visibility = visibility
+                    finishSatEditText.visibility = visibility
+                    Log.d("Hospital_Mypage", "토요일: ${buttonView.text}")
+                }
+            }
+        }
+
+        // 일요일 영업/휴무 체크박스 그룹 찾기
+        val workingCheckbox_sun = view.findViewById<CheckBox>(R.id.checkbox_working_sun)
+        val restCheckbox = view.findViewById<CheckBox>(R.id.checkbox_rest_sun)
+        val startSunEditText = view.findViewById<EditText>(R.id.StartSun)
+        val finishSunEditText = view.findViewById<EditText>(R.id.FinishSun)
+
+        // 초기에는 EditText 뷰를 숨김
+        startSunEditText.visibility = View.GONE
+        finishSunEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes_sun = listOf(workingCheckbox_sun, restCheckbox)
+        checkboxes_sun.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes_sun.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == R.id.checkbox_working_sun
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startSunEditText.visibility = visibility
+                    finishSunEditText.visibility = visibility
+                    Log.d("Hospital_Mypage", "일요일: ${buttonView.text}")
+                }
+            }
         }
 
         // 병원 소개 텍스트 창
@@ -73,44 +261,30 @@ class HospitalMypageFragment : Fragment() {
             }
         }
 
+        // Save 버튼 클릭 이벤트 처리
+        val saveButton = view.findViewById<Button>(R.id.SaveButton)
+        saveButton.setOnClickListener {
+            onSaveButtonClicked()
+        }
+
         return view
     }
-    fun onBackToHospitalClicked(view: View) {
-        val MonStartTime = view.findViewById<EditText>(R.id.MonStartTime).text.toString()
-        val MonEndTime = view.findViewById<EditText>(R.id.MonEndTime).text.toString()
-        val TueStartTime = view.findViewById<EditText>(R.id.TueStartTime).text.toString()
-        val TueEndTime = view.findViewById<EditText>(R.id.TueEndTime).text.toString()
-        val WedStartTime = view.findViewById<EditText>(R.id.WedStartTime).text.toString()
-        val WedEndTime = view.findViewById<EditText>(R.id.WedEndTime).text.toString()
-        val ThuStartTime = view.findViewById<EditText>(R.id.ThuStartTime).text.toString()
-        val ThuEndTime = view.findViewById<EditText>(R.id.ThuEndTime).text.toString()
-        val FriStartTime = view.findViewById<EditText>(R.id.FriStartTime).text.toString()
-        val FriEndTime = view.findViewById<EditText>(R.id.FriEndTime).text.toString()
-        val SatStartTime = view.findViewById<EditText>(R.id.SatStartTime).text.toString()
-        val SatEndTime = view.findViewById<EditText>(R.id.SatEndTime).text.toString()
-        val SunStartTime = view.findViewById<EditText>(R.id.SunStartTime).text.toString()
-        val SunEndTime = view.findViewById<EditText>(R.id.SunEndTime).text.toString()
 
-        val DayStartTime = view.findViewById<EditText>(R.id.DayStartTime).text.toString()
-        val DayEndTime = view.findViewById<EditText>(R.id.DayEndTime).text.toString()
-        val WeekendStartTime = view.findViewById<EditText>(R.id.WeekendStartTime).text.toString()
-        val WeekendEndTime = view.findViewById<EditText>(R.id.WeekendEndTime).text.toString()
+//    private fun onSaveButtonClicked() {
+//        // 병원 화면으로 이동하는 코드
+//        val intent = Intent(requireContext(), HospitalFragment::class.java)
+//        startActivity(intent)
+//    }
 
-        Log.d("Hospital_Mypage", "월요일 진료시간: $MonStartTime ~ $MonEndTime")
-        Log.d("Hospital_Mypage", "화요일 진료시간: $TueStartTime ~ $TueEndTime")
-        Log.d("Hospital_Mypage", "수요일 진료시간: $WedStartTime ~ $WedEndTime")
-        Log.d("Hospital_Mypage", "목요일 진료시간: $ThuStartTime ~ $ThuEndTime")
-        Log.d("Hospital_Mypage", "금요일 진료시간: $FriStartTime ~ $FriEndTime")
-        Log.d("Hospital_Mypage", "토요일 진료시간: $SatStartTime ~ $SatEndTime")
-        Log.d("Hospital_Mypage", "일요일 진료시간: $SunStartTime ~ $SunEndTime")
-        Log.d("Hospital_Mypage", "평일 점심시간: $DayStartTime ~ $DayEndTime")
-        Log.d("Hospital_Mypage", "주말 진료시간: $WeekendStartTime ~ $WeekendEndTime")
+    private fun onSaveButtonClicked() {
+        // 병원 화면으로 이동하는 코드
+        val hospitalFragment = HospitalFragment()
+        val fragmentManager = parentFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
 
-        // 이전 프래그먼트로 이동
-        requireActivity().supportFragmentManager.popBackStack()
-
-        // 병원 화면으로 돌아가는 코드는 이 함수 안에 있어야 합니다.
-        val intent = Intent(requireContext(), HospitalFragment::class.java)
-        startActivity(intent)
+        fragmentTransaction.replace(R.id.main_content, hospitalFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
+
 }

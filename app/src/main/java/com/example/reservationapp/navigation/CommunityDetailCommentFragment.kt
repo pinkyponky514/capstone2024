@@ -13,9 +13,11 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.CommunityDetailCommentAdapter
+import com.example.reservationapp.Adapter.ImageAdapter
 import com.example.reservationapp.App
 import com.example.reservationapp.Model.BoardContentResponse
 import com.example.reservationapp.Model.BoardLikeResponse
@@ -25,6 +27,7 @@ import com.example.reservationapp.Model.CommentItem
 import com.example.reservationapp.Model.CommentRequest
 import com.example.reservationapp.Model.CommentsRequest
 import com.example.reservationapp.Model.CommunityCommentRequest
+import com.example.reservationapp.Model.ImageItem
 import com.example.reservationapp.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONException
@@ -53,16 +56,21 @@ class CommunityDetailCommentFragment : Fragment() {
 
     private lateinit var progressBar: ProgressBar
 
+    private lateinit var imageAdapter: ImageAdapter
+
+
     companion object {
         private const val ARG_IMAGE_RESOURCE = "arg_image_resource"
         private const val ARG_IMAGE_TITLE = "arg_image_title"
         private const val ARG_BOARD_ID = "arg_board_id"
+        private const val ARG_IMAGE_URLS = "arg_image_urls"
 
-        fun newInstance(imageResource: Int, imageTitle: String, boardId: Long): CommunityDetailCommentFragment {
+        fun newInstance(imageResource: Int, imageTitle: String, imageUrls: List<String>, boardId: Long): CommunityDetailCommentFragment {
             val fragment = CommunityDetailCommentFragment()
             val args = Bundle()
             args.putInt(ARG_IMAGE_RESOURCE, imageResource)
             args.putString(ARG_IMAGE_TITLE, imageTitle)
+            args.putStringArrayList(ARG_IMAGE_URLS, ArrayList(imageUrls))
             args.putLong(ARG_BOARD_ID, boardId) // 올바른 boardId 값 설정
             fragment.arguments = args
             return fragment
@@ -83,11 +91,24 @@ class CommunityDetailCommentFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_community_detail_comment, container, false)
 
+        val recyclerViewImages: RecyclerView = view.findViewById(R.id.recyclerViewImages)
+        recyclerViewImages.layoutManager = GridLayoutManager(requireContext(), 1)
+
+        val imageList = listOf(
+            ImageItem(R.drawable.image1),
+            ImageItem(R.drawable.image2),
+            ImageItem(R.drawable.image3),
+            ImageItem(R.drawable.image4),
+            ImageItem(R.drawable.image5)
+        )
+
         // ProgressBar를 XML 레이아웃에서 찾아서 변수에 할당합니다.
         progressBar = view.findViewById(R.id.progressBar)
 
         // 데이터를 로드하기 전에 ProgressBar를 표시합니다.
         progressBar.visibility = View.VISIBLE
+
+        floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
 
         titleTextView = view.findViewById(R.id.textViewTitle)
         writerTextView = view.findViewById(R.id.textViewWriter)
@@ -239,6 +260,9 @@ class CommunityDetailCommentFragment : Fragment() {
             }
         )
         commentRecyclerView.adapter = adapter
+
+        imageAdapter = ImageAdapter(imageList)
+        recyclerViewImages.adapter = imageAdapter
 
         return view
     }

@@ -14,7 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.HospitalMainActivity
-import com.example.reservationapp.Hospital_Mypage
+//import com.example.reservationapp.Hospital_Mypage
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.Hospital
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
@@ -32,7 +32,6 @@ import java.util.Calendar
 
 class HospitalFragment : Fragment() {
     private lateinit var binding: FragmentHospitalBinding
-
     private lateinit var reservationAdapter: ReservationAdapter
     private lateinit var reservationList: ArrayList<ReservationItem>
     private var selectedDate: String = ""

@@ -25,6 +25,9 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class CommunityFragment : Fragment() {
 
@@ -42,8 +45,13 @@ class CommunityFragment : Fragment() {
             val bundle = Bundle()
             bundle.putLong("boardId", itemList[position].boardId)
 
+            // 현재 시간을 가져와서 형식을 맞춘 후 TextView에 설정합니다.
+            val currentTime = Calendar.getInstance().time
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val formattedTime = sdf.format(currentTime)
+
             val item = itemList[position]
-            val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title, item.boardId)
+            val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title, listOf(formattedTime), item.boardId)
             fragment.arguments = bundle
 
             requireActivity().supportFragmentManager.beginTransaction()

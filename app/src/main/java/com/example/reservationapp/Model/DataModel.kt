@@ -81,6 +81,10 @@ data class ImageData(
     // 필요한 경우 다른 메타데이터를 추가할 수 있습니다.
 )
 
+data class ImageItem(
+    val imageResId: Int
+)
+
 //HistoryAdapter, AbleReviewWriteAdapter
 data class HistoryItem (
     var reservationId: Long, //예약 레이블 번호

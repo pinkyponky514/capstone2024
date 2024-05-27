@@ -28,10 +28,14 @@ class HospitalMainActivity : AppCompatActivity() {
         Log.d("HospitalActivity", "hospitalId: $hospitalId") // hospitalId 로그 확인
 
 
-        //
         navigation = binding.navigation // 네비게이션 뷰 초기화
         navigation.selectedItemId = R.id.hospital_main
 
+        // 인텐트에서 show_fragment 값을 확인하고 HospitalFragment를 표시
+        val fragmentToShow = when (intent.getStringExtra("show_fragment")) {
+            "hospital" -> HospitalFragment()
+            else -> HospitalFragment() // 기본 프래그먼트 설정
+        }
         hospitalSetFragment(HospitalFragment())
         hospitalNavigationSetItem()
     }

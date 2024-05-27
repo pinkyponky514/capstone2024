@@ -71,6 +71,7 @@ class LoginDoctorActivity : AppCompatActivity() {
 
         //초기화
         idEditText = binding.IdEditText
+        IdCheckTextview = binding.IdCheckTextView
         PasswordEditText = binding.PasswordEditText
         PasswordCheckTextView = binding.PasswordCheckTextView
 
