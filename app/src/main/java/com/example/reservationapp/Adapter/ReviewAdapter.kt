@@ -138,6 +138,7 @@ class ReviewAdapter(): RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
                                         }
                                     }
                                 } else {
+                                    deleteButton.visibility = View.GONE
                                     Log.w("ReviewAdpater", "2. setContent에서 responseBodyReservation : 유저 로그인 안함")
                                 }
                             }

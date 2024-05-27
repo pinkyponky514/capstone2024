@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.RecentItem
+import com.example.reservationapp.Model.RecentSearchWordResponse
 import com.example.reservationapp.Model.RecentSearchWordResponseData
 import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.R
@@ -39,6 +40,7 @@ class RecentSearchWordAdapter:
         private var retrofitClient: RetrofitClient
         private var apiService: APIService
         private lateinit var responseBody: RecentSearchWordResponseData
+        private lateinit var responseBodyPost: RecentSearchWordResponseData
 
 
         init {
@@ -57,13 +59,28 @@ class RecentSearchWordAdapter:
 
                 searchWord = recent_search_word_data[adapterPosition].recentSearchWord
 
-                val intent = Intent(context, HospitalListActivity::class.java)
-                intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
-                context.startActivity(intent)
-                context.finish()
+                apiService.postRecentSearchWord(searchWord).enqueue(object: Callback<RecentSearchWordResponseData> {
+                    override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
+                        if(response.isSuccessful) {
+                            responseBodyPost = response.body()!!
+                            Log.w("HospitalSearchActivity", "검색어 저장! responseBodyPost : $responseBodyPost")
+
+                            val intent = Intent(context, HospitalListActivity::class.java)
+                            intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
+                            context.startActivity(intent)
+                            context.finish()
+                        }
+
+                        else handleErrorResponse(response)
+                    }
+
+                    override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
+                        Log.w("HospitalSearchActivity", "post Recent Search Word API call failed: ${t.localizedMessage}")
+                    }
+                })
             }
 
-                //최근 검색 단어 x버튼 클릭했을때
+            //최근 검색 단어 x버튼 클릭했을때
             delete_button.setOnClickListener {
                 searchWord = recent_search_word_data[adapterPosition].recentSearchWord
                 recent_search_word_data.removeAt(adapterPosition)
