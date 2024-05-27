@@ -16,7 +16,8 @@ data class BoardContent(
     @SerializedName("writer") val writer: String?,
     @SerializedName("boardId") val id: Long,
     @SerializedName("regDate") val regDate: LocalDate,
-    @SerializedName("regTime") val regTime: LocalTime
+    @SerializedName("regTime") val regTime: LocalTime,
+    @SerializedName("mainImage") val mainImage: String
 
 )
 
@@ -27,6 +28,11 @@ data class BoardContentResponse(
 )
 
 data class BoardResponse(
+    @SerializedName("success") val success: String,
+    @SerializedName("message") val message: String,
+)
+
+data class AllBoardResponse(
     @SerializedName("success") val success: String,
     @SerializedName("message") val message: String,
     @SerializedName("data") val data: List<BoardContent>
@@ -68,4 +74,10 @@ data class BoardLike(
     @SerializedName("boardlikeid")  val boardlikeid:Long,
     @SerializedName("boardid") val boardid: Long,
     @SerializedName("userid") val userid: Long
+)
+
+data class UserBoardLikeResponse(
+    @SerializedName("success") val success: String,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: Boolean
 )

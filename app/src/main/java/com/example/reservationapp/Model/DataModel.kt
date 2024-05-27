@@ -1,5 +1,6 @@
 package com.example.reservationapp.Model
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
@@ -117,7 +118,7 @@ data class CommentItem(
 
 // DataModel.kt
 data class CommunityItem(
-    val imageResource: Int,
+    val imageResource: Bitmap,
     val title: String,
     val writer: String,
     val likes : String,

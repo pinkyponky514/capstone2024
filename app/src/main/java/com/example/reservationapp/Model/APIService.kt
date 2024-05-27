@@ -2,6 +2,7 @@ package com.example.reservationapp.Model
 
 import com.example.reservationapp.userMapx
 import com.example.reservationapp.userMapy
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -9,8 +10,10 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Multipart
 
 interface APIService {
     @POST("/jwt-login/user/join") //환자 회원가입
@@ -73,17 +76,17 @@ interface APIService {
     @DELETE("/reservations/cancel/{reservationId}") //예약 취소 (토큰필요(
     fun deleteReservation(@Path(value="reservationId") reservationId: Long = 0): Call<DeleteReservationResponse>
 
-
     @GET("/bot/chat") //챗봇 - 진료과목 가져오기
     @Headers("Auth: false")
     fun getChatBotAnswer(@Query("prompt") prompt: String?= null): Call<ChatBotResponse>
 
+    @Multipart
     @POST("/boards/write") //커뮤니티 게시글 작성하기
-    fun postBoard(@Body board: BoardPost): Call<BoardResponse>
+    fun postBoard(@Part image: List<MultipartBody.Part>, @Part("boardDto") board: BoardPost): Call<BoardResponse>
 
     @GET("/boards") //전체 게시글 가져오기
     @Headers("Auth: false")
-    fun getAllBoards():Call<BoardResponse>
+    fun getAllBoards():Call<AllBoardResponse>
 
     @POST("/reservations/hospital/confirm") //예약 확정
     fun postConfirmReservation(@Body reservation: ConfirmReservationRequest):Call<ConfirmReservationResponse>
@@ -105,6 +108,9 @@ interface APIService {
     @GET("/boardlike/find/{boardId}") //게시글별 좋아요 가져오기
     @Headers("Auth: false")
     fun getBoardLikes(@Path(value="boardId") boardId:Long): Call<BoardLikesResponset>
+
+    @GET("/boardlike/find/user/{boardId}") //유저의 게시글 좋아요 확인
+    fun getUserBoardLike(@Path(value="boardId") boardId:Long): Call<UserBoardLikeResponse>
 
 /*
     @GET("/reservations/check") //유저의 예약 조회 (토큰필요)
