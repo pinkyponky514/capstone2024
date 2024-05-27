@@ -7,24 +7,6 @@
     android:layout_height="match_parent">
 
 
-<!--
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/filter_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="55dp"
-        android:layout_gravity="end|bottom"
-        android:backgroundTint="@color/white"
-        android:text="영업중"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        app:layout_anchor="@id/search_layout"
-        app:layout_anchorGravity="top|end" />
--->
-
-
     <!-- 검색창 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_ConstraintLayout"
@@ -38,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_margin="20dp"
-            android:background="@drawable/style_searchview"
+            android:background="@drawable/style_dark_green_line_radius_30"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:theme="@style/TextView15dpDarkGray"
@@ -52,6 +34,24 @@
             app:searchIcon="@drawable/ic_search" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 영업중 필터 플로팅 버튼 -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/filter_btn"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="@color/white"
+        android:text="영업중"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="14dp"
+        android:clickable="true"
+        android:elevation="15dp"
+        app:layout_anchor="@id/searchView"
+        app:layout_anchorGravity="bottom|end" />
+
 
     <!-- 지도 -->
     <androidx.fragment.app.FragmentContainerView
@@ -175,10 +175,10 @@
 
                     <!-- 점심시간 시간안내 -->
                     <TableLayout
-                        android:id="@+id/hospital_lunch_time_guide_tableLayout"
+                        android:id="@+id/classTableLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/style_time_table_radius_light_green"
+                        android:background="@drawable/style_light_green_radius_8"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -186,7 +186,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/operating_time">
 
                         <TableRow
-                            android:id="@+id/lunch_tableRow"
+                            android:id="@+id/classTableRow1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center">
@@ -226,13 +226,13 @@
                         android:id="@+id/hospital_all_time_guide_tableLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/style_time_table_radius_light_gray"
+                        android:background="@drawable/style_light_gray_radius_8"
                         android:layout_marginTop="18dp"
                         android:layout_marginBottom="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/hospital_lunch_time_guide_tableLayout"
-                        app:layout_constraintStart_toStartOf="@+id/hospital_lunch_time_guide_tableLayout"
-                        app:layout_constraintTop_toBottomOf="@+id/hospital_lunch_time_guide_tableLayout">
+                        app:layout_constraintEnd_toEndOf="@+id/classTableLayout"
+                        app:layout_constraintStart_toStartOf="@+id/classTableLayout"
+                        app:layout_constraintTop_toBottomOf="@+id/classTableLayout">
 
                         <TableRow
                             android:id="@+id/div_tableRow"
@@ -526,7 +526,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/style_light_green_rectangle_pressed_button"
+                android:background="@drawable/style_light_green_rectangle_radius_5_pressed_button"
                 android:text="전화문의"
                 android:textColor="#114513"
                 android:theme="@style/TextView14dpBlack"

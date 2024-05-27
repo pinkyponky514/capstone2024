@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -30,6 +32,7 @@ import com.example.reservationapp.Model.PharmacyMap.NaverMapItem
 import com.example.reservationapp.databinding.ActivityPharmacymapBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -73,6 +76,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
+
     private lateinit var mLocationSource: FusedLocationSource
     private lateinit var mNaverMap: NaverMap
 
@@ -192,7 +196,6 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
 
         //검색창 초기화
         val searchView = binding.searchView
-        //searchView.height = resources.getDimensionPixelSize(R.dimen.search_view_height)
 
         pharmacyNameTextView = binding.pharmacyNameTextView //findViewById(R.id.pharmacy_name_textView)
         operatingTimeTextView = binding.operatingTimeTextView //findViewById(R.id.operating_time_textView)
@@ -209,24 +212,24 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         sunTimeTextView = binding.sundayTimeTextView
         holTimeTextView = binding.dayOffTimeTextView
 
-        /*
-               //  필터 버튼 클릭 시 이벤트 설정
-                findViewById<ExtendedFloatingActionButton>(R.id.filter_btn).setOnClickListener {
-                    // 필터 상태 업데이트
-                    isFilterApplied = !isFilterApplied
+/*
+       //  필터 버튼 클릭 시 이벤트 설정
+        findViewById<ExtendedFloatingActionButton>(R.id.filter_btn).setOnClickListener {
+            // 필터 상태 업데이트
+            isFilterApplied = !isFilterApplied
 
-                    // 필터 상태에 따라 플로팅 버튼 배경색 변경
-                    val filterBtn = findViewById<ExtendedFloatingActionButton>(R.id.filter_btn)
-                    if (isFilterApplied) {
-                        filterBtn.backgroundTintList = ColorStateList.valueOf(Color.rgb(128, 128, 128))
-                    } else {
-                        filterBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
-                    }
+            // 필터 상태에 따라 플로팅 버튼 배경색 변경
+            val filterBtn = findViewById<ExtendedFloatingActionButton>(R.id.filter_btn)
+            if (isFilterApplied) {
+                filterBtn.backgroundTintList = ColorStateList.valueOf(Color.rgb(128, 128, 128))
+            } else {
+                filterBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
+            }
 
-                    // 필터링된 마커 표시/숨기기
-                    updateMarkers2()
-                }
-        */
+            // 필터링된 마커 표시/숨기기
+            updateMarkers2()
+        }
+*/
     }
 
     // 마커 필터링 함수
@@ -378,7 +381,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         operatingTimeTextView.text = openHours
         addressTextView.text = pharmacy.address
 
-        //lunchTimeTextView.text = getOpenHoursForDay(DayOfWeek.MONDAY, pharmacy)
+
         monTimeTextView.text = getOpenHoursForDay(DayOfWeek.MONDAY, pharmacy)
         tueTimeTextView.text = getOpenHoursForDay(DayOfWeek.THURSDAY, pharmacy)
         wedTimeTextView.text = getOpenHoursForDay(DayOfWeek.WEDNESDAY, pharmacy)
@@ -386,6 +389,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         friTimeTextView.text = getOpenHoursForDay(DayOfWeek.FRIDAY, pharmacy)
         satTimeTextView.text = getOpenHoursForDay(DayOfWeek.SATURDAY, pharmacy)
         sunTimeTextView.text = getOpenHoursForDay(DayOfWeek.SUNDAY, pharmacy)
+        //lunchTimeTextView.text = getOpenHoursForDay(DayOfWeek.MONDAY, pharmacy)
         //holTimeTextView.text = getOpenHoursForDay(DayOfWeek.MONDAY, pharmacy)
 
 

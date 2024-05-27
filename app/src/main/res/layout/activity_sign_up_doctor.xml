@@ -123,7 +123,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/style_gray_radius"
+        android:background="@drawable/style_gray_radius_20"
         android:enabled="false"
         android:text="계정 생성"
         android:textColor="@color/white"

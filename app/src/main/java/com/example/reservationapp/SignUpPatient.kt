@@ -171,9 +171,9 @@ class SignUpPatient : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 signUpButton.isEnabled = idFlag && pwFlag && nameFlag
                 if(!signUpButton.isEnabled) { //false
-                    signUpButton.setBackgroundResource(com.example.reservationapp.R.drawable.style_gray_radius)
+                    signUpButton.setBackgroundResource(com.example.reservationapp.R.drawable.style_gray_radius_20)
                 } else {
-                    signUpButton.setBackgroundResource(com.example.reservationapp.R.drawable.style_dark_green_radius_pressed_button)
+                    signUpButton.setBackgroundResource(com.example.reservationapp.R.drawable.style_dark_green_radius_20_pressed_button)
                 }
             }
         }

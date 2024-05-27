@@ -74,14 +74,14 @@ class CommunityDetailCommentFragment : Fragment() {
         arguments?.let {
             boardId = it.getLong("boardId", 0)
         }
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_community_detail_comment, container, false)
+
+        // FloatingActionButton 참조 가져오기
+        floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
+
 
         // ProgressBar를 XML 레이아웃에서 찾아서 변수에 할당합니다.
         progressBar = view.findViewById(R.id.progressBar)

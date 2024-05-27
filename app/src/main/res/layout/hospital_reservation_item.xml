@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="3dp"
-    android:background="@drawable/style_white_rectangle">
+    android:background="@drawable/style_white_radius_5">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/style_gray_rectangle_status"
+            android:background="@drawable/style_gray_radius_5_status_padding"
             android:text="진료 진행상태"
             android:textColor="#FFFFFF"
             android:textSize="10dp"

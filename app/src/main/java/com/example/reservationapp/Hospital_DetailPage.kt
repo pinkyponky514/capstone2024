@@ -7,27 +7,38 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.CalendarView
 import android.widget.ImageView
+import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.ReviewAdapter
-import com.example.reservationapp.Custom.CustomReserveDialogFragment
+import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.BookmarkResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.MyBookmarkResponse
+import com.example.reservationapp.Model.ReservationRequest
+import com.example.reservationapp.Model.ReservationResponse
 import com.example.reservationapp.Model.ReviewItem
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalDetailpageExampleAddBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -46,6 +57,22 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var adapter: ReviewAdapter
     private lateinit var hospitalNameString: String
 
+    //예약
+    private var calendar_open_flag: Boolean = false //달력 펼쳐져 있는지 확인하는 flag
+    private var time_open_flag: Boolean = true //시간 펼쳐져 있는지 확인하는 flag
+    private lateinit var calendarView: CalendarView //달력 calenderView
+    private lateinit var timeTableLayout: TableLayout //시간 tableLayout
+
+    private var reserveDate: String ?= null //예약 날짜 -> intent할때 쓸 변수
+    private var reserveTime: String ?= null //예약 시간 -> intent할때 쓸 변수
+
+    private var selectedButton: Button ?= null //선택된 시간 버튼
+
+    //오늘날짜 변수
+    private var currentYear: Int = 0
+    private var currentMonth: Int = 0
+    private var currentDay: Int = 0
+
 
     //즐겨찾기
     private var bookmark_flag: Boolean = false
@@ -61,6 +88,11 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var responseBodyDetail: HospitalSignupInfoResponse
     private lateinit var responseBodyMyBookmark: MyBookmarkResponse
     private lateinit var responseBodyBookmark: BookmarkResponse
+    private lateinit var responseBodyHospitalDetail: HospitalSignupInfoResponse
+    private lateinit var responseBodyReservation: ReservationResponse
+    private lateinit var db_lunch_time_start: String //점심 시작 시간
+    private lateinit var db_lunch_time_end: String //점심 끝나는 시간
+
 
     //DB에서 가져온 데이터 넣을 view
     private lateinit var hospitalNameTextView: TextView //병원이름
@@ -72,7 +104,9 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var hospitalCallTextView: TextView //병원 연락처
 
     private lateinit var reservationButton: Button //예약 버튼
+    private lateinit var bottomSheetReservationButton: Button //Bottom Sheet 예약 버튼
     private lateinit var favoriteButton: ImageView //즐겨찾기 버튼
+
 
     private lateinit var lunchTimeTextView: TextView //점심시간
     private lateinit var mondayTimeTextView: TextView
@@ -86,6 +120,8 @@ class Hospital_DetailPage : AppCompatActivity() {
 
 
 
+    //예약
+    lateinit var reservationBotoomSheetBehavior: BottomSheetBehavior<View>
 
 
     //
@@ -117,6 +153,17 @@ class Hospital_DetailPage : AppCompatActivity() {
         dayOffTimeTextView = binding.textViewDayOffTime
 
         reviewCountTextView = binding.reviewCountTextView
+
+        //달력 선택 가능범위 설정 하기위한 변수
+        val currentCalendar = Calendar.getInstance()
+        currentYear = currentCalendar.get(Calendar.YEAR)
+        currentMonth = currentCalendar.get(Calendar.MONTH)
+        currentDay = currentCalendar.get(Calendar.DATE)
+
+        val calendarOpenButton = binding.imageViewDateArrowOpen
+        var reserveDateTextView = binding.textViewReserveDate //선택한 날짜 textView
+        var reserveTimeTextView = binding.textViewReserveTime //선택한 시간 textView
+
 
         //리뷰 관련 초기화
         adapter = ReviewAdapter()
@@ -151,13 +198,6 @@ class Hospital_DetailPage : AppCompatActivity() {
                     hospitalPositionTextView.text = responseBodyDetail.data.openApiHospital.address //병원 주소 설정
                     hospitalCallTextView.text = responseBodyDetail.data.openApiHospital.tel //병원 전화번호 설정
 
-                    var reservationCount = 0
-                    for(reservation in responseBodyDetail.data.reservations) {
-                        if(reservation.status != "진료완료" && reservation.status != "예약취소") {
-                            reservationCount++
-                        }
-                    }
-                    waitCountTextView.text = "${reservationCount}명 대기중" //대기인원 설정
 
                     //금일 운영시간 설정
                     val calendar = Calendar.getInstance()
@@ -165,10 +205,22 @@ class Hospital_DetailPage : AppCompatActivity() {
                     val currentMonth = calendar.get(Calendar.MONTH)
                     val currentDay = calendar.get(Calendar.DATE)
                     val dayOfWeekTimeList = db_getDayOfWeek(currentYear, currentMonth, currentDay) //현재 요일 오픈, 마감시간 구하기
+                    val todayLocalDate = LocalDate.of(currentYear, currentMonth+1, currentDay) //2024-05-12, 현재날짜 로컬데이트로 변환
 
-                    if(dayOfWeekTimeList[1].equals("휴무") || dayOfWeekTimeList[1].equals("정기휴무")) { //금일 시간 설정, 정기휴무나 휴무인 날짜일 경우
+                    var reservationCount = 0
+                    for(reservation in responseBodyDetail.data.reservations) {
+                        if(reservation.reservationDate == todayLocalDate && reservation.status == "예약확정") { //예약날짜가 오늘날짜와 같고, 에약확정 상태여야함
+                            reservationCount++
+                        }
+                    }
+                    waitCountTextView.text = "${reservationCount}명 대기중" //대기인원 설정
+
+
+                    if(dayOfWeekTimeList[1].equals("휴무")) { //금일 시간 설정, 휴무인 날짜일 경우
                         todayTimeTextView.text = "휴무"
-                    } else {
+                    } else if(dayOfWeekTimeList[1].equals("정기휴무")) { //정기휴무 날짜일 경우
+                        todayTimeTextView.text = "정기휴무"
+                    }else {
                         todayTimeTextView.text = "${dayOfWeekTimeList[0]}요일 ${dayOfWeekTimeList[1]} ~ ${dayOfWeekTimeList[2]}"
                     }
 
@@ -189,7 +241,16 @@ class Hospital_DetailPage : AppCompatActivity() {
                         statusTextView.text = "진료마감"
                     }
 
+/*
+                    if(statusTextView.text == "진료마감") { //진료마감 됐으면 예약 못함
+                        reservationButton.isEnabled = false
+                        reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
+                    }
+*/
+
                     //진료시간 table 설정
+                    db_lunch_time_start = responseBodyDetail.data.hospitalDetail.lunch_start
+                    db_lunch_time_end = responseBodyDetail.data.hospitalDetail.lunch_end
                     lunchTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.lunch_start, responseBodyDetail.data.hospitalDetail.lunch_end) //점심시간
                     mondayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.mon_open, responseBodyDetail.data.hospitalDetail.mon_close) //월요일
                     tuesdayTimeTextView.text = db_getOpenningTime(responseBodyDetail.data.hospitalDetail.tue_open, responseBodyDetail.data.hospitalDetail.tue_close) //화요일
@@ -249,16 +310,16 @@ class Hospital_DetailPage : AppCompatActivity() {
                         if(responseBodyMyBookmark.result.data.boards != null) { //내가 즐겨찾기한 병원 목록이 있다면
                             for(responseMyBookmarkIndex in responseBodyMyBookmark.result.data.boards.indices) {
                                 if(responseBodyMyBookmark.result.data.boards[responseMyBookmarkIndex].hospitalId == hospitalId) { //즐겨찾기한 병원 아이디랑 상세페이지 병원 아이디가 같은 경우
-                                    favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
+                                    favoriteButton.setImageResource(R.drawable.ic_heart)
                                     bookmark_flag = true
                                     break
                                 }
                                 //내가 즐겨찾기 한 병원이 있지만, 해당 병원은 아닐 경우
-                                favoriteButton.setImageResource(R.drawable.ic_likes)
+                                favoriteButton.setImageResource(R.drawable.ic_empty_heart)
                             }
                         }
                         else { //나의 즐겨찾기 한 목록이 없다면, 빈 하트
-                            favoriteButton.setImageResource(R.drawable.ic_likes)
+                            favoriteButton.setImageResource(R.drawable.ic_empty_heart)
                         }
                     }
 
@@ -289,7 +350,7 @@ class Hospital_DetailPage : AppCompatActivity() {
                 }
             })
         }
-        else favoriteButton.setImageResource(R.drawable.ic_likes) //user token 없으면, 빈 하트
+        else favoriteButton.setImageResource(R.drawable.ic_empty_heart) //user token 없으면, 빈 하트
 
 
         //즐겨찾기 버튼 onClick
@@ -298,12 +359,12 @@ class Hospital_DetailPage : AppCompatActivity() {
             if(App.prefs.token != null) {
                 if(bookmark_flag) { //즐겨찾기 한 병원이면, 즐겨찾기 취소
                     bookmark_flag = false
-                    favoriteButton.setImageResource(R.drawable.ic_likes)
+                    favoriteButton.setImageResource(R.drawable.ic_empty_heart)
                     Log.w("Hospital_DetailPage", "즐겨찾기 취소: $bookmark_flag")
                 }
                 else { //즐겨찾기 안한 병원이면, 즐겨찾기
                     bookmark_flag = true
-                    favoriteButton.setImageResource(R.drawable.ic_favoritelikes)
+                    favoriteButton.setImageResource(R.drawable.ic_heart)
                     Log.w("Hospital_DetailPage", "즐겨찾기 등록 : $bookmark_flag")
                 }
 
@@ -383,13 +444,41 @@ class Hospital_DetailPage : AppCompatActivity() {
         }
 
 
-        // 예약 버튼 클릭 이벤트 설정
+
+        //뒷배경
+        val backgroundView = binding.backgroundView
+        val bottomSheetCallback = object: BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                //상태가 EXPANDED, COLLAPSED일때 뒷배경 불투명
+                if(newState == BottomSheetBehavior.STATE_COLLAPSED || newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    backgroundView.visibility = View.VISIBLE
+                } else {
+                    backgroundView.visibility = View.GONE
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if(-1<slideOffset || slideOffset<=1) {
+                    backgroundView.visibility = View.VISIBLE
+                } else {
+                    backgroundView.visibility = View.GONE
+                }
+            }
+        }
+
+        //예약 Bottom Sheet 초기화
+        val reservationBottomSheet = binding.hospitalDetailReservationBottomSheet
+        reservationBotoomSheetBehavior = BottomSheetBehavior.from(reservationBottomSheet)
+        reservationBotoomSheetBehavior.isHideable = true
+        reservationBotoomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        reservationBotoomSheetBehavior.addBottomSheetCallback(bottomSheetCallback)
+
+        // 예약하기 버튼 -> 예약창 Bottom Sheet 보이게
         reservationButton = binding.ReservationButton
         reservationButton.setOnClickListener {
             //로그인 되어있으면
             if(App.prefs.token != null) {
-                val dialog = CustomReserveDialogFragment.newInstance(hospitalNameString, className, hospitalId)
-                dialog.show(supportFragmentManager, "CustomReserveDialog")
+                reservationBotoomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
 
             //로그인 안되어있으면 로그인부터
@@ -399,9 +488,254 @@ class Hospital_DetailPage : AppCompatActivity() {
             }
         }
 
+        //배경 클릭했을때 Bottom Sheet 사라지게 상태 설정
+        backgroundView.setOnClickListener {
+            reservationBotoomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
 
 
         //
+        timeTableLayout = binding.tableLayoutReserveTime //시간 선택하는 TableLayout
+        calendarView = binding.calendarView //달력 뷰
+
+        //달력 펼치는 버튼 눌렀을 경우
+        calendarView.visibility = View.GONE
+        calendarOpenButton.setOnClickListener {
+            toggleCalendarVisibility()
+        }
+        reserveDateTextView.setOnClickListener {
+            toggleCalendarVisibility()
+        }
+
+
+        //달력에서 날짜 선택 변경감지
+        bottomSheetReservationButton = binding.reserveButton
+        calendarView.setOnDateChangeListener { view, year, month, day -> //view = CalendarView
+            val dayOfWeek = db_getDayOfWeek(year, month, day) //월
+            val dateString = String.format("%d-%d-%d", year, month+1, day) //2024-5-20
+            val dayOfWeekString = "(${dayOfWeek[0]})" //(월)
+
+            reserveDateTextView.text = String.format("%d.%d.%d ", year, month+1, day) + " $dayOfWeekString" //2024.05.20
+            reserveDate = dateString //2024-5-20
+
+            //날짜에 따른 예약 가능한 시간 다르게
+            apiService.getHospitalDetail(hospitalId).enqueue(object: Callback<HospitalSignupInfoResponse> {
+                override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+                    //통신, 응답 성공
+                    if(response.isSuccessful) {
+                        reserveTime = null; reserveTimeTextView.text = null //새로운 날짜 선택으로 인해 시간 지우기
+                        timeTableLayout.removeAllViews() //이전의 시간 테이블 모두 지우기
+                        responseBodyHospitalDetail = response.body()!!
+                        Log.w("CustomREserveDialogFragment", "responseBodyHospitalDetail: $responseBodyHospitalDetail")
+
+                        val startEndTimeList =  db_getDayOfWeek(year, month, day)
+                        val startTime =  startEndTimeList[1]
+                        val endTime = startEndTimeList[2]
+
+                        var selectDateFormat = LocalDate.of(year, month+1, day) //2024-05-12
+
+
+                        if(startTime == "휴무" || startTime == "정기휴무")  { //휴무나 정기휴무이면 오늘날짜로
+                            calendarView.date = Calendar.getInstance().timeInMillis //오늘날짜
+                            CustomToast(this@Hospital_DetailPage, "휴무 날짜는 선택할 수 없습니다.").show()
+
+                            val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()) //2024.05.24 표시용
+                            val dayFormat = SimpleDateFormat("EEE", Locale.KOREA)
+                            val dateString = dateFormat.format(calendarView.date)
+                            val dayString = dayFormat.format(calendarView.date)
+
+                            reserveDateTextView.text = "$dateString ($dayString)"
+
+                            val db_dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            val db_dateString = db_dateFormat.format(calendarView.date) //2024-05-24 request용
+                            reserveDate = db_dateString
+                        } else {
+                            val startTimeParts = startTime.split(":") //시간, 분 분리
+                            val endTimeParts = endTime.split(":")
+
+                            val startHour = startTimeParts[0].toInt() //오픈하는 hour
+                            val endHour = endTimeParts[0].toInt() //문닫는 hour
+
+                            val startMinute = startTimeParts[1].toInt() //오픈하는 minute
+                            val endMinute = endTimeParts[1].toInt() //문닫는 minute
+
+                            //시간 동적으로 넣기 (시간이 다 찼을 경우는 안그리기 위해서)
+                            val rowSize = 4 //한 행에 들어갈 버튼 수
+                            var tableRow: TableRow?= null //동적으로 추가하기 위함, 아직 테이블에 아무 행도 없기 때문에 id를 찾을 수 없음
+                            var buttonCountInRow = 0 //현재 행에 추가된 버튼 개수
+                            var buttonCount = 0 //현재 버튼 개수
+
+                            for (hour in startHour..endHour) {
+                                for (minute in arrayOf(0, 30)) { //30분 단위로 추가
+                                    if (buttonCountInRow == rowSize || buttonCount%4 == 0) {
+                                        buttonCountInRow = 0 //한 행에 버튼 개수 초기화
+                                    }
+
+                                    if (buttonCountInRow == 0) { //새로운 행 시작
+                                        tableRow = TableRow(this@Hospital_DetailPage)
+                                        tableRow?.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+                                        //tableRow?.setPadding(5,5,5,5)
+                                        //tableRow?.gravity = Gravity.CENTER
+                                        timeTableLayout.addView(tableRow)
+                                    }
+
+                                    if(hour == startHour && startMinute == 30 && minute == 0) { //오픈시간 minute가 9:30분부터 시작이면, 9:00는 건너뛰기
+                                        continue
+                                    }
+                                    if(hour == endHour && endMinute == 0 && minute == 30) { //문닫는 시간 minute가 14:00 이라면, 14:30는 건너뛰기
+                                        continue
+                                    }
+
+                                    val button = Button(this@Hospital_DetailPage)
+                                    val timeString = String.format("%02d:%02d", hour, minute)
+                                    val timeFormat = LocalTime.of(hour, minute) //09:00
+
+                                    if(timeString == db_lunch_time_start || timeString == db_lunch_time_end) { //점심시간이면 건너뛰기
+                                        continue
+                                    } else if(timeString in db_lunch_time_start..db_lunch_time_end) { //점심시간 사이의 시간도 건너뛰기
+                                        continue
+                                    }
+
+                                    button.text = timeString
+                                    button.setBackgroundResource(R.drawable.style_button_focus)
+
+                                    //같은 날짜와 같은 예약된 시간 비활성화
+                                    for(reservation in responseBodyHospitalDetail.data.reservations) {
+                                        if(reservation.reservationDate == selectDateFormat && reservation.reservationTime == timeFormat) { //선택한 날짜와 같은 예약된 날짜 거르기
+                                            button.isEnabled = false
+                                            button.setBackgroundResource(R.drawable.style_gray_radius_5)
+                                        }
+                                    }
+
+
+                                    button.setOnClickListener {
+                                        //val timeString = button.text
+                                        reserveTimeTextView.text = timeString //시간 선택 textView
+                                        reserveTime = timeString
+                                        reservationButtonEnabled()
+                                        selectButtonColor(button) //시간 선택하면 색 변경하도록
+                                    }
+                                    tableRow?.addView(button)
+                                    buttonCountInRow++
+                                    buttonCount++
+                                }
+                            }
+                        }
+                        reservationButtonEnabled()
+                    }
+
+                    //통신 성공, 응답 실패
+                    else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                        if (errorBody != null) {
+                            try {
+                                val jsonObject = JSONObject(errorBody)
+                                val timestamp = jsonObject.optString("timestamp")
+                                val status = jsonObject.optInt("status")
+                                val error = jsonObject.optString("error")
+                                val message = jsonObject.optString("message")
+                                val path = jsonObject.optString("path")
+
+                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                            } catch (e: JSONException) {
+                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                            }
+                        }
+                    }
+                }
+
+                //통신 실패
+                override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+                    Log.w("CONNECTION FAILURE: ", "Connect FAILURE : ${t.localizedMessage}")
+                }
+            })
+        }
+
+
+        //시간 펼치는 버튼 눌렀을 경우
+        val timeOpenButton = binding.imageViewTimeArrowOpen
+        val timeTableLayout = binding.tableLayoutReserveTime
+        timeTableLayout.visibility = View.VISIBLE
+        timeOpenButton.setOnClickListener {
+            toggleTimeVisibility()
+        }
+        reserveTimeTextView.setOnClickListener {
+            toggleTimeVisibility()
+        }
+
+
+
+        // 예약 버튼 클릭 onClick
+        bottomSheetReservationButton.setOnClickListener {
+            Log.d("Date, Time", "reserveDate: $reserveDate, reserveTime: $reserveTime")
+
+            // reserveDate와 reserveTime을 LocalDate와 LocalTime으로 파싱
+            val reservationLocalDate = LocalDate.parse(reserveDate, DateTimeFormatter.ofPattern("yyyy-M-d")) //yyyy-M-d
+            val reservationLocalTime = LocalTime.parse(reserveTime, DateTimeFormatter.ofPattern("H:mm")) //H:mm
+
+            // LocalDate와 LocalTime을 LocalDateTime으로 변환
+            val reservationLocalDateTime = LocalDateTime.of(reservationLocalDate, reservationLocalTime)
+
+            // 원하는 포맷으로 변환
+            val dateFormatter = reservationLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            val timeFormatter = reservationLocalDateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+            Log.d("Date, Time", "LocalDate: $dateFormatter, LocalTime: $timeFormatter")
+
+            val reservation = ReservationRequest(dateFormatter, timeFormatter, hospitalId)
+            apiService.postReservation(reservation).enqueue(object: Callback<ReservationResponse> {
+                override fun onResponse(call: Call<ReservationResponse>, response: Response<ReservationResponse>) {
+                    if(response.isSuccessful) {
+                        responseBodyReservation = response.body()!!
+                        Log.d("CustomReserveDialogFragment", "reserve response.body() : $responseBodyReservation")
+
+                        val intent = Intent(this@Hospital_DetailPage, CheckReservationActivity::class.java)
+                        intent.putExtra("reservationResponse", responseBodyReservation)
+                        startActivity(intent)
+                    }
+
+                    else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                        if (errorBody != null) {
+                            try {
+                                val jsonObject = JSONObject(errorBody)
+                                val timestamp = jsonObject.optString("timestamp")
+                                val status = jsonObject.optInt("status")
+                                val error = jsonObject.optString("error")
+                                val message = jsonObject.optString("message")
+                                val path = jsonObject.optString("path")
+
+                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                            } catch (e: JSONException) {
+                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ReservationResponse>, t: Throwable) {
+                    Log.w("CONNECTION FAILURE: ", "Reservation Connect FAILURE : ${t.localizedMessage}")
+                }
+            })
+        }
+
+        //
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val minDate = Calendar.getInstance() //캘린더에서 선택할 수 있는 최소날짜
+        val maxDate = Calendar.getInstance() //캘린더에서 선택할 수 있는 최대날짜
+
+        //오늘부터 선택 가능하도록
+        minDate.set(currentYear, currentMonth, currentDay)
+        calendarView.minDate = minDate.timeInMillis
+
+        //올해말까지 선택 가능하도록 (12/31)
+        maxDate.set(currentYear, 11, 31)
+        calendarView.maxDate = maxDate.timeInMillis
     }
 
     //뒤로가기 버튼 눌렀을때
@@ -436,6 +770,61 @@ class Hospital_DetailPage : AppCompatActivity() {
             return "$open ~ $close"
         }
     }
+
+    //달력 펼치기, 접기
+    private fun toggleCalendarVisibility() {
+        if(calendar_open_flag) { //true=열려있는 상태, 달력 접기
+            calendar_open_flag = false
+            calendarView.visibility = View.GONE //gone = 화면에 보이지 않으며, 자리차지도 안함
+        } else { //false=닫혀있는 상태, 달력 접기
+            calendar_open_flag = true
+            calendarView.visibility = View.VISIBLE
+        }
+    }
+    //시간 펼치기, 접기
+    private fun toggleTimeVisibility() {
+        if(time_open_flag) { //true=열려있는 상태, 시간 접기
+            time_open_flag = false
+            timeTableLayout.visibility = View.GONE
+        } else { //false=닫혀있는 상태, 시간 열기
+            time_open_flag = true
+            timeTableLayout.visibility = View.VISIBLE
+        }
+    }
+
+    //예약 버튼 enabled
+    private fun reservationButtonEnabled() {
+        if(reserveDate != null && reserveTime != null) { //예약 버튼 활성화
+            Log.w("reserveDate && reserveTime", "reserveDate and reserveTime not null")
+            bottomSheetReservationButton.isEnabled = true
+            reservationButtonEnabledBackgroundResource()
+
+        } else if(reserveDate == null || reserveTime == null) { //예약 버튼 비활성화
+            Log.w("reserveDate || reserveTime", "reserveDate or reserveTime is null")
+            bottomSheetReservationButton.isEnabled = false
+            reservationButtonEnabledBackgroundResource()
+        }
+    }
+
+    //예약 시간 클릭시 버튼 색상 변경
+    private fun selectButtonColor(clickedButton: Button) {
+        //선택된 버튼이 없거나 클릭된 버튼이 아닐 경우
+        if(selectedButton == null || selectedButton != clickedButton) {
+            selectedButton?.setBackgroundResource(R.drawable.style_button_focus) //이전에 선택된 버튼의 색을 원래대로 되돌림
+            clickedButton.setBackgroundResource(R.drawable.style_dark_green_line_light_green_radius_5) //현재 클릭된 버튼 색 변경
+            selectedButton = clickedButton
+        }
+    }
+
+    //버튼 비활성화, 활성화 배경 색
+    private fun reservationButtonEnabledBackgroundResource() {
+        if(reservationButton.isEnabled) {
+            bottomSheetReservationButton.setBackgroundResource(R.drawable.style_dark_green_radius_20_pressed_button)
+        } else {
+            bottomSheetReservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
+        }
+    }
+
 
 
     //
