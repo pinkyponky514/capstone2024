@@ -11,11 +11,9 @@
         android:id="@+id/customReserveScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- 예약 날짜, 시간 선택하기 -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -148,7 +146,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="28dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/style_gray_radius"
+            android:background="@drawable/style_gray_radius_20"
             android:enabled="false"
             android:paddingStart="20dp"
             android:paddingTop="10dp"

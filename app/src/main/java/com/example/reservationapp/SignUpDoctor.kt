@@ -153,9 +153,9 @@ class SignUpDoctor : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 registerButton.isEnabled = idFlag && pwFlag && hospitalNameFlag
                 if(!registerButton.isEnabled) { //false
-                    registerButton.setBackgroundResource(R.drawable.style_gray_radius)
+                    registerButton.setBackgroundResource(R.drawable.style_gray_radius_20)
                 } else {
-                    registerButton.setBackgroundResource(R.drawable.style_dark_green_radius_pressed_button)
+                    registerButton.setBackgroundResource(R.drawable.style_dark_green_radius_20_pressed_button)
                 }
             }
         }

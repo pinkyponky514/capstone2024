@@ -124,9 +124,9 @@ class LoginDoctorActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 LoginButton.isEnabled = BusinessNumberFlag && pwFlag
                 if(!LoginButton.isEnabled) { //false이면 배경색 gray로
-                    LoginButton.setBackgroundResource(R.drawable.style_gray_radius)
+                    LoginButton.setBackgroundResource(R.drawable.style_gray_radius_20)
                 } else {
-                    LoginButton.setBackgroundResource(R.drawable.style_dark_green_radius_pressed_button)
+                    LoginButton.setBackgroundResource(R.drawable.style_dark_green_radius_20_pressed_button)
                 }
             }
         }

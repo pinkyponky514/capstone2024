@@ -102,6 +102,14 @@ class HospitalListActivity : AppCompatActivity() {
             val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
+
+        //병원 지도 플로팅 버튼 onClick
+        val hospitalListMapFloatingButton = binding.hospitalListFloatingButton
+        hospitalListMapFloatingButton.setOnClickListener {
+            val intent = Intent(this, HospitalMapActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
 
@@ -182,6 +190,7 @@ class HospitalListActivity : AppCompatActivity() {
                         var className = responseBody[responseIndex]?.hospital?.hospitalDetail?.department ?: "진료과 없음" //진료과명
                         val address = responseBody[responseIndex].address //병원주소
                         var status: String //병원 영업 상태
+
 
                         if(responseBody[responseIndex].hospital != null) { //병원 상세정보 있으면
                             hospitalId = responseBody[responseIndex].hospital.hospitalId //병원 레이블 번호

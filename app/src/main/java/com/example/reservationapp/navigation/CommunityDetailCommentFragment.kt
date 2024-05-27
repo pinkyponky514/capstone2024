@@ -1,8 +1,11 @@
 package com.example.reservationapp.navigation
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -28,6 +32,7 @@ import com.example.reservationapp.Model.CommentRequest
 import com.example.reservationapp.Model.CommentsRequest
 import com.example.reservationapp.Model.CommunityCommentRequest
 import com.example.reservationapp.Model.ImageItem
+import com.example.reservationapp.Model.UserBoardLikeResponse
 import com.example.reservationapp.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONException
@@ -41,10 +46,12 @@ import java.util.Locale
 
 class CommunityDetailCommentFragment : Fragment() {
 
+/*
     private lateinit var buttonFavorite: CompoundButton
     private lateinit var titleTextView: TextView
     private lateinit var writerTextView:TextView
     private lateinit var textViewContent: TextView
+    private lateinit var imageViewDetail: ImageView
     private lateinit var timestamp2: TextView
     private lateinit var commentRecyclerView: RecyclerView
     private lateinit var editText: EditText
@@ -65,10 +72,16 @@ class CommunityDetailCommentFragment : Fragment() {
         private const val ARG_BOARD_ID = "arg_board_id"
         private const val ARG_IMAGE_URLS = "arg_image_urls"
 
+<<<<<<< HEAD
         fun newInstance(imageResource: Int, imageTitle: String, imageUrls: List<String>, boardId: Long): CommunityDetailCommentFragment {
+=======
+        fun newInstance(imageResource: Bitmap, imageTitle: String, boardId: Long): CommunityDetailCommentFragment {
+>>>>>>> lch
             val fragment = CommunityDetailCommentFragment()
             val args = Bundle()
-            args.putInt(ARG_IMAGE_RESOURCE, imageResource)
+            args.putInt(ARG_IMAGE_RESOURCE, 0*/
+/*imageResource*//*
+)
             args.putString(ARG_IMAGE_TITLE, imageTitle)
             args.putStringArrayList(ARG_IMAGE_URLS, ArrayList(imageUrls))
             args.putLong(ARG_BOARD_ID, boardId) // 올바른 boardId 값 설정
@@ -82,15 +95,12 @@ class CommunityDetailCommentFragment : Fragment() {
         arguments?.let {
             boardId = it.getLong("boardId", 0)
         }
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_community_detail_comment, container, false)
 
+<<<<<<< HEAD
         val recyclerViewImages: RecyclerView = view.findViewById(R.id.recyclerViewImages)
         recyclerViewImages.layoutManager = GridLayoutManager(requireContext(), 1)
 
@@ -101,6 +111,11 @@ class CommunityDetailCommentFragment : Fragment() {
             ImageItem(R.drawable.image4),
             ImageItem(R.drawable.image5)
         )
+=======
+        // FloatingActionButton 참조 가져오기
+        floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
+
+>>>>>>> lch
 
         // ProgressBar를 XML 레이아웃에서 찾아서 변수에 할당합니다.
         progressBar = view.findViewById(R.id.progressBar)
@@ -118,6 +133,9 @@ class CommunityDetailCommentFragment : Fragment() {
         editText = view.findViewById(R.id.messageEditText)
         sendButton2 = view.findViewById(R.id.buttonSend)
         buttonFavorite = view.findViewById(R.id.button_favorite)
+        imageViewDetail = view.findViewById(R.id.imageViewDetail)
+        floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
+
 
         commentRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = CommunityDetailCommentAdapter()
@@ -135,18 +153,21 @@ class CommunityDetailCommentFragment : Fragment() {
                     val content = data.content
                     val writer = data.writer
                     val regDate = data.regDate
-                    //     val regTime = data.regTime
-
+                    val regTime = data.regTime
+                    val decodedBytes: ByteArray = Base64.decode(data.mainImage, Base64.DEFAULT)
+                    var bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
 //
 //                    titleTextView = view.findViewById<TextView>(R.id.textViewTitle)
 //                    writerTextView = view.findViewById(R.id.textViewWriter)
 //                    timestamp2 = view.findViewById(R.id.timestamp2)
-                    timestamp2.text = regDate.toString()
+                    timestamp2.text = regDate.toString()+" "+regTime.toString()
                     titleTextView.text = title
                     writerTextView.text="글쓴이:"+writer
                     textViewContent.text = content
+                    imageViewDetail.setImageBitmap(bitmap)
 
                     fetchComments()
+                    fetchUserBoardLike()
                     progressBar.visibility = View.GONE
 
                 } else {
@@ -300,4 +321,30 @@ class CommunityDetailCommentFragment : Fragment() {
             }
         })
     }
+
+    fun fetchUserBoardLike(){
+        App.apiService.getUserBoardLike(boardId = boardId).enqueue(object :
+            Callback<UserBoardLikeResponse> {
+            override fun onResponse(call: Call<UserBoardLikeResponse>, response: Response<UserBoardLikeResponse>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()!!
+                    val data = responseBody.data
+
+                    if(data == true){
+                        buttonFavorite.setBackgroundResource(R.drawable.ic_favoritelikes)
+                    }else{
+                        buttonFavorite.setBackgroundResource(R.drawable.ic_likes)
+                    }
+
+                } else {
+                    Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
+                }
+            }
+
+            override fun onFailure(call: Call<UserBoardLikeResponse>, t: Throwable) {
+                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+            }
+        })
+    }
+*/
 }

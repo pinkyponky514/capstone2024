@@ -111,7 +111,7 @@ class ChatActivity : AppCompatActivity() {
 
                             gethospital(recommended_departments[0])
                         } else {
-                            handleErrorResponse(response)
+                            //handleErrorResponse(response)
                             Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                         }
                     }
@@ -154,7 +154,10 @@ class ChatActivity : AppCompatActivity() {
                     chatList.add(ChatItem("AI", chatBotResponse))
                     adapter.updateList(chatList)
 
-                } else Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
+                } else {
+                    handleErrorResponse(response)
+                    Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
+                } //통신 성공, 응답은 실패
             }
 
             override fun onFailure(call: Call<List<SearchHospital>>, t: Throwable) {
@@ -164,7 +167,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     //
-    private fun handleErrorResponse(response: Response<ChatBotResponse>) {
+    private fun handleErrorResponse(response: Response<List<SearchHospital>>) {
         val errorBody = response.errorBody()?.string()
         Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: $errorBody")
         if (errorBody != null) {

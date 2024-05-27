@@ -10,10 +10,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Hospital_DetailPage
-import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HistoryItem
 import com.example.reservationapp.R
-import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.ReviewWriteDetailActivity
 import java.util.Calendar
 
@@ -83,7 +81,7 @@ class PastHistoryAdapter: RecyclerView.Adapter<PastHistoryAdapter.ViewHolder>() 
                 review_Button.isEnabled = false
                 review_Button.text = "리뷰 작성완료"
                 review_Button.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-                review_Button.setBackgroundResource(R.drawable.style_gray_rectangle_radius)
+                review_Button.setBackgroundResource(R.drawable.style_gray_radius_5)
             }
         }
 

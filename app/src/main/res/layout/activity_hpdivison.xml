@@ -25,7 +25,7 @@
         android:id="@+id/PatientButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_dark_green_radius_pressed_button"
+        android:background="@drawable/style_dark_green_radius_20_pressed_button"
         android:drawableBottom="@drawable/patient_button_image_add"
         android:text="환자"
         android:textColor="@drawable/text_click_color"

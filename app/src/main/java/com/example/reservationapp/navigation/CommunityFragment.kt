@@ -1,6 +1,8 @@
 package com.example.reservationapp.navigation
 
 import CommunityImageAdapter
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +16,9 @@ import com.example.reservationapp.App
 import com.example.reservationapp.Model.*
 import com.example.reservationapp.MainActivity
 import com.example.reservationapp.Model.BoardContent
-import com.example.reservationapp.Model.BoardResponse
-import com.example.reservationapp.Model.ChatBotResponse
-import com.example.reservationapp.Model.ChatItem
 import com.example.reservationapp.Model.CommunityItem
 import com.example.reservationapp.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineStart
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -28,6 +27,9 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.io.encoding.ExperimentalEncodingApi
+import android.util.Base64
+import android.widget.ProgressBar
 
 class CommunityFragment : Fragment() {
 
@@ -35,6 +37,7 @@ class CommunityFragment : Fragment() {
     private lateinit var adapter: CommunityImageAdapter
     private lateinit var timestamp: TextView
     private lateinit var boardItems: List<BoardContent>
+    private lateinit var progressBar: ProgressBar
 
     val itemList = mutableListOf<CommunityItem>()
 
@@ -51,6 +54,8 @@ class CommunityFragment : Fragment() {
             val formattedTime = sdf.format(currentTime)
 
             val item = itemList[position]
+            //!!!!!!!!!!!!!!!!! 여기 주석 풀어서 확인 !!!!!!!!!!!!!!!!!!!!!!!! 오류남 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*
             val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title, listOf(formattedTime), item.boardId)
             fragment.arguments = bundle
 
@@ -58,6 +63,7 @@ class CommunityFragment : Fragment() {
                 .replace(R.id.main, fragment)
                 .addToBackStack(null)
                 .commit()
+*/
         }
 
         val mainActivity = requireActivity() as MainActivity
@@ -65,6 +71,8 @@ class CommunityFragment : Fragment() {
 
 //        // 작성 시간을 표시하는 TextView를 찾아 변수에 할당합니다.
 //        timestamp = view.findViewById(R.id.timestamp)
+
+        progressBar = view.findViewById(R.id.progressBar)
 
         return view
     }
@@ -90,11 +98,14 @@ class CommunityFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     private fun fetchCommunityItems() {
+        // 로딩 시작 시 ProgressBar 표시
+        progressBar.visibility = View.VISIBLE
         val apiService = App.apiService
 
-        apiService.getAllBoards().enqueue(object : Callback<BoardResponse> {
-            override fun onResponse(call: Call<BoardResponse>, response: Response<BoardResponse>) {
+        apiService.getAllBoards().enqueue(object : Callback<AllBoardResponse> {
+            override fun onResponse(call: Call<AllBoardResponse>, response: Response<AllBoardResponse>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()!!
                     boardItems = responseBody.data
@@ -104,8 +115,11 @@ class CommunityFragment : Fragment() {
                     for (boardContent in boardItems) {
                         getCommentsCount(boardContent.id) { commentCount ->
                             getBoardLikeCount(boardContent.id) { likeCount ->
+
+                                val decodedBytes: ByteArray = Base64.decode(boardContent.mainImage, Base64.DEFAULT)
+                                val bitmapImage = getImg(decodedBytes)
                                 val item = CommunityItem(
-                                    R.drawable.ex_communityimage1,
+                                    bitmapImage,
                                     boardContent.title,
                                     boardContent.writer ?: "",
                                     likeCount,
@@ -118,23 +132,28 @@ class CommunityFragment : Fragment() {
                                 if (completedRequests == boardItems.size) {
                                     recyclerView.adapter = adapter
                                     adapter.notifyDataSetChanged()
+                                    progressBar.visibility = View.GONE
                                 }
                             }
                         }
                     }
+//                    // 데이터 로드 완료 시 ProgressBar 숨기기
+//                    progressBar.visibility = View.GONE
                 } else {
                     handleErrorResponse(response)
+                    progressBar.visibility = View.GONE
                     Log.d("FAILURE Response", "Connect SUCCESS, Response FAILURE, body: ${response.body().toString()}")
                 }
             }
 
-            override fun onFailure(call: Call<BoardResponse>, t: Throwable) {
+            override fun onFailure(call: Call<AllBoardResponse>, t: Throwable) {
                 Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+                progressBar.visibility = View.GONE
             }
         })
     }
 
-    private fun handleErrorResponse(response: Response<BoardResponse>) {
+    private fun handleErrorResponse(response: Response<AllBoardResponse>) {
         val errorBody = response.errorBody()?.string()
         Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: $errorBody")
         if (errorBody != null) {
@@ -149,6 +168,17 @@ class CommunityFragment : Fragment() {
             } catch (e: JSONException) {
                 Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
             }
+        }
+    }
+    
+    private fun getImg(input: ByteArray): Bitmap{
+        var arr = input
+
+        try {
+            var bitmap = BitmapFactory.decodeByteArray(arr, 0, arr.size)
+            return bitmap
+        } catch (e: Exception) {
+            throw RuntimeException(e)
         }
     }
 

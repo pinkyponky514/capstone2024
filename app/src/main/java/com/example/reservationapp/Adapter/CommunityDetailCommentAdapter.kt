@@ -79,7 +79,7 @@ class CommunityDetailCommentAdapter(
         private val timestamp: TextView = itemView.findViewById(R.id.timestamp)
 
         fun bind(item: CommunityItem) {
-            imageView.setImageResource(item.imageResource)
+            imageView.setImageBitmap(item.imageResource)
             title.text = item.title
             writer.text = item.writer
             likes.text = item.likes

@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/hospital_list_ratingBar"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,9 +37,9 @@
         android:layout_marginStart="10dp"
         android:text="4.0"
         android:theme="@style/TextView15dpDarkGray"
-        app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
-        app:layout_constraintStart_toEndOf="@+id/ratingBar"
-        app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+        app:layout_constraintBottom_toBottomOf="@+id/hospital_list_ratingBar"
+        app:layout_constraintStart_toEndOf="@+id/hospital_list_ratingBar"
+        app:layout_constraintTop_toTopOf="@+id/hospital_list_ratingBar" />
 
     <TextView
         android:id="@+id/comment_textView"
@@ -51,8 +51,8 @@
         android:text="좋은 병원이네요"
         android:theme="@style/TextView15dpDarkGray"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ratingBar"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+        app:layout_constraintStart_toStartOf="@+id/hospital_list_ratingBar"
+        app:layout_constraintTop_toBottomOf="@+id/hospital_list_ratingBar" />
 
     <TextView
         android:id="@+id/reviewDate_textView"
@@ -81,11 +81,11 @@
         android:id="@+id/review_delete_ImageView"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:layout_marginEnd="18dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintBottom_toBottomOf="@+id/hospital_list_ratingBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ratingBar"
+        app:layout_constraintTop_toTopOf="@+id/hospital_list_ratingBar"
         app:srcCompat="@drawable/image_delete"
         app:tint="@color/gray" />
 </androidx.constraintlayout.widget.ConstraintLayout>

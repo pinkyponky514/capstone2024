@@ -38,7 +38,7 @@ class CommunityImageAdapter(
         private val timestamp: TextView = itemView.findViewById(R.id.timestamp) // Timestamp TextView 추가
 
         fun bind(item: CommunityItem) {
-            imageView.setImageResource(item.imageResource)
+            imageView.setImageBitmap(item.imageResource)
             title.text = item.title
             writer.text = item.writer
             likes.text = item.likes

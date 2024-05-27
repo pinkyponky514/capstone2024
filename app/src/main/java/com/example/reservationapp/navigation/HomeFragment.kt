@@ -27,12 +27,16 @@ import com.example.reservationapp.Model.AllBookmarkResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.ReserveItem
+import com.example.reservationapp.Model.SearchHospital
 import com.example.reservationapp.Model.UserReservationResponse
+import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHomeBinding
 import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
 import com.naver.maps.map.NaverMapSdk
+import com.naver.maps.map.OnMapReadyCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -53,9 +57,8 @@ class HomeFragment : Fragment() {
     private lateinit var popularHospitalAdapter: PopularHospitalAdapter //인기 순위 병원 adapter
     private lateinit var userReserveAlarm: ArrayList<ReserveItem> //유저가 예약한 병원 리스트
 
-
     private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
-    private val syptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
+    private val symptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
 
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
@@ -70,6 +73,8 @@ class HomeFragment : Fragment() {
 
         val mainActivity = requireActivity() as MainActivity //MainActivity 접근
         mainActivity.tokenCheck()
+
+
 
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
@@ -125,7 +130,8 @@ class HomeFragment : Fragment() {
                     responseBodyReservation = response.body()!!
 
                     for(reservation in responseBodyReservation) {
-                        if(reservation.status == "예약신청" || reservation.status == "예약확정") {
+                        //if(reservation.status == "예약신청" || reservation.status == "예약확정") {
+                        if(reservation.status == "예약확정") {
                             userReserveAlarm.add(ReserveItem(reservation.hospitalName, reservation.reservationDate.toString(), reservation.reservationTime.toString()))
                         }
                     }
@@ -142,9 +148,7 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                else {
-
-                }
+                else handleErrorResponse(response)
             }
 
             override fun onFailure(call: Call<List<UserReservationResponse>>, t: Throwable) {
@@ -160,48 +164,32 @@ class HomeFragment : Fragment() {
             mainActivity.navigationSetItem()
         }
 
-
-        //진료과별 예약 버튼
-        for(i in 0..3) {
-            var classButtonId = resources.getIdentifier("class_button${i+1}", "id", context?.packageName)
-            var button = binding.root.findViewById<Button>(classButtonId) //var button = view.findViewById<Button>(classButtonId)
-
-            button.text = classReserveList[i]
-            button.setOnClickListener {
-                val intent = Intent(requireActivity(), HospitalListActivity::class.java)
-                intent.putExtra("searchWord", button.text)
+        //진료과, 증상별 버튼 설정
+        val classButtonList: List<Button> = listOf(binding.classButton1, binding.classButton2, binding.classButton3, binding.classButton4)
+        val symptomButtonList: List<Button> = listOf(binding.symptomButton1, binding.symptomButton2, binding.symptomButton3, binding.symptomButton4)
+        for(i in classButtonList.indices) {
+            val intent = Intent(requireActivity(), HospitalListActivity::class.java)
+            classButtonList[i].text = classReserveList[i]
+            classButtonList[i].setOnClickListener {
+                intent.putExtra("searchWord", classReserveList[i])
                 startActivity(intent)
             }
-
-            Log.w("HomeFragment", "class Button ID: $classButtonId, Text: ${classReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
+            symptomButtonList[i].text = symptomReserveList[i]
+            symptomButtonList[i].setOnClickListener {
+                intent.putExtra("searchWord", symptomReserveList[i])
+                startActivity(intent)
+            }
         }
+
         //진료과별 더보기 버튼
         val classMoreTextView = binding.classMoreTextView
         classMoreTextView.setOnClickListener {
-            val dialog = CustomMoreDialogFragment.newInstance(classReserveList) //val dialog = CustomMoreDialogActivity(classReserveList)
-            dialog.show(parentFragmentManager,  "CustomMoreDialog")
-        }
-
-
-        //증상 질환별 예약 버튼
-        for(i in 0..3) {
-            var syptomButtonId = resources.getIdentifier("symptom_button${i+1}", "id", context?.packageName)
-            var button = binding.root.findViewById<Button>(syptomButtonId) //var button = view.findViewById<Button>(classButtonId)
-
-            button.text = syptomReserveList[i]
-            button.setOnClickListener {
-                val intent = Intent(requireActivity(), HospitalListActivity::class.java)
-                intent.putExtra("searchWord", button.text)
-                startActivity(intent)
-            }
-
-            Log.w("HomeFragment", "syptom Button ID: $syptomButtonId, Text: ${syptomReserveList[i]}, Button Object: $button") //Log 찍어보는 부분
+            mainActivity.showBottomSheet("진료과")
         }
         //증상 질환별 더보기 버튼
         val syptomMoreTextView = binding.symptomMoreTextView
         syptomMoreTextView.setOnClickListener {
-            val dialog = CustomMoreDialogFragment.newInstance(syptomReserveList)
-            dialog.show(parentFragmentManager,  "CustomDialog")
+            mainActivity.showBottomSheet("증상별")
         }
 
 
@@ -240,6 +228,7 @@ class HomeFragment : Fragment() {
         popularHospitalRecyclerView.setHasFixedSize(true)
 
         val bookmarkHospitalScoreTextView = binding.textViewPopularHospitalScore
+        val bookmarkHospitalImageView = binding.bookmarkImageView
 
         //인기 순위 병원 설정
         apiService.getAllHospitalBookmark().enqueue(object: Callback<AllBookmarkResponse> {
@@ -289,33 +278,18 @@ class HomeFragment : Fragment() {
                         if(bookmarkItemList.isEmpty()) { //인기순위 비어있으면
                             bookmarkHospitalScoreTextView.visibility = View.GONE
                             popularHospitalRecyclerView.visibility = View.GONE
+                            bookmarkHospitalImageView.visibility = View.GONE
                         } else {
                             bookmarkHospitalScoreTextView.visibility = View.VISIBLE
                             popularHospitalRecyclerView.visibility = View.VISIBLE
+                            bookmarkHospitalImageView.visibility = View.VISIBLE
                         }
                         Log.w("HomeFragment", "updateList bookmarkItemList: $bookmarkItemList")
                     }
                 }
 
                 //통신 성공, 응답 실패
-                else {
-                    val errorBody = response.errorBody()?.string()
-                    Log.d("HomeFragment FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                    if (errorBody != null) {
-                        try {
-                            val jsonObject = JSONObject(errorBody)
-                            val timestamp = jsonObject.optString("timestamp")
-                            val status = jsonObject.optInt("status")
-                            val error = jsonObject.optString("error")
-                            val message = jsonObject.optString("message")
-                            val path = jsonObject.optString("path")
-
-                            Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                        } catch (e: JSONException) {
-                            Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                        }
-                    }
-                }
+                else handleErrorResponse(response)
             }
 
             //통신 실패

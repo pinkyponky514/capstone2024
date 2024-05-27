@@ -1,9 +1,16 @@
 package com.example.reservationapp.Model
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Response
 import java.io.Serializable
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.Calendar
 
 //ReserveAlarmAdapter
@@ -13,35 +20,14 @@ data class ReserveItem (
     var reservationTime: String, //예약한 시간
 )
 
-/*
 //RecentSearchWordAdapter
 data class RecentItem (
-    var recent_search_word: String //최근 검색한 단어
-)
+    var recentSearchWord: String //최근 검색한 단어
+/*
+    var searchDate: LocalDate //검색 날짜
+    var searchTime: LocalTime //검색시간
 */
-data class RecentItem(
-    var recent_search_word: String // 최근 검색한 단어
-) : Parcelable {
-    constructor(parcel: Parcel) : this(parcel.readString()!!)
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(recent_search_word)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<RecentItem> {
-        override fun createFromParcel(parcel: Parcel): RecentItem {
-            return RecentItem(parcel)
-        }
-
-        override fun newArray(size: Int): Array<RecentItem?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+)
 
 //HospitalListAdapter
 data class HospitalItem(
@@ -52,7 +38,7 @@ data class HospitalItem(
     var hospitalAddress: String, //병원주소 ㅇ
     var className: List<String>, //진료과 ㅇ
     var status: String, //병원 영업 상태
-    //var favoriteCount: Int //즐겨찾기 수
+    //var bookmarkBoolean: Boolean //즐겨찾기 플래그
 )
 
 //ChattingAdapter
@@ -89,7 +75,6 @@ data class ImageItem(
 data class HistoryItem (
     var reservationId: Long, //예약 레이블 번호
     var hospitalId: Long, //병원 레이블 번호
-
     var status: String, //진료상태
     var hospitalName: String, //병원이름
     var className: String, //진료과명
@@ -121,7 +106,7 @@ data class CommentItem(
 
 // DataModel.kt
 data class CommunityItem(
-    val imageResource: Int,
+    val imageResource: Bitmap,
     val title: String,
     val writer: String,
     val likes : String,
@@ -131,18 +116,6 @@ data class CommunityItem(
     val boardId: Long
 )
 
-//Filter
-data class FilterItem(
-    var hospitalName: String, //병원이름
-    var hospitalAddress: String, //병원주소
-    var className: List<String>, //진료과
-    var weekTime: HashMap<String, String>, //월~금 진료시간
-    var favoriteCount: Int, //병원 즐겨찾기 수
-    var reviewList: MutableList<ReviewItem>, //해당 병원 리뷰 리스트, MutableList = 변경가능한 리스트
-    var starScore: String, //별점 4.0
-    var waitCount: Int, //대기인원
-)
-
 //PopularHospitalAdapter
 data class PopularHospitalItem(
     var score: Int, //순위
@@ -150,21 +123,21 @@ data class PopularHospitalItem(
     var hospitalName: String //병원이름
 )
 
-
-//년, 월, 일 해당하는 날짜의 요일 구하기
-fun getDayOfWeek(year:Int, month:Int, day: Int): String {
-    val calendar = Calendar.getInstance()
-    calendar.set(year, month, day)
-
-    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-    return when(dayOfWeek) {
-        Calendar.SUNDAY -> "일"
-        Calendar.MONDAY -> "월"
-        Calendar.TUESDAY -> "화"
-        Calendar.WEDNESDAY -> "수"
-        Calendar.THURSDAY -> "목"
-        Calendar.FRIDAY -> "금"
-        Calendar.SATURDAY -> "토"
-        else -> ""
+fun handleErrorResponse(response: Response<*>) {
+    val errorBody = response.errorBody()?.string()
+    Log.d("handleErrorResponse", "Response failed: ${response.code()}, error body: ${errorBody ?: "none"}")
+    if (errorBody != null) {
+        try {
+            val jsonObject = JSONObject(errorBody)
+            val timestamp = jsonObject.optString("timestamp")
+            val status = jsonObject.optInt("status")
+            val error = jsonObject.optString("error")
+            val message = jsonObject.optString("message")
+            val path = jsonObject.optString("path")
+            Log.d("ErrorDetails", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+        } catch (e: JSONException) {
+            Log.d("JSONParsingError", "Error parsing error body JSON: ${e.localizedMessage}")
+        }
     }
 }
+

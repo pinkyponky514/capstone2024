@@ -2,6 +2,7 @@ package com.example.reservationapp.Model
 
 import com.example.reservationapp.userMapx
 import com.example.reservationapp.userMapy
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -9,8 +10,10 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Multipart
 
 interface APIService {
     @POST("/jwt-login/user/join") //환자 회원가입
@@ -60,30 +63,33 @@ interface APIService {
 
     //Delete /reviews/{review_id}/{reservation_id} -> 병원 리뷰 삭제 ( user 본인만 가능 )
     @DELETE("/reviews/{reviewId}/{reservationId}")
-    fun deleteReview(@Path(value="reviewId") reviewId: Long = 0, @Path(value="reservationId") reservationId: Long = 0)
+    fun deleteReview(@Path(value="reviewId") reviewId: Long = 0, @Path(value="reservationId") reservationId: Long = 0): Call<Int>
 
-    @GET("/reviews/{hospitalId}/all") //병원의 모든 리뷰 조회
+    @GET("/reviews/{hospitalId}/all") //병원의 모든 리뷰 조회 - 비동기 처리
     @Headers("Auth: false")
     fun getHospitalReviewAll(@Path(value="hospitalId") hospitalId: Long = 0): Call<List<HospitalReviewAllResponse>>
+
+    @GET("/reviews/{hospitalId}/all") //병원의 모든 리뷰 조회 - 동기적 처리
+    @Headers("Auth: false")
+    suspend fun getSyncHospitalReviewAll(@Path(value="hospitalId") hospitalId: Long = 0)
 
     @POST("/reservations") //병원 예약 (토큰필요)
     fun postReservation(@Body reservation: ReservationRequest): Call<ReservationResponse>
 
-    //Delete /reservations/cancel/{reservationId} -> 예약 취소
-    @DELETE("/reservations/cancel/{reservationId}") //예약 취소 (토큰필요(
+    @DELETE("/reservations/cancel/{reservationId}") //예약 취소 (토큰필요)
     fun deleteReservation(@Path(value="reservationId") reservationId: Long = 0): Call<DeleteReservationResponse>
-
 
     @GET("/bot/chat") //챗봇 - 진료과목 가져오기
     @Headers("Auth: false")
     fun getChatBotAnswer(@Query("prompt") prompt: String?= null): Call<ChatBotResponse>
 
+    @Multipart
     @POST("/boards/write") //커뮤니티 게시글 작성하기
-    fun postBoard(@Body board: BoardPost): Call<BoardResponse>
+    fun postBoard(@Part image: List<MultipartBody.Part>, @Part("boardDto") board: BoardPost): Call<BoardResponse>
 
     @GET("/boards") //전체 게시글 가져오기
     @Headers("Auth: false")
-    fun getAllBoards():Call<BoardResponse>
+    fun getAllBoards():Call<AllBoardResponse>
 
     @POST("/reservations/hospital/confirm") //예약 확정
     fun postConfirmReservation(@Body reservation: ConfirmReservationRequest):Call<ConfirmReservationResponse>
@@ -106,6 +112,9 @@ interface APIService {
     @Headers("Auth: false")
     fun getBoardLikes(@Path(value="boardId") boardId:Long): Call<BoardLikesResponset>
 
+    @GET("/boardlike/find/user/{boardId}") //유저의 게시글 좋아요 확인
+    fun getUserBoardLike(@Path(value="boardId") boardId:Long): Call<UserBoardLikeResponse>
+
 /*
     @GET("/reservations/check") //유저의 예약 조회 (토큰필요)
     suspend fun getUserReservation(): List<UserReservationResponse> //비동기 처리
@@ -122,4 +131,12 @@ interface APIService {
     @Headers("Auth: false") //병원 api테이블에서 모든 데이터 가져오기
     fun getAllHospitlas():Call<ApiHospitalResponse>
 
+    @GET("/users/search/request") //최근 검색어 가져오기 (토큰필요)
+    fun getRecentSearchWordList(): Call<RecentSearchWordResponse>
+
+    @POST("/users/search/save/{keyword}") //최근 검색어 저장 (토큰필요)
+    fun postRecentSearchWord(@Path(value="keyword") searchWord:String): Call<RecentSearchWordResponseData>
+
+    @DELETE("/users/search/remove/{keyword}")
+    fun deleteRecentSearchWord(@Path(value="keyword") searchWord:String?): Call<RecentSearchWordResponseData>
 }

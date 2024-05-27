@@ -24,16 +24,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.MultiImageAdapter
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.AllBoardResponse
 import com.example.reservationapp.Model.BoardPost
 import com.example.reservationapp.Model.ImageData
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 @Suppress("DEPRECATION")
 class CommunityPostFragment : Fragment() {
@@ -51,6 +56,7 @@ class CommunityPostFragment : Fragment() {
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
 
+    private var imageFiles: List<File> = emptyList()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -89,7 +95,16 @@ class CommunityPostFragment : Fragment() {
             val content = view.findViewById<EditText>(R.id.editTextContent).text.toString()
 
             val boardContent = BoardPost(title, content)
-            apiService.postBoard(boardContent).enqueue(object :
+
+            val imagepart = imageFiles.size
+            val imageParts = imageFiles.map { file ->
+                val requestBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("image", file.name, requestBody)
+            }
+
+
+
+            apiService.postBoard(imageParts, boardContent).enqueue(object :
                 Callback<BoardResponse> {
                 override fun onResponse(call: Call<BoardResponse>, response: Response<BoardResponse>) {
                     if (response.isSuccessful) {
@@ -161,60 +176,13 @@ class CommunityPostFragment : Fragment() {
         }
     }
 
-
-    // 갤러리에서 이미지를 선택한 결과를 처리
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
-////            // 이미지 선택 결과를 이미지뷰에 설정합니다.
-//            val selectedImageUri = data.data
-//            imageView.setImageURI(selectedImageUri)
-//
-//            if (data.clipData == null) { // Single image selected
-//                Log.e("single choice: ", data.data.toString())
-//                val imageUri = data.data
-//                imageDataList.add(ImageData(imageUri!!))
-//
-//                adapter = MultiImageAdapter(imageDataList, requireContext())
-//                recyclerView.adapter = adapter
-//                recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
-//            } else { // Multiple images selected
-//                val clipData = data.clipData
-//                Log.e("clipData", clipData!!.itemCount.toString())
-//
-//                if (clipData.itemCount > 10) { // More than 10 images selected
-//                    Toast.makeText(context, "사진은 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
-//                } else {
-//                    Log.e(TAG, "multiple choice")
-//
-//                    for (i in 0 until clipData.itemCount) {
-//                        val imageUri = clipData.getItemAt(i).uri
-//                        try {
-//                            imageDataList.add(ImageData(imageUri))
-//                        } catch (e: Exception) {
-//                            Log.e(TAG, "File select error", e)
-//                        }
-//                    }
-//
-//                    adapter = MultiImageAdapter(imageDataList, requireContext())
-//                    recyclerView.adapter = adapter
-//                    recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
-//                }
-//            }
-//        }
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImages = ArrayList<Uri>()
             if (data.clipData == null) { // Single image selected
-                val imageUri = data.data
-                if (imageUri != null) {
-                    selectedImages.add(imageUri)
-                }
+                data.data?.let { selectedImages.add(it) }
             } else { // Multiple images selected
                 val clipData = data.clipData
                 if (clipData != null) {
@@ -231,11 +199,19 @@ class CommunityPostFragment : Fragment() {
                 return
             }
 
-            // 이미지 추가
+            // 이미지 추가 및 업로드
+            imageFiles = selectedImages.mapNotNull { uri ->
+                val imagePath = getRealPathFromURI(uri)
+                if (imagePath != null) File(imagePath) else null
+            }
+
+            // RecyclerView 업데이트
             for (uri in selectedImages) {
                 imageDataList.add(ImageData(uri))
             }
-
+//            if (imageFiles.isNotEmpty()) {
+//                uploadImages(imageFiles)
+//            }
             adapter.notifyDataSetChanged()
             updateImageCount()
         }
@@ -244,5 +220,16 @@ class CommunityPostFragment : Fragment() {
     companion object {
         private const val REQUEST_IMAGE_PICK = 100
         private const val TAG = "CommunityPostFragment"
+    }
+
+    private fun getRealPathFromURI(contentUri: Uri): String? {
+        val cursor = activity?.contentResolver?.query(contentUri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                return it.getString(columnIndex)
+            }
+        }
+        return null
     }
 }
