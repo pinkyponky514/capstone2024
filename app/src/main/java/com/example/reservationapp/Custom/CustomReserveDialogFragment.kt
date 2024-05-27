@@ -437,9 +437,9 @@ class CustomReserveDialogFragment() : DialogFragment() {
     //버튼 비활성화, 활성화 배경 색
     private fun buttonEnabledBackgroundResource() {
         if(reservationButton.isEnabled) {
-            reservationButton.setBackgroundResource(R.drawable.style_dark_green_radius_pressed_button)
+            reservationButton.setBackgroundResource(R.drawable.style_dark_green_radius_20_pressed_button)
         } else {
-            reservationButton.setBackgroundResource(R.drawable.style_gray_radius)
+            reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
         }
     }
     //

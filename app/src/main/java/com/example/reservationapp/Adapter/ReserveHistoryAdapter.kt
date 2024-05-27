@@ -69,7 +69,7 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
                 cancel_Button.text = "예약 취소완료"
                 cancel_Button.isEnabled = false
                 cancel_Button.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-                cancel_Button.setBackgroundResource(R.drawable.style_gray_rectangle_radius)
+                cancel_Button.setBackgroundResource(R.drawable.style_gray_radius_5)
             }
 
 

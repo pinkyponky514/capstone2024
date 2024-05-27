@@ -69,7 +69,7 @@ class AbleReviewWriteAdapter: RecyclerView.Adapter<AbleReviewWriteAdapter.ViewHo
                 review_Button.isEnabled = false
                 review_Button.text = "리뷰 작성완료"
                 review_Button.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-                review_Button.setBackgroundResource(R.drawable.style_gray_rectangle_radius)
+                review_Button.setBackgroundResource(R.drawable.style_gray_radius_5)
             }
 
         }

@@ -1,4 +1,3 @@
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,23 +10,15 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.App
-import com.example.reservationapp.HospitalMainActivity
-import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.ChatBotResponse
 import com.example.reservationapp.Model.ConfirmReservationRequest
 import com.example.reservationapp.Model.ConfirmReservationResponse
-import com.example.reservationapp.Model.HospitalUserLoginResponse
 import com.example.reservationapp.Model.ReservationItem
 import com.example.reservationapp.R
-import com.example.reservationapp.Retrofit.RetrofitClient
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>() {
 
@@ -139,9 +130,9 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
 
         // 여기서 status에 따라 배경색 변경
         if (currentItem.status == "예약확정") {
-            holder.historyStatusTextView.setBackgroundResource(R.drawable.style_dark_green_rectangle_status)
+            holder.historyStatusTextView.setBackgroundResource(R.drawable.style_dark_green_radius_5_status_padding)
         } else if (currentItem.status == "예약신청" || currentItem.status == "예약취소") {
-            holder.historyStatusTextView.setBackgroundResource(R.drawable.style_gray_rectangle_status)
+            holder.historyStatusTextView.setBackgroundResource(R.drawable.style_gray_radius_5_status_padding)
         } else if (currentItem.status == "진료완료"){
             holder.historyStatusTextView.setBackgroundResource(R.drawable.alarm_hospital_finish)
         }

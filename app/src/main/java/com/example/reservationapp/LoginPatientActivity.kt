@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
@@ -24,7 +23,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.regex.Pattern
 
 //로그인 화면
 class LoginPatientActivity: AppCompatActivity() {
@@ -132,9 +130,9 @@ class LoginPatientActivity: AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 LoginButton.isEnabled = idFlag && pwFlag
                 if(!LoginButton.isEnabled) { //false이면 배경색 gray로
-                    LoginButton.setBackgroundResource(R.drawable.style_gray_radius)
+                    LoginButton.setBackgroundResource(R.drawable.style_gray_radius_20)
                 } else {
-                    LoginButton.setBackgroundResource(R.drawable.style_dark_green_radius_pressed_button)
+                    LoginButton.setBackgroundResource(R.drawable.style_dark_green_radius_20_pressed_button)
                 }
             }
         }

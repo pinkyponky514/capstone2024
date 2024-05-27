@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:id="@+id/homeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="20dp"
-                android:background="@drawable/style_searchview"
+                android:background="@drawable/style_dark_green_line_radius_30"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:theme="@style/TextView16dpDarkGray"
@@ -139,7 +140,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
 
@@ -154,7 +155,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
 
@@ -169,7 +170,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
 
@@ -184,7 +185,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
                 </TableRow>
@@ -250,7 +251,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
 
@@ -265,7 +266,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
 
@@ -280,7 +281,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
 
@@ -295,7 +296,7 @@
                         android:autoSizeMinTextSize="9dp"
                         android:autoSizeStepGranularity="1dp"
                         android:autoSizeTextType="uniform"
-                        android:background="@drawable/style_gray_radius_line_button"
+                        android:background="@drawable/style_gray_line_radius_10"
                         android:maxLines="1"
                         android:text="Button" />
                 </TableRow>
@@ -406,7 +407,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="15dp"
-                    android:background="@drawable/style_light_gray_rectangle_status"
+                    android:background="@drawable/style_light_gray_radius_5_status_padding"
                     android:nestedScrollingEnabled="false"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -416,9 +417,6 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
@@ -433,5 +431,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

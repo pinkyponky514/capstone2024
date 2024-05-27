@@ -1,33 +1,417 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/main_content"
+    <!-- 불투명 설정할 View -->
+    <View
+        android:id="@+id/background_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/mint"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:elevation="15dp"
+        android:visibility="gone" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        app:itemBackground="@color/white"
-        app:itemIconTint="@drawable/menu_click_color"
-        app:itemTextColor="@drawable/menu_click_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/main_navi_menu"
-        tools:ignore="MissingConstraints" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/mint"
+            app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+        </FrameLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            app:itemBackground="@color/white"
+            app:itemIconTint="@drawable/menu_click_color"
+            app:itemTextColor="@drawable/menu_click_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/main_navi_menu"
+            tools:ignore="MissingConstraints" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 진료과별 더보기 bottom sheet -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/class_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="@drawable/white_round_top_border_20"
+        android:elevation="15dp"
+        android:orientation="vertical"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="150dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <TextView
+            android:id="@+id/classnameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="진료과목"
+            android:theme="@style/TextView16dpBlackBold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TableLayout
+            android:id="@+id/classTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/classnameTextView">
+
+            <TableRow
+                android:id="@+id/classTableRow1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/classButton1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="내과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp"/>
+
+                <Button
+                    android:id="@+id/classButton2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="외과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/classButton3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="이비인후과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:background="@drawable/style_button_focus" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/classTableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/classButton4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="피부과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/classButton5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="안과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/classButton6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="성형외과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/classTableRow3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/classButton7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="신경외과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/classButton8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="소아청소년과"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/none"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:visibility="invisible"
+                    android:enabled="false" />
+            </TableRow>
+
+        </TableLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 증상별 더보기 bottom sheet -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/symptom_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@drawable/white_round_top_border_20"
+        android:elevation="15dp"
+        android:orientation="vertical"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="200dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <TextView
+            android:id="@+id/symptomTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="진료과목"
+            android:theme="@style/TextView16dpBlackBold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TableLayout
+            android:id="@+id/symptomTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/symptomTextView">
+
+            <TableRow
+                android:id="@+id/symptomTableRow1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/symptomButton1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="발열"
+                    android:theme="@style/TextView16dpBlack"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp"/>
+
+                <Button
+                    android:id="@+id/symptomButton2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="기침"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="가래"
+                    android:theme="@style/TextView16dpBlack"
+                    android:background="@drawable/style_button_focus" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/symptomTableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/symptomButton4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="인후통"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="가슴통증"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="호흡곤란"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/symptomTableRow3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/symptomButton7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="두통"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="구토 및 설사"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton9"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="소화불량"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/symptomTableRow4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/symptomButton10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="배탈"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="가려움증"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="피부발진"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/symptomTableRow5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <Button
+                    android:id="@+id/symptomButton13"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="관절통"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="근육통"
+                    android:theme="@style/TextView16dpBlack"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:id="@+id/symptomButton15"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="시력문제"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_button_focus" />
+            </TableRow>
+
+
+        </TableLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

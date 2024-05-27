@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.OpenApiHospital
 import com.example.reservationapp.Model.ApiHospitalResponse
 import com.example.reservationapp.Model.Hospital
@@ -109,10 +111,15 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    // Hospital_DetailPage 액티비티로 이동
-                    val intent = Intent(this@HospitalMapActivity, Hospital_DetailPage::class.java)
-                    intent.putExtra("hospitalId", clickHospitalId)
-                    startActivity(intent)
+                    if(clickHospitalId != 0.toLong()) { //병원 아이디가 있을 경우
+                        // Hospital_DetailPage 액티비티로 이동
+                        val intent = Intent(this@HospitalMapActivity, Hospital_DetailPage::class.java)
+                        intent.putExtra("hospitalId", clickHospitalId)
+                        startActivity(intent)
+                    } else {
+                        CustomToast(this@HospitalMapActivity, "병원 정보가 없습니다. \n병원 정보를 입력하길 기다리십시오.").show()
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    }
                 }
             }
 
@@ -211,6 +218,7 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
                         val marker = Marker()
                         marker.position = LatLng(lat, lng)
                         marker.icon = OverlayImage.fromResource(R.drawable.hospital_6395229)
+                        marker.iconTintColor = Color.BLUE
                         marker.width = 80
                         marker.height = 80
                         marker.map = mNaverMap
@@ -264,6 +272,7 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
 
         val hospitalId = hospital.hospitalId
         clickHospitalId = hospitalId
+        Log.w("HospitalMapActivity", "Bottom Sheet HospitalId : $clickHospitalId")
         if (hospitalId.toInt() != 0){
             // 클릭한 병원의 데이터를 가져오는 Retrofit 통신 요청
             App.apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
