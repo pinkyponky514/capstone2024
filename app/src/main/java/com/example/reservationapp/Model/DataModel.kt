@@ -120,7 +120,7 @@ data class PopularHospitalItem(
 
 fun handleErrorResponse(response: Response<*>) {
     val errorBody = response.errorBody()?.string()
-    Log.d("ReviewAdapter", "Response failed: ${response.code()}, error body: ${errorBody ?: "none"}")
+    Log.d("handleErrorResponse", "Response failed: ${response.code()}, error body: ${errorBody ?: "none"}")
     if (errorBody != null) {
         try {
             val jsonObject = JSONObject(errorBody)

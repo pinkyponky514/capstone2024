@@ -35,7 +35,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- 영업중 필터 플로팅 버튼 -->
+<!--
+    &lt;!&ndash; 영업중 필터 플로팅 버튼 &ndash;&gt;
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/filter_btn"
         android:layout_width="60dp"
@@ -51,6 +52,7 @@
         android:elevation="15dp"
         app:layout_anchor="@id/searchView"
         app:layout_anchorGravity="bottom|end" />
+-->
 
 
     <!-- 지도 -->

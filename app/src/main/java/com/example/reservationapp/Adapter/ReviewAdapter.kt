@@ -21,18 +21,18 @@ import com.example.reservationapp.Model.UserReservationResponse
 import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 private var review_list_data = ArrayList<ReviewItem>()
 
-class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
+class ReviewAdapter(): RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
     @RequiresApi(Build.VERSION_CODES.O)
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var ratingBar: RatingBar //별점개수
@@ -50,7 +50,7 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
         private var retrofitClient: RetrofitClient = RetrofitClient.getInstance()
         private var apiService: APIService = retrofitClient.getRetrofitInterface()
         private lateinit var responseBodyReviewALl: List<HospitalReviewAllResponse>
-        private lateinit var responseBodyUserReservation: List<UserReservationResponse>
+        private var responseBodyReservation:ArrayList<UserReservationResponse>
 
         init {
             hospitalId = 0
@@ -64,10 +64,27 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
             userIdTextView = itemView.findViewById(R.id.userId_textView)
             deleteButton = itemView.findViewById(R.id.review_delete_ImageView)
 
-            deleteButton.visibility = View.GONE
+            responseBodyReservation = ArrayList()
 
-            //삭제 버튼 누르면
+            if(App.prefs.token != null) {
+                GlobalScope.launch {
+                    val response = apiService.getUserReservation().execute()
+
+                    if(response.isSuccessful) {
+                        response.body()?.let {
+                            for(i in it.indices) responseBodyReservation.add(it[i])
+                        }
+                        Log.w("ReviewAdapter", "유저 예약 조회 : $responseBodyReservation")
+                    }
+                }
+            }
+
+
+            //삭제 버튼 누르면 > 삭제할거냐는 메세지 띄우기
             deleteButton.setOnClickListener {
+                review_list_data.removeAt(adapterPosition)
+                notifyDataSetChanged()
+
                 apiService.deleteReview(reviewId, reservationId).enqueue(object: Callback<Int> {
                     override fun onResponse(call: Call<Int>, response: Response<Int>) {
                         if(response.isSuccessful) {
@@ -89,6 +106,7 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
             hospitalId = list.hospitalId
             reviewId = list.reviewId
 
+
             //리뷰 레이아웃에 값 설정해주기
             apiService.getHospitalReviewAll(hospitalId).enqueue(object: Callback<List<HospitalReviewAllResponse>> {
                 override fun onResponse(call: Call<List<HospitalReviewAllResponse>>, response: Response<List<HospitalReviewAllResponse>>) {
@@ -97,46 +115,35 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
                         responseBodyReviewALl = response.body()!!
 
                         for(review in responseBodyReviewALl) {
-                            //if(review.reviewId == list.reviewId) { //전달받은 리뷰 아이디와 response로 받은 리뷰 아이디가 같으면
                             if(review.reviewId == reviewId) { //전달받은 리뷰 아이디와 response로 받은 리뷰 아이디가 같으면
-                                Log.w("ReviewAdapter", "병원 모든 리뷰 가져오기 list.reviewId = ${list.reviewId}, review.reviewId = ${review.reviewId}, reviewId = $reviewId")
+                                Log.w("ReviewAdapter", "1. 병원 모든 리뷰 가져오기 list.reviewId = ${list.reviewId}, review.reviewId = ${review.reviewId}, reviewId = $reviewId")
+
                                 reservationId = review.reservationId
-                                //reviewId = review.reviewId
                                 ratingBar.rating = review.grade
                                 starScoreTextView.text = review.grade.toString()
                                 commentTextView.text = review.comment
                                 reviewDateTextView.text = review.registerDate.toString()
                                 userIdTextView.text = review.userName
 
-                                Log.w("ReviewAdapter", "if문 마지막 줄 review.reviewId = $reviewId")
-
-                                if(App.prefs.token != null) {
-                                    GlobalScope.launch {
-                                        val responseBodyReservation = ArrayList<UserReservationResponse>()
-                                        val response = apiService.getUserReservation().execute()
-
-                                        if(response.isSuccessful) {
-                                            response.body()?.let {
-                                                for(i in it.indices) {
-                                                    responseBodyReservation.add(it[i])
-                                                }
-                                            }
-                                            Log.w("ReviewAdpater", "GlobalScope responseBodyReservation : $responseBodyReservation")
-
-                                            for(reservation in responseBodyReservation) {
-                                                if (reservation.reservationId == review.reservationId && reservation.status == "진료완료" && reservation.reviewWriteBoolean) {
-                                                    Log.w("ReviewAdapter", "내가 쓴 리뷰 reviewId = $reviewId, reservationId = $reservationId, GlobalScope response body = $responseBodyUserReservation")
-                                                    deleteButton.visibility = View.VISIBLE
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
 
                                 //
-                                break
+                                if(App.prefs.token != null) {
+                                    Log.w("ReviewAdpater", "2. setContent에서 responseBodyReservation : $responseBodyReservation")
+                                    for(reservation in responseBodyReservation) {
+                                        if(reservation.reservationId == review.reservationId && reservation.status == "진료완료" && reservation.reviewWriteBoolean) {
+                                            Log.w("ReviewAdapter", "내가 쓴 리뷰 reviewId: $reviewId, reservationId: $reservationId, responseBodyReservation: $responseBodyReservation")
+                                            deleteButton.visibility = View.VISIBLE
+                                        } else {
+                                            deleteButton.visibility = View.GONE
+                                        }
+                                    }
+                                } else {
+                                    Log.w("ReviewAdpater", "2. setContent에서 responseBodyReservation : 유저 로그인 안함")
+                                }
                             }
                         }
+
+
 
                         //
                     }
@@ -149,9 +156,7 @@ class ReviewAdapter: RecyclerView.Adapter<ReviewAdapter.ViewHolder>() {
                 override fun onFailure(call: Call<List<HospitalReviewAllResponse>>, t: Throwable) {
                     Log.w("ReviewAdapter CONNECTION FAILURE: ", "getHospitalReviewAll CONNECT FAILURE : ${t.localizedMessage}")
                 }
-
             })
-
         }
 
 

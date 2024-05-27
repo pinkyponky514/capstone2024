@@ -13,10 +13,8 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.Model.RecentSearchWordResponseData
-import com.example.reservationapp.Model.SearchHospital
 import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
@@ -34,6 +32,7 @@ class RecentSearchWordAdapter:
     @RequiresApi(Build.VERSION_CODES.O)
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var recent_textview: TextView
+        private var delete_button: Button
         private var searchWord: String = ""
 
         //Retrofit
@@ -44,6 +43,7 @@ class RecentSearchWordAdapter:
 
         init {
             recent_textview = itemView.findViewById(R.id.search_word)
+            delete_button = itemView.findViewById(R.id.clear_button)
 
             //Retrofit
             retrofitClient = RetrofitClient.getInstance()
@@ -51,45 +51,46 @@ class RecentSearchWordAdapter:
 
 
             //최근 검색 단어 버튼을 클릭했을때
-                itemView.setOnClickListener {
-                    //병원 검색 목록 페이지로 넘어간다
-                    val context = itemView.context as Activity
+            itemView.setOnClickListener {
+                //병원 검색 목록 페이지로 넘어간다
+                val context = itemView.context as Activity
 
-                    searchWord = recent_search_word_data[adapterPosition].recentSearchWord
+                searchWord = recent_search_word_data[adapterPosition].recentSearchWord
 
-                    val intent = Intent(context, HospitalListActivity::class.java)
-                    intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
-                    context.startActivity(intent)
-                    context.finish()
-                }
+                val intent = Intent(context, HospitalListActivity::class.java)
+                intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
+                context.startActivity(intent)
+                context.finish()
+            }
 
                 //최근 검색 단어 x버튼 클릭했을때
-                itemView.findViewById<Button>(R.id.clear_button).setOnClickListener {
-                    recent_search_word_data.removeAt(adapterPosition)
-                    notifyDataSetChanged()
+            delete_button.setOnClickListener {
+                searchWord = recent_search_word_data[adapterPosition].recentSearchWord
+                recent_search_word_data.removeAt(adapterPosition)
+                notifyDataSetChanged()
 
-                    apiService.deleteRecentSearchWord(searchWord).enqueue(object: Callback<RecentSearchWordResponseData> {
-                        override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
-                            if(response.isSuccessful) {
-                                responseBody = response.body()!!
-                                Log.w("RecentSearchWordAdpater", "최근 검색어 삭제! $responseBody")
-                            }
-
-                            else handleErrorResponse(response)
+                apiService.deleteRecentSearchWord(searchWord).enqueue(object: Callback<RecentSearchWordResponseData> {
+                    override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
+                        if(response.isSuccessful) {
+                            responseBody = response.body()!!
+                            Log.w("RecentSearchWordAdpater", "최근 검색어 삭제! $responseBody")
                         }
 
-                        override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
+                        else handleErrorResponse(response)
+                    }
 
-                        }
-                    })
-                }
-            }
+                    override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
 
-            //데이터 설정해줌
-            fun setContents(list: RecentItem) {
-                recent_textview.text = list.recentSearchWord
+                    }
+                })
             }
         }
+
+        //데이터 설정해줌
+        fun setContents(list: RecentItem) {
+            recent_textview.text = list.recentSearchWord
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -109,7 +110,7 @@ class RecentSearchWordAdapter:
     //데이터 갱신
     fun updateList(newList: ArrayList<RecentItem>) {
         recent_search_word_data = newList
-        Log.w("RecentSearchWordAdapter", "1. updateList: ${newList}")
+        Log.w("RecentSearchWordAdapter", "updateList: ${newList}")
         notifyDataSetChanged()
     }
 

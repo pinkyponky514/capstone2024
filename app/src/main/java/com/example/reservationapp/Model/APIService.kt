@@ -73,8 +73,7 @@ interface APIService {
     @POST("/reservations") //병원 예약 (토큰필요)
     fun postReservation(@Body reservation: ReservationRequest): Call<ReservationResponse>
 
-    //Delete /reservations/cancel/{reservationId} -> 예약 취소
-    @DELETE("/reservations/cancel/{reservationId}") //예약 취소 (토큰필요(
+    @DELETE("/reservations/cancel/{reservationId}") //예약 취소 (토큰필요)
     fun deleteReservation(@Path(value="reservationId") reservationId: Long = 0): Call<DeleteReservationResponse>
 
 
@@ -133,5 +132,5 @@ interface APIService {
     fun postRecentSearchWord(@Path(value="keyword") searchWord:String): Call<RecentSearchWordResponseData>
 
     @DELETE("/users/search/remove/{keyword}")
-    fun deleteRecentSearchWord(@Path(value="keyword") searchWord:String): Call<RecentSearchWordResponseData>
+    fun deleteRecentSearchWord(@Path(value="keyword") searchWord:String?): Call<RecentSearchWordResponseData>
 }

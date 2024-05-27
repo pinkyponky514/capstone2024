@@ -25,12 +25,11 @@ import com.example.reservationapp.Model.MyBookmarkResponse
 import com.example.reservationapp.Model.ReservationRequest
 import com.example.reservationapp.Model.ReservationResponse
 import com.example.reservationapp.Model.ReviewItem
+import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalDetailpageExampleAddBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -324,24 +323,7 @@ class Hospital_DetailPage : AppCompatActivity() {
                     }
 
                     //통신 성공, 응답 실패
-                    else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.d("Hospital_DetailPage FAILURE Response", "MyBookmark Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                        if (errorBody != null) {
-                            try {
-                                val jsonObject = JSONObject(errorBody)
-                                val timestamp = jsonObject.optString("timestamp")
-                                val status = jsonObject.optInt("status")
-                                val error = jsonObject.optString("error")
-                                val message = jsonObject.optString("message")
-                                val path = jsonObject.optString("path")
-
-                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                            } catch (e: JSONException) {
-                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                            }
-                        }
-                    }
+                    else handleErrorResponse(response)
                 }
 
                 //통신 실패
@@ -377,24 +359,7 @@ class Hospital_DetailPage : AppCompatActivity() {
                         }
 
                         //통신 성공, 응답 실패
-                        else {
-                            val errorBody = response.errorBody()?.string()
-                            Log.d("FAILURE Response", "Bookmark onClick Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                            if (errorBody != null) {
-                                try {
-                                    val jsonObject = JSONObject(errorBody)
-                                    val timestamp = jsonObject.optString("timestamp")
-                                    val status = jsonObject.optInt("status")
-                                    val error = jsonObject.optString("error")
-                                    val message = jsonObject.optString("message")
-                                    val path = jsonObject.optString("path")
-
-                                    Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                                } catch (e: JSONException) {
-                                    Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                                }
-                            }
-                        }
+                        else handleErrorResponse(response)
                     }
 
                     //통신 실패
@@ -625,24 +590,7 @@ class Hospital_DetailPage : AppCompatActivity() {
                     }
 
                     //통신 성공, 응답 실패
-                    else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                        if (errorBody != null) {
-                            try {
-                                val jsonObject = JSONObject(errorBody)
-                                val timestamp = jsonObject.optString("timestamp")
-                                val status = jsonObject.optInt("status")
-                                val error = jsonObject.optString("error")
-                                val message = jsonObject.optString("message")
-                                val path = jsonObject.optString("path")
-
-                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                            } catch (e: JSONException) {
-                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                            }
-                        }
-                    }
+                    else handleErrorResponse(response)
                 }
 
                 //통신 실패
@@ -694,24 +642,7 @@ class Hospital_DetailPage : AppCompatActivity() {
                         startActivity(intent)
                     }
 
-                    else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                        if (errorBody != null) {
-                            try {
-                                val jsonObject = JSONObject(errorBody)
-                                val timestamp = jsonObject.optString("timestamp")
-                                val status = jsonObject.optInt("status")
-                                val error = jsonObject.optString("error")
-                                val message = jsonObject.optString("message")
-                                val path = jsonObject.optString("path")
-
-                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                            } catch (e: JSONException) {
-                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                            }
-                        }
-                    }
+                    else handleErrorResponse(response)
                 }
 
                 override fun onFailure(call: Call<ReservationResponse>, t: Throwable) {

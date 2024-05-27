@@ -148,9 +148,7 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                else {
-
-                }
+                else handleErrorResponse(response)
             }
 
             override fun onFailure(call: Call<List<UserReservationResponse>>, t: Throwable) {
