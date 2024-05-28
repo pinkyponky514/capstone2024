@@ -1,5 +1,5 @@
 >>
-># CapStone2024-한냥갱-CatchDoctor
+# CapStone2024-한냥갱-CatchDoctor
 위치 기반 병원 예약 어플리케이션
 >>
 ## 프로젝트 소개
