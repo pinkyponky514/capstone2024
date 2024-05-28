@@ -49,21 +49,21 @@ class CommunityFragment : Fragment() {
             bundle.putLong("boardId", itemList[position].boardId)
 
             // 현재 시간을 가져와서 형식을 맞춘 후 TextView에 설정합니다.
-            val currentTime = Calendar.getInstance().time
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val formattedTime = sdf.format(currentTime)
+//            val currentTime = Calendar.getInstance().time
+//            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+//            val formattedTime = sdf.format(currentTime)
 
             val item = itemList[position]
             //!!!!!!!!!!!!!!!!! 여기 주석 풀어서 확인 !!!!!!!!!!!!!!!!!!!!!!!! 오류남 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*
-            val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title, listOf(formattedTime), item.boardId)
+
+            val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title, item.boardId)
             fragment.arguments = bundle
 
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.main, fragment)
                 .addToBackStack(null)
                 .commit()
-*/
+
         }
 
         val mainActivity = requireActivity() as MainActivity

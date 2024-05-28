@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.reservationapp.App
 import com.example.reservationapp.HospitalMainActivity
 //import com.example.reservationapp.Hospital_Mypage
 import com.example.reservationapp.Model.APIService
@@ -88,14 +89,6 @@ class HospitalFragment : Fragment() {
             hospitalName = savedInstanceState.getString("hospitalName", "")
             hospitalNameTextView.text = hospitalName
         }
-
-//        hospitalNameTextView.setOnClickListener {
-//            val intent = Intent(requireContext(), Hospital_Mypage::class.java)
-//            intent.putExtra("hospitalName", hospitalName)
-//            startActivity(intent)
-//        }
-
-
         return binding.root
     }
 
@@ -117,27 +110,30 @@ class HospitalFragment : Fragment() {
                     Log.d("SUCCESS Response", "Message: ${responseBodyDetail.message}")
                     hospitalName = responseBodyDetail.data.name
                     hospitalNameTextView.text = hospitalName
-
+                    App.hospitalName = hospitalName
                     reservations = responseBodyDetail.data.reservations
 
-                    for(reservation in reservations) {
+                    if(reservations.size >= 1) {
+                        for (reservation in reservations) {
 
-                        val time = reservation.reservationTime
-                        val date = reservation.reservationDate
-                        val status = reservation.status
-                        val user = reservation.user
-                        reservationList.add(
-                            ReservationItem(
-                                time.toString(),
-                                user.name,
-                                user.birthday,
-                                date.toString(),
-                                status
+                            val time = reservation.reservationTime
+                            val date = reservation.reservationDate
+                            val status = reservation.status
+                            val user = reservation.user
+                            reservationList.add(
+                                ReservationItem(
+                                    time.toString(),
+                                    user.name,
+                                    user.birthday,
+                                    date.toString(),
+                                    status
+                                )
                             )
-                        )
+
+                        }
+                        reservationAdapter.updateList(reservationList)
 
                     }
-                    reservationAdapter.updateList(reservationList)
 
                 } else {
                     handleErrorResponse(response)

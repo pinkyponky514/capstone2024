@@ -36,8 +36,6 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
         val historyStatusTextView: TextView = itemView.findViewById(R.id.status)
 
         init {
-
-
             // LinearLayout 클릭 이벤트 처리
             itemView.setOnClickListener {
                 if (buttonLayout.visibility == View.VISIBLE) {
@@ -48,7 +46,6 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
                     buttonLayout.visibility = View.VISIBLE
                 }
             }
-
 
             // 예약 승낙 버튼 클릭 리스너 설정
             acceptButton.setOnClickListener {
@@ -61,33 +58,80 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
                 val time = selectedItem.time
                 val date = selectedItem.reservationDate
 
-                val confirmReservationRequest = ConfirmReservationRequest(date = date, time = time)
-                App.apiService.postConfirmReservation(confirmReservationRequest).enqueue(object:
-                    Callback<ConfirmReservationResponse> {
-                    override fun onResponse(call: Call<ConfirmReservationResponse>, response: Response<ConfirmReservationResponse>) {
-                        if (response.isSuccessful) {
-                            val response = response.body()!!
-                            historyStatusTextView.text = response.status
-                            selectedItem.status = response.status
 
-                            // 상태가 업데이트되었음을 알림
-                            notifyItemChanged(position)
-                        } else {
-                            handleErrorResponse(response)
-                            Log.d(
-                                "FAILURE Response",
-                                "Connect SUCESS, Response FAILURE, body: ${
-                                    response.body().toString()
-                                }"
-                            ) //통신 성공, 응답은 실패
+                val confirmReservationRequest =
+                    ConfirmReservationRequest(date = date, time = time)
+                if (selectedItem.status == "예약확정") {
+                    App.apiService.postCompleteReservation(confirmReservationRequest).enqueue(object :
+                        Callback<ConfirmReservationResponse> {
+                        override fun onResponse(
+                            call: Call<ConfirmReservationResponse>,
+                            response: Response<ConfirmReservationResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                val response = response.body()!!
+                                historyStatusTextView.text = response.status
+                                selectedItem.status = response.status
 
+                                notifyItemChanged(position)
+                            } else {
+                                handleErrorResponse(response)
+                                Log.d(
+                                    "FAILURE Response",
+                                    "Connect SUCESS, Response FAILURE, body: ${
+                                        response.body().toString()
+                                    }"
+                                ) //통신 성공, 응답은 실패
+
+                            }
                         }
-                    }
+                        override fun onFailure(
+                            call: Call<ConfirmReservationResponse>,
+                            t: Throwable
+                        ) {
+                            Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                        }
+                    })
 
-                    override fun onFailure(call: Call<ConfirmReservationResponse>, t: Throwable) {
-                        Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
-                    }
-                })
+
+                    // postCompleteReservataion API 호출 및 이후 작업 구현
+                } else {
+
+                    App.apiService.postConfirmReservation(confirmReservationRequest)
+                        .enqueue(object :
+                            Callback<ConfirmReservationResponse> {
+                            override fun onResponse(
+                                call: Call<ConfirmReservationResponse>,
+                                response: Response<ConfirmReservationResponse>
+                            ) {
+                                if (response.isSuccessful) {
+                                    val response = response.body()!!
+                                    historyStatusTextView.text = response.status
+                                    selectedItem.status = response.status
+
+                                    acceptButton.text = "진료완료"
+                                    // 상태가 업데이트되었음을 알림
+                                    notifyItemChanged(position)
+                                } else {
+                                    handleErrorResponse(response)
+                                    Log.d(
+                                        "FAILURE Response",
+                                        "Connect SUCESS, Response FAILURE, body: ${
+                                            response.body().toString()
+                                        }"
+                                    ) //통신 성공, 응답은 실패
+
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<ConfirmReservationResponse>,
+                                t: Throwable
+                            ) {
+                                Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                            }
+                        })
+                }
 
 
             }
@@ -131,8 +175,10 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
         // 여기서 status에 따라 배경색 변경
         if (currentItem.status == "예약확정") {
             holder.historyStatusTextView.setBackgroundResource(R.drawable.style_dark_green_radius_5_status_padding)
+            holder.acceptButton.text = "진료완료"
         } else if (currentItem.status == "예약신청" || currentItem.status == "예약취소") {
             holder.historyStatusTextView.setBackgroundResource(R.drawable.style_gray_radius_5_status_padding)
+            holder.acceptButton.text = "예약확정"
         } else if (currentItem.status == "진료완료"){
             holder.historyStatusTextView.setBackgroundResource(R.drawable.alarm_hospital_finish)
         }

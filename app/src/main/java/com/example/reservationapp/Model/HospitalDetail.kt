@@ -31,7 +31,8 @@ data class HospitalDetail2(
     @SerializedName("sun_close") val sun_close: String?,
     @SerializedName("hol_open") val hol_open: String?, //공휴일
     @SerializedName("hol_close") val hol_close: String?,
-
+    @SerializedName("lunch_start") val lunch_start: String?, //점심시간
+    @SerializedName("lunch_end") val lunch_end: String?,
     )
 
 
@@ -40,7 +41,7 @@ data class HospitalDetail(
     @SerializedName("id") val hospitalId: Long?,
     @SerializedName("hospitalInfo") val hospitalInfo: String, //병원 설명
     @SerializedName("department") val department: String, //진료과명
-    @SerializedName("doctorInfo") val doctorInfo: String, //의사 정보
+   @SerializedName("doctorInfo") val doctorInfo: String, //의사 정보
 
     @SerializedName("mon_open") val mon_open: String, //월요일
     @SerializedName("mon_close") val mon_close: String,
@@ -60,6 +61,11 @@ data class HospitalDetail(
     @SerializedName("hol_close") val hol_close: String,
     @SerializedName("lunch_start") val lunch_start: String, //점심시간
     @SerializedName("lunch_end") val lunch_end: String,
-
+    @SerializedName("boardImage1") val mainImage: String //메인 이미지
     //병원이미지 추가
     )
+
+data class SetOpenApiResponse(
+    @SerializedName("success") val success: String,
+    @SerializedName("message") val message: String
+)

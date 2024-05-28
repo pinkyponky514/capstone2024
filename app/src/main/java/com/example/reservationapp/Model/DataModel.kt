@@ -45,7 +45,9 @@ data class HospitalItem(
 data class ChatItem (
     var user: String,
     var text: String? = null,
-    var imageResource: Int? = null // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
+    var imageResource: Bitmap? = null, // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
+    var hospitalName: String? = null, // 병원 이름 추가
+    var hospitalAddress: String? = null // 병원 주소 추가
 )
 
 
@@ -67,9 +69,14 @@ data class ImageData(
     // 필요한 경우 다른 메타데이터를 추가할 수 있습니다.
 )
 
-data class ImageItem(
-    val imageResId: Int
+//MultiImageHospitalAdapter
+data class ImageDataHospital(
+    val uri: Uri
 )
+
+//data class ImageItem(
+//    val imageResId: Int
+//)
 
 //HistoryAdapter, AbleReviewWriteAdapter
 data class HistoryItem (

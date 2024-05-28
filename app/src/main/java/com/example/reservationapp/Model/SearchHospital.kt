@@ -11,3 +11,4 @@ data class SearchHospital(
     @SerializedName("hospital") val hospital: Hospital, //회원가입 했을때 정보
     @SerializedName("distance") val distance: Double
 )
+

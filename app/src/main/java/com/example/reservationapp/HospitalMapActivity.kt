@@ -182,7 +182,7 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         // 카메라 이동이 멈추면 호출되는 리스너
         mNaverMap.addOnCameraIdleListener {
             updateMarkers()
-           // updateMarkers2()
+            // updateMarkers2()
         }
 
         gpsTracker = GpsTracker(this@HospitalMapActivity)

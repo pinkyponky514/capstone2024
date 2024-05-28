@@ -106,9 +106,9 @@ class HospitalListActivity : AppCompatActivity() {
         //병원 지도 플로팅 버튼 onClick
         val hospitalListMapFloatingButton = binding.hospitalListFloatingButton
         hospitalListMapFloatingButton.setOnClickListener {
-            val intent = Intent(this, HospitalMapActivity::class.java)
-            startActivity(intent)
-            finish()
+//            val intent = Intent(this, HospitalMapActivity::class.java)
+//            startActivity(intent)
+//            finish()
         }
     }
 
