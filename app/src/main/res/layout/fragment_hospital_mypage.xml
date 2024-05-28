@@ -32,12 +32,12 @@
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="350dp"
+            android:layout_width="361dp"
             android:layout_height="92dp"
             android:layout_gravity="center"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="36dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_border_tae"
             android:backgroundTint="@color/sky"
             android:orientation="vertical"
@@ -69,13 +69,14 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
+
         <TextView
             android:id="@+id/AdditionalInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="32dp"
             android:text="추가 정보"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -83,30 +84,56 @@
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardview_member"
-            android:layout_width="350dp"
-            android:layout_height="225dp"
-            android:layout_marginTop="20dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="6dp"
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_border_tae"
+            android:orientation="vertical"
+            android:padding="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/explanation">
 
-            <ImageView
-                android:id="@+id/imageView_hospital"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ex_hospital" />
-        </androidx.cardview.widget.CardView>
+            <Button
+                android:id="@+id/getImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_photo" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/imageCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:text="0/5"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+            app:layout_constraintHorizontal_bias="0.538"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="266dp"
+            android:layout_height="131dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.187"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/explanation" />
 
         <EditText
             android:id="@+id/explanation2"
-            android:layout_width="350dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="354dp"
+            android:layout_height="154dp"
+            android:layout_marginTop="60dp"
             android:background="@drawable/rounded_border_tae"
             android:hint="병원 소개를 입력하세요"
             android:inputType="textMultiLine"
@@ -114,9 +141,9 @@
             android:padding="8dp"
             android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintHorizontal_bias="0.571"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview_member" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <TextView
             android:id="@+id/class_reserve_TextView"
@@ -132,11 +159,11 @@
 
         <TableLayout
             android:id="@+id/tableLayout_hospital_time_guide"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="355dp"
+            android:layout_height="96dp"
             android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/explanation2"
-            app:layout_constraintStart_toStartOf="@+id/explanation2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/class_reserve_TextView">
 
             <TableRow
