@@ -29,6 +29,10 @@ class ChattingAdapter :
         init {
             chatTextView = itemView.findViewById(R.id.chatTextView)
             chatImageView = itemView.findViewById(R.id.chatImageView)
+
+            itemView.setOnClickListener {
+                itemClickListener?.invoke(chatArray[adapterPosition])
+            }
         }
 
         fun setContents(chat: ChatItem) {
@@ -48,6 +52,12 @@ class ChattingAdapter :
         private var imageView: ImageView = itemView.findViewById(R.id.imageView)
         private var hospitalNameTextView: TextView = itemView.findViewById(R.id.textView_hospital_name)
         private var hospitalPosTextView: TextView = itemView.findViewById(R.id.textView_hospital_pos)
+
+        init {
+            itemView.setOnClickListener {
+                itemClickListener?.invoke(chatArray[adapterPosition])
+            }
+        }
 
         fun setContents(chat: ChatItem) {
             // 이 부분에서 실제 병원 이름과 위치 정보를 설정하도록 변경
@@ -92,7 +102,12 @@ class ChattingAdapter :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is MessageViewHolder -> holder.setContents(chatArray[position])
+            is MessageViewHolder -> {
+                holder.setContents(chatArray[position])
+                holder.itemView.setOnClickListener {
+                    itemClickListener?.invoke(chatArray[position])
+                }
+            }
             is HospitalViewHolder -> {
                 holder.setContents(chatArray[position])
                 holder.itemView.setOnClickListener {

@@ -391,9 +391,9 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
 
                     val marker = Marker()
                     marker.position = LatLng(lat, lng)
-                    marker.icon = OverlayImage.fromResource(R.drawable.pill_medicine_medicines_medical_icon_131306)
-                    marker.width = 80
-                    marker.height = 80
+                    marker.icon = OverlayImage.fromResource(R.drawable.pill_pin)
+                    marker.width = 90
+                    marker.height = 90
                     marker.map = mNaverMap
                     markers.add(marker) // 수정된 부분
                     marker.tag = item // 마커에 데이터 추가
@@ -477,8 +477,8 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         }
 
         // 선택된 마커 크기 크게
-        clickedMarker.width = 100
-        clickedMarker.height = 100
+        clickedMarker.width = 110
+        clickedMarker.height = 110
         // Bottom Sheet 표시
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }

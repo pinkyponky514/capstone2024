@@ -67,12 +67,19 @@ class ChatActivity : AppCompatActivity() {
         adapter.updateList(chatList)
 
         adapter.setOnItemClickListener { chatItem ->
-            // 클릭된 채팅 아이템에 따라 처리
-            if (chatItem.hospitalName != null ) {
-                // AI 메시지인 경우 다른 액티비티로 이동하도록 처리
-                val intent = Intent(this@ChatActivity,  Hospital_DetailPage::class.java)
-                intent.putExtra("hospitalId", hospitalid)
-                startActivity(intent)
+            when {
+                chatItem.hospitalName != null -> {
+                    // 병원 이름이 포함된 메시지인 경우 병원 상세 페이지로 이동
+                    val intent = Intent(this@ChatActivity, Hospital_DetailPage::class.java)
+                    intent.putExtra("hospitalId", hospitalid)
+                    startActivity(intent)
+                }
+                chatItem.text?.startsWith("더 많은") == true -> {
+                    // "더 많은 {department} 찾아보기" 메시지를 클릭한 경우
+                    val intent = Intent(this@ChatActivity, HospitalListActivity::class.java)
+                    intent.putExtra("searchWord", recommended_departments[0])
+                    startActivity(intent)
+                }
             }
         }
 
@@ -121,7 +128,6 @@ class ChatActivity : AppCompatActivity() {
 
                                 chatList.add(ChatItem("AI", chatBotResponse))
                                 adapter.updateList(chatList)
-
                                 gethospital(recommended_departments[0])
                             }
                             else{
@@ -186,6 +192,10 @@ class ChatActivity : AppCompatActivity() {
 //
 //                    chatList.add(ChatItem("AI", chatBotResponse))
                     chatList.add(hospitalChatItem)
+
+                    chatBotResponse = "더 많은 ${department} 찾아보기"
+                    chatList.add(ChatItem("AI", text = chatBotResponse))
+
                     adapter.updateList(chatList)
 
                 } else {
