@@ -27,6 +27,9 @@ import com.example.reservationapp.Model.BookmarkResponse
 import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.MyBookmarkResponse
+import com.example.reservationapp.Model.NaverMapApiInterface
+import com.example.reservationapp.Model.NaverMapRequest
+import com.example.reservationapp.Model.PharmacyMap.NaverMapItem
 import com.example.reservationapp.Model.ReservationRequest
 import com.example.reservationapp.Model.ReservationResponse
 import com.example.reservationapp.Model.ReviewItem
@@ -45,8 +48,19 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
+import com.naver.maps.map.util.FusedLocationSource
+import kotlin.properties.Delegates
 
-class Hospital_DetailPage : AppCompatActivity() {
+class Hospital_DetailPage : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityHospitalDetailpageExampleAddBinding
 
     //리뷰
@@ -128,10 +142,17 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var dayOffTimeTextView: TextView //공휴일
 
 
+    private var hospitalId by Delegates.notNull<Long>()
 
     //예약
     lateinit var reservationBotoomSheetBehavior: BottomSheetBehavior<View>
 
+
+    private lateinit var mapView: MapView
+    private lateinit var mNaverMap: NaverMap
+
+    private var hospitalMapX: Double = 0.0
+    private var hospitalMapY:Double = 0.0
 
     //
     @RequiresApi(Build.VERSION_CODES.O)
@@ -163,6 +184,9 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         reviewCountTextView = binding.reviewCountTextView
 
+        mapView = binding.destinationmap
+        mapView?.getMapAsync(this)
+
         //달력 선택 가능범위 설정 하기위한 변수
         val currentCalendar = Calendar.getInstance()
         currentYear = currentCalendar.get(Calendar.YEAR)
@@ -185,7 +209,7 @@ class Hospital_DetailPage : AppCompatActivity() {
 
 
         //DB에서 데이터 가져올 것임
-        val hospitalId = intent.getLongExtra("hospitalId", 0)
+        hospitalId = intent.getLongExtra("hospitalId", 0)
         val className = binding.textViewClassName.text.toString()
         Log.w("Hospital DetailPage", "hospitalId: $hospitalId")
 
@@ -209,6 +233,8 @@ class Hospital_DetailPage : AppCompatActivity() {
                     hospitalCallTextView.text = responseBodyDetail.data.hospital.openApiHospital.tel //병원 전화번호 설정
 
 
+                    hospitalMapX = responseBodyDetail.data.hospital.openApiHospital.mapX
+                    hospitalMapY = responseBodyDetail.data.hospital.openApiHospital.mapY
                     //병원 이미지 설정
                     var imageList:ArrayList<Bitmap>
                     hospitalDetailImageAdapter = HospitalDetailImageAdapter()
@@ -283,12 +309,12 @@ class Hospital_DetailPage : AppCompatActivity() {
                         statusTextView.text = "진료마감"
                     }
 
-/*
-                    if(statusTextView.text == "진료마감") { //진료마감 됐으면 예약 못함
-                        reservationButton.isEnabled = false
-                        reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
-                    }
-*/
+                    /*
+                                        if(statusTextView.text == "진료마감") { //진료마감 됐으면 예약 못함
+                                            reservationButton.isEnabled = false
+                                            reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
+                                        }
+                    */
 
                     //진료시간 table 설정
                     db_lunch_time_start = responseBodyDetail.data.hospital.hospitalDetail.lunch_start
@@ -338,7 +364,7 @@ class Hospital_DetailPage : AppCompatActivity() {
             }
         })
 
-
+        
         //즐겨찾기 이미지 설정
         favoriteButton = binding.favoriteImageView
         if(App.prefs.token != null) { //user token이 있으면 == 로그인 했으면
@@ -799,6 +825,70 @@ class Hospital_DetailPage : AppCompatActivity() {
         }
     }
 
+    override fun onMapReady(naverMap: NaverMap) {
+        mNaverMap = naverMap
+
+        apiService.getHospitalDetail(hospitalId).enqueue(object: Callback<HospitalSearchResponse> {
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(call: Call<HospitalSearchResponse>, response: Response<HospitalSearchResponse>) {
+                if(response.isSuccessful) {
+                    responseBodyDetail = response.body()!!
+
+                    hospitalMapX = responseBodyDetail.data.hospital.openApiHospital.mapY
+                    hospitalMapY = responseBodyDetail.data.hospital.openApiHospital.mapX
+                    //병원 이미지 설정
+
+                    val cameraUpdate = CameraUpdate.scrollTo(LatLng(hospitalMapX, hospitalMapY))
+                    naverMap.moveCamera(cameraUpdate)
+
+                    val locationOverlay = mNaverMap.locationOverlay
+                //    locationOverlay.isVisible = true
+                    locationOverlay.position = LatLng(hospitalMapX, hospitalMapY)
+                    naverMap.locationTrackingMode = LocationTrackingMode.Follow
+                    naverMap.uiSettings.isLocationButtonEnabled = false
+
+                    val naverMapApiInterface = NaverMapRequest.getClient().create(NaverMapApiInterface::class.java)
+
+
+                    val marker = Marker()
+                    marker.position = LatLng(hospitalMapX, hospitalMapY)
+                    marker.icon = OverlayImage.fromResource(R.drawable.hospital_pin)
+                    marker.width = 130
+                    marker.height = 130
+                    marker.map = mNaverMap
+                    marker.map = mNaverMap
+                }
+
+                //통신 성공, 응답 실패
+                else handleErrorResponse(response)
+            }
+
+            //통신 실패
+            override fun onFailure(call: Call<HospitalSearchResponse>, t: Throwable) {
+                Log.w("CONNECTION FAILURE: ", "Connect FAILURE : ${t.localizedMessage}")
+            }
+        })
+
+//        val cameraUpdate = CameraUpdate.scrollTo(LatLng(hospitalMapX, hospitalMapY))
+//        naverMap.moveCamera(cameraUpdate)
+//
+//        val locationOverlay = mNaverMap.locationOverlay
+//    //    locationOverlay.isVisible = true
+//        locationOverlay.position = LatLng(hospitalMapX, hospitalMapY)
+//        naverMap.locationTrackingMode = LocationTrackingMode.Follow
+//        naverMap.uiSettings.isLocationButtonEnabled = true
+//
+//        val naverMapApiInterface = NaverMapRequest.getClient().create(NaverMapApiInterface::class.java)
+//
+//
+//        val marker = Marker()
+//        marker.position = LatLng(hospitalMapX, hospitalMapY)
+//        marker.icon = OverlayImage.fromResource(R.drawable.hospital_pin)
+//        marker.width = 100
+//        marker.height = 100
+//        marker.map = mNaverMap
+//        marker.map = mNaverMap
+    }
 
 
     //

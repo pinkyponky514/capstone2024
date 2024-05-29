@@ -218,10 +218,10 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
 
                         val marker = Marker()
                         marker.position = LatLng(lat, lng)
-                        marker.icon = OverlayImage.fromResource(R.drawable.hospital_6395229)
+                        marker.icon = OverlayImage.fromResource(R.drawable.hospital_pin)
                         marker.iconTintColor = Color.BLUE
-                        marker.width = 80
-                        marker.height = 80
+                        marker.width = 90
+                        marker.height = 90
                         marker.map = mNaverMap
                         markers.add(marker) // 수정된 부분
                         marker.tag = hospital // 마커에 데이터 추가
@@ -288,8 +288,8 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
                         textView.text = responseBody.data.hospital.openApiHospital.address
 
                         // 선택된 마커 크기 크게
-                        clickedMarker.width = 100
-                        clickedMarker.height = 100
+                        clickedMarker.width = 110
+                        clickedMarker.height = 110
                         // Bottom Sheet 표시
                         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     } else {
