@@ -310,10 +310,10 @@ class Hospital_DetailPage : AppCompatActivity(), OnMapReadyCallback {
                     }
 
                     /*
-                                        if(statusTextView.text == "진료마감") { //진료마감 됐으면 예약 못함
-                                            reservationButton.isEnabled = false
-                                            reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
-                                        }
+                    if(statusTextView.text == "진료마감") { //진료마감 됐으면 예약 못함
+                    reservationButton.isEnabled = false
+                    reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
+                    }
                     */
 
                     //진료시간 table 설정

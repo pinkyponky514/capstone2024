@@ -154,17 +154,22 @@ class LoginDoctorActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<HospitalUserLoginResponse>, response: Response<HospitalUserLoginResponse>) {
                     if(response.isSuccessful) {
                         val response = response.body()!!
-                        val data = response.data
-                        val userToken = data.token
+                        if(response.success == "true") {
+                            val data = response.data
+                            val userToken = data.token
 
-                        App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
-                        val intent = Intent(this@LoginDoctorActivity, HospitalMainActivity::class.java)
-                        intent.putExtra("hospitalId", data.hospitalId) //hospitalId(기본키) 넘겨주기
-                        Log.d("LoginDoctorActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
+                            App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
 
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
-                        startActivity(intent)
-                        finish()
+                            val intent = Intent(this@LoginDoctorActivity, HospitalMainActivity::class.java)
+                            intent.putExtra("hospitalId", data.hospitalId) //hospitalId(기본키) 넘겨주기
+                            Log.d("LoginDoctorActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
+
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            CustomToast(this@LoginDoctorActivity, "일치하는 유저의 계정이 없습니다.").show()
+                        }
                     }
                     else {
                         //CustomToast(this@LoginDoctorActivity, "일치하는 유저의 계정이 없습니다.").show()
