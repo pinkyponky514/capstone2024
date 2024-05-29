@@ -1,17 +1,16 @@
 package com.example.reservationapp.navigation
 
 import CommunityImageAdapter
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Model.CommunityItem
 import com.example.reservationapp.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -20,34 +19,30 @@ class CommunityFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CommunityImageAdapter
-    private lateinit var timestamp: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // item_community 레이아웃을 inflate하여 View 객체를 생성합니다.
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_community, container, false)
 
-//        // 작성 시간을 표시하는 TextView를 찾아 변수에 할당합니다.
-//        timestamp = view.findViewById(R.id.timestamp)
-
-        return view
-    }
-
-    // onViewCreated 메서드는 그대로 유지합니다.
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initializeRecyclerView()
-
-        // floatingActionButton 클릭 시 CommunityPostFragment로 이동
-        view.findViewById<View>(R.id.floatingActionButton2)?.setOnClickListener {
+        // Set up FloatingActionButton click listener
+        val floatingActionButton: FloatingActionButton = view.findViewById(R.id.floatingActionButton)
+        floatingActionButton.setOnClickListener {
             val fragment = CommunityPostFragment()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.main, fragment)
                 .addToBackStack(null)
                 .commit()
         }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeRecyclerView()
     }
 
     private fun initializeRecyclerView() {
@@ -76,7 +71,7 @@ class CommunityFragment : Fragment() {
         adapter = CommunityImageAdapter(itemList) { position ->
             // RecyclerView의 아이템 클릭 시 동작 정의
             val item = itemList[position]
-            val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title)
+            val fragment = CommunityDetailCommentFragment.newInstance(item.imageResource, item.title, listOf(formattedTime))
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.main, fragment)
                 .addToBackStack(null)

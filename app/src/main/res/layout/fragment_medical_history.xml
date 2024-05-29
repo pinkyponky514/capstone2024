@@ -10,14 +10,16 @@
 
 
     <!-- 나의 진료내역 프래그먼트 -->
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/top_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="410dp"
+        android:layout_height="33dp"
         android:background="@color/white"
         app:itemBackground="@color/white"
         app:itemTextColor="@drawable/menu_click_color"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/medical_history_navi_menu"

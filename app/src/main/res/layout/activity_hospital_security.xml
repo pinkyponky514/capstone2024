@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="72dp"
+        android:layout_height="64dp"
+        android:text="주소"
+        app:layout_constraintBottom_toBottomOf="@+id/et_address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintStart_toEndOf="@+id/et_address"
+        app:layout_constraintTop_toTopOf="@+id/et_address"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/security_button"
+        android:layout_width="355dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/rounded_button_background2"
+        android:backgroundTint="@color/sky"
+        android:text="인증하기"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/hospital_name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/hospital_name"
+        app:layout_constraintTop_toBottomOf="@+id/hospital_name" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/et_address"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="188dp"
+        android:background="@drawable/rounded_border_tae"
+        android:hint="우편번호를 입력해주세요"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/hospital_name"
+        android:layout_width="359dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="104dp"
+        android:background="@drawable/rounded_border_tae"
+        android:hint="병원이름을 입력해주세요"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="우편번호"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="137dp" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="병원이름"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="310dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

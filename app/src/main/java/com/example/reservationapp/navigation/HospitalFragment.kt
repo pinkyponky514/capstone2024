@@ -6,28 +6,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CalendarView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.HospitalSecurityActivity
 import com.example.reservationapp.Model.ReservationItem
-import com.example.reservationapp.R
+import com.example.reservationapp.WebViewActivity
 import com.example.reservationapp.databinding.FragmentHospitalBinding
 
 class HospitalFragment : Fragment() {
     private lateinit var binding: FragmentHospitalBinding
-
     private lateinit var reservationAdapter: ReservationAdapter
     private lateinit var reservationList: ArrayList<ReservationItem>
     private var selectedDate: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentHospitalBinding.inflate(inflater)
+        binding = FragmentHospitalBinding.inflate(inflater, container, false)
 
-        val reservationRecyclerView = binding.reservationList//requireView().findViewById<RecyclerView>(R.id.reservation_list)
-        val calendarView = binding.calendarView//requireView().findViewById<CalendarView>(R.id.calendar_view)
+        val reservationRecyclerView = binding.reservationList
+        val calendarView = binding.calendarView
 
         // 예약 리스트 초기화 및 임의의 데이터 값 설정
         reservationList = ArrayList()
@@ -45,12 +41,19 @@ class HospitalFragment : Fragment() {
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val formattedMonth = if (month + 1 < 10) "0${month + 1}" else "${month + 1}"
             val formattedDay = if (dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
-            val newSelectedDate = "$year-$formattedMonth-$formattedDay" // 새로 선택된 날짜 문자열로 변환
+            val newSelectedDate = "$year-$formattedMonth-$formattedDay"
             if (selectedDate != newSelectedDate) {
                 selectedDate = newSelectedDate
                 updateReservationList()
             }
         }
+
+        // 병원 보안 버튼 클릭 시 HospitalSecurityActivity로 이동
+        binding.hospitalSecurity.setOnClickListener {
+            val intent = Intent(requireContext(), HospitalSecurityActivity::class.java)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 

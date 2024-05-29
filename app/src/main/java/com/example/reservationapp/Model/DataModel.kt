@@ -82,10 +82,21 @@ data class ReservationItem(
 
 )
 
+//MultiImageAdapter
 data class ImageData(
     val uri: Uri
     // 필요한 경우 다른 메타데이터를 추가할 수 있습니다.
 )
+
+//MultiImageHospitalAdapter
+data class ImageDataHospital(
+    val uri: Uri
+)
+
+data class ImageItem(
+    val imageResId: Int
+)
+
 
 //HistoryAdapter
 data class HistoryItem (

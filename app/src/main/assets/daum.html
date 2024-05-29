@@ -1,0 +1,17 @@
+﻿<input type="text" id="sample6_postcode" placeholder="우편번호">
+<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 우편번호만 가져오기
+                var zipcode = data.zonecode;
+
+                // 우편번호를 해당 필드에 넣는다.
+                document.getElementById('sample6_postcode').value = zipcode;
+            }
+        }).embed();
+    }
+</script>

@@ -21,33 +21,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- CardView -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardview_member"
-                android:layout_width="368dp"
-                android:layout_height="225dp"
-                android:layout_marginTop="8dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="6dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewContent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewImages"
+                android:layout_width="367dp"
+                android:layout_height="281dp"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toEndOf="@+id/textViewContent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textViewContent"
+                app:layout_constraintTop_toBottomOf="@id/textViewContent" />
 
-                <!-- ImageView -->
-                <ImageView
-                    android:id="@+id/imageViewDetail"
-                    android:layout_width="366dp"
-                    android:layout_height="225dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ex_communityimage1"
-                    app:layout_constraintDimensionRatio="H,16:9" />
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- TextView for Title -->
             <TextView
                 android:id="@+id/textViewTitle"
-                android:layout_width="358dp"
+                android:layout_width="368dp"
                 android:layout_height="29dp"
                 android:layout_marginTop="28dp"
                 android:gravity="center"
@@ -63,16 +49,15 @@
 
             <TextView
                 android:id="@+id/textViewContent"
-                android:layout_width="369dp"
-                android:layout_height="192dp"
+                android:layout_width="365dp"
+                android:layout_height="189dp"
                 android:layout_marginTop="28dp"
                 android:text="세균의 번식 속도는 여러 요인에 따라 다르지만, 일반적으로 이중나선균과 같은 일부 세균은 20분에서 1시간 사이에 한 번 혹은 그 이상으로 번식할 수 있습니다. 이러한 빠른 번식은 적절한 영양분과 환경 조건이 제공되면 가능합니다. 세균의 빠른 번식 속도는 그들이 짧은 세대 간격과 많은 수의 후손을 생성할 수 있기 때문에 놀라운 것입니다. 이것은 세균이 질병의 전파나 식품 부패 등에 어떻게 영향을 미칠 수 있는지에 대한 중요한 이슈 중 하나입니다."
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/dark_gray"
                 android:textSize="14dp"
-                app:layout_constraintEnd_toEndOf="@+id/textViewTitle"
-                app:layout_constraintHorizontal_bias="0.454"
-                app:layout_constraintStart_toStartOf="@+id/textViewTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timestamp2"
                 tools:ignore="MissingConstraints" />
 
@@ -80,13 +65,13 @@
                 android:id="@+id/textViewWriter"
                 android:layout_width="117dp"
                 android:layout_height="23dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:text="글쓴이: 내가기자다"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/textViewTitle"
+                app:layout_constraintHorizontal_bias="0.074"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
             <TextView
@@ -102,23 +87,34 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewWriter" />
 
             <View
-                android:id="@+id/divider"
+                android:id="@+id/divider2"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="16dp"
                 android:background="#CCCCCC"
-                app:layout_constraintBottom_toTopOf="@+id/commentRecyclerView"
+                app:layout_constraintBottom_toTopOf="@+id/textView7"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardview_member"
                 app:layout_constraintVertical_bias="0.09" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="#CCCCCC"
+                app:layout_constraintBottom_toTopOf="@+id/recyclerViewImages"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewContent"
+                app:layout_constraintVertical_bias="0.531" />
 
             <ToggleButton
                 android:id="@+id/button_favorite"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="148dp"
                 android:background="@drawable/ic_likes"
                 android:checked="false"
@@ -126,17 +122,21 @@
                 android:textOff=""
                 android:textOn=""
                 app:layout_constraintBottom_toBottomOf="@+id/timestamp2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.394"
                 app:layout_constraintStart_toEndOf="@+id/timestamp2"
                 tools:ignore="MissingConstraints" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/commentRecyclerView"
-                android:layout_width="0dp"
+                android:layout_width="366dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/recyclerViewImages"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/recyclerViewImages"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
             <TextView
@@ -144,13 +144,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="52dp"
-                android:text="댓글 창"
+                android:text="댓글"
                 android:textColor="@color/dark_green"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardview_member" />
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewImages" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -159,7 +159,7 @@
         android:id="@+id/editTextContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="50dp"
         android:background="@android:color/white"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -167,13 +167,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <!-- EditText for Comment -->
+
+        <!-- Send Button -->
         <EditText
             android:id="@+id/messageEditText"
-            android:layout_width="0dp"
+            android:layout_width="331dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="5dp"
             android:layout_toStartOf="@+id/buttonSend"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext_background"
@@ -181,19 +183,18 @@
             android:padding="10dp"
             android:textSize="15dp" />
 
-        <!-- Send Button -->
         <Button
             android:id="@+id/buttonSend"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="11dp"
             android:background="@drawable/rounded_button_inactive"
             android:contentDescription="Send"
             android:drawableTop="@drawable/ic_chatting_sendbutton"
             android:drawablePadding="0dp"
             android:enabled="false"
-            android:padding="5dp" />
+            android:padding="8dp" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

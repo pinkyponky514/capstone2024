@@ -12,11 +12,15 @@ import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.CommunityDetailCommentAdapter
+import com.example.reservationapp.Adapter.ImageAdapter
 import com.example.reservationapp.Model.CommentItem
+import com.example.reservationapp.Model.ImageItem
 import com.example.reservationapp.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -29,17 +33,20 @@ class CommunityDetailCommentFragment : Fragment() {
     private lateinit var editText: EditText
     private lateinit var sendButton2: Button
     private lateinit var adapter: CommunityDetailCommentAdapter
+    private lateinit var floatingActionButton: FloatingActionButton
+    private lateinit var imageAdapter: ImageAdapter
 
-    // newInstance 메서드를 Fragment 클래스 내에 정의합니다.
     companion object {
         private const val ARG_IMAGE_RESOURCE = "arg_image_resource"
         private const val ARG_IMAGE_TITLE = "arg_image_title"
+        private const val ARG_IMAGE_URLS = "arg_image_urls"
 
-        fun newInstance(imageResource: Int, imageTitle: String): CommunityDetailCommentFragment {
+        fun newInstance(imageResource: Int, imageTitle: String, imageUrls: List<String>): CommunityDetailCommentFragment {
             val fragment = CommunityDetailCommentFragment()
             val args = Bundle()
             args.putInt(ARG_IMAGE_RESOURCE, imageResource)
             args.putString(ARG_IMAGE_TITLE, imageTitle)
+            args.putStringArrayList(ARG_IMAGE_URLS, ArrayList(imageUrls))
             fragment.arguments = args
             return fragment
         }
@@ -51,8 +58,20 @@ class CommunityDetailCommentFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_community_detail_comment, container, false)
 
-        buttonFavorite = view.findViewById(R.id.button_favorite)
+        val recyclerViewImages: RecyclerView = view.findViewById(R.id.recyclerViewImages)
+        recyclerViewImages.layoutManager = GridLayoutManager(requireContext(), 1)
 
+        val imageList = listOf(
+            ImageItem(R.drawable.image1),
+            ImageItem(R.drawable.image2),
+            ImageItem(R.drawable.image3),
+            ImageItem(R.drawable.image4),
+            ImageItem(R.drawable.image5)
+        )
+
+        floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
+
+        buttonFavorite = view.findViewById(R.id.button_favorite)
         buttonFavorite.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 buttonView.setBackgroundResource(R.drawable.ic_likes)
@@ -101,12 +120,32 @@ class CommunityDetailCommentFragment : Fragment() {
             if (commentContent.isNotEmpty()) {
                 val currentTime = System.currentTimeMillis()
                 val formattedTime = android.text.format.DateFormat.format("yyyy-MM-dd HH:mm", currentTime).toString()
-                val comment = CommentItem(commentContent, "pinky", formattedTime) // 작성자 정보는 나중에 변경 가능
+                val comment = CommentItem(commentContent, "혜인공주", formattedTime)
                 adapter.addComment(comment)
                 editText.text.clear()
             }
         }
 
+        adapter = CommunityDetailCommentAdapter(
+            onItemDelete = { position ->
+                adapter.removeComment(position)
+            }
+        )
+        commentRecyclerView.adapter = adapter
+
+        imageAdapter = ImageAdapter(imageList)
+        recyclerViewImages.adapter = imageAdapter
+
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        floatingActionButton.hide()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        floatingActionButton.show()
     }
 }

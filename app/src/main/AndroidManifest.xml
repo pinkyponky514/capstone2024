@@ -20,6 +20,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Adapter.MultiImageHospitalAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".WebViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Adapter.ImageAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".HospitalSecurityActivity"
+            android:exported="false" />
+        <activity
             android:name=".navigation.CommunityDetailCommentFragment"
             android:exported="false" />
         <activity
@@ -27,9 +39,6 @@
             android:exported="false" />
         <activity
             android:name=".HospitalMainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CommentDialogActivity"
             android:exported="false" />
         <activity
             android:name=".CheckReservationActivity"
@@ -65,9 +74,6 @@
         </activity>
         <activity
             android:name=".navigation.CommunityPostFragment"
-            android:exported="false" />
-        <activity
-            android:name=".navigation.CommunityDetailFragment"
             android:exported="false" />
         <activity
             android:name=".navigation.CommunityFragment"

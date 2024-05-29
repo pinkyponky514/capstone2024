@@ -1,19 +1,35 @@
 package com.example.reservationapp.navigation
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.*
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Adapter.MultiImageHospitalAdapter
+import com.example.reservationapp.Model.ImageDataHospital
 import com.example.reservationapp.R
 
+@Suppress("DEPRECATION")
 class HospitalMypageFragment : Fragment() {
+
+    companion object {
+        private const val REQUEST_IMAGE_PICK = 100
+        private const val TAG = "HospitalMypageFragment"
+    }
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var getImageButton: Button
+    private lateinit var imageCountTextView: TextView
+    private val imageDataList = ArrayList<ImageDataHospital>()
+    private lateinit var adapter: MultiImageHospitalAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,11 +38,27 @@ class HospitalMypageFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_hospital_mypage, container, false)
 
+        recyclerView = view.findViewById(R.id.recyclerView)
+        getImageButton = view.findViewById(R.id.getImage)
+        imageCountTextView = view.findViewById(R.id.imageCountTextView)
+
+        getImageButton.setOnClickListener {
+            if (imageDataList.size >= 5) {
+                Toast.makeText(context, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
+            } else {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = MediaStore.Images.Media.CONTENT_TYPE
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                startActivityForResult(intent, HospitalMypageFragment.REQUEST_IMAGE_PICK)
+            }
+        }
+
         val classReserveList: List<String> =
             listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과")
 
         // 진료과별 예약 버튼 설정
-        for (i in 0 until classReserveList.size) {
+        for (i in classReserveList.indices) {
             val classButtonId =
                 resources.getIdentifier("class_button${i + 1}", "id", requireContext().packageName)
             val button = view.findViewById<Button>(classButtonId)
@@ -46,7 +78,7 @@ class HospitalMypageFragment : Fragment() {
                 // 상태에 따라 배경색 변경
                 if (isSelected) {
                     // 버튼이 선택된 상태라면 원래의 배경색으로 변경
-                    button.setBackgroundResource(R.drawable.button_shadow) // 버튼 배경색 변경
+                    button.setBackgroundResource(R.drawable.rounded_button_background3) // 버튼 배경색 변경
                 } else {
                     // 버튼이 선택되지 않은 상태라면 새로운 배경색으로 변경
                     button.setBackgroundResource(R.drawable.button_shadow) // 버튼 배경색 변경
@@ -54,14 +86,14 @@ class HospitalMypageFragment : Fragment() {
             }
         }
 
-        // 라디오 버튼 그룹 찾기
-        val restdayRadioGroup = view.findViewById<RadioGroup>(R.id.restday_radio_group)
-        // 라디오 버튼 클릭 이벤트 처리
-        restdayRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            val selectedRadioButton = view.findViewById<RadioButton>(checkedId)
-            val restday = selectedRadioButton.text.toString()
-            Log.d("Hospital_Mypage", "공휴일: $restday")
-        }
+        setupCheckboxGroup(view, R.id.checkbox_working_mon, R.id.checkbox_rest_mon, R.id.StartMon, R.id.FinishMon)
+        setupCheckboxGroup(view, R.id.checkbox_working_tue, R.id.checkbox_rest_tue, R.id.StartTue, R.id.FinishTue)
+        setupCheckboxGroup(view, R.id.checkbox_working_wed, R.id.checkbox_rest_wed, R.id.StartWed, R.id.FinishWed)
+        setupCheckboxGroup(view, R.id.checkbox_working_thu, R.id.checkbox_rest_thu, R.id.StartThu, R.id.FinishThu)
+        setupCheckboxGroup(view, R.id.checkbox_working_fri, R.id.checkbox_rest_fri, R.id.StartFri, R.id.FinishFri)
+        setupCheckboxGroup(view, R.id.checkbox_working_sat, R.id.checkbox_rest_sat, R.id.StartSat, R.id.FinishSat)
+        setupCheckboxGroup(view, R.id.checkbox_working_sun, R.id.checkbox_rest_sun, R.id.StartSun, R.id.FinishSun)
+        setupCheckboxGroup(view, R.id.restday_working, R.id.restday_realrest, R.id.StartRestday, R.id.FinishRestday)
 
         // 병원 소개 텍스트 창
         val hospitalIntroEditText = view.findViewById<EditText>(R.id.explanation2)
@@ -73,44 +105,116 @@ class HospitalMypageFragment : Fragment() {
             }
         }
 
+        // Save 버튼 클릭 이벤트 처리
+        val saveButton = view.findViewById<Button>(R.id.SaveButton)
+        saveButton.setOnClickListener {
+            onSaveButtonClicked()
+        }
+
+        setupRecyclerView()
+
         return view
     }
-    fun onBackToHospitalClicked(view: View) {
-        val MonStartTime = view.findViewById<EditText>(R.id.MonStartTime).text.toString()
-        val MonEndTime = view.findViewById<EditText>(R.id.MonEndTime).text.toString()
-        val TueStartTime = view.findViewById<EditText>(R.id.TueStartTime).text.toString()
-        val TueEndTime = view.findViewById<EditText>(R.id.TueEndTime).text.toString()
-        val WedStartTime = view.findViewById<EditText>(R.id.WedStartTime).text.toString()
-        val WedEndTime = view.findViewById<EditText>(R.id.WedEndTime).text.toString()
-        val ThuStartTime = view.findViewById<EditText>(R.id.ThuStartTime).text.toString()
-        val ThuEndTime = view.findViewById<EditText>(R.id.ThuEndTime).text.toString()
-        val FriStartTime = view.findViewById<EditText>(R.id.FriStartTime).text.toString()
-        val FriEndTime = view.findViewById<EditText>(R.id.FriEndTime).text.toString()
-        val SatStartTime = view.findViewById<EditText>(R.id.SatStartTime).text.toString()
-        val SatEndTime = view.findViewById<EditText>(R.id.SatEndTime).text.toString()
-        val SunStartTime = view.findViewById<EditText>(R.id.SunStartTime).text.toString()
-        val SunEndTime = view.findViewById<EditText>(R.id.SunEndTime).text.toString()
 
-        val DayStartTime = view.findViewById<EditText>(R.id.DayStartTime).text.toString()
-        val DayEndTime = view.findViewById<EditText>(R.id.DayEndTime).text.toString()
-        val WeekendStartTime = view.findViewById<EditText>(R.id.WeekendStartTime).text.toString()
-        val WeekendEndTime = view.findViewById<EditText>(R.id.WeekendEndTime).text.toString()
+    private fun setupRecyclerView() {
+        adapter = MultiImageHospitalAdapter(imageDataList, requireContext()) { position ->
+            if (position >= 0 && position < imageDataList.size) {
+                imageDataList.removeAt(position)
+                adapter.notifyDataSetChanged()
+                updateImageCount()
+            }
+        }
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    }
 
-        Log.d("Hospital_Mypage", "월요일 진료시간: $MonStartTime ~ $MonEndTime")
-        Log.d("Hospital_Mypage", "화요일 진료시간: $TueStartTime ~ $TueEndTime")
-        Log.d("Hospital_Mypage", "수요일 진료시간: $WedStartTime ~ $WedEndTime")
-        Log.d("Hospital_Mypage", "목요일 진료시간: $ThuStartTime ~ $ThuEndTime")
-        Log.d("Hospital_Mypage", "금요일 진료시간: $FriStartTime ~ $FriEndTime")
-        Log.d("Hospital_Mypage", "토요일 진료시간: $SatStartTime ~ $SatEndTime")
-        Log.d("Hospital_Mypage", "일요일 진료시간: $SunStartTime ~ $SunEndTime")
-        Log.d("Hospital_Mypage", "평일 점심시간: $DayStartTime ~ $DayEndTime")
-        Log.d("Hospital_Mypage", "주말 진료시간: $WeekendStartTime ~ $WeekendEndTime")
+    private fun updateImageCount() {
+        imageCountTextView.text = "${imageDataList.size}/5"
+    }
 
-        // 이전 프래그먼트로 이동
-        requireActivity().supportFragmentManager.popBackStack()
+    private fun onSaveButtonClicked() {
+        // 병원 화면으로 이동하는 코드
+        val hospitalFragment = HospitalFragment()
+        val fragmentManager = parentFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
 
-        // 병원 화면으로 돌아가는 코드는 이 함수 안에 있어야 합니다.
-        val intent = Intent(requireContext(), HospitalFragment::class.java)
-        startActivity(intent)
+        fragmentTransaction.replace(R.id.main_content, hospitalFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == HospitalMypageFragment.REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
+            val selectedImages = ArrayList<Uri>()
+            if (data.clipData == null) { // Single image selected
+                val imageUri = data.data
+                if (imageUri != null) {
+                    selectedImages.add(imageUri)
+                }
+            } else { // Multiple images selected
+                val clipData = data.clipData
+                if (clipData != null) {
+                    for (i in 0 until clipData.itemCount) {
+                        selectedImages.add(clipData.getItemAt(i).uri)
+                    }
+                }
+            }
+
+            // 이미지 개수 확인
+            val totalImages = imageDataList.size + selectedImages.size
+            if (totalImages > 5) {
+                Toast.makeText(context, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
+                return
+            }
+
+            // 이미지 추가
+            for (uri in selectedImages) {
+                imageDataList.add(ImageDataHospital(uri))
+            }
+
+            adapter.notifyDataSetChanged()
+            updateImageCount()
+        }
+    }
+
+    private fun setupCheckboxGroup(view: View, workingCheckboxId: Int, restCheckboxId: Int, startEditTextId: Int, finishEditTextId: Int) {
+        val workingCheckbox = view.findViewById<CheckBox>(workingCheckboxId)
+        val restCheckbox = view.findViewById<CheckBox>(restCheckboxId)
+        val startEditText = view.findViewById<EditText>(startEditTextId)
+        val finishEditText = view.findViewById<EditText>(finishEditTextId)
+
+        // 초기에는 EditText 뷰를 숨김
+        startEditText.visibility = View.GONE
+        finishEditText.visibility = View.GONE
+
+        // 체크박스 선택 이벤트 처리
+        val checkboxes = listOf(workingCheckbox, restCheckbox)
+        checkboxes.forEach { checkbox ->
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 체크박스 선택 해제
+                    checkboxes.filter { it != buttonView }.forEach { it.isChecked = false }
+
+                    // 선택된 체크박스에 따라 EditText 뷰의 가시성 조정
+                    val isWorking = buttonView.id == workingCheckboxId
+                    val visibility = if (isWorking) View.VISIBLE else View.GONE
+                    startEditText.visibility = visibility
+                    finishEditText.visibility = visibility
+                    Log.d(
+                        "Hospital_Mypage",
+                        "${view.resources.getResourceEntryName(buttonView.id)}: ${buttonView.text}"
+                    )
+                } else {
+                    // 체크박스가 해제되면 EditText를 숨김
+                    // 여기서 체크박스 상태를 다시 확인하여, 하나도 선택되지 않은 경우만 숨김
+                    if (!workingCheckbox.isChecked && !restCheckbox.isChecked) {
+                        startEditText.visibility = View.GONE
+                        finishEditText.visibility = View.GONE
+                    }
+                }
+            }
+        }
     }
 }

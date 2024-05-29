@@ -12,6 +12,7 @@ import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.databinding.ActivityMainBinding
 import com.example.reservationapp.navigation.CommunityFragment
 import com.example.reservationapp.navigation.HomeFragment
+import com.example.reservationapp.navigation.HospitalFragment
 import com.example.reservationapp.navigation.MedicalHistoryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarMenu
@@ -20,6 +21,7 @@ import com.google.android.material.navigation.NavigationView
 //메인메뉴
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
 
     var searchRecentWordList = ArrayList<RecentItem>()
 
@@ -32,12 +34,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root) //setContentView(R.layout.activity_main)
 
+
         searchRecentWordList = intent.getSerializableExtra("searchWordList") as? ArrayList<RecentItem> ?: ArrayList()
         medicalHistoryFragment = MedicalHistoryFragment.newInstance("")
+
+//        // 인텐트 데이터를 확인하고 HospitalFragment를 표시
+//        if (intent.getStringExtra("show_fragment") == "hospital") {
+//            showFragment(HospitalFragment())
+//        }
 
         //처음 실행시 홈 선택으로 시작
         navigation = binding.navigation
@@ -48,6 +55,12 @@ class MainActivity : AppCompatActivity() {
         //네비게이션바 선택에 따른 화면전환
         navigationSetItem()
     }
+
+//    private fun showFragment(fragment: Fragment) {
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.fragment_container, fragment)
+//            .commit()
+//    }
 
     //액티비티 전환 사용자정의 함수
     fun setActivity(context: Context, activity: Any) {
