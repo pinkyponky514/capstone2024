@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.PharmacyMapActivity
 import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
+import com.example.reservationapp.App
 import com.example.reservationapp.ChatActivity
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMap
@@ -26,6 +27,8 @@ import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.AllBookmarkResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.PopularHospitalItem
+import com.example.reservationapp.Model.RecentItem
+import com.example.reservationapp.Model.RecentSearchWordResponseData
 import com.example.reservationapp.Model.ReserveItem
 import com.example.reservationapp.Model.SearchHospital
 import com.example.reservationapp.Model.UserReservationResponse
@@ -75,7 +78,6 @@ class HomeFragment : Fragment() {
         mainActivity.tokenCheck()
 
 
-
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
@@ -104,6 +106,73 @@ class HomeFragment : Fragment() {
             mainActivity.setActivity(requireActivity(), HospitalSearchActivity())
         }
 
+
+        //예약 더보기 버튼
+        val reserveMoreButton = binding.commingMoreTextView
+        reserveMoreButton.setOnClickListener {
+            mainActivity.navigation.selectedItemId = R.id.checkupFrag
+            mainActivity.navigationSetItem()
+        }
+
+        //진료과, 증상별 버튼 설정
+        val classButtonList: List<Button> = listOf(binding.classButton1, binding.classButton2, binding.classButton3, binding.classButton4)
+        val symptomButtonList: List<Button> = listOf(binding.symptomButton1, binding.symptomButton2, binding.symptomButton3, binding.symptomButton4)
+        for(i in classButtonList.indices) {
+            val intent = Intent(requireActivity(), HospitalListActivity::class.java)
+            classButtonList[i].text = classReserveList[i]
+            classButtonList[i].setOnClickListener {
+                recentSearchWord(classReserveList, i)
+            }
+
+            symptomButtonList[i].text = symptomReserveList[i]
+            symptomButtonList[i].setOnClickListener {
+                recentSearchWord(symptomReserveList, i)
+            }
+        }
+
+        //진료과별 더보기 버튼
+        val classMoreTextView = binding.classMoreTextView
+        classMoreTextView.setOnClickListener {
+            mainActivity.showBottomSheet("진료과")
+        }
+        //증상 질환별 더보기 버튼
+        val syptomMoreTextView = binding.symptomMoreTextView
+        syptomMoreTextView.setOnClickListener {
+            mainActivity.showBottomSheet("증상별")
+        }
+
+
+        //주변에 위치한 병원지도
+        val textViewMap = binding.textView8 //view.findViewById<TextView>(R.id.textView8)
+        textViewMap.setOnClickListener {
+            val intent = Intent(requireActivity(), HospitalMapActivity::class.java)
+            startActivity(intent)
+        }
+
+        //주변에 위치한 약국지도
+        val textViewMap2 = binding.textView9 //view.findViewById<TextView>(R.id.textView9)
+        textViewMap2.setOnClickListener {
+            val intent = Intent(requireActivity(), PharmacyMapActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+        //채팅 서비스 버튼 클릭 이벤트 처리
+        val chatServiceButton = binding.floatingActionButton
+        chatServiceButton.setOnClickListener {
+            val intent = Intent(requireActivity(), ChatActivity::class.java)
+            startActivity(intent)
+        }
+
+
+        return binding.root //return view
+    }
+
+
+    //사라졌다가 다시 보여질때
+    override fun onResume() {
+        super.onResume()
 
         //병원 예약 알림 recyclerView
         reserveAlarmAdapter = ReserveAlarmAdapter()
@@ -157,68 +226,6 @@ class HomeFragment : Fragment() {
         })
 
 
-        //예약 더보기 버튼
-        val reserveMoreButton = binding.commingMoreTextView
-        reserveMoreButton.setOnClickListener {
-            mainActivity.navigation.selectedItemId = R.id.checkupFrag
-            mainActivity.navigationSetItem()
-        }
-
-        //진료과, 증상별 버튼 설정
-        val classButtonList: List<Button> = listOf(binding.classButton1, binding.classButton2, binding.classButton3, binding.classButton4)
-        val symptomButtonList: List<Button> = listOf(binding.symptomButton1, binding.symptomButton2, binding.symptomButton3, binding.symptomButton4)
-        for(i in classButtonList.indices) {
-            val intent = Intent(requireActivity(), HospitalListActivity::class.java)
-            classButtonList[i].text = classReserveList[i]
-            classButtonList[i].setOnClickListener {
-                intent.putExtra("searchWord", classReserveList[i])
-                startActivity(intent)
-            }
-            symptomButtonList[i].text = symptomReserveList[i]
-            symptomButtonList[i].setOnClickListener {
-                intent.putExtra("searchWord", symptomReserveList[i])
-                startActivity(intent)
-            }
-        }
-
-        //진료과별 더보기 버튼
-        val classMoreTextView = binding.classMoreTextView
-        classMoreTextView.setOnClickListener {
-            mainActivity.showBottomSheet("진료과")
-        }
-        //증상 질환별 더보기 버튼
-        val syptomMoreTextView = binding.symptomMoreTextView
-        syptomMoreTextView.setOnClickListener {
-            mainActivity.showBottomSheet("증상별")
-        }
-
-
-        //주변에 위치한 병원지도
-        val textViewMap = binding.textView8 //view.findViewById<TextView>(R.id.textView8)
-        textViewMap.setOnClickListener {
-            val intent = Intent(requireActivity(), HospitalMapActivity::class.java)
-            startActivity(intent)
-        }
-
-        //주변에 위치한 약국지도
-        val textViewMap2 = binding.textView9 //view.findViewById<TextView>(R.id.textView9)
-        textViewMap2.setOnClickListener {
-            val intent = Intent(requireActivity(), PharmacyMapActivity::class.java)
-            startActivity(intent)
-        }
-
-
-
-        //채팅 서비스 버튼 클릭 이벤트 처리
-        val chatServiceButton = binding.floatingActionButton
-        chatServiceButton.setOnClickListener {
-            val intent = Intent(requireActivity(), ChatActivity::class.java)
-            startActivity(intent)
-        }
-
-
-
-
         //인기 순위 병원 adapter, recyclerView 초기화
         popularHospitalAdapter = PopularHospitalAdapter()
         val popularHospitalRecyclerView = binding.popularHospitalRecyclerView
@@ -232,6 +239,7 @@ class HomeFragment : Fragment() {
 
         //인기 순위 병원 설정
         apiService.getAllHospitalBookmark().enqueue(object: Callback<AllBookmarkResponse> {
+            @RequiresApi(Build.VERSION_CODES.N)
             override fun onResponse(call: Call<AllBookmarkResponse>, response: Response<AllBookmarkResponse>) {
                 //통신, 응답 성공
                 if(response.isSuccessful) {
@@ -263,8 +271,8 @@ class HomeFragment : Fragment() {
                         var bookmarkItemList = ArrayList<PopularHospitalItem>() //adapter와 연결할 ItemList
                         if(sortedHospitalDetailList.size >= 5) { //병원 목록 리스트가 5개 이상이면
                             bookmarkItemList = sortedHospitalDetailList.take(5).mapIndexed { takeIndex, hospitalSignupInfoResponse ->
-                                    PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospitalId, hospitalSignupInfoResponse.data.name)
-                                } as ArrayList
+                                PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospitalId, hospitalSignupInfoResponse.data.name)
+                            } as ArrayList
                             Log.w("HomeFragment", "take문 bookmarkItemList: $bookmarkItemList")
                         }
                         else { //병원 목록 리스트가 5개 미만이면
@@ -297,9 +305,44 @@ class HomeFragment : Fragment() {
                 Log.w("HomeFragment CONNECTION FAILURE: ", "Connect FAILURE : ${t.localizedMessage}")
             }
         })
+    }
 
 
-        return binding.root //return view
+    //검색어저장
+    private fun recentSearchWord(list: List<String>, i: Int) {
+        //로그인 되어 있으면 저장되게
+        if(App.prefs.token != null) {
+            apiService.postRecentSearchWord(list[i]).enqueue(object: Callback<RecentSearchWordResponseData> {
+                override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
+                    if(response.isSuccessful) {
+                        val responseBodyPost = response.body()!!
+                        Log.w("HospitalSearchActivity", "검색어 저장! responseBodyPost : $responseBodyPost")
+
+                        val intent = Intent(requireActivity(), HospitalListActivity::class.java)
+                        intent.putExtra("searchWord", list[i])
+                        startActivity(intent)
+                    }
+
+                    else handleErrorResponse(response)
+                }
+
+                override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
+                    Log.w("HospitalSearchActivity", "post Recent Search Word API call failed: ${t.localizedMessage}")
+                }
+            })
+        }
+
+        //로그인 안되어 있으면 전달만 하기
+        else {
+/*
+            recentSearchWordList.add(0, RecentItem(searchWord))
+            adapter.updateList(recentSearchWordList)
+*/
+
+            val intent = Intent(requireActivity(), HospitalListActivity::class.java)
+            intent.putExtra("searchWord", list[i])
+            startActivity(intent)
+        }
     }
 
     //

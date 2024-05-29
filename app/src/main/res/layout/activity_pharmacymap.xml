@@ -18,7 +18,7 @@
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="50dp"
             android:layout_margin="20dp"
             android:background="@drawable/style_dark_green_line_radius_30"
             android:focusable="false"
@@ -35,8 +35,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--
-    &lt;!&ndash; 영업중 필터 플로팅 버튼 &ndash;&gt;
+    <!-- 영업중 필터 플로팅 버튼 -->
+    <!--
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/filter_btn"
         android:layout_width="60dp"
@@ -52,8 +52,7 @@
         android:elevation="15dp"
         app:layout_anchor="@id/searchView"
         app:layout_anchorGravity="bottom|end" />
--->
-
+        -->
 
     <!-- 지도 -->
     <androidx.fragment.app.FragmentContainerView

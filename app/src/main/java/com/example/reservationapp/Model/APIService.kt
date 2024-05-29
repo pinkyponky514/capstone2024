@@ -127,8 +127,8 @@ interface APIService {
     @Headers("Auth: false")
     fun getTokenCheck(): Call<String>
 
-    @GET("/api/hospitals")
-    @Headers("Auth: false") //병원 api테이블에서 모든 데이터 가져오기
+    @GET("/api/hospitals") //병원 api테이블에서 모든 데이터 가져오기
+    @Headers("Auth: false")
     fun getAllHospitlas():Call<ApiHospitalResponse>
 
     @GET("/users/search/request") //최근 검색어 가져오기 (토큰필요)
@@ -137,6 +137,10 @@ interface APIService {
     @POST("/users/search/save/{keyword}") //최근 검색어 저장 (토큰필요)
     fun postRecentSearchWord(@Path(value="keyword") searchWord:String): Call<RecentSearchWordResponseData>
 
-    @DELETE("/users/search/remove/{keyword}")
+    @DELETE("/users/search/remove/{keyword}") //최근 검색어 삭제 (토큰필요)
     fun deleteRecentSearchWord(@Path(value="keyword") searchWord:String?): Call<RecentSearchWordResponseData>
+
+    @GET("/hospitals/download/{detailId}") //병원 이미지 가져오기
+    @Headers("Auth: false")
+    fun getHospitalDetailImage(@Path(value="detailId") detailId: Long = 0): Call<List<String>>
 }

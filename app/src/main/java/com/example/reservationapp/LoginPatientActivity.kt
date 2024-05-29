@@ -14,8 +14,10 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.UserLoginInfoRequest
+import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityLoginBinding
 import org.json.JSONException
@@ -169,28 +171,14 @@ class LoginPatientActivity: AppCompatActivity() {
                         finish()
                     }
                     else {
-                        //Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
-                        val errorBody = response.errorBody()?.string()
-                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                        if (errorBody != null) {
-                            try {
-                                val jsonObject = JSONObject(errorBody)
-                                val timestamp = jsonObject.optString("timestamp")
-                                val status = jsonObject.optInt("status")
-                                val error = jsonObject.optString("error")
-                                val message = jsonObject.optString("message")
-                                val path = jsonObject.optString("path")
-
-                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                            } catch (e: JSONException) {
-                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                            }
-                        }
+                        //CustomToast(this@LoginPatientActivity, "일치하는 유저의 계정이 없습니다.").show()
+                        handleErrorResponse(response)
                     }
                 }
 
                 //통신 실패
                 override fun onFailure(call: Call<String>, t: Throwable) {
+                    CustomToast(this@LoginPatientActivity, "일치하는 유저의 계정이 없습니다.").show()
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage)
                 }
             })

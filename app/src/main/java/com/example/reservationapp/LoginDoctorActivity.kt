@@ -14,9 +14,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HospitalUserLoginResponse
 import com.example.reservationapp.Model.UserLoginInfoRequest
+import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityLoginBinding
 import retrofit2.Call
@@ -165,11 +167,14 @@ class LoginDoctorActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
-                    else
-                        Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
+                    else {
+                        //CustomToast(this@LoginDoctorActivity, "일치하는 유저의 계정이 없습니다.").show()
+                        handleErrorResponse(response)
+                    }
                 }
 
                 override fun onFailure(call: Call<HospitalUserLoginResponse>, t: Throwable) {
+                    CustomToast(this@LoginDoctorActivity, "일치하는 유저의 계정이 없습니다.").show()
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
                 }
             })
