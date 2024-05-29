@@ -15,6 +15,13 @@ private var chatArray = ArrayList<ChatItem>()
 class ChattingAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+
+    private var itemClickListener: ((ChatItem) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (ChatItem) -> Unit) {
+        itemClickListener = listener
+    }
+
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var chatTextView: TextView
         private var chatImageView: ImageView?
@@ -28,7 +35,7 @@ class ChattingAdapter :
             chatTextView.text = chat.text
             chat.imageResource?.let { resourceId ->
                 chatImageView?.apply {
-                    setImageResource(resourceId)
+                    setImageBitmap(resourceId)
                     visibility = View.VISIBLE
                 }
             } ?: run {
@@ -44,16 +51,21 @@ class ChattingAdapter :
 
         fun setContents(chat: ChatItem) {
             // 이 부분에서 실제 병원 이름과 위치 정보를 설정하도록 변경
-            imageView.setImageResource(chat.imageResource!!)
-            hospitalNameTextView.text = "삼성드림이비인후과"  // 여기를 실제 데이터로 변경
-            hospitalPosTextView.text = "서울특별시 중구 을지로 51 교원 내외빌딩 4층"  // 여기를 실제 데이터로 변경
+            if (chat.imageResource != null) {
+                imageView.setImageBitmap(chat.imageResource)
+                imageView.visibility = View.VISIBLE
+            } else {
+                imageView.visibility = View.GONE
+            }
+            hospitalNameTextView.text =   chat.hospitalName ?: "Unknown Hospital" // 여기를 실제 데이터로 변경
+            hospitalPosTextView.text =  chat.hospitalName ?: "Unknown Hospital"  // 여기를 실제 데이터로 변경
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (chatArray[position].user == "hansung") {
             1 // 나의 메세지
-        } else if (chatArray[position].imageResource != null) {
+        } else if (chatArray[position].imageResource != null || chatArray[position].hospitalName != null) {
             2 // 병원 정보
         } else {
             0 // AI 메세지
@@ -81,7 +93,13 @@ class ChattingAdapter :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is MessageViewHolder -> holder.setContents(chatArray[position])
-            is HospitalViewHolder -> holder.setContents(chatArray[position])
+            is HospitalViewHolder -> {
+                holder.setContents(chatArray[position])
+                holder.itemView.setOnClickListener {
+                    itemClickListener?.invoke(chatArray[position])
+                }
+            }
+
         }
     }
 

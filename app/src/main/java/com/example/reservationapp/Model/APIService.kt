@@ -7,7 +7,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -41,8 +40,9 @@ interface APIService {
         @Query("mapy") mapy: Double = userMapy
     ): Call<List<SearchHospital>>
 
+    @Multipart
     @POST("/hospitals/hospitaldetail") //병원 상세정보 입력 (토큰필요)
-    fun postHospitalDetail(@Body hospital: HospitalDetail2): Call<HospitalDetailResponse>
+    fun postHospitalDetail(@Part image: List<MultipartBody.Part>?, @Part("hospitalDetailDto") hospital: HospitalDetail2): Call<HospitalDetailResponse>
 
     @GET("/hospitals/findhospital/{hospitalId}") //특정 병원 상세정보 검색
     @Headers("Auth: false")
@@ -94,12 +94,19 @@ interface APIService {
     @POST("/reservations/hospital/confirm") //예약 확정
     fun postConfirmReservation(@Body reservation: ConfirmReservationRequest):Call<ConfirmReservationResponse>
 
+    @POST("/reservations/hospital/complete") //진료완료
+    fun postCompleteReservation(@Body reservation: ConfirmReservationRequest): Call<ConfirmReservationResponse>
+
     @POST("/boardlike/{boardId}") //커뮤니티 게시글 좋아요
     fun postBoardLike(@Path(value="boardId") boardId:Long): Call<BoardLikeResponse>
 
     @GET("/boards/{boardId}") //개별 게시글 가져오기
     @Headers("Auth: false")
     fun getBoaradContent(@Path(value="boardId") boardId:Long): Call<BoardContentResponse>
+
+    @GET("/boards/download/{boardId}") //개별 게시글 이미지 가져오기
+    @Headers("Auth: false")
+    fun getBaoardImages(@Path(value="boardId") boardId:Long): Call<List<String>>
 
     @POST("/comments/write/{boardId}") //게시글 댓글 작성
     fun postComment(@Path(value="boardId") boardId:Long, @Body comment: CommentRequest): Call<CommunityCommentRequest>
@@ -127,8 +134,8 @@ interface APIService {
     @Headers("Auth: false")
     fun getTokenCheck(): Call<String>
 
-    @GET("/api/hospitals")
-    @Headers("Auth: false") //병원 api테이블에서 모든 데이터 가져오기
+    @GET("/api/hospitals") //병원 api테이블에서 모든 데이터 가져오기
+    @Headers("Auth: false")
     fun getAllHospitlas():Call<ApiHospitalResponse>
 
     @GET("/users/search/request") //최근 검색어 가져오기 (토큰필요)
@@ -137,6 +144,13 @@ interface APIService {
     @POST("/users/search/save/{keyword}") //최근 검색어 저장 (토큰필요)
     fun postRecentSearchWord(@Path(value="keyword") searchWord:String): Call<RecentSearchWordResponseData>
 
-    @DELETE("/users/search/remove/{keyword}")
+    @DELETE("/users/search/remove/{keyword}") //최근 검색어 삭제 (토큰필요)
     fun deleteRecentSearchWord(@Path(value="keyword") searchWord:String?): Call<RecentSearchWordResponseData>
+
+    @POST("/hospitals/setopenapi/{addnum}") //병원 연결
+    fun postSetOpenApi(@Path(value="addnum") addnum :String):Call<SetOpenApiResponse>
+
+    @GET("/hospitals/download/{detailId}") //병원 이미지 가져오기
+    @Headers("Auth: false")
+    fun getHospitalDetailImage(@Path(value="detailId") detailId: Long = 0): Call<List<String>>
 }

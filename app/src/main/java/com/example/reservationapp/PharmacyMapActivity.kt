@@ -15,8 +15,11 @@ import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import androidx.appcompat.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.NonNull
@@ -64,6 +67,7 @@ enum class DayOfWeek(val value: Int) {
 
 class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.OnClickListener*/ {
     private lateinit var binding: ActivityPharmacymapBinding
+    private lateinit var pharmacy: NaverMapData
 
     // 필터 상태를 나타내는 변수
     private var isFilterApplied = false
@@ -196,6 +200,35 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
 
         //검색창 초기화
         val searchView = binding.searchView
+        searchView.setOnQueryTextFocusChangeListener { searchView, hasFocus ->
+            if(hasFocus) { //포커스를 가지고 있으면
+                val intent = Intent(this, HospitalSearchActivity::class.java)
+                startActivity(intent)
+                searchView.clearFocus()
+            }
+        }
+        //검색창(이미지) 눌렀을때 이벤트 처리
+        searchView.setOnClickListener {
+            val intent = Intent(this, HospitalSearchActivity::class.java)
+            startActivity(intent)
+        }
+
+
+/*
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean { //검색할때마다 바뀜
+                setListenerToEditText()
+                if(newText.isNotEmpty()) {
+                    searchAndClickMarker(newText)
+                }
+                return true
+            }
+        })
+*/
 
         pharmacyNameTextView = binding.pharmacyNameTextView //findViewById(R.id.pharmacy_name_textView)
         operatingTimeTextView = binding.operatingTimeTextView //findViewById(R.id.operating_time_textView)
@@ -230,6 +263,43 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
             updateMarkers2()
         }
 */
+    }
+
+    //엔터 눌렀을때 키보드 내려가게
+    private fun setListenerToEditText() {
+        binding.searchView.setOnKeyListener { view, keyCode, event ->
+            //Enter Key Action
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER
+            ) {
+                //키패드 내리기
+                val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
+                true
+            }
+
+            false
+        }
+    }
+
+    // 검색어와 일치하는 마커를 찾고 클릭하는 함수
+    private fun searchAndClickMarker(query: String) {
+        val matchedMarker = markers.find { marker ->
+            val pharmacy = marker.tag as? NaverMapData
+            pharmacy?.pharmacyname?.contains(query, ignoreCase = true) == true
+        }
+
+        matchedMarker?.let {
+            // 해당 마커 클릭
+            it.performClick()
+            // 마커 위치로 카메라 이동
+            val cameraUpdate = CameraUpdate.scrollTo(it.position)
+            mNaverMap.moveCamera(cameraUpdate)
+            // Bottom sheet 표시
+            val pharmacy = it.tag as NaverMapData
+            showBottomSheet(pharmacy, it)
+        } ?: run {
+            Toast.makeText(this, "일치하는 약국을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     // 마커 필터링 함수

@@ -64,6 +64,7 @@
 
 
                     <!-- 병원 상세 이미지 -->
+<!--
                     <ImageView
                         android:id="@+id/imageView_hospital_image"
                         android:layout_width="340dp"
@@ -73,7 +74,16 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_status"
                         app:srcCompat="@drawable/ex_hospital" />
+-->
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/hospital_detail_image_recyclerview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="40dp"
+                        app:layout_constraintEnd_toEndOf="@+id/textView_wait_count"
+                        app:layout_constraintStart_toStartOf="@+id/textView_class_name"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_status" />
 
                     <!-- 병원 진료가능 상태, 대기인원 -->
                     <TextView
@@ -105,7 +115,7 @@
                         android:layout_height="20dp"
                         android:layout_marginTop="30dp"
                         app:layout_constraintStart_toStartOf="@+id/textView_hospital_name"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView_hospital_image"
+                        app:layout_constraintTop_toBottomOf="@+id/hospital_detail_image_recyclerview"
                         app:srcCompat="@drawable/image_marker" />
 
                     <TextView

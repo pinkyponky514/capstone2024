@@ -11,11 +11,10 @@ import com.example.reservationapp.Retrofit.RetrofitClient
 
 //싱글톤 패턴을 사용
 class App :Application(){
-
-
     companion object{
         lateinit var retrofitClient: RetrofitClient
         lateinit var apiService: APIService
+        lateinit var hospitalName:String
         lateinit var prefs: Prefs
     }
     @RequiresApi(Build.VERSION_CODES.O)

@@ -2,8 +2,11 @@ package com.example.reservationapp
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -16,6 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.reservationapp.Adapter.HospitalDetailImageAdapter
 import com.example.reservationapp.Adapter.ReviewAdapter
 import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
@@ -55,6 +59,8 @@ class Hospital_DetailPage : AppCompatActivity() {
 
     private lateinit var adapter: ReviewAdapter
     private lateinit var hospitalNameString: String
+    private var hospitalDetailId: Long = 0 //병원 상세정보 레이블 번호
+
 
     //예약
     private var calendar_open_flag: Boolean = false //달력 펼쳐져 있는지 확인하는 flag
@@ -76,6 +82,8 @@ class Hospital_DetailPage : AppCompatActivity() {
     //즐겨찾기
     private var bookmark_flag: Boolean = false
 
+    //병원 상세정보 이미지
+    private lateinit var hospitalDetailImageAdapter: HospitalDetailImageAdapter
 
     //
     private lateinit var mainActivity: MainActivity
@@ -89,6 +97,7 @@ class Hospital_DetailPage : AppCompatActivity() {
     private lateinit var responseBodyBookmark: BookmarkResponse
     private lateinit var responseBodyHospitalDetail: HospitalSignupInfoResponse
     private lateinit var responseBodyReservation: ReservationResponse
+    private lateinit var responseBodyHospitalDetailImage: List<String>
     private lateinit var db_lunch_time_start: String //점심 시작 시간
     private lateinit var db_lunch_time_end: String //점심 끝나는 시간
 
@@ -185,17 +194,50 @@ class Hospital_DetailPage : AppCompatActivity() {
 
 
         //상세정보 채우기
-        apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
+        apiService.getHospitalDetail(hospitalId).enqueue(object: Callback<HospitalSignupInfoResponse> {
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
                 if(response.isSuccessful) {
                     responseBodyDetail = response.body()!!
 
                     hospitalNameString = responseBodyDetail.data.name //병원이름 저장
+                    hospitalDetailId = responseBodyDetail.data.hospitalDetail.detailId //병원 디테일 레이블 번호
                     hospitalNameTextView.text = responseBodyDetail.data.hospitalDetail.department //병원 진료과 설정
                     hospitalNameTextView.text = responseBodyDetail.data.name //병원 이름 설정
                     hospitalPositionTextView.text = responseBodyDetail.data.openApiHospital.address //병원 주소 설정
                     hospitalCallTextView.text = responseBodyDetail.data.openApiHospital.tel //병원 전화번호 설정
+
+
+                    //병원 이미지 설정
+                    var imageList:ArrayList<Bitmap>
+                    hospitalDetailImageAdapter = HospitalDetailImageAdapter()
+                    val hospitalDetailImageRecyclerView = binding.hospitalDetailImageRecyclerview
+                    val hospitalDetailLinearLayoutManager = LinearLayoutManager(this@Hospital_DetailPage, LinearLayoutManager.HORIZONTAL, false)
+                    hospitalDetailImageRecyclerView.adapter = hospitalDetailImageAdapter
+                    hospitalDetailImageRecyclerView.layoutManager = hospitalDetailLinearLayoutManager
+
+                    apiService.getHospitalDetailImage(hospitalDetailId).enqueue(object: Callback<List<String>> {
+                        override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
+                            if(response.isSuccessful) { //이미지 변환
+                                imageList = ArrayList()
+                                responseBodyHospitalDetailImage = response.body()!!
+                                Log.w("Hospital_DetailPage", "병원 이미지 응답 response body = ${responseBodyHospitalDetailImage}")
+
+                                for(image in responseBodyHospitalDetailImage) {
+                                    val decodedBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
+                                    var bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                                    imageList.add(bitmap)
+                                }
+                                hospitalDetailImageAdapter.updatelist(imageList)
+                            }
+
+                            else handleErrorResponse(response)
+                        }
+
+                        override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                            Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+                        }
+                    })
 
 
                     //금일 운영시간 설정
@@ -295,6 +337,39 @@ class Hospital_DetailPage : AppCompatActivity() {
             }
         })
 
+
+        //병원 이미지 채우기
+/*
+        var imageList:ArrayList<Bitmap>
+
+        hospitalDetailImageAdapter = HospitalDetailImageAdapter()
+        val hospitalDetailImageRecyclerView = binding.hospitalDetailImageRecyclerview
+        val hospitalDetailLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        hospitalDetailImageRecyclerView.adapter = hospitalDetailImageAdapter
+        hospitalDetailImageRecyclerView.layoutManager = hospitalDetailLinearLayoutManager
+
+        apiService.getHospitalDetailImage(hospitalDetailId).enqueue(object: Callback<List<String>> {
+            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
+                if(response.isSuccessful) { //이미지 변환
+                    imageList = ArrayList()
+                    responseBodyHospitalDetailImage = response.body()!!
+                    Log.w("Hospital_DetailPage", "병원 이미지 응답 response body = ${responseBodyHospitalDetailImage}")
+
+                    for(image in responseBodyHospitalDetailImage) {
+                        val decodedBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
+                        var bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        imageList.add(bitmap)
+                    }
+                }
+
+                else handleErrorResponse(response)
+            }
+
+            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+            }
+        })
+*/
 
         //즐겨찾기 이미지 설정
         favoriteButton = binding.favoriteImageView

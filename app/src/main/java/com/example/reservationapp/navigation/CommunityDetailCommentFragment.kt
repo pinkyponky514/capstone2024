@@ -31,7 +31,6 @@ import com.example.reservationapp.Model.CommentItem
 import com.example.reservationapp.Model.CommentRequest
 import com.example.reservationapp.Model.CommentsRequest
 import com.example.reservationapp.Model.CommunityCommentRequest
-import com.example.reservationapp.Model.ImageItem
 import com.example.reservationapp.Model.UserBoardLikeResponse
 import com.example.reservationapp.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,12 +45,11 @@ import java.util.Locale
 
 class CommunityDetailCommentFragment : Fragment() {
 
-/*
+
     private lateinit var buttonFavorite: CompoundButton
     private lateinit var titleTextView: TextView
     private lateinit var writerTextView:TextView
     private lateinit var textViewContent: TextView
-    private lateinit var imageViewDetail: ImageView
     private lateinit var timestamp2: TextView
     private lateinit var commentRecyclerView: RecyclerView
     private lateinit var editText: EditText
@@ -65,25 +63,18 @@ class CommunityDetailCommentFragment : Fragment() {
 
     private lateinit var imageAdapter: ImageAdapter
 
+    private lateinit var imageList: ArrayList<Bitmap>
 
     companion object {
         private const val ARG_IMAGE_RESOURCE = "arg_image_resource"
         private const val ARG_IMAGE_TITLE = "arg_image_title"
         private const val ARG_BOARD_ID = "arg_board_id"
-        private const val ARG_IMAGE_URLS = "arg_image_urls"
 
-<<<<<<< HEAD
-        fun newInstance(imageResource: Int, imageTitle: String, imageUrls: List<String>, boardId: Long): CommunityDetailCommentFragment {
-=======
         fun newInstance(imageResource: Bitmap, imageTitle: String, boardId: Long): CommunityDetailCommentFragment {
->>>>>>> lch
             val fragment = CommunityDetailCommentFragment()
             val args = Bundle()
-            args.putInt(ARG_IMAGE_RESOURCE, 0*/
-/*imageResource*//*
-)
+            args.putInt(ARG_IMAGE_RESOURCE, 0)
             args.putString(ARG_IMAGE_TITLE, imageTitle)
-            args.putStringArrayList(ARG_IMAGE_URLS, ArrayList(imageUrls))
             args.putLong(ARG_BOARD_ID, boardId) // 올바른 boardId 값 설정
             fragment.arguments = args
             return fragment
@@ -100,22 +91,19 @@ class CommunityDetailCommentFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_community_detail_comment, container, false)
 
-<<<<<<< HEAD
         val recyclerViewImages: RecyclerView = view.findViewById(R.id.recyclerViewImages)
-        recyclerViewImages.layoutManager = GridLayoutManager(requireContext(), 1)
 
-        val imageList = listOf(
-            ImageItem(R.drawable.image1),
-            ImageItem(R.drawable.image2),
-            ImageItem(R.drawable.image3),
-            ImageItem(R.drawable.image4),
-            ImageItem(R.drawable.image5)
-        )
-=======
+        //recyclerViewImages.layoutManager = GridLayoutManager(requireContext(), 1)
+        recyclerViewImages.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        // Initialize imageList
+        imageList = ArrayList()
+
+        // imageAdapter 초기화
+        imageAdapter = ImageAdapter(imageList)
+        recyclerViewImages.adapter = imageAdapter
+
         // FloatingActionButton 참조 가져오기
         floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
-
->>>>>>> lch
 
         // ProgressBar를 XML 레이아웃에서 찾아서 변수에 할당합니다.
         progressBar = view.findViewById(R.id.progressBar)
@@ -133,7 +121,8 @@ class CommunityDetailCommentFragment : Fragment() {
         editText = view.findViewById(R.id.messageEditText)
         sendButton2 = view.findViewById(R.id.buttonSend)
         buttonFavorite = view.findViewById(R.id.button_favorite)
-        imageViewDetail = view.findViewById(R.id.imageViewDetail)
+
+   //     imageViewDetail = view.findViewById(R.id.imageViewDetail)
         floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
 
 
@@ -154,20 +143,19 @@ class CommunityDetailCommentFragment : Fragment() {
                     val writer = data.writer
                     val regDate = data.regDate
                     val regTime = data.regTime
-                    val decodedBytes: ByteArray = Base64.decode(data.mainImage, Base64.DEFAULT)
-                    var bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-//
-//                    titleTextView = view.findViewById<TextView>(R.id.textViewTitle)
-//                    writerTextView = view.findViewById(R.id.textViewWriter)
-//                    timestamp2 = view.findViewById(R.id.timestamp2)
+//                    val decodedBytes: ByteArray = Base64.decode(data.mainImage, Base64.DEFAULT)
+//                    var bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+
                     timestamp2.text = regDate.toString()+" "+regTime.toString()
                     titleTextView.text = title
                     writerTextView.text="글쓴이:"+writer
                     textViewContent.text = content
-                    imageViewDetail.setImageBitmap(bitmap)
+             //       imageViewDetail.setImageBitmap(bitmap)
 
+                    fetchImages()
                     fetchComments()
                     fetchUserBoardLike()
+
                     progressBar.visibility = View.GONE
 
                 } else {
@@ -245,10 +233,6 @@ class CommunityDetailCommentFragment : Fragment() {
         sendButton2.setOnClickListener {
             val commentContent = editText.text.toString().trim()
             if (commentContent.isNotEmpty()) {
-                val currentTime = System.currentTimeMillis()
-              val formattedTime = android.text.format.DateFormat.format("yyyy-MM-dd HH:mm", currentTime).toString()
-//                //val comment = CommentItem(commentContent, "pinky", formattedTime) // 작성자 정보는 나중에 변경 가능
-
                 val comment = CommentRequest(commentContent)
                 App.apiService.postComment(boardId, comment).enqueue(object : Callback<CommunityCommentRequest> {
                     override fun onResponse(call: Call<CommunityCommentRequest>, response: Response<CommunityCommentRequest>) {
@@ -298,6 +282,31 @@ class CommunityDetailCommentFragment : Fragment() {
         floatingActionButton.show() // Show FloatingActionButton
     }
 
+    fun fetchImages(){
+        App.apiService.getBaoardImages(boardId = boardId).enqueue(object :
+            Callback<List<String>> {
+            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()!!
+
+                    for(image in responseBody){
+                        val decodedBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
+                        var bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        imageList.add(bitmap)
+                    }
+
+                    imageAdapter.notifyDataSetChanged()
+
+                } else {
+                    Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
+                }
+            }
+
+            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
+            }
+        })
+    }
     fun fetchComments(){
         App.apiService.getComments(boardId = boardId).enqueue(object :
             Callback<CommentsRequest> {
@@ -310,7 +319,7 @@ class CommunityDetailCommentFragment : Fragment() {
                         val newComment = CommentItem(comment.content, comment.writer, "${comment.regDate} ${comment.regTime}")
                         adapter.addComment(newComment)
                     }
-
+                    adapter.notifyDataSetChanged()
                 } else {
                     Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}") //통신 성공, 응답은 실패
                 }
@@ -346,5 +355,5 @@ class CommunityDetailCommentFragment : Fragment() {
             }
         })
     }
-*/
+
 }

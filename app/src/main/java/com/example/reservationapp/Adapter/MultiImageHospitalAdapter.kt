@@ -45,3 +45,4 @@ class MultiImageHospitalAdapter(
         return imageDataList.size
     }
 }
+

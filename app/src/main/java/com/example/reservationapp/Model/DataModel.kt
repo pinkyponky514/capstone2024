@@ -45,7 +45,9 @@ data class HospitalItem(
 data class ChatItem (
     var user: String,
     var text: String? = null,
-    var imageResource: Int? = null // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
+    var imageResource: Bitmap? = null, // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
+    var hospitalName: String? = null, // 병원 이름 추가
+    var hospitalAddress: String? = null // 병원 주소 추가
 )
 
 
@@ -76,6 +78,10 @@ data class ImageDataHospital(
 data class ImageItem(
     val imageResId: Int
 )
+
+//data class ImageItem(
+//    val imageResId: Int
+//)
 
 //HistoryAdapter, AbleReviewWriteAdapter
 data class HistoryItem (
@@ -128,6 +134,7 @@ data class PopularHospitalItem(
     var hospitalId: Long, //병원 레이블 번호
     var hospitalName: String //병원이름
 )
+
 
 fun handleErrorResponse(response: Response<*>) {
     val errorBody = response.errorBody()?.string()

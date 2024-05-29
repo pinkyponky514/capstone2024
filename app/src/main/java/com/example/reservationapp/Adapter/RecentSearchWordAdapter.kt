@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.App
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.RecentItem
@@ -59,25 +60,34 @@ class RecentSearchWordAdapter:
 
                 searchWord = recent_search_word_data[adapterPosition].recentSearchWord
 
-                apiService.postRecentSearchWord(searchWord).enqueue(object: Callback<RecentSearchWordResponseData> {
-                    override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
-                        if(response.isSuccessful) {
-                            responseBodyPost = response.body()!!
-                            Log.w("HospitalSearchActivity", "검색어 저장! responseBodyPost : $responseBodyPost")
+                if(App.prefs.token != null) { //로그인 되어 있으면
+                    apiService.postRecentSearchWord(searchWord).enqueue(object: Callback<RecentSearchWordResponseData> {
+                        override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
+                            if(response.isSuccessful) {
+                                responseBodyPost = response.body()!!
+                                Log.w("HospitalSearchActivity", "검색어 저장! responseBodyPost : $responseBodyPost")
 
-                            val intent = Intent(context, HospitalListActivity::class.java)
-                            intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
-                            context.startActivity(intent)
-                            context.finish()
+                                val intent = Intent(context, HospitalListActivity::class.java)
+                                intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
+                                context.startActivity(intent)
+                                context.finish()
+                            }
+
+                            else handleErrorResponse(response)
                         }
 
-                        else handleErrorResponse(response)
-                    }
-
-                    override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
-                        Log.w("HospitalSearchActivity", "post Recent Search Word API call failed: ${t.localizedMessage}")
-                    }
-                })
+                        override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
+                            Log.w("HospitalSearchActivity", "post Recent Search Word API call failed: ${t.localizedMessage}")
+                        }
+                    })
+                }
+                //로그인 안되어 있으면
+                else {
+                    val intent = Intent(context, HospitalListActivity::class.java)
+                    intent.putExtra("searchWord", searchWord) //검색어 데이터 putExtra로 전환 해줘야함
+                    context.startActivity(intent)
+                    context.finish()
+                }
             }
 
             //최근 검색 단어 x버튼 클릭했을때
@@ -86,20 +96,26 @@ class RecentSearchWordAdapter:
                 recent_search_word_data.removeAt(adapterPosition)
                 notifyDataSetChanged()
 
-                apiService.deleteRecentSearchWord(searchWord).enqueue(object: Callback<RecentSearchWordResponseData> {
-                    override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
-                        if(response.isSuccessful) {
-                            responseBody = response.body()!!
-                            Log.w("RecentSearchWordAdpater", "최근 검색어 삭제! $responseBody")
+                if(App.prefs.token != null) {
+                    apiService.deleteRecentSearchWord(searchWord).enqueue(object: Callback<RecentSearchWordResponseData> {
+                        override fun onResponse(call: Call<RecentSearchWordResponseData>, response: Response<RecentSearchWordResponseData>) {
+                            if(response.isSuccessful) {
+                                responseBody = response.body()!!
+                                Log.w("RecentSearchWordAdpater", "최근 검색어 삭제! $responseBody")
+                            }
+
+                            else handleErrorResponse(response)
                         }
 
-                        else handleErrorResponse(response)
-                    }
+                        override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
 
-                    override fun onFailure(call: Call<RecentSearchWordResponseData>, t: Throwable) {
+                        }
+                    })
+                }
 
-                    }
-                })
+                else {
+
+                }
             }
         }
 
