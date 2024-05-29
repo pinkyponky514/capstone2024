@@ -18,6 +18,7 @@ import com.example.reservationapp.HospitalMainActivity
 //import com.example.reservationapp.Hospital_Mypage
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.Hospital
+import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReservationItem
 import com.example.reservationapp.Model.Reservations
@@ -103,15 +104,15 @@ class HospitalFragment : Fragment() {
     //병원 정보 가져오기
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchHospitalDetails(hospitalId: Long, hospitalNameTextView: TextView) {
-        apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
-            override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+        apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSearchResponse> {
+            override fun onResponse(call: Call<HospitalSearchResponse>, response: Response<HospitalSearchResponse>) {
                 if (response.isSuccessful) {
                     val responseBodyDetail = response.body()!!
                     Log.d("SUCCESS Response", "Message: ${responseBodyDetail.message}")
                     hospitalName = responseBodyDetail.data.name
                     hospitalNameTextView.text = hospitalName
                     App.hospitalName = hospitalName
-                    reservations = responseBodyDetail.data.reservations
+                    reservations = responseBodyDetail.data.hospital.reservations
 
                     if(reservations.size >= 1) {
                         for (reservation in reservations) {
@@ -140,7 +141,7 @@ class HospitalFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+            override fun onFailure(call: Call<HospitalSearchResponse>, t: Throwable) {
                 Log.d("CONNECTION FAILURE: ", t.localizedMessage)
             }
         })
@@ -148,7 +149,7 @@ class HospitalFragment : Fragment() {
 
 
     //
-    private fun handleErrorResponse(response: Response<HospitalSignupInfoResponse>) {
+    private fun handleErrorResponse(response: Response<HospitalSearchResponse>) {
         val errorBody = response.errorBody()?.string()
         Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: $errorBody")
         if (errorBody != null) {

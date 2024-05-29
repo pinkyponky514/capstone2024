@@ -163,7 +163,7 @@ class ChatActivity : AppCompatActivity() {
                     Log.d("Success Response", responseBody.toString())
                     val hospitalName = responseBody[0].hospitalName  //병원이름
                     val address =  responseBody[0].address //주소
-                    val image = responseBody[0].hospital.hospitalDetail.mainImage //메인 이미지
+                    val image = responseBody[0].mainImage //메인 이미지
 
                     val decodedBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
                    // val bitmapImage = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)

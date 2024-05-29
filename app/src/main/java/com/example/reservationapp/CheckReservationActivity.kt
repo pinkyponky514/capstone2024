@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HistoryItem
+import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReservationResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
@@ -34,7 +35,7 @@ class CheckReservationActivity : AppCompatActivity() {
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
-    private lateinit var responseBody: HospitalSignupInfoResponse
+    private lateinit var responseBody: HospitalSearchResponse
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -61,23 +62,22 @@ class CheckReservationActivity : AppCompatActivity() {
 
         val intentDataItem = intent.getSerializableExtra("reservationResponse") as ReservationResponse
 
-        apiService.getHospitalDetail(intentDataItem.hospitalId).enqueue(object:
-            Callback<HospitalSignupInfoResponse> {
-            override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+        apiService.getHospitalDetail(intentDataItem.hospitalId).enqueue(object: Callback<HospitalSearchResponse> {
+            override fun onResponse(call: Call<HospitalSearchResponse>, response: Response<HospitalSearchResponse>) {
                 //통신, 응답 성공
                 if(response.isSuccessful) {
                     responseBody = response.body()!!
                     Log.d("CheckReservationActivity", "response.body(): $responseBody, intentDateItem: $intentDataItem")
 
 
-                    for(i in responseBody.data.reservations.indices) {
+                    for(i in responseBody.data.hospital.reservations.indices) {
                         //예약 날짜와 시간이 같으면
-                        if(responseBody.data.reservations[i].reservationDate == intentDataItem.reservationDate && responseBody.data.reservations[i].reservationTime == intentDataItem.reservationTime) {
+                        if(responseBody.data.hospital.reservations[i].reservationDate == intentDataItem.reservationDate && responseBody.data.hospital.reservations[i].reservationTime == intentDataItem.reservationTime) {
                             hospitalNameTextView.text = responseBody.data.name
-                            classNameTextView.text = responseBody.data.hospitalDetail.department
-                            statusTextView.text = responseBody.data.reservations[i].status
-                            reservationDateTextView.text = responseBody.data.reservations[i].reservationDate.toString()
-                            reservationTimeTextView.text = responseBody.data.reservations[i].reservationTime.toString()
+                            classNameTextView.text = responseBody.data.hospital.hospitalDetail.department
+                            statusTextView.text = responseBody.data.hospital.reservations[i].status
+                            reservationDateTextView.text = responseBody.data.hospital.reservations[i].reservationDate.toString()
+                            reservationTimeTextView.text = responseBody.data.hospital.reservations[i].reservationTime.toString()
                             break
                         }
                     }
@@ -105,7 +105,7 @@ class CheckReservationActivity : AppCompatActivity() {
             }
 
             //통신 실패
-            override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+            override fun onFailure(call: Call<HospitalSearchResponse>, t: Throwable) {
                 Log.w("CheckReservationActivity CONNECTION FAILURE: ", "Connect FAILURE : ${t.localizedMessage}")
             }
         })

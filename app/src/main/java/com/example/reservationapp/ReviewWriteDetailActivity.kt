@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HistoryItem
+import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReviewRequest
 import com.example.reservationapp.Retrofit.RetrofitClient
@@ -25,7 +26,7 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
-    private lateinit var responseBodyHospitalDetail: HospitalSignupInfoResponse
+    private lateinit var responseBodyHospitalDetail: HospitalSearchResponse
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -59,8 +60,8 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
 
 
         //예약정보 표시
-        apiService.getHospitalDetail(hospitalId).enqueue(object: Callback<HospitalSignupInfoResponse> {
-            override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+        apiService.getHospitalDetail(hospitalId).enqueue(object: Callback<HospitalSearchResponse> {
+            override fun onResponse(call: Call<HospitalSearchResponse>, response: Response<HospitalSearchResponse>) {
                 if(response.isSuccessful) {
                     responseBodyHospitalDetail = response.body()!!
                     hospital_name_textView.text = responseBodyHospitalDetail.data.name
@@ -75,7 +76,7 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
                 else Log.w("ReviewWriteDetailActivity", "getHospitalDetail Connect SUCCESS, Response FAILURE - response.body(): ${response.body()}")
             }
 
-            override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+            override fun onFailure(call: Call<HospitalSearchResponse>, t: Throwable) {
                 Log.w("ReviewWriteDetailActivity CONNECTION FAILURE: ", "Review Connect FAILURE : ${t.localizedMessage}")
             }
         })

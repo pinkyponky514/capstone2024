@@ -351,72 +351,72 @@ class HospitalMypageFragment : Fragment() {
         val monStartTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_mon)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.StartMon)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val monEndTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_mon)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.FinishMon)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val tueStartTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_tue)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.StartTue)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val tueEndTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_tue)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.FinishTue)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val wedStartTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_wed)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.StartWed)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val wedEndTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_wed)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.FinishWed)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val thuStartTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_thu)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.StartThu)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val thuEndTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_thu)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.FinishThu)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val friStartTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_fri)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.StartFri)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val friEndTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_fri)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.FinishFri)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val satStartTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_sat)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.StartSat)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val satEndTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_sat)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.FinishSat)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val sunStartTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_sun)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.StartSun)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val sunEndTime = if (view?.findViewById<CheckBox>(R.id.checkbox_working_sun)?.isChecked == true) {
             view?.findViewById<EditText>(R.id.FinishSun)?.text.toString()
         } else {
-            "0000"
+            "휴무"
         }
         val lunchStartTime = view?.findViewById<TextView>(R.id.StartLunch)?.text.toString()
         val lunchEndTime = view?.findViewById<TextView>(R.id.FinishLunch)?.text.toString()

@@ -22,6 +22,7 @@ import com.example.reservationapp.HospitalSearchActivity
 import com.example.reservationapp.MainActivity
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.AllBookmarkResponse
+import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.PopularHospitalItem
 import com.example.reservationapp.Model.RecentSearchWordResponseData
@@ -251,7 +252,7 @@ class HomeFragment : Fragment() {
 
                     //병원 상세정보 가져오기, 순차적으로 진행
                     GlobalScope.launch(Dispatchers.Main) {
-                        val sortedHospitalDetailList = ArrayList<HospitalSignupInfoResponse>() //정렬된 병원 상세정보 리스트
+                        val sortedHospitalDetailList = ArrayList<HospitalSearchResponse>() //정렬된 병원 상세정보 리스트
 
                         sortedHospitalIdList.forEach { hospitalId ->
                             val response = withContext(Dispatchers.IO) { apiService.getHospitalDetail(hospitalId).execute() }
@@ -261,13 +262,13 @@ class HomeFragment : Fragment() {
                         var bookmarkItemList = ArrayList<PopularHospitalItem>() //adapter와 연결할 ItemList
                         if(sortedHospitalDetailList.size >= 5) { //병원 목록 리스트가 5개 이상이면
                             bookmarkItemList = sortedHospitalDetailList.take(5).mapIndexed { takeIndex, hospitalSignupInfoResponse ->
-                                PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospitalId, hospitalSignupInfoResponse.data.name)
+                                PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospital.hospitalId, hospitalSignupInfoResponse.data.name)
                             } as ArrayList
                             Log.w("HomeFragment", "take문 bookmarkItemList: $bookmarkItemList")
                         }
                         else { //병원 목록 리스트가 5개 미만이면
                             for(forIndex in sortedHospitalDetailList.indices) {
-                                bookmarkItemList.add(PopularHospitalItem(forIndex+1, sortedHospitalDetailList[forIndex].data.hospitalId, sortedHospitalDetailList[forIndex].data.name))
+                                bookmarkItemList.add(PopularHospitalItem(forIndex+1, sortedHospitalDetailList[forIndex].data.hospital.hospitalId, sortedHospitalDetailList[forIndex].data.name))
                                 Log.w("HomeFragment", "for문 bookmarkItemList: $bookmarkItemList")
                             }
                         }

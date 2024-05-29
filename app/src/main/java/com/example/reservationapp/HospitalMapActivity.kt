@@ -24,6 +24,7 @@ import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.OpenApiHospital
 import com.example.reservationapp.Model.ApiHospitalResponse
 import com.example.reservationapp.Model.Hospital
+import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.LatLng
@@ -275,16 +276,16 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         Log.w("HospitalMapActivity", "Bottom Sheet HospitalId : $clickHospitalId")
         if (hospitalId.toInt() != 0){
             // 클릭한 병원의 데이터를 가져오는 Retrofit 통신 요청
-            App.apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSignupInfoResponse> {
-                override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+            App.apiService.getHospitalDetail(hospitalId).enqueue(object : Callback<HospitalSearchResponse> {
+                override fun onResponse(call: Call<HospitalSearchResponse>, response: Response<HospitalSearchResponse>) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()!!
 
-                        val openHours = getOpenHoursForDay(getCurrentDayOfWeek(), responseBody.data)
+                        val openHours = getOpenHoursForDay(getCurrentDayOfWeek(), responseBody.data.hospital)
                         // 가져온 데이터를 이용하여 Bottom Sheet에 표시할 정보 설정
                         textView4.text = hospital.hospitalName
                         textView5.text = openHours
-                        textView.text = responseBody.data.openApiHospital.address
+                        textView.text = responseBody.data.hospital.openApiHospital.address
 
                         // 선택된 마커 크기 크게
                         clickedMarker.width = 100
@@ -296,7 +297,7 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
                     }
                 }
 
-                override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+                override fun onFailure(call: Call<HospitalSearchResponse>, t: Throwable) {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage)
                 }
             })
@@ -384,26 +385,15 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
             return "전화 문의"
         }
 
-        val sdf = SimpleDateFormat("HHmm", Locale.getDefault())
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
         val currentTime = sdf.format(Date())
 
-        val startTimeStr = if (startTime.isNotEmpty()) {
-            startTime.substring(0, 2) + ":" + startTime.substring(2)
-        } else {
-            ""
-        }
-
-        val closeTimeStr = if (closeTime.isNotEmpty()) {
-            closeTime.substring(0, 2) + ":" + closeTime.substring(2)
-        } else {
-            ""
-        }
 
         val isOpen = isWithinOpenHours(startTime, closeTime, currentTime)
         return if (isOpen) {
-            "영업중  $startTimeStr ~ $closeTimeStr"
+            "영업중  $startTime ~ $closeTime"
         } else {
-            "영업종료 $startTimeStr ~ $closeTimeStr"
+            "영업종료 $startTime ~ $closeTime"
         }
     }
 
@@ -412,13 +402,12 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         if (startTime.isEmpty() || closeTime.isEmpty()) {
             return false
         }
-
         val startTimeHour = startTime.substring(0, 2).toInt()
-        val startTimeMinute = startTime.substring(2).toInt()
+        val startTimeMinute = startTime.substring(3).toInt()
         val closeTimeHour = closeTime.substring(0, 2).toInt()
-        val closeTimeMinute = closeTime.substring(2).toInt()
+        val closeTimeMinute = closeTime.substring(3).toInt()
         val currentHour = currentTime.substring(0, 2).toInt()
-        val currentMinute = currentTime.substring(2).toInt()
+        val currentMinute = currentTime.substring(3).toInt()
 
         if (currentHour < startTimeHour || currentHour > closeTimeHour) {
             return false

@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.example.reservationapp.CheckReservationActivity
 import com.example.reservationapp.Model.APIService
+import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReservationRequest
 import com.example.reservationapp.Model.ReservationResponse
@@ -70,7 +71,7 @@ class CustomReserveDialogFragment() : DialogFragment() {
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
-    private lateinit var responseBodyHospitalDetail: HospitalSignupInfoResponse
+    private lateinit var responseBodyHospitalDetail: HospitalSearchResponse
     private lateinit var responseBodyReservation: ReservationResponse
 
 
@@ -138,8 +139,8 @@ class CustomReserveDialogFragment() : DialogFragment() {
             reserveDate = dateString //2024-5-20
 
             //날짜에 따른 예약 가능한 시간 다르게
-            apiService.getHospitalDetail(thisHospitalId).enqueue(object: Callback<HospitalSignupInfoResponse> {
-                override fun onResponse(call: Call<HospitalSignupInfoResponse>, response: Response<HospitalSignupInfoResponse>) {
+            apiService.getHospitalDetail(thisHospitalId).enqueue(object: Callback<HospitalSearchResponse> {
+                override fun onResponse(call: Call<HospitalSearchResponse>, response: Response<HospitalSearchResponse>) {
                     //통신, 응답 성공
                     if(response.isSuccessful) {
                         reserveTime = null; reserveTimeTextView.text = null //새로운 날짜 선택으로 인해 시간 지우기
@@ -237,7 +238,7 @@ class CustomReserveDialogFragment() : DialogFragment() {
                 }
 
                 //통신 실패
-                override fun onFailure(call: Call<HospitalSignupInfoResponse>, t: Throwable) {
+                override fun onFailure(call: Call<HospitalSearchResponse>, t: Throwable) {
                     Log.w("CONNECTION FAILURE: ", "Connect FAILURE : ${t.localizedMessage}")
                 }
             })
@@ -376,13 +377,13 @@ class CustomReserveDialogFragment() : DialogFragment() {
 
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
         return when(dayOfWeek) {
-            Calendar.SUNDAY -> listOf("일", responseBodyHospitalDetail.data.hospitalDetail.sun_open, responseBodyHospitalDetail.data.hospitalDetail.sun_close)
-            Calendar.MONDAY -> listOf("월", responseBodyHospitalDetail.data.hospitalDetail.mon_open, responseBodyHospitalDetail.data.hospitalDetail.mon_close)
-            Calendar.TUESDAY -> listOf("화", responseBodyHospitalDetail.data.hospitalDetail.tue_open, responseBodyHospitalDetail.data.hospitalDetail.tue_close)
-            Calendar.WEDNESDAY -> listOf("수", responseBodyHospitalDetail.data.hospitalDetail.wed_open, responseBodyHospitalDetail.data.hospitalDetail.wed_close)
-            Calendar.THURSDAY -> listOf("목", responseBodyHospitalDetail.data.hospitalDetail.thu_open, responseBodyHospitalDetail.data.hospitalDetail.thu_close)
-            Calendar.FRIDAY -> listOf("금", responseBodyHospitalDetail.data.hospitalDetail.fri_open, responseBodyHospitalDetail.data.hospitalDetail.fri_close)
-            Calendar.SATURDAY -> listOf("토", responseBodyHospitalDetail.data.hospitalDetail.sat_open, responseBodyHospitalDetail.data.hospitalDetail.sat_close)
+            Calendar.SUNDAY -> listOf("일", responseBodyHospitalDetail.data.hospital.hospitalDetail.sun_open, responseBodyHospitalDetail.data.hospital.hospitalDetail.sun_close)
+            Calendar.MONDAY -> listOf("월", responseBodyHospitalDetail.data.hospital.hospitalDetail.mon_open, responseBodyHospitalDetail.data.hospital.hospitalDetail.mon_close)
+            Calendar.TUESDAY -> listOf("화", responseBodyHospitalDetail.data.hospital.hospitalDetail.tue_open, responseBodyHospitalDetail.data.hospital.hospitalDetail.tue_close)
+            Calendar.WEDNESDAY -> listOf("수", responseBodyHospitalDetail.data.hospital.hospitalDetail.wed_open, responseBodyHospitalDetail.data.hospital.hospitalDetail.wed_close)
+            Calendar.THURSDAY -> listOf("목", responseBodyHospitalDetail.data.hospital.hospitalDetail.thu_open, responseBodyHospitalDetail.data.hospital.hospitalDetail.thu_close)
+            Calendar.FRIDAY -> listOf("금", responseBodyHospitalDetail.data.hospital.hospitalDetail.fri_open, responseBodyHospitalDetail.data.hospital.hospitalDetail.fri_close)
+            Calendar.SATURDAY -> listOf("토", responseBodyHospitalDetail.data.hospital.hospitalDetail.sat_open, responseBodyHospitalDetail.data.hospital.hospitalDetail.sat_close)
             else -> listOf("")
         }
     }

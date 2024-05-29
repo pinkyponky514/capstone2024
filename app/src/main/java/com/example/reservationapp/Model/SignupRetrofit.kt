@@ -41,6 +41,21 @@ data class HospitalSignupInfoResponse(
     @SerializedName("message") val message: String,
     @SerializedName("data") val data: Hospital
 )
+//병원 - response
+data class HospitalSearchResponse(
+    @SerializedName("success") val success: String,
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: dataHospital
+)
+data class dataHospital(
+    @SerializedName("id") val id: Long,
+    @SerializedName("hospitalname") val name: String,
+    @SerializedName("address") val address: String,
+    @SerializedName("tel") val tel: String,
+    @SerializedName("hospital") val hospital: Hospital,
+    @SerializedName("mainImage") val mainImage: String
+)
+
 data class Hospital(
     @SerializedName("hospitalid") val hospitalId: Long,
     @SerializedName("id") val id: String,

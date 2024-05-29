@@ -1,5 +1,6 @@
 package com.example.reservationapp.navigation
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -88,6 +89,7 @@ class CommunityDetailCommentFragment : Fragment() {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_community_detail_comment, container, false)
 
@@ -106,7 +108,7 @@ class CommunityDetailCommentFragment : Fragment() {
         floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton)
 
         // ProgressBar를 XML 레이아웃에서 찾아서 변수에 할당합니다.
-        progressBar = view.findViewById(R.id.progressBar)
+        progressBar = view.findViewById(R.id.progressBar2)
 
         // 데이터를 로드하기 전에 ProgressBar를 표시합니다.
         progressBar.visibility = View.VISIBLE

@@ -142,6 +142,46 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
                 val position = adapterPosition
                 // 클릭된 예약 아이템을 가져옵니다.
                 val selectedItem = reservationList[position]
+
+
+                val time = selectedItem.time
+                val date = selectedItem.reservationDate
+
+
+                val confirmReservationRequest =
+                    ConfirmReservationRequest(date = date, time = time)
+
+                App.apiService.postCancelReservation(confirmReservationRequest).enqueue(object :
+                    Callback<ConfirmReservationResponse> {
+                    override fun onResponse(
+                        call: Call<ConfirmReservationResponse>,
+                        response: Response<ConfirmReservationResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val response = response.body()!!
+                            historyStatusTextView.text = response.status
+                            selectedItem.status = response.status
+
+                            notifyItemChanged(position)
+                        } else {
+                            handleErrorResponse(response)
+                            Log.d(
+                                "FAILURE Response",
+                                "Connect SUCESS, Response FAILURE, body: ${
+                                    response.body().toString()
+                                }"
+                            ) //통신 성공, 응답은 실패
+
+                        }
+                    }
+                    override fun onFailure(
+                        call: Call<ConfirmReservationResponse>,
+                        t: Throwable
+                    ) {
+                        Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                    }
+                })
+
                 // 여기에 취소 버튼이 클릭되었을 때의 작업을 구현합니다.
             }
         }

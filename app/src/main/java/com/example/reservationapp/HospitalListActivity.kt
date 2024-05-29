@@ -312,6 +312,7 @@ class HospitalListActivity : AppCompatActivity() {
                             else { //병원 정보가 있을때
                                 val intent = Intent(this@HospitalListActivity, Hospital_DetailPage::class.java)
                                 intent.putExtra("hospitalId", hospitalList[position].hospitalId)
+                                Log.w("HospitalList", "hospitalId ${hospitalList[position].hospitalId}")
                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                                 startActivity(intent)
                             }

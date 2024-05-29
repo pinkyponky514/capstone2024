@@ -46,7 +46,7 @@ interface APIService {
 
     @GET("/hospitals/findhospital/{hospitalId}") //특정 병원 상세정보 검색
     @Headers("Auth: false")
-    fun getHospitalDetail(@Path(value="hospitalId") hospitalId: Long = 0): Call<HospitalSignupInfoResponse>
+    fun getHospitalDetail(@Path(value="hospitalId") hospitalId: Long = 0): Call<HospitalSearchResponse>
 
     @POST("/bookmarks/{hospitalId}") //병원 즐겨찾기 등록 (토큰필요)
     fun postHospitalBookmark(@Path(value="hospitalId") hospitalId: Long = 0): Call<BookmarkResponse>
@@ -153,4 +153,7 @@ interface APIService {
     @GET("/hospitals/download/{detailId}") //병원 이미지 가져오기
     @Headers("Auth: false")
     fun getHospitalDetailImage(@Path(value="detailId") detailId: Long = 0): Call<List<String>>
+
+    @POST("/reservations/hospital/cancel") //
+    fun postCancelReservation(@Body reservation: ConfirmReservationRequest): Call<ConfirmReservationResponse>
 }
