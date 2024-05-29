@@ -158,7 +158,6 @@ class LoginDoctorActivity : AppCompatActivity() {
                         val userToken = data.token
 
                         App.prefs.token = "Bearer "+userToken //로그인 시 받은 토큰 저장
-
                         val intent = Intent(this@LoginDoctorActivity, HospitalMainActivity::class.java)
                         intent.putExtra("hospitalId", data.hospitalId) //hospitalId(기본키) 넘겨주기
                         Log.d("LoginDoctorActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")

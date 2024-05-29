@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ReservationApp</string>
+    <string name="app_name">캐치닥터</string>
     <string name="home">홈</string>
     <string name="checkup">나의 진료</string>
     <string name="community">커뮤니티</string>

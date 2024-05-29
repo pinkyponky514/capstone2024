@@ -17,7 +17,7 @@ object RetrofitClient {
     private var instance: RetrofitClient? = null
     private var apiService: APIService? = null
     private var retrofit: Retrofit
-    private const val baseUrl = "http://223.194.133.88:8080"
+    private const val baseUrl = "http://223.194.133.88:8080" //"http://223.194.133.88:8080"
 
 
     init {

@@ -1,9 +1,12 @@
 package com.example.reservationapp
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -58,9 +61,6 @@ class HospitalListActivity : AppCompatActivity() {
     private lateinit var filterHolSpreadButton: ImageView //휴일진료 펼치는 버튼
     private var filterHolSpreadFlag = false //휴일진료 펼쳤는지 플래그
     private lateinit var filterHolSpreadConstraintLayout: ConstraintLayout
-
-    //
-    private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
 
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
@@ -150,9 +150,9 @@ class HospitalListActivity : AppCompatActivity() {
         //병원 지도 플로팅 버튼 onClick
         val hospitalListMapFloatingButton = binding.hospitalListFloatingButton
         hospitalListMapFloatingButton.setOnClickListener {
-//            val intent = Intent(this, HospitalMapActivity::class.java)
-//            startActivity(intent)
-//            finish()
+            val intent = Intent(this, HospitalMapActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -218,6 +218,7 @@ class HospitalListActivity : AppCompatActivity() {
         Log.w("HospitalListActivity", "2. query = $query, department = $department, matchedDepartment: $matchedDepartment")
 
 
+        //병원 검색 정보 가져오기
         apiService.getSearchHospital(query=query, className=department).enqueue(object : Callback<List<SearchHospital>> {
             override fun onResponse(call: Call<List<SearchHospital>>, response: Response<List<SearchHospital>>) {
 
@@ -278,6 +279,7 @@ class HospitalListActivity : AppCompatActivity() {
                         var className = responseBody[responseIndex]?.hospital?.hospitalDetail?.department ?: "진료과 없음" //진료과명
                         val address = responseBody[responseIndex].address //병원주소
                         var status: String //병원 영업 상태
+                        val mainImage = responseBody[responseIndex].mainImage //병원 대표하는 이미지(디테일의 첫번째 이미지)
 
 
                         if(responseBody[responseIndex].hospital != null) { //병원 상세정보 있으면
@@ -289,6 +291,12 @@ class HospitalListActivity : AppCompatActivity() {
                             status = "정보없음"
                         }
 
+                        //받아온 이미지가 있으면
+                        var bitmap: Bitmap ?= null
+                        if(mainImage != null) {
+                            val decodedBytes: ByteArray = Base64.decode(mainImage, Base64.DEFAULT)
+                            bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        }
 
                         //리뷰가 있으면, 평점 구하기
                         if(responseBody[responseIndex]?.hospital?.review != null) {
@@ -299,7 +307,7 @@ class HospitalListActivity : AppCompatActivity() {
                         }
 
                         //리스트에 병원 추가
-                        hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), operatingTime, address, listOf(className), status))
+                        hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), operatingTime, address, listOf(className), status, bitmap))
 
                     }
                     adapter.updatelist(hospitalList)

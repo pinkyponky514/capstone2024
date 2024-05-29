@@ -13,7 +13,11 @@ class Prefs(context: Context) {
         set(value){
             prefs.edit().putString("token",value).apply()
         }
-
+    var hospitalName:String?
+        get() = prefs.getString("hospitalName",null)
+        set(value){
+            prefs.edit().putString("hospitalName",value).apply()
+        }
 /*
     var recentSearchWord: String?
         get() = prefs.getString("recentSearchWord", null)

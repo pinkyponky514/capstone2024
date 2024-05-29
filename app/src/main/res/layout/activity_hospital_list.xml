@@ -51,11 +51,14 @@
             app:srcCompat="@drawable/ic_search" />
 
         <!-- 필터 -->
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchEditTextField">
 
@@ -70,6 +73,28 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/image_filter"
                 app:tint="@color/dark_green" />
+
+            <Button
+                android:id="@+id/distance_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="거리 순"
+                app:layout_constraintBottom_toBottomOf="@+id/filterImageView"
+                app:layout_constraintStart_toEndOf="@+id/filterImageView"
+                app:layout_constraintTop_toTopOf="@+id/filterImageView" />
+
+            <Button
+                android:id="@+id/bookmark_list_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="좋아요 순"
+                app:layout_constraintBottom_toBottomOf="@+id/distance_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/distance_button"
+                app:layout_constraintTop_toTopOf="@+id/distance_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,8 +103,10 @@
             android:background="@color/light_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+            app:layout_constraintVertical_bias="1.0">
             <!-- 병원 목록 리스트 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hospitalListRecyclerView"
@@ -94,8 +121,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/hospitalListFloatingButton"

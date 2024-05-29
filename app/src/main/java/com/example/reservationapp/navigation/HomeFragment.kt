@@ -1,5 +1,6 @@
 package com.example.reservationapp.navigation
 
+import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
 import com.example.reservationapp.App
 import com.example.reservationapp.ChatActivity
+import com.example.reservationapp.GpsTracker
 import com.example.reservationapp.HospitalListActivity
 import com.example.reservationapp.HospitalMapActivity
 import com.example.reservationapp.HospitalSearchActivity
@@ -34,6 +36,7 @@ import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHomeBinding
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMapSdk
+import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -60,6 +63,8 @@ class HomeFragment : Fragment() {
     private lateinit var apiService: APIService
     private lateinit var responseBody: AllBookmarkResponse
     private lateinit var responseBodyReservation: List<UserReservationResponse>
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -335,6 +340,7 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
     }
+
 
     //
 }

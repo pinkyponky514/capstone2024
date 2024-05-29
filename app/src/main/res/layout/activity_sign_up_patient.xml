@@ -7,25 +7,49 @@
     android:background="@color/white"
     tools:context=".SignUpPatient">
 
-    <ImageView
-        android:id="@+id/signupPatientLogoImageView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/logo_ConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="140dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/loginLogoImageView"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/image_catchdoctor_logo" />
+
+        <TextView
+            android:id="@+id/logo_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="50dp"
+            android:text="CatchDoctor"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/loginLogoImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/loginLogoImageView"
+            app:layout_constraintTop_toTopOf="@+id/loginLogoImageView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 아이디 -->
     <EditText
         android:id="@+id/register_id"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/style_edit_text_focuse"
         android:drawableLeft="@drawable/ic_id"
         android:drawablePadding="20dp"
@@ -35,9 +59,9 @@
         android:inputType="textPersonName"
         android:paddingLeft="10dp"
         android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="@+id/signupPatientLogoImageView"
-        app:layout_constraintStart_toStartOf="@+id/signupPatientLogoImageView"
-        app:layout_constraintTop_toBottomOf="@+id/signupPatientLogoImageView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo_ConstraintLayout" />
 
     <TextView
         android:id="@+id/idCheckTextView"

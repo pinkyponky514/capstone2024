@@ -156,7 +156,7 @@ class ChatActivity : AppCompatActivity() {
 
     @OptIn(ExperimentalEncodingApi::class)
     private fun gethospital(department:String){
-        apiService.getSearchHospital(className = department, mapx = 35.8662525, mapy = 128.604703).enqueue(object : Callback<List<SearchHospital>> {
+        apiService.getSearchHospital(className = department, mapx = App.mylat, mapy = App.mylng).enqueue(object : Callback<List<SearchHospital>> {
             override fun onResponse(call: Call<List<SearchHospital>>, response: Response<List<SearchHospital>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()!!

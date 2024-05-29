@@ -19,8 +19,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 
-var userMapx: Double = 37.5 //사용자 위도
-var userMapy: Double = 126.9 //사용자 경도
+var userMapx: Double = App.mylat //사용자 위도
+var userMapy: Double = App.mylng //사용자 경도
 
 
 //메인메뉴

@@ -31,13 +31,14 @@ data class RecentItem (
 
 //HospitalListAdapter
 data class HospitalItem(
-    var hospitalId: Long, //병원 레이블 번호
-    var hospitalName: String, //병원이름 ㅇ
-    var starScore: String, //별점(4.0)
-    var openingTimes: String, //영업시간 ㅇ
-    var hospitalAddress: String, //병원주소 ㅇ
-    var className: List<String>, //진료과 ㅇ
+    val hospitalId: Long, //병원 레이블 번호
+    val hospitalName: String, //병원이름 ㅇ
+    val starScore: String, //별점(4.0)
+    val openingTimes: String, //영업시간 ㅇ
+    val hospitalAddress: String, //병원주소 ㅇ
+    val className: List<String>, //진료과 ㅇ
     var status: String, //병원 영업 상태
+    var mainImage: Bitmap? //병원 대표 이미지 한개
     //var bookmarkBoolean: Boolean //즐겨찾기 플래그
 )
 

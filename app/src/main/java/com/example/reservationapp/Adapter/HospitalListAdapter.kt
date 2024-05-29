@@ -3,6 +3,8 @@ package com.example.reservationapp.Adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -58,6 +60,7 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
         private var ratingBar: RatingBar //별점
         private var bookmark_Button: ImageView //즐겨찾기
         private var bookmark_flag: Boolean //즐겨찾기 플래그
+        private var Hospital_main_Image: ImageView //병원 이미지 string
 
         //Retrofit
         private var retrofitClient: RetrofitClient = RetrofitClient.getInstance()
@@ -77,6 +80,7 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
             ratingBar = itemView.findViewById(R.id.hospital_list_ratingBar)
             bookmark_Button = itemView.findViewById(R.id.bookmark_ImageView)
             bookmark_flag = false
+            Hospital_main_Image = itemView.findViewById(R.id.hopsitalImageView)
         }
 
 
@@ -96,6 +100,15 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
             }
             class_name_TextView.text = string
 
+            //이미지가 있으면
+            if(list.mainImage != null) {
+                Hospital_main_Image.setImageBitmap(list.mainImage)
+            } else {
+                Hospital_main_Image.setImageResource(R.drawable.image_no_image)
+                Hospital_main_Image.scaleType = ImageView.ScaleType.CENTER_INSIDE
+                Hospital_main_Image.setColorFilter(Color.GRAY)
+                Hospital_main_Image.setPadding(90, 90, 90, 90)
+            }
 
             //내가 좋아요한 병원 설정
             if(App.prefs.token != null) { //user token이 있으면 == 로그인 했으면

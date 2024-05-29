@@ -191,7 +191,7 @@ class Hospital_DetailPage : AppCompatActivity() {
 
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
-        apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+        apiService = retrofitClient.getRetrofitInterface()
 
 
         //상세정보 채우기
@@ -338,39 +338,6 @@ class Hospital_DetailPage : AppCompatActivity() {
             }
         })
 
-
-        //병원 이미지 채우기
-/*
-        var imageList:ArrayList<Bitmap>
-
-        hospitalDetailImageAdapter = HospitalDetailImageAdapter()
-        val hospitalDetailImageRecyclerView = binding.hospitalDetailImageRecyclerview
-        val hospitalDetailLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        hospitalDetailImageRecyclerView.adapter = hospitalDetailImageAdapter
-        hospitalDetailImageRecyclerView.layoutManager = hospitalDetailLinearLayoutManager
-
-        apiService.getHospitalDetailImage(hospitalDetailId).enqueue(object: Callback<List<String>> {
-            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
-                if(response.isSuccessful) { //이미지 변환
-                    imageList = ArrayList()
-                    responseBodyHospitalDetailImage = response.body()!!
-                    Log.w("Hospital_DetailPage", "병원 이미지 응답 response body = ${responseBodyHospitalDetailImage}")
-
-                    for(image in responseBodyHospitalDetailImage) {
-                        val decodedBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
-                        var bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-                        imageList.add(bitmap)
-                    }
-                }
-
-                else handleErrorResponse(response)
-            }
-
-            override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                Log.d("CONNECTION FAILURE: ", t.localizedMessage)
-            }
-        })
-*/
 
         //즐겨찾기 이미지 설정
         favoriteButton = binding.favoriteImageView

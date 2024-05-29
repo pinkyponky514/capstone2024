@@ -93,7 +93,6 @@ class HospitalFragment : Fragment() {
         return binding.root
     }
 
-
     //
     override fun onSaveInstanceState(outState: Bundle) {  //onSaveInstanceState를 오버라이드, hospitalName을 저장
         super.onSaveInstanceState(outState)
@@ -112,6 +111,7 @@ class HospitalFragment : Fragment() {
                     hospitalName = responseBodyDetail.data.name
                     hospitalNameTextView.text = hospitalName
                     App.hospitalName = hospitalName
+                    App.prefs.hospitalName = hospitalName
                     reservations = responseBodyDetail.data.hospital.reservations
 
                     if(reservations.size >= 1) {

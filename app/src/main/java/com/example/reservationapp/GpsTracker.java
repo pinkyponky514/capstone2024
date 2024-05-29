@@ -68,6 +68,7 @@ public class GpsTracker extends Service implements LocationListener {
                         {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
+
                         }
                     }
                 }
