@@ -57,6 +57,12 @@ class ReserveHistoryFragment : Fragment() {
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
 
         //예약 진료내역 adapter, recyclerView 초기화
         adapter = ReserveHistoryAdapter()
@@ -109,37 +115,5 @@ class ReserveHistoryFragment : Fragment() {
             override fun onFailure(call: Call<List<UserReservationResponse>>, t: Throwable) {
             }
         })
-
-
-        // 코루틴을 사용하여 순차적으로 API 호출
-        /*lifecycleScope.launch {
-            try {
-                //첫 번째 API 호출
-                responseBodyUserReservation = apiService.getUserReservation()
-
-                reserveHistoryList = ArrayList()
-                for (reservation in responseBodyUserReservation) {
-                    if (reservation.status == "예약신청" || reservation.status == "예약확정" || reservation.status == "예약취소") {
-                        reserveHistoryList.add(HistoryItem(reservation.status, reservation.hospitalName, "", reservation.reservationDate.toString(), reservation.reservationTime.toString(), false))
-                    }
-                }
-                adapter.updatelist(reserveHistoryList)
-            } catch (e: Exception) {
-                Log.e("API Error", "Error fetching data: ${e.localizedMessage}")
-            }
-        }*/
-
-/*
-        reserveHistoryList = ArrayList()
-        reserveHistoryList.add(HistoryItem("예약","강남대학병원", "내과", "2024.2.14","15:00", false))
-        reserveHistoryList.add(HistoryItem("예약","서울병원", "이비인후과", "2024.3.14", "14:00", false))
-        reserveHistoryList.add(HistoryItem("예약", "별빛한의원", "외과", "2024.3.25", "18:30", false))
-        reserveHistoryList.add(HistoryItem("대기중","강남성형외과", "성형외과", "2024.5.13", "13:30", false))
-        reserveHistoryList.add(HistoryItem("대기중","버팀병원", "내과", "2024.05.28", "16:20", false))
-        adapter.updatelist(reserveHistoryList)
-*/
-
-
-        return binding.root
     }
 }

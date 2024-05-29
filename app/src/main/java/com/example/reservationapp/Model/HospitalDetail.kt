@@ -38,7 +38,7 @@ data class HospitalDetail2(
 
 //병원 상세정보
 data class HospitalDetail(
-    @SerializedName("id") val hospitalId: Long?,
+    @SerializedName("id") val detailId: Long,
     @SerializedName("hospitalInfo") val hospitalInfo: String, //병원 설명
     @SerializedName("department") val department: String, //진료과명
    @SerializedName("doctorInfo") val doctorInfo: String, //의사 정보

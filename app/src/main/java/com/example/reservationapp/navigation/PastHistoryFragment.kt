@@ -50,6 +50,12 @@ class PastHistoryFragment : Fragment() {
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
+        return binding.root
+    }
+
+
+    override fun onResume() {
+        super.onResume()
         //진료내역 recyclerView
         adapter = PastHistoryAdapter()
         val recyclerView = binding.pastHistoryRecyclerView
@@ -102,7 +108,5 @@ class PastHistoryFragment : Fragment() {
 
             }
         })
-
-        return binding.root
     }
 }

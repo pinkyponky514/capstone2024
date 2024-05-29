@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 필터 -->
+    <ImageView
+        android:id="@+id/back_ImageView"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back"
+        app:tint="@color/dark_green" />
+
+    <TextView
+        android:id="@+id/filter_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="필터"
+        android:theme="@style/TextView16dpBlackBold"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/back_ImageView"
+        app:layout_constraintEnd_toStartOf="@+id/init_ImageView"
+        app:layout_constraintStart_toEndOf="@+id/back_ImageView"
+        app:layout_constraintTop_toTopOf="@+id/back_ImageView" />
+
+    <ImageView
+        android:id="@+id/init_ImageView"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/back_ImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/back_ImageView"
+        app:srcCompat="@drawable/ic_reload"
+        app:tint="@color/dark_green" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_textView" />
+
+    <!-- 휴일진료 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/hol_diagnosis_ConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3">
+
+        <TextView
+            android:id="@+id/hol_diagnosis_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:text="휴일 진료"
+            android:theme="@style/TextView16dpBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/hol_spread_ImageView"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="45dp"
+            app:layout_constraintBottom_toBottomOf="@+id/hol_diagnosis_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/hol_diagnosis_textView"
+            app:srcCompat="@drawable/ic_plus"
+            app:tint="@color/dark_gray" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/hol_diagnosis_select_ConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hol_diagnosis_ConstraintLayout">
+
+        <CheckBox
+            android:id="@+id/saturday_checkbox"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="45dp"
+            android:button="@drawable/custom_filter_checkbox"
+            android:padding="10dp"
+            android:text="토요일"
+            android:theme="@style/TextView15dpBlack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/sunday_checkbox"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:button="@drawable/custom_filter_checkbox"
+            android:padding="10dp"
+            android:text="일요일"
+            android:theme="@style/TextView15dpBlack"
+            app:layout_constraintEnd_toEndOf="@+id/saturday_checkbox"
+            app:layout_constraintStart_toStartOf="@+id/saturday_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/saturday_checkbox" />
+
+        <CheckBox
+            android:id="@+id/holiday_checkbox"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:button="@drawable/custom_filter_checkbox"
+            android:text="공휴일"
+            android:padding="10dp"
+            android:theme="@style/TextView15dpBlack"
+            app:layout_constraintEnd_toEndOf="@+id/sunday_checkbox"
+            app:layout_constraintStart_toStartOf="@+id/sunday_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/sunday_checkbox" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- 필터 적용 버튼 -->
+    <Button
+        android:id="@+id/filter_apply_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="필터 적용하기"
+        android:textColor="@color/white"
+        android:background="@drawable/style_dark_green_radius_20_pressed_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/init_ImageView"
+        app:layout_constraintStart_toStartOf="@+id/back_ImageView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

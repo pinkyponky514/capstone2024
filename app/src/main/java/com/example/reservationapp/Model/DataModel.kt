@@ -130,6 +130,7 @@ data class PopularHospitalItem(
     var hospitalName: String //병원이름
 )
 
+
 fun handleErrorResponse(response: Response<*>) {
     val errorBody = response.errorBody()?.string()
     Log.d("handleErrorResponse", "Response failed: ${response.code()}, error body: ${errorBody ?: "none"}")

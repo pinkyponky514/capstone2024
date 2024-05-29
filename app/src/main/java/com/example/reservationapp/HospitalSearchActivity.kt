@@ -102,13 +102,15 @@ class HospitalSearchActivity : AppCompatActivity() {
                 }
             })
         }
+        else { //로그인 안했으면
+            adapter.updateList(recentSearchWordList)
+        }
 
 
 
         //검색 버튼 눌렀을 경우 - 병원 검색목록 페이지 나옴
         submitButton.setOnClickListener {
             var searchWord = searchEditText.text.toString()
-            //recentSearchWordList.add(0, RecentItem(searchWord)) //맨 앞에 들어가게
             adapter.updateList(recentSearchWordList)
 
             //로그인 되어 있으면 저장되게
@@ -136,6 +138,9 @@ class HospitalSearchActivity : AppCompatActivity() {
 
             //로그인 안되어 있으면 전달만 하기
             else {
+                recentSearchWordList.add(0, RecentItem(searchWord))
+                adapter.updateList(recentSearchWordList)
+
                 val intent = Intent(this, HospitalListActivity::class.java)
                 intent.putExtra("searchWord", searchWord)
                 startActivity(intent)
