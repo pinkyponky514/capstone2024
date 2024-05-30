@@ -267,13 +267,13 @@ class HomeFragment : Fragment() {
                         var bookmarkItemList = ArrayList<PopularHospitalItem>() //adapter와 연결할 ItemList
                         if(sortedHospitalDetailList.size >= 5) { //병원 목록 리스트가 5개 이상이면
                             bookmarkItemList = sortedHospitalDetailList.take(5).mapIndexed { takeIndex, hospitalSignupInfoResponse ->
-                                PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospital.hospitalId, hospitalSignupInfoResponse.data.name)
+                                PopularHospitalItem(takeIndex+1, hospitalSignupInfoResponse.data.hospital.hospitalId, hospitalSignupInfoResponse.data.hospital.name)
                             } as ArrayList
                             Log.w("HomeFragment", "take문 bookmarkItemList: $bookmarkItemList")
                         }
                         else { //병원 목록 리스트가 5개 미만이면
                             for(forIndex in sortedHospitalDetailList.indices) {
-                                bookmarkItemList.add(PopularHospitalItem(forIndex+1, sortedHospitalDetailList[forIndex].data.hospital.hospitalId, sortedHospitalDetailList[forIndex].data.name))
+                                bookmarkItemList.add(PopularHospitalItem(forIndex+1, sortedHospitalDetailList[forIndex].data.hospital.hospitalId, sortedHospitalDetailList[forIndex].data.hospital.name))
                                 Log.w("HomeFragment", "for문 bookmarkItemList: $bookmarkItemList")
                             }
                         }

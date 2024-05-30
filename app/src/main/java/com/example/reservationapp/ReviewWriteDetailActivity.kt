@@ -64,7 +64,7 @@ class ReviewWriteDetailActivity : AppCompatActivity() {
             override fun onResponse(call: Call<HospitalSearchResponse>, response: Response<HospitalSearchResponse>) {
                 if(response.isSuccessful) {
                     responseBodyHospitalDetail = response.body()!!
-                    hospital_name_textView.text = responseBodyHospitalDetail.data.name
+                    hospital_name_textView.text = responseBodyHospitalDetail.data.hospital.name
                     class_name_textView.text = historyItem.className
 
                     val dateSplit = historyItem.reserveDay.split("-")

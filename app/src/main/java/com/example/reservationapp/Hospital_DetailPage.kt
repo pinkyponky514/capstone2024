@@ -225,10 +225,10 @@ class Hospital_DetailPage : AppCompatActivity(), OnMapReadyCallback {
                 if(response.isSuccessful) {
                     responseBodyDetail = response.body()!!
 
-                    hospitalNameString = responseBodyDetail.data.name //병원이름 저장
+                    hospitalNameString = responseBodyDetail.data.hospital.name //병원이름 저장
                     hospitalDetailId = responseBodyDetail.data.hospital.hospitalDetail.detailId //병원 디테일 레이블 번호
                     hospitalNameTextView.text = responseBodyDetail.data.hospital.hospitalDetail.department //병원 진료과 설정
-                    hospitalNameTextView.text = responseBodyDetail.data.name //병원 이름 설정
+                    hospitalNameTextView.text = responseBodyDetail.data.hospital.name //병원 이름 설정
                     hospitalPositionTextView.text = responseBodyDetail.data.hospital.openApiHospital.address //병원 주소 설정
                     hospitalCallTextView.text = responseBodyDetail.data.hospital.openApiHospital.tel //병원 전화번호 설정
 

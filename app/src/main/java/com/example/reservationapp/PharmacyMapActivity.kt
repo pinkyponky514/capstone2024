@@ -211,8 +211,8 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
                     val pharmacy = marker.tag as? NaverMapData
                     pharmacy?.pharmacyname?.contains(query, ignoreCase = true) == true
                 }
-
 */
+
 
             }
 
