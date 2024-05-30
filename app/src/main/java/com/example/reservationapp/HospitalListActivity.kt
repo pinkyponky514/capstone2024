@@ -14,7 +14,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -56,7 +55,6 @@ class HospitalListActivity : AppCompatActivity() {
     //필터
     private lateinit var navigationView: NavigationView //필터 네비게이션 뷰
     private lateinit var drawerLayout: DrawerLayout //네비게이션 드로우
-    private lateinit var filtertextView: TextView //필터 펼치는 텍스트뷰
     private lateinit var filterHideButton: ImageView //네비게이션 드로우의 x 버튼
     private lateinit var filterHolSpreadButton: ImageView //휴일진료 펼치는 버튼
     private var filterHolSpreadFlag = false //휴일진료 펼쳤는지 플래그
@@ -114,7 +112,6 @@ class HospitalListActivity : AppCompatActivity() {
         drawerLayout = binding.drawerLayout
         navigationView = binding.filterNavigatinonView
 
-
         //필터 창 닫기
         filterHideButton = navigationView.findViewById(R.id.back_ImageView)
         filterHideButton.setOnClickListener {
@@ -130,16 +127,6 @@ class HospitalListActivity : AppCompatActivity() {
         filterHolSpreadConstraintLayout = navigationView.findViewById(R.id.hol_diagnosis_select_ConstraintLayout)
         filterHolSpreadConstraintLayout.visibility = View.GONE
         filterHolSpreadButton.setOnClickListener {
-            if(filterHolSpreadFlag) { //펼쳐져 있으면
-                filterHolSpreadConstraintLayout.visibility = View.GONE
-                filterHolSpreadFlag = false
-            } else { //접혀 있으면
-                filterHolSpreadConstraintLayout.visibility = View.VISIBLE
-                filterHolSpreadFlag = true
-            }
-        }
-        filtertextView = navigationView.findViewById(R.id.hol_diagnosis_textView)
-        filtertextView.setOnClickListener {
             if(filterHolSpreadFlag) { //펼쳐져 있으면
                 filterHolSpreadConstraintLayout.visibility = View.GONE
                 filterHolSpreadFlag = false
