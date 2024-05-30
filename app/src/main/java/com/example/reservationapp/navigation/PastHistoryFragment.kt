@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.reservationapp.Adapter.PastHistoryAdapter
 import com.example.reservationapp.MainActivity
 import com.example.reservationapp.Model.APIService
@@ -37,6 +39,11 @@ class PastHistoryFragment : Fragment() {
     private lateinit var responseBody: List<UserReservationResponse>
 
 
+    //과거 진료내역
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var linearLayoutManager: LinearLayoutManager
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -46,25 +53,36 @@ class PastHistoryFragment : Fragment() {
         val mainActivity = requireActivity() as MainActivity
         mainActivity.tokenCheck()
 
+        //진료내역 recyclerView
+        adapter = PastHistoryAdapter()
+        recyclerView = binding.pastHistoryRecyclerView
+        linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = linearLayoutManager
+
+
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
-        return binding.root
+        //새로고침
+        var RefreshLayout: SwipeRefreshLayout = binding.refreshLayout
+        RefreshLayout.setOnRefreshListener {
+            RefreshLayout.isRefreshing = false
+            pastReservationData()
+        }
+
+            return binding.root
     }
 
 
     override fun onResume() {
         super.onResume()
-        //진료내역 recyclerView
-        adapter = PastHistoryAdapter()
-        val recyclerView = binding.pastHistoryRecyclerView
-        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = linearLayoutManager
+        pastReservationData() //과거 진료내역 데이터 넣기
+    }
 
-
-        //과거 진료내역 데이터 넣기 (DB에서 불러오기)
+    //과거 진료내역 데이터 넣기 (DB에서 불러오기)
+    private fun pastReservationData() {
         apiService.getUserReservation().enqueue(object: Callback<List<UserReservationResponse>> {
             override fun onResponse(call: Call<List<UserReservationResponse>>, response: Response<List<UserReservationResponse>>) {
                 if(response.isSuccessful) {
@@ -109,4 +127,7 @@ class PastHistoryFragment : Fragment() {
             }
         })
     }
+
+
+    //
 }

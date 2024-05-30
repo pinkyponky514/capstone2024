@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.reservationapp.App
 import com.example.reservationapp.HospitalMainActivity
 import com.example.reservationapp.HospitalSecurityActivity
@@ -23,6 +24,7 @@ import com.example.reservationapp.Model.HospitalSearchResponse
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.ReservationItem
 import com.example.reservationapp.Model.Reservations
+import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.FragmentHospitalBinding
 import org.json.JSONException
@@ -96,6 +98,7 @@ class HospitalFragment : Fragment() {
             intent.putExtra("hospitalId", hospitalid)
             startActivity(intent)
         }
+
         // 상태 복원을 위해 onRestoreInstanceState 호출을 대기
         if (savedInstanceState == null) {  //savedInstanceState가 null이 아닌 경우 hospitalName을 복원
             // 병원 정보를 가져와서 UI를 업데이트하는 메소드 호출
@@ -107,7 +110,25 @@ class HospitalFragment : Fragment() {
             hospitalName = savedInstanceState.getString("hospitalName", "")
             hospitalNameTextView.text = hospitalName
         }
-        return binding.root
+
+        //새로고침
+        var RefreshLayout: SwipeRefreshLayout = binding.refreshLayout
+        RefreshLayout.setOnRefreshListener {
+            RefreshLayout.isRefreshing = false
+
+            // 상태 복원을 위해 onRestoreInstanceState 호출을 대기
+            if (savedInstanceState == null) {  //savedInstanceState가 null이 아닌 경우 hospitalName을 복원
+                // 병원 정보를 가져와서 UI를 업데이트하는 메소드 호출
+                val hospitalMainActivity = requireActivity() as HospitalMainActivity
+                val hospitalId = hospitalMainActivity.hospitalId
+                fetchHospitalDetails(hospitalId, hospitalNameTextView)
+            } else {
+                // 액티비티가 다시 포그라운드로 돌아올 때 hospitalName이 유지
+                hospitalName = savedInstanceState.getString("hospitalName", "")
+                hospitalNameTextView.text = hospitalName
+            }
+        }
+            return binding.root
     }
 
     //
@@ -162,26 +183,6 @@ class HospitalFragment : Fragment() {
                 Log.d("CONNECTION FAILURE: ", t.localizedMessage)
             }
         })
-    }
-
-
-    //
-    private fun handleErrorResponse(response: Response<HospitalSearchResponse>) {
-        val errorBody = response.errorBody()?.string()
-        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: $errorBody")
-        if (errorBody != null) {
-            try {
-                val jsonObject = JSONObject(errorBody)
-                val timestamp = jsonObject.optString("timestamp")
-                val status = jsonObject.optInt("status")
-                val error = jsonObject.optString("error")
-                val message = jsonObject.optString("message")
-                val path = jsonObject.optString("path")
-                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-            } catch (e: JSONException) {
-                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-            }
-        }
     }
 
     //

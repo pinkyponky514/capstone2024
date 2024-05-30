@@ -309,12 +309,12 @@ class Hospital_DetailPage : AppCompatActivity(), OnMapReadyCallback {
                         statusTextView.text = "진료마감"
                     }
 
-                    /*
-                    if(statusTextView.text == "진료마감") { //진료마감 됐으면 예약 못함
+
+                    //진료마감 됐으면 예약 못함
+                    if(statusTextView.text == "진료마감") {
                     reservationButton.isEnabled = false
                     reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
                     }
-                    */
 
                     //진료시간 table 설정
                     db_lunch_time_start = responseBodyDetail.data.hospital.hospitalDetail.lunch_start

@@ -17,9 +17,11 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.PatientSignUpInfoRequest
 import com.example.reservationapp.Model.PatientSignupInfoResponse
+import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivitySignUpPatientBinding
 import com.google.android.material.snackbar.Snackbar
@@ -284,6 +286,7 @@ class SignUpPatient : AppCompatActivity() {
                     if(response.isSuccessful) {
                         responseBody = response.body()!!
                         Log.d("SingUpPatient Success Response", "response: $responseBody") //통신 성공한 경우
+                        CustomToast(this@SignUpPatient, "회원가입 완료되었습니다.")
 
                         //회원가입 성공시 메인 환자 로그인 액티비티로 이동
                         val intent = Intent(this@SignUpPatient, LoginPatientActivity::class.java)
@@ -292,25 +295,7 @@ class SignUpPatient : AppCompatActivity() {
                     }
 
                     //통신 성공, 응답은 실패
-                    else {
-                        //Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
-                        val errorBody = response.errorBody()?.string()
-                        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                        if (errorBody != null) {
-                            try {
-                                val jsonObject = JSONObject(errorBody)
-                                val timestamp = jsonObject.optString("timestamp")
-                                val status = jsonObject.optInt("status")
-                                val error = jsonObject.optString("error")
-                                val message = jsonObject.optString("message")
-                                val path = jsonObject.optString("path")
-
-                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                            } catch (e: JSONException) {
-                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                            }
-                        }
-                    }
+                    else handleErrorResponse(response)
                 }
 
                 override fun onFailure(call: Call<PatientSignupInfoResponse>, t: Throwable) {
@@ -321,30 +306,11 @@ class SignUpPatient : AppCompatActivity() {
         //
     }
 
-
-    private fun handleErrorResponse(response: Response<PatientSignupInfoResponse>) {
-        val errorBody = response.errorBody()?.string()
-        Log.d("FAILURE Response", "Response Code: ${response.code()}, Error Body: $errorBody")
-        if (errorBody != null) {
-            try {
-                val jsonObject = JSONObject(errorBody)
-                val timestamp = jsonObject.optString("timestamp")
-                val status = jsonObject.optInt("status")
-                val error = jsonObject.optString("error")
-                val message = jsonObject.optString("message")
-                val path = jsonObject.optString("path")
-                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-            } catch (e: JSONException) {
-                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-            }
-        }
-    }
-    //
-
     //뒤로가기 버튼 눌렀을때
     override fun onBackPressed() {
         super.onBackPressed()
         finish() //현재 액티비티 종료
     }
 
+    //
 }

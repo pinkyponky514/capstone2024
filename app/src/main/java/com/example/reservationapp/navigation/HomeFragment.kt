@@ -9,9 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.reservationapp.PharmacyMapActivity
 import com.example.reservationapp.Adapter.PopularHospitalAdapter
 import com.example.reservationapp.Adapter.ReserveAlarmAdapter
@@ -41,6 +45,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,10 +56,26 @@ class HomeFragment : Fragment() {
     private lateinit var mapViewHospital: MapView
     private lateinit var mapViewMedicine: MapView
 
+    //병원 예약
+    private lateinit var reserveAlarmRecyclerView: RecyclerView //병원 예약 recyclerview
+    private lateinit var reserveAlarmLinearLayoutManager: LinearLayoutManager
     private lateinit var reserveAlarmAdapter: ReserveAlarmAdapter //병원 예약 알림 adapter
-    private lateinit var popularHospitalAdapter: PopularHospitalAdapter //인기 순위 병원 adapter
     private lateinit var userReserveAlarm: ArrayList<ReserveItem> //유저가 예약한 병원 리스트
 
+    //인기 병원
+    private lateinit var popularHospitalAdapter: PopularHospitalAdapter //인기 순위 병원 adapter
+    private lateinit var popularHospitalRecyclerView: RecyclerView //인기 병원 recyclerview
+    private lateinit var popularHospitalLinearLayoutManger: LinearLayoutManager
+    private lateinit var bookmarkHospitalScoreTextView: TextView //인기순위 textview
+    private lateinit var bookmarkHospitalImageView: ImageView //인기순위 아이콘
+
+
+    //
+    private lateinit var commingReserveTextView: TextView //다가오는 예약 textview
+    private lateinit var commingMoreTextView: TextView //다가오는 예약 더보기
+
+
+    //
     private val classReserveList: List<String> = listOf("내과", "외과", "이비인후과", "피부과", "안과", "성형외과", "신경외과", "소아청소년과") //진료과별 예약 리스트
     private val symptomReserveList: List<String> = listOf("발열", "기침", "가래", "인후통", "가슴 통증", "호흡 곤란", "두통", "구토 및 설사", "소화불량", "배탈", "가려움증", "피부 발진", "관절통", "근육통", "시력문제") //증상, 질환별 예약 리스트
 
@@ -79,6 +100,44 @@ class HomeFragment : Fragment() {
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
+
+        //병원 예약 알림 recyclerView
+        reserveAlarmAdapter = ReserveAlarmAdapter()
+        reserveAlarmRecyclerView = binding.reserveAlarmRecyclerView //view.findViewById<RecyclerView>(R.id.reserve_alarm_RecyclerView)
+        reserveAlarmLinearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        reserveAlarmRecyclerView.adapter = reserveAlarmAdapter
+        reserveAlarmRecyclerView.layoutManager = reserveAlarmLinearLayoutManager
+        //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
+
+
+        //예약 리스트에 아무것도 없으면 보이지 않게
+        commingReserveTextView = binding.commingReserveTextView
+        commingMoreTextView = binding.commingMoreTextView
+        reserveAlarmRecyclerView.visibility = View.GONE
+        commingReserveTextView.visibility = View.GONE
+        commingMoreTextView.visibility = View.GONE
+
+
+        //인기 순위 병원 adapter, recyclerView 초기화
+        popularHospitalAdapter = PopularHospitalAdapter()
+        popularHospitalRecyclerView = binding.popularHospitalRecyclerView
+        popularHospitalLinearLayoutManger = LinearLayoutManager(activity)
+        popularHospitalRecyclerView.adapter = popularHospitalAdapter
+        popularHospitalRecyclerView.layoutManager = popularHospitalLinearLayoutManger
+        popularHospitalRecyclerView.setHasFixedSize(true)
+
+        bookmarkHospitalScoreTextView = binding.textViewPopularHospitalScore
+        bookmarkHospitalImageView = binding.bookmarkImageView
+
+
+        //새로고침
+        var RefreshLayout = binding.refreshLayout
+        RefreshLayout.setOnRefreshListener {
+            RefreshLayout.isRefreshing = false
+
+            getUserReservation() //유저 예약 알림 설정
+            getHospitalBookmark() //인기 순위 병원 설정
+        }
 
         //지도 API
         NaverMapSdk.getInstance(requireContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
@@ -154,7 +213,6 @@ class HomeFragment : Fragment() {
         }
 
 
-
         //채팅 서비스 버튼 클릭 이벤트 처리
         val chatServiceButton = binding.floatingActionButton
         chatServiceButton.setOnClickListener {
@@ -171,24 +229,18 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        //병원 예약 알림 recyclerView
-        reserveAlarmAdapter = ReserveAlarmAdapter()
-        val reserveAlarmRecyclerView = binding.reserveAlarmRecyclerView //view.findViewById<RecyclerView>(R.id.reserve_alarm_RecyclerView)
-        val reserveAlarmLinearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        reserveAlarmRecyclerView.adapter = reserveAlarmAdapter
-        reserveAlarmRecyclerView.layoutManager = reserveAlarmLinearLayoutManager
-        //recyclerView.suppressLayout(true) //리사이클러뷰 스크롤 불가
-
-
-        //예약 리스트에 아무것도 없으면 보이지 않게
-        val commingReserveTextView = binding.commingReserveTextView
-        val commingMoreTextView = binding.commingMoreTextView
-
         reserveAlarmRecyclerView.visibility = View.GONE
         commingReserveTextView.visibility = View.GONE
         commingMoreTextView.visibility = View.GONE
 
+        getUserReservation() //유저 예약 알림 설정
+        getHospitalBookmark() //인기 순위 병원 설정
 
+    }
+
+
+    //유저 예약 가져오기 api
+    private fun getUserReservation() {
         apiService.getUserReservation().enqueue(object: Callback<List<UserReservationResponse>> {
             override fun onResponse(call: Call<List<UserReservationResponse>>, response: Response<List<UserReservationResponse>>) {
                 if(response.isSuccessful) {
@@ -221,19 +273,10 @@ class HomeFragment : Fragment() {
 
             }
         })
+    }
 
-        //인기 순위 병원 adapter, recyclerView 초기화
-        popularHospitalAdapter = PopularHospitalAdapter()
-        val popularHospitalRecyclerView = binding.popularHospitalRecyclerView
-        val popularHospitalLinearLayoutManger = LinearLayoutManager(activity)
-        popularHospitalRecyclerView.adapter = popularHospitalAdapter
-        popularHospitalRecyclerView.layoutManager = popularHospitalLinearLayoutManger
-        popularHospitalRecyclerView.setHasFixedSize(true)
-
-        val bookmarkHospitalScoreTextView = binding.textViewPopularHospitalScore
-        val bookmarkHospitalImageView = binding.bookmarkImageView
-
-        //인기 순위 병원 설정
+    //인기 병원 순위 api
+    private fun getHospitalBookmark() {
         apiService.getAllHospitalBookmark().enqueue(object: Callback<AllBookmarkResponse> {
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onResponse(call: Call<AllBookmarkResponse>, response: Response<AllBookmarkResponse>) {
@@ -302,7 +345,6 @@ class HomeFragment : Fragment() {
             }
         })
     }
-
 
     //검색어저장
     private fun recentSearchWord(list: List<String>, i: Int) {

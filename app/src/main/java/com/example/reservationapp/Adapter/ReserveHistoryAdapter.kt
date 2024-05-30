@@ -1,5 +1,6 @@
 package com.example.reservationapp.Adapter
 
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,8 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Custom.CustomToast
+import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.DeleteReservationResponse
 import com.example.reservationapp.Model.HistoryItem
@@ -90,20 +93,28 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
                     comming_date_TextView.text = ((calcuDate*-1).toInt()).toString() + "일전"
                 }
 
+
+                //취소버튼 onClick
                 cancel_Button.setOnClickListener {
-                    apiService.deleteReservation(reservationId).enqueue(object: Callback<DeleteReservationResponse> {
-                        override fun onResponse(call: Call<DeleteReservationResponse>, response: Response<DeleteReservationResponse>) {
-                            if(response.isSuccessful) {
-                                val responseBody = response.body()!!
-                                Log.w("ReserveHistoryAdapter", "cancel button onclick responseBody : $responseBody")
+                    if(list.status != "예약확정") {
+                        apiService.deleteReservation(reservationId).enqueue(object: Callback<DeleteReservationResponse> {
+                            override fun onResponse(call: Call<DeleteReservationResponse>, response: Response<DeleteReservationResponse>) {
+                                if(response.isSuccessful) {
+                                    val responseBody = response.body()!!
+                                    Log.w("ReserveHistoryAdapter", "cancel button onclick responseBody : $responseBody")
 
-                                cancel_Button.setBackgroundResource(R.drawable.style_gray_radius_5)
+                                    cancel_Button.setBackgroundResource(R.drawable.style_gray_radius_5)
+                                    cancel_Button.text = "예약 취소완료"
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<DeleteReservationResponse>, t: Throwable) {
-                        }
-                    })
+                            override fun onFailure(call: Call<DeleteReservationResponse>, t: Throwable) {
+                            }
+                        })
+                    }
+                    else {
+                        CustomToast(itemView.context, "확정된 예약은 취소할 수 없습니다.").show()
+                    }
                 }
 
             } catch (e: ParseException) {

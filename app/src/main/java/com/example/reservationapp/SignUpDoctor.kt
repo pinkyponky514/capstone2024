@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.HospitalSignUpInfoRequest
 import com.example.reservationapp.Model.HospitalSignupInfoResponse
@@ -203,6 +204,7 @@ class SignUpDoctor : AppCompatActivity() {
                 if(response.isSuccessful) {
                     responseBody = response.body()!!
                     Log.d("Success Response", responseBody.toString()) //통신 성공한 경우
+                    CustomToast(this@SignUpDoctor, "회원가입 완료되었습니다.")
 
                     //회원가입 성공시 병원 로그인 액티비티로 이동
                     val intent = Intent(this@SignUpDoctor, LoginDoctorActivity::class.java)

@@ -370,9 +370,16 @@ class HospitalListActivity : AppCompatActivity() {
                             reviewAverage/(responseBody[responseIndex].hospital.review.size)
                         }
 
-                        val sat_open =  responseBody[responseIndex].hospital.hospitalDetail.sat_open
-                        val sun_open = responseBody[responseIndex].hospital.hospitalDetail.sun_open
-                        val hol_open =  responseBody[responseIndex].hospital.hospitalDetail.hol_open
+                        var sat_open = ""
+                        var sun_open = ""
+                        var hol_open = ""
+
+                        if(responseBody[responseIndex].hospital != null){
+                            sat_open =  responseBody[responseIndex].hospital.hospitalDetail.sat_open
+                            sun_open = responseBody[responseIndex].hospital.hospitalDetail.sun_open
+                            hol_open =  responseBody[responseIndex].hospital.hospitalDetail.hol_open
+
+                        }
 
                         //리스트에 병원 추가
                         hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), operatingTime, address, listOf(className), status, bitmap, sat_open, sun_open, hol_open))

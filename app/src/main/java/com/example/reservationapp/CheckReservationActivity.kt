@@ -74,7 +74,7 @@ class CheckReservationActivity : AppCompatActivity() {
                         //예약 날짜와 시간이 같으면
                         if(responseBody.data.hospital.reservations[i].reservationDate == intentDataItem.reservationDate && responseBody.data.hospital.reservations[i].reservationTime == intentDataItem.reservationTime) {
                             hospitalNameTextView.text = responseBody.data.hospital.name
-                            classNameTextView.text = responseBody.data.hospital.hospitalDetail.department
+                            classNameTextView.text = responseBody.data.hospital.hospitalDetail?.department
                             statusTextView.text = responseBody.data.hospital.reservations[i].status
                             reservationDateTextView.text = responseBody.data.hospital.reservations[i].reservationDate.toString()
                             reservationTimeTextView.text = responseBody.data.hospital.reservations[i].reservationTime.toString()

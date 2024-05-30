@@ -54,15 +54,67 @@ class ReserveHistoryFragment : Fragment() {
         val mainActivity = requireActivity() as MainActivity
         mainActivity.tokenCheck()
 
+        //예약 진료내역 adapter, recyclerView 초기화
+        adapter = ReserveHistoryAdapter()
+        val recyclerView = binding.reserveHistoryRecyclerView
+        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = linearLayoutManager
+
+
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
 
-        var RefreshLayout: SwipeRefreshLayout = binding.refreshLayout
 
+        //새로고침
+        var RefreshLayout: SwipeRefreshLayout = binding.refreshLayout
         RefreshLayout.setOnRefreshListener {
-            println("SwipeRefreshLayout Test")
             RefreshLayout.isRefreshing = false
+
+            apiService.getUserReservation().enqueue(object: Callback<List<UserReservationResponse>> {
+                override fun onResponse(call: Call<List<UserReservationResponse>>, response: Response<List<UserReservationResponse>>) {
+                    //통신, 응답 성공
+                    if(response.isSuccessful) {
+                        responseBodyUserReservation = response.body()!!
+
+                        if(responseBodyUserReservation != null) {
+                            reserveHistoryList = ArrayList()
+                            for(reservation in responseBodyUserReservation) {
+                                //진행 단계 : 예약신청, 에약확정, 예약취소, 진료완료
+                                if(reservation.status == "예약신청" || reservation.status == "예약확정" || reservation.status == "예약취소") {
+                                    reserveHistoryList.add(HistoryItem(reservation.reservationId, reservation.hospitalId, reservation.status, reservation.hospitalName, reservation.className, reservation.reservationDate.toString(), reservation.reservationTime.toString(), reservation.reviewWriteBoolean))
+                                }
+                            }
+                            adapter.updatelist(reserveHistoryList)
+                        }
+                    }
+
+                    //통신 성공, 응답 실패
+                    else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.d("FAILURE Response", "UserReservation Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
+                        if (errorBody != null) {
+                            try {
+                                val jsonObject = JSONObject(errorBody)
+                                val timestamp = jsonObject.optString("timestamp")
+                                val status = jsonObject.optInt("status")
+                                val error = jsonObject.optString("error")
+                                val message = jsonObject.optString("message")
+                                val path = jsonObject.optString("path")
+
+                                Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
+                            } catch (e: JSONException) {
+                                Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
+                            }
+                        }
+                    }
+                }
+
+                //통신 실패
+                override fun onFailure(call: Call<List<UserReservationResponse>>, t: Throwable) {
+                }
+            })
         }
 
         return binding.root
@@ -71,13 +123,6 @@ class ReserveHistoryFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-
-        //예약 진료내역 adapter, recyclerView 초기화
-        adapter = ReserveHistoryAdapter()
-        val recyclerView = binding.reserveHistoryRecyclerView
-        val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = linearLayoutManager
 
         //예약 진료내역 데이터 넣기 (DB 데이터 가져와서 넣기)
         apiService.getUserReservation().enqueue(object: Callback<List<UserReservationResponse>> {

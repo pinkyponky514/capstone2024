@@ -163,11 +163,13 @@ class LoginDoctorActivity : AppCompatActivity() {
                             val intent = Intent(this@LoginDoctorActivity, HospitalMainActivity::class.java)
                             intent.putExtra("hospitalId", data.hospitalId) //hospitalId(기본키) 넘겨주기
                             Log.d("LoginDoctorActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
+                            CustomToast(this@LoginDoctorActivity, "로그인 하였습니다.")
 
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                             startActivity(intent)
                             finish()
-                        } else {
+                        }
+                        else {
                             CustomToast(this@LoginDoctorActivity, "일치하는 유저의 계정이 없습니다.").show()
                         }
                     }

@@ -165,6 +165,7 @@ class LoginPatientActivity: AppCompatActivity() {
 
                         Log.d("LoginPatientActivity", "userId: ${userLoginInfo.id}, userToken: $userToken")
                         Log.d("Success Response", "userToken: ${userToken}, body: ${response.body().toString()}") //통신 성공한 경우
+                        CustomToast(this@LoginPatientActivity, "로그인 하였습니다.")
 
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                         startActivity(intent)
