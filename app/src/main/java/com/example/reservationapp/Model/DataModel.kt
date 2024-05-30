@@ -23,10 +23,10 @@ data class ReserveItem (
 //RecentSearchWordAdapter
 data class RecentItem (
     var recentSearchWord: String //최근 검색한 단어
-/*
-    var searchDate: LocalDate //검색 날짜
-    var searchTime: LocalTime //검색시간
-*/
+    /*
+        var searchDate: LocalDate //검색 날짜
+        var searchTime: LocalTime //검색시간
+    */
 )
 
 //HospitalListAdapter
@@ -38,8 +38,11 @@ data class HospitalItem(
     val hospitalAddress: String, //병원주소 ㅇ
     val className: List<String>, //진료과 ㅇ
     var status: String, //병원 영업 상태
-    var mainImage: Bitmap? //병원 대표 이미지 한개
+    var mainImage: Bitmap?, //병원 대표 이미지 한개
     //var bookmarkBoolean: Boolean //즐겨찾기 플래그
+    var sat_open: String?="",
+    var sun_open:String?="",
+    var hol_open:String?=""
 )
 
 //ChattingAdapter
@@ -48,7 +51,8 @@ data class ChatItem (
     var text: String? = null,
     var imageResource: Bitmap? = null, // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
     var hospitalName: String? = null, // 병원 이름 추가
-    var hospitalAddress: String? = null // 병원 주소 추가
+    var hospitalAddress: String? = null, // 병원 주소 추가
+    var isLoading: Boolean = false // 추가된 필드
 )
 
 
