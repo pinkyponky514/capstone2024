@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.reservationapp.Adapter.ReserveHistoryAdapter
 import com.example.reservationapp.MainActivity
 import com.example.reservationapp.Model.APIService
@@ -56,6 +57,13 @@ class ReserveHistoryFragment : Fragment() {
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface() // = retrofit.create(APIService::class.java)
+
+        var RefreshLayout: SwipeRefreshLayout = binding.refreshLayout
+
+        RefreshLayout.setOnRefreshListener {
+            println("SwipeRefreshLayout Test")
+            RefreshLayout.isRefreshing = false
+        }
 
         return binding.root
     }

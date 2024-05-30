@@ -96,6 +96,8 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
                             if(response.isSuccessful) {
                                 val responseBody = response.body()!!
                                 Log.w("ReserveHistoryAdapter", "cancel button onclick responseBody : $responseBody")
+
+                                cancel_Button.setBackgroundResource(R.drawable.style_gray_radius_5)
                             }
                         }
 

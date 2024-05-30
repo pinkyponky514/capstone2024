@@ -1,38 +1,32 @@
 package com.example.reservationapp
 
 import android.Manifest
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.AttributeSet
 import android.util.Log
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.PharmacyMapSearchAdapter
@@ -42,8 +36,6 @@ import com.example.reservationapp.Model.PharmacyMap.NaverMapData
 import com.example.reservationapp.Model.PharmacyMap.NaverMapItem
 import com.example.reservationapp.databinding.ActivityPharmacymapBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -53,7 +45,6 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,6 +52,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
 
 enum class DayOfWeek(val value: Int) {
     SUNDAY(1),
@@ -165,6 +157,27 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         //bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback) // Bottom Sheet의 콜백 설정
 
 
+        // Drawer 상태 변화 감지
+        drawerLayout.addDrawerListener(object : DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerOpened(drawerView: View) {
+                //Drawer가 열렸을 때 스와이프 잠금 해제
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                //Drawer가 닫혔을 때 스와이프 잠금 설정
+                drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
+
+        // 초기 Drawer 잠금 설정 (필요한 경우)
+        if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+        }
+
 
         //검색창 초기화
         val searchView = binding.searchView
@@ -178,6 +191,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         searchView.setOnClickListener {
             openPharmacyDrawer(searchView)
         }
+
 
 
         //검색하기
@@ -198,51 +212,51 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
             override fun onTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 setListenerToEditText()
                 Log.w("PharmacyMapActivity", "onTextChanged s: CharSequence = $s")
+
                 //입력 텍스트 변화중
                 if(s.isNotEmpty()) {
-                     if(!searchWordList.contains(s)) {
-                        searchWordList.add(s.toString())
-                     }
-                    adapter.updatelist(searchWordList)
+                    //searchWordList.clear()
+                    var pharmacy: NaverMapData? = NaverMapData()
+                    markers.find { marker ->
+                        pharmacy = marker.tag as? NaverMapData
+                        pharmacy?.pharmacyname?.contains(s, ignoreCase = true) == true
+                    }
+                    if(pharmacy?.pharmacyname?.contains(s) == true && !searchWordList.contains(pharmacy?.pharmacyname.toString())) {
+                        for(i in searchWordList.indices) {
+                            if(pharmacy?.pharmacyname?.contains(searchWordList[i]) == false) {
+                                searchWordList.removeAt(i)
+                            }
+                        }
+                        searchWordList.add(pharmacy?.pharmacyname.toString())
+                        Log.w("PharmacyMapActivity", "1. searchWordList = $searchWordList")
+                    }
                 }
-
-/*
-                val matchedMarker = markers.find { marker ->
-                    val pharmacy = marker.tag as? NaverMapData
-                    pharmacy?.pharmacyname?.contains(query, ignoreCase = true) == true
+                else {
+                    searchWordList.clear()
                 }
-*/
+                adapter.updatelist(searchWordList)
 
+                adapter.itemClick = (object: PharmacyMapSearchAdapter.ItemClick { //클릭 이벤트 처리
+                    override fun itemSetOnClick(itemView: View, position: Int) {
+                        val textView = searchWordList[position]
+                        Log.w("PharmacyMapActivity", "itemView click string = ${textView}")
 
+                        //키보드 내리기
+                        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                        manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+
+                        searchAndClickMarker(textView)
+                        drawerLayout.closeDrawer(GravityCompat.END)
+                        drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+                    }
+                })
             }
 
             override fun afterTextChanged(s: Editable) {
-                setListenerToEditText()
-                Log.w("PharmacyMapActivity", "afterTextChanged s: CharSequence = $s")
-/*
-                //입력 끝난 후
-                if(s.isNotEmpty()) { if(!searchWordList.contains(s.toString())) { searchWordList.add(s.toString()) } }
-                adapter.updatelist(searchWordList)
-//                searchWordList.clear()
-*/
+                //입력 후
             }
         })
 
-/*
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean { //검색할때마다 바뀜
-                setListenerToEditText()
-                if(newText.isNotEmpty()) {
-                    searchAndClickMarker(newText)
-                }
-                return true
-            }
-        })
-*/
 
         //
         pharmacyNameTextView = binding.pharmacyNameTextView //findViewById(R.id.pharmacy_name_textView)
@@ -703,6 +717,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
     fun openPharmacyDrawer(view: View) {
         drawerLayout.openDrawer(GravityCompat.END)
     }
+
 
     //
 }

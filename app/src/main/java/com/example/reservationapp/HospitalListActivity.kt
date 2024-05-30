@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -73,6 +74,16 @@ class HospitalListActivity : AppCompatActivity() {
     private lateinit var responseBody: List<SearchHospital>
 
 
+    private lateinit var satCheckbox: CheckBox
+    private lateinit var sunCheckbox: CheckBox
+    private lateinit var holCheckbox: CheckBox
+
+    private lateinit var filterApplyButton: Button
+
+    private var isSaturdaySelected = false
+    private var isSundaySelected = false
+    private var isHolidaySelected = false
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,6 +136,16 @@ class HospitalListActivity : AppCompatActivity() {
             }
         }
 
+        satCheckbox =navigationView.findViewById(R.id.saturday_checkbox) //토요일 체크박스
+        sunCheckbox = navigationView.findViewById(R.id.sunday_checkbox) //일요일 체크박스
+        holCheckbox = navigationView.findViewById(R.id.holiday_checkbox) //공휴일 체크박
+
+        filterApplyButton = navigationView.findViewById(R.id.filter_apply_Button)
+        filterApplyButton.setOnClickListener {
+            applyFilter()
+            // 네비게이션 드로어 닫기 (선택 사항)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
 
         //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
         val backButton = binding.backButtonImageView
@@ -349,12 +370,19 @@ class HospitalListActivity : AppCompatActivity() {
                             reviewAverage/(responseBody[responseIndex].hospital.review.size)
                         }
 
+                        val sat_open =  responseBody[responseIndex].hospital.hospitalDetail.sat_open
+                        val sun_open = responseBody[responseIndex].hospital.hospitalDetail.sun_open
+                        val hol_open =  responseBody[responseIndex].hospital.hospitalDetail.hol_open
+
                         //리스트에 병원 추가
-                        hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), operatingTime, address, listOf(className), status, bitmap))
+                        hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), operatingTime, address, listOf(className), status, bitmap, sat_open, sun_open, hol_open))
+
 
                     }
                     adapter.updatelist(hospitalList)
-                    adapter.itemClick = (object: HospitalListAdapter.ItemClick { //클릭 이벤트 처리
+                    adapter.itemClick = filterItemOnClick(hospitalList)
+/*
+                        (object: HospitalListAdapter.ItemClick { //클릭 이벤트 처리
                         override fun itemSetOnClick(itemView: View, position: Int) {
                             if(hospitalList[position].openingTimes.startsWith("운")) { //병원 정보가 없을때
                                 //Toast.makeText(this@HospitalListActivity, "병원 정보가 없습니다.\n병원 정보를 입력하길 기다리십시오.", Toast.LENGTH_SHORT).show()
@@ -369,6 +397,7 @@ class HospitalListActivity : AppCompatActivity() {
                             }
                         }
                     })
+*/
                 }
 
                 //통신 성공, 응답 실패
@@ -381,6 +410,47 @@ class HospitalListActivity : AppCompatActivity() {
             }
         })
     }
+
+/*
+    //아이템 필터
+    private fun filterItemOnClick(list: ArrayList<HospitalItem>): HospitalListAdapter.ItemClick? {
+        adapter.itemClick = (object: HospitalListAdapter.ItemClick { //클릭 이벤트 처리
+            override fun itemSetOnClick(itemView: View, position: Int) {
+                if(list[position].openingTimes.startsWith("운")) { //병원 정보가 없을때
+                    //Toast.makeText(this@HospitalListActivity, "병원 정보가 없습니다.\n병원 정보를 입력하길 기다리십시오.", Toast.LENGTH_SHORT).show()
+                    CustomToast(this@HospitalListActivity, "병원 정보가 없습니다.\n병원 정보를 입력하길 기다리십시오.").show()
+                }
+                else { //병원 정보가 있을때
+                    val intent = Intent(this@HospitalListActivity, Hospital_DetailPage::class.java)
+                    intent.putExtra("hospitalId", list[position].hospitalId)
+                    Log.w("HospitalList", "hospitalId ${list[position].hospitalId}")
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+                    startActivity(intent)
+                }
+            }
+        })
+        return
+    }
+*/
+    // 아이템 필터 함수
+    private fun filterItemOnClick(list: ArrayList<HospitalItem>): HospitalListAdapter.ItemClick? {
+        return object : HospitalListAdapter.ItemClick { // 클릭 이벤트 처리
+            override fun itemSetOnClick(itemView: View, position: Int) {
+                if (list[position].openingTimes.startsWith("운")) { // 병원 정보가 없을 때
+                    // Toast.makeText(this@HospitalListActivity, "병원 정보가 없습니다.\n병원 정보를 입력하길 기다리십시오.", Toast.LENGTH_SHORT).show()
+                    CustomToast(this@HospitalListActivity, "병원 정보가 없습니다.\n병원 정보를 입력하길 기다리십시오.").show()
+                } else { // 병원 정보가 있을 때
+                    val intent = Intent(this@HospitalListActivity, Hospital_DetailPage::class.java)
+                    intent.putExtra("hospitalId", list[position].hospitalId)
+                    Log.w("HospitalList", "hospitalId ${list[position].hospitalId}")
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // 인텐트 플래그 설정
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+
+
 
     //평점 순 필터
     private fun starScoreFilterAction() {
@@ -466,6 +536,38 @@ class HospitalListActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+    private fun updateSelectedDays() {
+        isSaturdaySelected = satCheckbox.isChecked
+        isSundaySelected = sunCheckbox.isChecked
+        isHolidaySelected = holCheckbox.isChecked
+    }
+
+
+    private fun applyFilter() {
+        // 선택한 요일 업데이트
+        updateSelectedDays()
+
+        // 선택한 요일에 영업하는 병원만 추출하여 새로운 리스트 생성
+        val filteredList = hospitalList.filter { item ->
+            // 선택한 요일에 영업하는 병원인지 확인
+            val isOperatingOnSelectedDay = when {
+                isSaturdaySelected && item.sat_open == "휴무" ->false
+                isSundaySelected && item.sun_open == "휴무" ->false
+                isHolidaySelected && item.hol_open == "휴무" -> false
+                isSaturdaySelected && item.sat_open != "휴무" -> true
+                isSundaySelected && item.sun_open != "휴무" -> true
+                isHolidaySelected && item.hol_open != "휴무" -> true
+                else -> true
+            }
+            isOperatingOnSelectedDay
+        }
+
+        val filteredArrayList = ArrayList(filteredList)
+
+        // 새로운 리스트로 어댑터 업데이트
+        adapter.updatelist(filteredArrayList)
+        adapter.itemClick = filterItemOnClick(filteredArrayList)
     }
 
 //

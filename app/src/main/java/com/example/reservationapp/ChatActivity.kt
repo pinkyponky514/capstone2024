@@ -148,7 +148,8 @@ class ChatActivity : AppCompatActivity() {
 
             } else Log.w("Message Send Error", "$messageString")
 
-            recyclerView.scrollToPosition(chatList.size - 1)
+            recyclerView.scrollToPosition(chatList.size-1) //recyclerView.scrollToPosition(chatList.size-1)
+
 
             // 아이콘 클릭 이벤트 설정
             val backIcon: ImageView = findViewById(R.id.backIcon)
