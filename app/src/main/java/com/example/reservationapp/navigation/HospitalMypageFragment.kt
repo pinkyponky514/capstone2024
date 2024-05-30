@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Adapter.MultiImageHospitalAdapter
 import com.example.reservationapp.App
+import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.HospitalDetail
 import com.example.reservationapp.Model.HospitalDetail2
 import com.example.reservationapp.Model.HospitalDetailResponse
@@ -260,6 +261,7 @@ class HospitalMypageFragment : Fragment() {
                         val responseBody = response.body()
                         if (responseBody != null) {
                             Log.d("SUCCESS Response", "Message: ${responseBody.message}")
+                            CustomToast(requireContext(), "병원 정보 작성 완료되었습니다.").show()
                             val reponse = response.body()!!
                             val message = response.message()
                         }

@@ -33,6 +33,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.properties.Delegates
 
 
 class HospitalFragment : Fragment() {
@@ -49,6 +50,7 @@ class HospitalFragment : Fragment() {
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
 
+    private var hospitalid by Delegates.notNull<Long>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -91,6 +93,7 @@ class HospitalFragment : Fragment() {
 
         securityButton.setOnClickListener{
             val intent = Intent(requireContext(), HospitalSecurityActivity::class.java)
+            intent.putExtra("hospitalId", hospitalid)
             startActivity(intent)
         }
         // 상태 복원을 위해 onRestoreInstanceState 호출을 대기
@@ -126,6 +129,8 @@ class HospitalFragment : Fragment() {
                     hospitalNameTextView.text = hospitalName
                     App.hospitalName = hospitalName
                     App.prefs.hospitalName = hospitalName
+                    hospitalid = responseBodyDetail.data.hospital.hospitalId
+
                     reservations = responseBodyDetail.data.hospital.reservations
 
                     reservationList.clear() // 기존 리스트 초기화
