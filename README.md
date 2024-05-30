@@ -22,7 +22,7 @@
 * Framework & OPEN API : Spring Boot, Naver api, 공공데이터 api, Openai api
 * Database: MySQL
 ------------------------------------------
-## 2. 주요 기능
+## 2. 주요 기능(추가예정)
 
 ### [회원가입 및 로그인]
 
