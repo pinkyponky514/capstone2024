@@ -105,7 +105,7 @@ class HospitalMapActivity : AppCompatActivity(), OnMapReadyCallback/* Overlay.On
         val bottomSheetView: View = findViewById(R.id.hospital_bottom_sheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
         bottomSheetBehavior.isHideable = true
-        bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
+        //bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         // BottomSheetCallback 추가

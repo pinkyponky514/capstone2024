@@ -20,7 +20,7 @@
         android:elevation="16dp"
         android:orientation="vertical"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="214dp"
+        app:behavior_peekHeight="250dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View

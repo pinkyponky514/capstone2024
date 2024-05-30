@@ -38,8 +38,11 @@ data class HospitalItem(
     val hospitalAddress: String, //병원주소 ㅇ
     val className: List<String>, //진료과 ㅇ
     var status: String, //병원 영업 상태
-    var mainImage: Bitmap? //병원 대표 이미지 한개
+    var mainImage: Bitmap?, //병원 대표 이미지 한개
     //var bookmarkBoolean: Boolean //즐겨찾기 플래그
+    var sat_open:String?="",
+    var sun_open:String?="",
+    var hol_open:String?="",
 )
 
 //ChattingAdapter
