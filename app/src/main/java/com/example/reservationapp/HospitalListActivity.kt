@@ -8,11 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -24,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.Adapter.HospitalListAdapter
 import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.Hospital
 import com.example.reservationapp.Model.HospitalItem
 import com.example.reservationapp.Model.RecentItem
 import com.example.reservationapp.Model.RecentSearchWordResponseData
@@ -33,8 +30,6 @@ import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
 import com.google.android.material.navigation.NavigationView
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,15 +44,14 @@ class HospitalListActivity : AppCompatActivity() {
 
     //병원 검색 리스트
     private lateinit var adapter: HospitalListAdapter
-    private lateinit var hospitalList : ArrayList<HospitalItem> //병원 리스트
+    private lateinit var hospitalList: ArrayList<HospitalItem> //병원 리스트
+    private lateinit var sortedStarScoreHospitalList: ArrayList<HospitalItem>
 
     //최근검색어
     private lateinit var intentString: String //다른 액티비티로부터 넘겨받은 검색어, 최근검색어 추가하기 위한 문자열
     private lateinit var searchTextField: EditText
-    private lateinit var recentSearchWordList: ArrayList<RecentItem> //최근검색어 리스트
 
     //필터
-    //private lateinit var filterButton: ImageView //필터 버튼
     private lateinit var navigationView: NavigationView //필터 네비게이션 뷰
     private lateinit var drawerLayout: DrawerLayout //네비게이션 드로우
     private lateinit var filterHideButton: ImageView //네비게이션 드로우의 x 버튼
@@ -65,20 +59,19 @@ class HospitalListActivity : AppCompatActivity() {
     private var filterHolSpreadFlag = false //휴일진료 펼쳤는지 플래그
     private lateinit var filterHolSpreadConstraintLayout: ConstraintLayout
 
+    //거리, 평점 순
+    private lateinit var distanceButton: Button
+    private lateinit var starScoreButton: Button
+    private var distanceFlag = false
+    private var starScoreFlag = false
+    private var selectedButton: Button ?= null //선택된 버튼
+
+
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
     private lateinit var apiService: APIService
     private lateinit var responseBody: List<SearchHospital>
 
-    private lateinit var satCheckbox: CheckBox
-    private lateinit var sunCheckbox: CheckBox
-    private lateinit var holCheckbox: CheckBox
-
-    private lateinit var filterApplyButton: Button
-
-    private var isSaturdaySelected = false
-    private var isSundaySelected = false
-    private var isHolidaySelected = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +80,11 @@ class HospitalListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         MainActivity().tokenCheck() //토큰 만료 검사
+
+        //Retrofit
+        retrofitClient = RetrofitClient.getInstance()
+        apiService = retrofitClient.getRetrofitInterface()
+
 
         //adapter
         adapter = HospitalListAdapter()
@@ -99,19 +97,6 @@ class HospitalListActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true) //뷰마다 항목 사이즈를 같게함
 
 
-        //다른 Activity에서 검색어 넘겨받기
-        searchTextField = binding.searchEditTextField
-        intentString = ""
-        intentString = intent.getStringExtra("searchWord").toString()
-
-        if(intentString != "null") {
-            searchTextField.setText(intentString)
-
-            //검색어 입력시 필터 동작
-            searchFilterAction(intentString)
-        }
-
-
         //필터
         drawerLayout = binding.drawerLayout
         navigationView = binding.filterNavigatinonView
@@ -122,6 +107,9 @@ class HospitalListActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
+        //거리, 평점 순 버튼 초기화
+        distanceButton = binding.distanceButton
+        starScoreButton = binding.starScoreListButton
 
         //휴일 진료 펼치기
         filterHolSpreadButton = navigationView.findViewById(R.id.hol_spread_ImageView)
@@ -138,34 +126,10 @@ class HospitalListActivity : AppCompatActivity() {
         }
 
 
-        satCheckbox =navigationView.findViewById(R.id.saturday_checkbox) //토요일 체크박스
-        sunCheckbox = navigationView.findViewById(R.id.sunday_checkbox) //일요일 체크박스
-        holCheckbox = navigationView.findViewById(R.id.holiday_checkbox) //공휴일 체크박
-
-        filterApplyButton = navigationView.findViewById(R.id.filter_apply_Button)
-        filterApplyButton.setOnClickListener {
-            applyFilter()
-            // 네비게이션 드로어 닫기 (선택 사항)
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-
         //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
         val backButton = binding.backButtonImageView
         backButton.setOnClickListener {
             finish()
-        }
-
-        //검색버튼 또 눌렀을때
-        val submitButton = binding.searchButtonImageView
-        submitButton.setOnClickListener {
-            intentString = searchTextField.text.toString()
-            searchTextField.text.clear()
-            recentSearchWord(intentString) //최근 검색단어 저장
-            searchFilterAction(intentString)
-
-            //키보드 내리기
-            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
 
         //병원 지도 플로팅 버튼 onClick
@@ -177,6 +141,69 @@ class HospitalListActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+
+        //다른 Activity에서 검색어 넘겨받기
+        searchTextField = binding.searchEdittext
+        intentString = ""
+        intentString = intent.getStringExtra("searchWord").toString()
+
+        if(intentString != "null") {
+            searchTextField.setText(intentString)
+
+            //검색어 입력시 필터 동작
+            searchFilterAction(intentString)
+        }
+
+        //검색버튼 또 눌렀을때
+        val submitButton = binding.searchButtonImageview
+        submitButton.setOnClickListener {
+            intentString = searchTextField.text.toString()
+            searchTextField.text.clear()
+            recentSearchWord(intentString) //최근 검색단어 저장
+            searchFilterAction(intentString)
+
+            //키보드 내리기
+            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
+
+        //거리순 버튼 onClick
+        distanceButton.setOnClickListener {
+            selectButtonColor(distanceButton)
+            if(distanceFlag) { //누른 상태 -> 안누른 상태로
+                distanceFlag = false
+                distanceButton.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+                Log.w("HospitalListActivity", "거리순 안누른 상태")
+                //searchFilterAction(intentString)
+            } else { //안누른 상태 -> 누른 상태로
+                distanceFlag = true
+                starScoreFlag = false
+                distanceButton.setBackgroundResource(R.drawable.style_dark_green_line_light_green_radius_5)
+                searchFilterAction(intentString)
+                Log.w("HospitalListActivity", "거리순 누른 상태")
+            }
+        }
+
+        //평점순 버튼 onClick
+        starScoreButton.setOnClickListener {
+            selectButtonColor(starScoreButton)
+            if(starScoreFlag) { //누른 상태 -> 안누른 상태로
+                starScoreFlag = false
+                starScoreButton.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+                searchFilterAction(intentString)
+                Log.w("HospitalListActivity", "평점순 안누른 상태")
+            } else { //안누른 상태 - > 누른 상태로
+                starScoreFlag = true
+                distanceFlag = false
+                starScoreButton.setBackgroundResource(R.drawable.style_dark_green_line_light_green_radius_5)
+                starScoreFilterAction()
+                Log.w("HospitalListActivity", "평점순 누른 상태")
+            }
+        }
+    }
 
     //뒤로가기 버튼 눌렀을때
     override fun onBackPressed() {
@@ -190,11 +217,6 @@ class HospitalListActivity : AppCompatActivity() {
         searchTextField.setText(string)
 
         var searchString = searchTextField.text.toString().trim() //앞, 뒤 공백 제거
-
-        //Retrofit
-        retrofitClient = RetrofitClient.getInstance()
-        apiService = retrofitClient.getRetrofitInterface()
-
 
         val classString = "내과, 외과, 이비인후과, 피부과, 안과, 성형외과, 신경외과, 소아청소년과"
 
@@ -250,6 +272,30 @@ class HospitalListActivity : AppCompatActivity() {
 
                     hospitalList = ArrayList()
                     for(responseIndex in responseBody.indices) {
+                        /*
+                        //hospital Detail 작성한 병원만 나옴
+                        if(responseBody[responseIndex].hospital != null) {
+                            val calendar = Calendar.getInstance()
+                            val currentYear = calendar.get(Calendar.YEAR)
+                            val currentMonth = calendar.get(Calendar.MONTH)
+                            val currentDay = calendar.get(Calendar.DATE)
+
+                            val dayOfWeek = db_getDayOfWeek(currentYear, currentMonth, currentDay, responseIndex) //현재 요일 운영시간 구하기
+                            Log.w("HospitalActivity !!", "dayTime open: $dayOfWeek")
+
+                            val hospitalName = responseBody[responseIndex].hospitalName
+                            val className = responseBody[responseIndex].hospital.hospitalDetail.department
+                            val address = responseBody[responseIndex].address
+                            var reviewAverage: Float = 0.0F //리뷰 별점 평균
+                            if(responseBody[responseIndex].hospital.review != null) { //리뷰가 있으면
+                                for (i in responseBody[responseIndex].hospital.review.indices) {
+                                    reviewAverage += responseBody[responseIndex].hospital.review[i].starScore
+                                }
+                                reviewAverage/responseBody[responseIndex].hospital.review.size
+                            }
+                            hospitalList.add(HospitalItem(hospitalName, reviewAverage.toString(), dayOfWeek, address, listOf(className)))
+                        }
+                        */
 
                         //hospital Detail 작성안한 병원도 나옴
                         val calendar = Calendar.getInstance()
@@ -303,12 +349,8 @@ class HospitalListActivity : AppCompatActivity() {
                             reviewAverage/(responseBody[responseIndex].hospital.review.size)
                         }
 
-                        val sat_open =  responseBody[responseIndex].hospital.hospitalDetail.sat_open
-                        val sun_open = responseBody[responseIndex].hospital.hospitalDetail.sun_open
-                        val hol_open =  responseBody[responseIndex].hospital.hospitalDetail.hol_open
-
                         //리스트에 병원 추가
-                        hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), operatingTime, address, listOf(className), status, bitmap, sat_open, sun_open, hol_open))
+                        hospitalList.add(HospitalItem(hospitalId, hospitalName, reviewAverage.toString(), operatingTime, address, listOf(className), status, bitmap))
 
                     }
                     adapter.updatelist(hospitalList)
@@ -338,6 +380,28 @@ class HospitalListActivity : AppCompatActivity() {
                 Log.w("HospitalListActivity CONNECTION FAILURE: ", t.localizedMessage)
             }
         })
+    }
+
+    //평점 순 필터
+    private fun starScoreFilterAction() {
+        Log.w("HospitalListActivity", "어댑터에 넣을 hospitalList = $hospitalList")
+
+        val sortedStarScoreHospitalList = hospitalList.sortedByDescending { it.starScore }.map { it } as ArrayList<HospitalItem> //ArrayList<HospitalItem>
+        adapter.updatelist(sortedStarScoreHospitalList)
+    }
+
+    //선택한 버튼 바꾸기
+    private fun selectButtonColor(clickedButton: Button) {
+        //선택된 버튼이 없거나 클릭된 버튼이 아닐 경우
+        if(selectedButton == null || selectedButton != clickedButton) {
+            selectedButton?.setBackgroundResource(R.drawable.style_light_gray_radius_line_5) //이전에 선택된 버튼의 색을 원래대로 되돌림
+            clickedButton.setBackgroundResource(R.drawable.style_dark_green_line_light_green_radius_5) //현재 클릭된 버튼 색 변경
+            selectedButton = clickedButton
+        } else if(selectedButton != null || selectedButton == clickedButton) {
+            selectedButton?.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+            clickedButton.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+            selectedButton = clickedButton
+        }
     }
 
     //네비게이션 드로우 열기
@@ -403,32 +467,7 @@ class HospitalListActivity : AppCompatActivity() {
             })
         }
     }
-    private fun updateSelectedDays() {
-        isSaturdaySelected = satCheckbox.isChecked
-        isSundaySelected = sunCheckbox.isChecked
-        isHolidaySelected = holCheckbox.isChecked
-    }
 
-    private fun applyFilter() {
-        // 선택한 요일 업데이트
-        updateSelectedDays()
-
-        // 선택한 요일에 영업하는 병원만 추출하여 새로운 리스트 생성
-        val filteredList = hospitalList.filter { item ->
-            // 선택한 요일에 영업하는 병원인지 확인
-            val isOperatingOnSelectedDay = when {
-                isSaturdaySelected && item.sat_open != "휴무" -> true
-                isSundaySelected && item.sun_open != "휴무" -> true
-                isHolidaySelected && item.hol_open != "휴무" -> true
-                else -> false
-            }
-            isOperatingOnSelectedDay
-        }
-
-        // Convert filteredList to ArrayList
-        val filteredArrayList = ArrayList(filteredList)
-
-        // 새로운 리스트로 어댑터 업데이트
-        adapter.updatelist(filteredArrayList)
-    }
+//
 }
+

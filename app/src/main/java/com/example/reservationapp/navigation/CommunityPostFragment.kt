@@ -77,7 +77,7 @@ class CommunityPostFragment : Fragment() {
 
         getImageButton.setOnClickListener {
             if (imageDataList.size >= 10) {
-                Toast.makeText(context, "사진은 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "사진은 5장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
             } else {
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.type = MediaStore.Images.Media.CONTENT_TYPE

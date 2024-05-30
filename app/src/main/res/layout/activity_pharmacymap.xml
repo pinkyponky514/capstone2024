@@ -1,543 +1,561 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <!-- 검색창 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/search_ConstraintLayout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:elevation="15dp" >
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
+
+        <!-- 검색창 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/search_ConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/style_dark_green_line_radius_30"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:theme="@style/TextView15dpDarkGray"
-            app:iconifiedByDefault="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:queryBackground="@null"
-            app:queryHint="약국을 검색하세요."
-            app:searchIcon="@drawable/ic_search" />
+            android:layout_marginTop="20dp"
+            android:onClick="openPharmacyDrawer"
+            android:elevation="15dp" >
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- 영업중 필터 플로팅 버튼 -->
-    <!--
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/filter_btn"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="100dp"
-        android:backgroundTint="@color/white"
-        android:text="영업중"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="14dp"
-        android:clickable="true"
-        android:elevation="15dp"
-        app:layout_anchor="@id/searchView"
-        app:layout_anchorGravity="bottom|end" />
-        -->
-
-    <!-- 지도 -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map"
-        android:name="com.naver.maps.map.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
-    <!-- Persistent Bottom Sheet / 약국 디테일 화면 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/persistent_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/white_round_top_border_20"
-        android:elevation="15dp"
-        android:orientation="vertical"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="175dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="40dp"
-            android:layout_height="6dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/gray_round_border_20"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ScrollView
-            android:id="@+id/pharmacy_ScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@color/light_gray"
-            app:layout_constraintTop_toBottomOf="@+id/view">
-
-            <!-- 한번에 감싸는 constraintlayout -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/pharmacy_ConstraintLayout"
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <!-- 약국 정보 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/pharmacy_info_ConstraintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/pharmacy_name_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center"
-                        android:text="강남백년가약국"
-                        android:textColor="#272727"
-                        android:theme="@style/TextView18dpBlackBold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/operating_time_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="영업종료 09:00 ~ 20:00"
-                        android:textColor="#7C7C7C"
-                        android:theme="@style/TextView15dpDarkGray"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="@+id/pharmacy_name_textView"
-                        app:layout_constraintTop_toBottomOf="@+id/pharmacy_name_textView" />
-
-
-                    <TextView
-                        android:id="@+id/address_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:text="서울 관악구 신림동"
-                        android:textColor="#BCBCBC"
-                        android:theme="@style/TextView14dpDarkGray"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/pharmacy_name_textView"
-                        app:layout_constraintTop_toBottomOf="@+id/operating_time_textView" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <!-- 영업 시간 정보 -->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/operating_time_ConstraintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pharmacy_info_ConstraintLayout">
-
-                    <TextView
-                        android:id="@+id/operating_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text="영업 시간"
-                        android:theme="@style/TextView16dpBlackBold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <!-- 점심시간 시간안내 -->
-                    <TableLayout
-                        android:id="@+id/classTableLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/style_light_green_radius_8"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/operating_time"
-                        app:layout_constraintTop_toBottomOf="@+id/operating_time">
-
-                        <TableRow
-                            android:id="@+id/classTableRow1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/lunch_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="점심시간"
-                                android:textAlignment="center"
-                                android:textColor="@color/black"
-                                android:theme="@style/TextView14dpBlackBold"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"/>
-                        </TableRow>
-
-                        <TableRow
-                            android:id="@+id/lunch_time_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/lunch_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="12:30 ~ 13:30"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"/>
-                        </TableRow>
-                    </TableLayout>
-
-                    <!-- 모든 요일 진료시간 안내 -->
-                    <TableLayout
-                        android:id="@+id/hospital_all_time_guide_tableLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/style_light_gray_radius_8"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/classTableLayout"
-                        app:layout_constraintStart_toStartOf="@+id/classTableLayout"
-                        app:layout_constraintTop_toBottomOf="@+id/classTableLayout">
-
-                        <TableRow
-                            android:id="@+id/div_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/day_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="요일"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlackBold"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="진료시간"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlackBold"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 월요일 -->
-                        <TableRow
-                            android:id="@+id/monday_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/monday_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="월요일"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/monday_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="09:00 ~ 18:00"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 화요일 -->
-                        <TableRow
-                            android:id="@+id/tuesday_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/tuesday_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="화요일"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/tuesday_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="09:00 ~ 18:00"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 수요일 -->
-                        <TableRow
-                            android:id="@+id/wednesday_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/wednesday_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="수요일"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/wednesday_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="09:00 ~ 18:00"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 목요일 -->
-                        <TableRow
-                            android:id="@+id/thursday_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/thursday_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="목요일"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/thursday_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="09:00 ~ 18:00"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 금요일 -->
-                        <TableRow
-                            android:id="@+id/friday_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/friday_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="금요일"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/friday_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="09:00 ~ 18:00"
-                                android:textAlignment="center"
-                                android:theme="@style/TextView14dpBlack"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 토요일 -->
-                        <TableRow
-                            android:id="@+id/saturday_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/saturday_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="토요일"
-                                android:textAlignment="center"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/saturday_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="09:00 ~ 14:00"
-                                android:textAlignment="center"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 일요일 -->
-                        <TableRow
-                            android:id="@+id/sunday_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/sunday_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="일요일"
-                                android:textAlignment="center"
-                                android:textColor="@color/red"
-                                android:textSize="14dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp" />
-
-                            <TextView
-                                android:id="@+id/sunday_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="정기휴무"
-                                android:textAlignment="center"
-                                android:textColor="@color/red"
-                                android:textSize="14dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-
-                        <!-- 공휴일 -->
-                        <TableRow
-                            android:id="@+id/day_off_tableRow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/day_off_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="공휴일"
-                                android:textAlignment="center"
-                                android:textColor="@color/red"
-                                android:textSize="14dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-
-                            <TextView
-                                android:id="@+id/day_off_time_textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="100dp"
-                                android:text="휴무"
-                                android:textAlignment="center"
-                                android:textColor="@color/red"
-                                android:textSize="14dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp" />
-                        </TableRow>
-                    </TableLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
-
-
-
-        <!-- 전화문의 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/call_ask_ConstraintLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/style_light_green_rectangle_radius_5_pressed_button"
-                android:text="전화문의"
-                android:textColor="#114513"
-                android:theme="@style/TextView14dpBlack"
+                android:layout_margin="20dp"
+                android:background="@drawable/style_dark_green_line_radius_30"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:theme="@style/TextView15dpDarkGray"
+                app:iconifiedByDefault="false"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryBackground="@null"
+                app:queryHint="약국을 검색하세요."
+                app:searchIcon="@drawable/ic_search" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 영업중 필터 플로팅 버튼 -->
+        <!--
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/filter_btn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="100dp"
+            android:backgroundTint="@color/white"
+            android:text="영업중"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="14dp"
+            android:clickable="true"
+            android:elevation="15dp"
+            app:layout_anchor="@id/searchView"
+            app:layout_anchorGravity="bottom|end" />
+            -->
+
+        <!-- 지도 -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <!-- Persistent Bottom Sheet / 약국 디테일 화면 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/persistent_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/white_round_top_border_20"
+            android:elevation="15dp"
+            android:orientation="vertical"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="175dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="40dp"
+                android:layout_height="6dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/gray_round_border_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <ScrollView
+                android:id="@+id/pharmacy_ScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/light_gray"
+                app:layout_constraintTop_toBottomOf="@+id/view">
+
+                <!-- 한번에 감싸는 constraintlayout -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/pharmacy_ConstraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <!-- 약국 정보 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/pharmacy_info_ConstraintLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/pharmacy_name_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:text="강남백년가약국"
+                            android:textColor="#272727"
+                            android:theme="@style/TextView18dpBlackBold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/operating_time_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="영업종료 09:00 ~ 20:00"
+                            android:textColor="#7C7C7C"
+                            android:theme="@style/TextView15dpDarkGray"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@+id/pharmacy_name_textView"
+                            app:layout_constraintTop_toBottomOf="@+id/pharmacy_name_textView" />
+
+
+                        <TextView
+                            android:id="@+id/address_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="서울 관악구 신림동"
+                            android:textColor="#BCBCBC"
+                            android:theme="@style/TextView14dpDarkGray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/pharmacy_name_textView"
+                            app:layout_constraintTop_toBottomOf="@+id/operating_time_textView" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <!-- 영업 시간 정보 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/operating_time_ConstraintLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/pharmacy_info_ConstraintLayout">
+
+                        <TextView
+                            android:id="@+id/operating_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:text="영업 시간"
+                            android:theme="@style/TextView16dpBlackBold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- 점심시간 시간안내 -->
+                        <TableLayout
+                            android:id="@+id/classTableLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/style_light_green_radius_8"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/operating_time"
+                            app:layout_constraintTop_toBottomOf="@+id/operating_time">
+
+                            <TableRow
+                                android:id="@+id/classTableRow1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/lunch_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="점심시간"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:theme="@style/TextView14dpBlackBold"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/lunch_time_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/lunch_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="12:30 ~ 13:30"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"/>
+                            </TableRow>
+                        </TableLayout>
+
+                        <!-- 모든 요일 진료시간 안내 -->
+                        <TableLayout
+                            android:id="@+id/hospital_all_time_guide_tableLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/style_light_gray_radius_8"
+                            android:layout_marginTop="18dp"
+                            android:layout_marginBottom="16dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/classTableLayout"
+                            app:layout_constraintStart_toStartOf="@+id/classTableLayout"
+                            app:layout_constraintTop_toBottomOf="@+id/classTableLayout">
+
+                            <TableRow
+                                android:id="@+id/div_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/day_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="요일"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlackBold"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="진료시간"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlackBold"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 월요일 -->
+                            <TableRow
+                                android:id="@+id/monday_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/monday_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="월요일"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/monday_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="09:00 ~ 18:00"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 화요일 -->
+                            <TableRow
+                                android:id="@+id/tuesday_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/tuesday_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="화요일"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/tuesday_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="09:00 ~ 18:00"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 수요일 -->
+                            <TableRow
+                                android:id="@+id/wednesday_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/wednesday_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="수요일"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/wednesday_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="09:00 ~ 18:00"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 목요일 -->
+                            <TableRow
+                                android:id="@+id/thursday_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/thursday_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="목요일"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/thursday_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="09:00 ~ 18:00"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 금요일 -->
+                            <TableRow
+                                android:id="@+id/friday_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/friday_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="금요일"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/friday_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="09:00 ~ 18:00"
+                                    android:textAlignment="center"
+                                    android:theme="@style/TextView14dpBlack"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 토요일 -->
+                            <TableRow
+                                android:id="@+id/saturday_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/saturday_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="토요일"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/blue"
+                                    android:textSize="14dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/saturday_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="09:00 ~ 14:00"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/blue"
+                                    android:textSize="14dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 일요일 -->
+                            <TableRow
+                                android:id="@+id/sunday_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/sunday_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="일요일"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/red"
+                                    android:textSize="14dp"
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp" />
+
+                                <TextView
+                                    android:id="@+id/sunday_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="정기휴무"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/red"
+                                    android:textSize="14dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+
+                            <!-- 공휴일 -->
+                            <TableRow
+                                android:id="@+id/day_off_tableRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/day_off_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="공휴일"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/red"
+                                    android:textSize="14dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+
+                                <TextView
+                                    android:id="@+id/day_off_time_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="100dp"
+                                    android:text="휴무"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/red"
+                                    android:textSize="14dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp" />
+                            </TableRow>
+                        </TableLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
+
+
+            <!-- 전화문의 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/call_ask_ConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/style_light_green_rectangle_radius_5_pressed_button"
+                    android:text="전화문의"
+                    android:textColor="#114513"
+                    android:theme="@style/TextView14dpBlack"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pharmacyFilterNavigatinonView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="-64dp"
+        android:layout_gravity="end"
+        android:background="@color/white">
+        <include layout="@layout/pharmacy_search_navi_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

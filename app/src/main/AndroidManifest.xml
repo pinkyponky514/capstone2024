@@ -141,7 +141,7 @@
                 android:value="" />
         </activity> <!-- 메인 액티비티 -->
         <activity
-            android:name=".Intro_Activity"
+            android:name=".IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

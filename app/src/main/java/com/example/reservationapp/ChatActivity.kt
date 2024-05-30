@@ -237,7 +237,7 @@ class ChatActivity : AppCompatActivity() {
                 Log.d("CONNECTION FAILURE: ", t.localizedMessage)
             }
         })
-        recyclerView.scrollToPosition(chatList.size - 2)
+        recyclerView.scrollToPosition(chatList.size)
     }
 
     private fun handleErrorResponse(response: Response<ChatBotResponse>) {
