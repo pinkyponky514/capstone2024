@@ -32,7 +32,9 @@ CatchDoctor은 Chat GPT를 fine-tuning한 챗봇을 활용하여 병원 예약�
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/9dff57e8-1ce7-498f-92d4-8b7738e7806c)
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/4d269dfc-6d36-4595-8ba9-00aaf0a440f4)
 
+API명세서 notion URL : https://www.notion.so/2024-CatchDoctor-d51d6de0813c407f95ea2ad211fe29a5
 
 ### 테이블 ERD
+![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/3ca2f928-0330-4ab3-bf03-656c7277ce6d)
 
 ------------------------------------------
