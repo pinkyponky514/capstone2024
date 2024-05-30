@@ -1,5 +1,5 @@
 ------------------------------------------
-# CapStone2024-한냥갱-CatchDoctor
+# 병원 예약 앱 CatchDoctor
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/26127a3f-da51-455b-a8af-a1dc71d912d8)
 
 ## 1. 프로젝트 소개
