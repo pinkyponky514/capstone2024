@@ -171,10 +171,15 @@ class ChatActivity : AppCompatActivity() {
                     val address =  responseBody[0].address //주소
                     val image = responseBody[0].mainImage //메인 이미지
 
-                    val decodedBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
-                   // val bitmapImage = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    var bitmap: Bitmap? = null
+                    if (image != null) {
+                        val decodedBytes: ByteArray = Base64.decode(image, Base64.DEFAULT)
+                        bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
 
-                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    }else{ //이미지 없을시 no_image로 사진 대체
+                        bitmap = BitmapFactory.decodeResource(resources, R.drawable.image_no_image)
+
+                    }
 
                     hospitalid  = responseBody[0].hospital.hospitalId
                     var chatBotResponse = "현 위치에서 가장 가까운 ${department}를 추천해드리겠습니다."
