@@ -8,9 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
@@ -30,8 +30,6 @@ import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.Retrofit.RetrofitClient
 import com.example.reservationapp.databinding.ActivityHospitalListBinding
 import com.google.android.material.navigation.NavigationView
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,21 +44,28 @@ class HospitalListActivity : AppCompatActivity() {
 
     //병원 검색 리스트
     private lateinit var adapter: HospitalListAdapter
-    private lateinit var hospitalList : ArrayList<HospitalItem> //병원 리스트
+    private lateinit var hospitalList: ArrayList<HospitalItem> //병원 리스트
+    private lateinit var sortedStarScoreHospitalList: ArrayList<HospitalItem>
 
     //최근검색어
     private lateinit var intentString: String //다른 액티비티로부터 넘겨받은 검색어, 최근검색어 추가하기 위한 문자열
     private lateinit var searchTextField: EditText
-    private lateinit var recentSearchWordList: ArrayList<RecentItem> //최근검색어 리스트
 
     //필터
-    //private lateinit var filterButton: ImageView //필터 버튼
     private lateinit var navigationView: NavigationView //필터 네비게이션 뷰
     private lateinit var drawerLayout: DrawerLayout //네비게이션 드로우
     private lateinit var filterHideButton: ImageView //네비게이션 드로우의 x 버튼
     private lateinit var filterHolSpreadButton: ImageView //휴일진료 펼치는 버튼
     private var filterHolSpreadFlag = false //휴일진료 펼쳤는지 플래그
     private lateinit var filterHolSpreadConstraintLayout: ConstraintLayout
+
+    //거리, 평점 순
+    private lateinit var distanceButton: Button
+    private lateinit var starScoreButton: Button
+    private var distanceFlag = false
+    private var starScoreFlag = false
+    private var selectedButton: Button ?= null //선택된 버튼
+
 
     //Retrofit
     private lateinit var retrofitClient: RetrofitClient
@@ -76,6 +81,11 @@ class HospitalListActivity : AppCompatActivity() {
 
         MainActivity().tokenCheck() //토큰 만료 검사
 
+        //Retrofit
+        retrofitClient = RetrofitClient.getInstance()
+        apiService = retrofitClient.getRetrofitInterface()
+
+
         //adapter
         adapter = HospitalListAdapter()
 
@@ -85,19 +95,6 @@ class HospitalListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.setHasFixedSize(true) //뷰마다 항목 사이즈를 같게함
-
-
-        //다른 Activity에서 검색어 넘겨받기
-        searchTextField = binding.searchEditTextField
-        intentString = ""
-        intentString = intent.getStringExtra("searchWord").toString()
-
-        if(intentString != "null") {
-            searchTextField.setText(intentString)
-
-            //검색어 입력시 필터 동작
-            searchFilterAction(intentString)
-        }
 
 
         //필터
@@ -110,6 +107,9 @@ class HospitalListActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
+        //거리, 평점 순 버튼 초기화
+        distanceButton = binding.distanceButton
+        starScoreButton = binding.starScoreListButton
 
         //휴일 진료 펼치기
         filterHolSpreadButton = navigationView.findViewById(R.id.hol_spread_ImageView)
@@ -126,25 +126,10 @@ class HospitalListActivity : AppCompatActivity() {
         }
 
 
-
-
         //뒤로가기 버튼 눌렀을때 - 메인화면 나옴
         val backButton = binding.backButtonImageView
         backButton.setOnClickListener {
             finish()
-        }
-
-        //검색버튼 또 눌렀을때
-        val submitButton = binding.searchButtonImageView
-        submitButton.setOnClickListener {
-            intentString = searchTextField.text.toString()
-            searchTextField.text.clear()
-            recentSearchWord(intentString) //최근 검색단어 저장
-            searchFilterAction(intentString)
-
-            //키보드 내리기
-            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
 
         //병원 지도 플로팅 버튼 onClick
@@ -156,6 +141,69 @@ class HospitalListActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+
+        //다른 Activity에서 검색어 넘겨받기
+        searchTextField = binding.searchEdittext
+        intentString = ""
+        intentString = intent.getStringExtra("searchWord").toString()
+
+        if(intentString != "null") {
+            searchTextField.setText(intentString)
+
+            //검색어 입력시 필터 동작
+            searchFilterAction(intentString)
+        }
+
+        //검색버튼 또 눌렀을때
+        val submitButton = binding.searchButtonImageview
+        submitButton.setOnClickListener {
+            intentString = searchTextField.text.toString()
+            searchTextField.text.clear()
+            recentSearchWord(intentString) //최근 검색단어 저장
+            searchFilterAction(intentString)
+
+            //키보드 내리기
+            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
+
+        //거리순 버튼 onClick
+        distanceButton.setOnClickListener {
+            selectButtonColor(distanceButton)
+            if(distanceFlag) { //누른 상태 -> 안누른 상태로
+                distanceFlag = false
+                distanceButton.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+                Log.w("HospitalListActivity", "거리순 안누른 상태")
+                //searchFilterAction(intentString)
+            } else { //안누른 상태 -> 누른 상태로
+                distanceFlag = true
+                starScoreFlag = false
+                distanceButton.setBackgroundResource(R.drawable.style_dark_green_line_light_green_radius_5)
+                searchFilterAction(intentString)
+                Log.w("HospitalListActivity", "거리순 누른 상태")
+            }
+        }
+
+        //평점순 버튼 onClick
+        starScoreButton.setOnClickListener {
+            selectButtonColor(starScoreButton)
+            if(starScoreFlag) { //누른 상태 -> 안누른 상태로
+                starScoreFlag = false
+                starScoreButton.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+                searchFilterAction(intentString)
+                Log.w("HospitalListActivity", "평점순 안누른 상태")
+            } else { //안누른 상태 - > 누른 상태로
+                starScoreFlag = true
+                distanceFlag = false
+                starScoreButton.setBackgroundResource(R.drawable.style_dark_green_line_light_green_radius_5)
+                starScoreFilterAction()
+                Log.w("HospitalListActivity", "평점순 누른 상태")
+            }
+        }
+    }
 
     //뒤로가기 버튼 눌렀을때
     override fun onBackPressed() {
@@ -169,11 +217,6 @@ class HospitalListActivity : AppCompatActivity() {
         searchTextField.setText(string)
 
         var searchString = searchTextField.text.toString().trim() //앞, 뒤 공백 제거
-
-        //Retrofit
-        retrofitClient = RetrofitClient.getInstance()
-        apiService = retrofitClient.getRetrofitInterface()
-
 
         val classString = "내과, 외과, 이비인후과, 피부과, 안과, 성형외과, 신경외과, 소아청소년과"
 
@@ -337,6 +380,28 @@ class HospitalListActivity : AppCompatActivity() {
                 Log.w("HospitalListActivity CONNECTION FAILURE: ", t.localizedMessage)
             }
         })
+    }
+
+    //평점 순 필터
+    private fun starScoreFilterAction() {
+        Log.w("HospitalListActivity", "어댑터에 넣을 hospitalList = $hospitalList")
+
+        val sortedStarScoreHospitalList = hospitalList.sortedByDescending { it.starScore }.map { it } as ArrayList<HospitalItem> //ArrayList<HospitalItem>
+        adapter.updatelist(sortedStarScoreHospitalList)
+    }
+
+    //선택한 버튼 바꾸기
+    private fun selectButtonColor(clickedButton: Button) {
+        //선택된 버튼이 없거나 클릭된 버튼이 아닐 경우
+        if(selectedButton == null || selectedButton != clickedButton) {
+            selectedButton?.setBackgroundResource(R.drawable.style_light_gray_radius_line_5) //이전에 선택된 버튼의 색을 원래대로 되돌림
+            clickedButton.setBackgroundResource(R.drawable.style_dark_green_line_light_green_radius_5) //현재 클릭된 버튼 색 변경
+            selectedButton = clickedButton
+        } else if(selectedButton != null || selectedButton == clickedButton) {
+            selectedButton?.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+            clickedButton.setBackgroundResource(R.drawable.style_light_gray_radius_line_5)
+            selectedButton = clickedButton
+        }
     }
 
     //네비게이션 드로우 열기

@@ -11,6 +11,8 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
@@ -19,6 +21,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -28,6 +31,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.reservationapp.Adapter.PharmacyMapSearchAdapter
 import com.example.reservationapp.Model.NaverMapApiInterface
 import com.example.reservationapp.Model.NaverMapRequest
 import com.example.reservationapp.Model.PharmacyMap.NaverMapData
@@ -112,54 +120,11 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
 
     private var clickedMarker: Marker? = null
 
+    //DrawerLayout
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: ConstraintLayout
+    private lateinit var adapter: PharmacyMapSearchAdapter
 
-    //
-/*
-    private val bottomSheetCallback = object: BottomSheetBehavior.BottomSheetCallback() {
-        //BottomSheet를 드래그 할때 동작
-        override fun onStateChanged(bottomSheet: View, newState: Int) {
-            when(newState) {
-                //접혀져 있을때
-                BottomSheetBehavior.STATE_COLLAPSED -> {
-                    moveButtonToPeekHeight()
-                }
-                //펼쳐져 있을때
-                BottomSheetBehavior.STATE_EXPANDED -> {
-                    moveButtonToBottom()
-                }
-                //그외
-                else -> {
-                    moveButtonToBottom()
-                }
-            }
-        }
-
-        override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            //슬라이드 동작 시 추가 작업
-        }
-    }
-
-    // 버튼을 214dp 높이에 위치하도록 설정
-    private fun moveButtonToPeekHeight() {
-        val params = binding.callAskConstraintLayout.layoutParams as ConstraintLayout.LayoutParams
-        params.bottomMargin = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
-        binding.callAskConstraintLayout.layoutParams = params
-    }
-    // 버튼을 맨 아래에 위치하도록 설정
-    private fun moveButtonToBottom() {
-        val params = binding.callAskConstraintLayout.layoutParams as ConstraintLayout.LayoutParams
-        params.bottomMargin = 0 // 혹은 원하는 값으로 설정
-        binding.callAskConstraintLayout.layoutParams = params
-    }
-    //dp 변환 함수
-    private fun Int.dpToPx(): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            resources.displayMetrics
-        ).toInt()
-    }
-*/
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -170,6 +135,9 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         //var fm: FragmentManager = supportFragmentManager
         //var mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
         var mapFragment = supportFragmentManager.findFragmentById(R.id.map) as MapFragment?
+
+        drawerLayout = binding.drawerLayout
+        navigationView =binding.pharmacyFilterNavigatinonView
 
 
         //위치권한 상태 확인
@@ -202,17 +170,63 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         val searchView = binding.searchView
         searchView.setOnQueryTextFocusChangeListener { searchView, hasFocus ->
             if(hasFocus) { //포커스를 가지고 있으면
-                val intent = Intent(this, HospitalSearchActivity::class.java)
-                startActivity(intent)
+                openPharmacyDrawer(searchView)
                 searchView.clearFocus()
             }
         }
         //검색창(이미지) 눌렀을때 이벤트 처리
         searchView.setOnClickListener {
-            val intent = Intent(this, HospitalSearchActivity::class.java)
-            startActivity(intent)
+            openPharmacyDrawer(searchView)
         }
 
+
+        //검색하기
+        adapter = PharmacyMapSearchAdapter()
+        val recyclerView = navigationView.findViewById<RecyclerView>(R.id.pharmacy_recyclerview)
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.setHasFixedSize(true)
+
+        val searchWordList = ArrayList<String>()
+        val searchEditText = navigationView.findViewById<EditText>(R.id.pharmacy_search_edittext)
+        searchEditText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //입력전
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                setListenerToEditText()
+                Log.w("PharmacyMapActivity", "onTextChanged s: CharSequence = $s")
+                //입력 텍스트 변화중
+                if(s.isNotEmpty()) {
+                     if(!searchWordList.contains(s)) {
+                        searchWordList.add(s.toString())
+                     }
+                    adapter.updatelist(searchWordList)
+                }
+
+/*
+                val matchedMarker = markers.find { marker ->
+                    val pharmacy = marker.tag as? NaverMapData
+                    pharmacy?.pharmacyname?.contains(query, ignoreCase = true) == true
+                }
+
+*/
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                setListenerToEditText()
+                Log.w("PharmacyMapActivity", "afterTextChanged s: CharSequence = $s")
+/*
+                //입력 끝난 후
+                if(s.isNotEmpty()) { if(!searchWordList.contains(s.toString())) { searchWordList.add(s.toString()) } }
+                adapter.updatelist(searchWordList)
+//                searchWordList.clear()
+*/
+            }
+        })
 
 /*
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
@@ -230,6 +244,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         })
 */
 
+        //
         pharmacyNameTextView = binding.pharmacyNameTextView //findViewById(R.id.pharmacy_name_textView)
         operatingTimeTextView = binding.operatingTimeTextView //findViewById(R.id.operating_time_textView)
         addressTextView = binding.addressTextView //findViewById(R.id.address_textView)
@@ -246,7 +261,7 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         holTimeTextView = binding.dayOffTimeTextView
 
 /*
-       //  필터 버튼 클릭 시 이벤트 설정
+       //  필터 플로팅 버튼 클릭 시 이벤트 설정
         findViewById<ExtendedFloatingActionButton>(R.id.filter_btn).setOnClickListener {
             // 필터 상태 업데이트
             isFilterApplied = !isFilterApplied
@@ -682,6 +697,11 @@ class PharmacyMapActivity : AppCompatActivity(), OnMapReadyCallback /* Overlay.O
         builder.setNegativeButton("취소",
             DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
         builder.create().show()
+    }
+
+    //네비게이션 드로우 열기
+    fun openPharmacyDrawer(view: View) {
+        drawerLayout.openDrawer(GravityCompat.END)
     }
 
     //

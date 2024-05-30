@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.naver.maps.map.util.FusedLocationSource
 
-class Intro_Activity : AppCompatActivity() {
+class IntroActivity : AppCompatActivity() {
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val PERMISSION_REQUEST_CODE: Int = 100
 
@@ -42,7 +42,7 @@ class Intro_Activity : AppCompatActivity() {
 
         Handler().postDelayed({
 
-            gpsTracker = GpsTracker(this@Intro_Activity)
+            gpsTracker = GpsTracker(this@IntroActivity)
 
             App.mylat = gpsTracker!!.latitude
             App.mylng = gpsTracker!!.longitude
@@ -63,11 +63,11 @@ class Intro_Activity : AppCompatActivity() {
         //런타임 퍼미션 처리
         // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
         val hasFineLocationPermission = ContextCompat.checkSelfPermission(
-            this@Intro_Activity,
+            this@IntroActivity,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         val hasCoarseLocationPermission = ContextCompat.checkSelfPermission(
-            this@Intro_Activity,
+            this@IntroActivity,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
@@ -77,23 +77,23 @@ class Intro_Activity : AppCompatActivity() {
         } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다.
             // 3-1. 사용자가 퍼미션 거부를 한 적이 있는 경우에는
             if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this@Intro_Activity,
+                    this@IntroActivity,
                     PERMISSION[0]
                 )
             ) {
                 // 3-2. 요청을 진행하기 전에 사용자가에게 퍼미션이 필요한 이유를 설명해줄 필요가 있습니다.
-                Toast.makeText(this@Intro_Activity, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG)
+                Toast.makeText(this@IntroActivity, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG)
                     .show()
                 // 3-3. 사용자게에 퍼미션 요청을 합니다. 요청 결과는 onRequestPermissionResult에서 수신됩니다.
                 ActivityCompat.requestPermissions(
-                    this@Intro_Activity, PERMISSION,
+                    this@IntroActivity, PERMISSION,
                     PERMISSION_REQUEST_CODE
                 )
             } else {
                 // 4-1. 사용자가 퍼미션 거부를 한 적이 없는 경우에는 퍼미션 요청을 바로 합니다.
                 // 요청 결과는 onRequestPermissionResult에서 수신됩니다.
                 ActivityCompat.requestPermissions(
-                    this@Intro_Activity, PERMISSION,
+                    this@IntroActivity, PERMISSION,
                     PERMISSION_REQUEST_CODE
                 )
             }
@@ -107,7 +107,7 @@ class Intro_Activity : AppCompatActivity() {
     }
 
     private fun showDialogForLocationServiceSetting() {
-        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this@Intro_Activity)
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this@IntroActivity)
         builder.setTitle("위치 서비스 비활성화")
         builder.setMessage(
             """

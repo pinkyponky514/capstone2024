@@ -3,7 +3,6 @@ package com.example.reservationapp.Adapter
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -13,20 +12,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.App
 import com.example.reservationapp.Custom.CustomToast
 import com.example.reservationapp.HPDivisonActivity
-import com.example.reservationapp.HospitalListActivity
-import com.example.reservationapp.Hospital_DetailPage
 import com.example.reservationapp.Model.APIService
-import com.example.reservationapp.Model.Bookmark
 import com.example.reservationapp.Model.BookmarkResponse
 import com.example.reservationapp.Model.HospitalItem
-import com.example.reservationapp.Model.HospitalSignupInfoResponse
 import com.example.reservationapp.Model.MyBookmarkResponse
+import com.example.reservationapp.Model.handleErrorResponse
 import com.example.reservationapp.R
 import com.example.reservationapp.Retrofit.RetrofitClient
 import org.json.JSONException
@@ -120,6 +115,9 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
                             Log.w("HospitalListAdapter", "responseBody MyBookmark : $responseBodyMyBookmark, bookmark_flag: $bookmark_flag")
 
                             if(responseBodyMyBookmark.result.data.boards != null) { //내가 즐겨찾기한 병원 목록이 있다면
+                                bookmark_flag = false
+                                bookmark_Button.setImageResource(R.drawable.ic_empty_heart)
+
                                 for(responseMyBookmarkIndex in responseBodyMyBookmark.result.data.boards.indices) {
                                     if(responseBodyMyBookmark.result.data.boards[responseMyBookmarkIndex].hospitalId == list.hospitalId) { //즐겨찾기한 병원 아이디랑 상세페이지 병원 아이디가 같은 경우
                                         bookmark_Button.setImageResource(R.drawable.ic_heart)
@@ -127,33 +125,17 @@ class HospitalListAdapter: RecyclerView.Adapter<HospitalListAdapter.ViewHolder>(
                                         break
                                     }
                                     //내가 즐겨찾기 한 병원이 있지만, 해당 병원은 아닐 경우
-                                    bookmark_Button.setImageResource(R.drawable.ic_empty_heart)
+                                    //bookmark_Button.setImageResource(R.drawable.ic_empty_heart)
                                 }
                             }
                             else { //나의 즐겨찾기 한 목록이 없다면, 빈 하트
+                                bookmark_flag = false
                                 bookmark_Button.setImageResource(R.drawable.ic_empty_heart)
                             }
                         }
 
                         //통신 성공, 응답 실패
-                        else {
-                            val errorBody = response.errorBody()?.string()
-                            Log.d("HospitalListAdapter FAILURE Response", "MyBookmark Response Code: ${response.code()}, Error Body: ${response.errorBody()?.string()}")
-                            if (errorBody != null) {
-                                try {
-                                    val jsonObject = JSONObject(errorBody)
-                                    val timestamp = jsonObject.optString("timestamp")
-                                    val status = jsonObject.optInt("status")
-                                    val error = jsonObject.optString("error")
-                                    val message = jsonObject.optString("message")
-                                    val path = jsonObject.optString("path")
-
-                                    Log.d("Error Details", "Timestamp: $timestamp, Status: $status, Error: $error, Message: $message, Path: $path")
-                                } catch (e: JSONException) {
-                                    Log.d("JSON Parsing Error", "Error parsing error body JSON: ${e.localizedMessage}")
-                                }
-                            }
-                        }
+                        else handleErrorResponse(response)
                     }
 
                     //통신 실패

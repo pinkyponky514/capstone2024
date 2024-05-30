@@ -13,7 +13,7 @@
 
         <!-- 검색창 -->
         <ImageView
-            android:id="@+id/backButtonImageView"
+            android:id="@+id/back_button_imageView"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
@@ -23,7 +23,7 @@
             app:srcCompat="@drawable/ic_arrow_back" />
 
         <EditText
-            android:id="@+id/searchEditTextField"
+            android:id="@+id/search_edittext"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="15dp"
@@ -35,24 +35,23 @@
             android:hint="검색어를 입력하세요."
             android:theme="@style/TextView16dpDarkGray"
             android:paddingLeft="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/searchButtonImageView"
-            app:layout_constraintStart_toEndOf="@+id/backButtonImageView"
+            app:layout_constraintEnd_toStartOf="@+id/search_button_imageview"
+            app:layout_constraintStart_toEndOf="@+id/back_button_imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <!-- 검색 필터 -->
         <ImageView
-            android:id="@+id/searchButtonImageView"
+            android:id="@+id/search_button_imageview"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/back_button_imageView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/backButtonImageView"
+            app:layout_constraintTop_toTopOf="@+id/back_button_imageView"
             app:srcCompat="@drawable/ic_search" />
 
         <!-- 필터 -->
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
@@ -60,7 +59,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchEditTextField">
+            app:layout_constraintTop_toBottomOf="@+id/search_edittext">
 
             <ImageView
                 android:id="@+id/filterImageView"
@@ -76,20 +75,28 @@
 
             <Button
                 android:id="@+id/distance_button"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:text="거리 순"
+                android:background="@drawable/style_light_gray_radius_line_5"
+                android:text="거리순"
+                android:drawableLeft="@drawable/image_position_resize"
+                android:paddingLeft="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/filterImageView"
                 app:layout_constraintStart_toEndOf="@+id/filterImageView"
                 app:layout_constraintTop_toTopOf="@+id/filterImageView" />
 
             <Button
-                android:id="@+id/bookmark_list_button"
+                android:id="@+id/star_score_list_button"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="좋아요 순"
+                android:layout_height="40dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/style_light_gray_radius_line_5"
+                android:text="평점순"
+                android:drawableLeft="@drawable/image_star_resize"
+                android:paddingLeft="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/distance_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
