@@ -345,6 +345,32 @@
             app:layout_constraintStart_toStartOf="@+id/tableLayout_hospital_time_guide"
             app:layout_constraintTop_toBottomOf="@+id/WeekendLunch" />
 
+        <EditText
+            android:id="@+id/FinishRestday"
+            android:layout_width="169dp"
+            android:layout_height="57dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_border_tae"
+            android:gravity="center"
+            android:hint="종료시간 (예 : 18:00)"
+            android:padding="15dp"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="@+id/FinishMon"
+            app:layout_constraintTop_toBottomOf="@+id/restday" />
+
+        <EditText
+            android:id="@+id/StartRestday"
+            android:layout_width="165dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_border_tae"
+            android:gravity="center"
+            android:hint="시작시간 (예 : 09:00)"
+            android:padding="15dp"
+            android:textSize="15dp"
+            app:layout_constraintStart_toStartOf="@+id/tableLayout_hospital_time_guide"
+            app:layout_constraintTop_toBottomOf="@+id/restday" />
+
         <TextView
             android:id="@+id/restday"
             android:layout_width="wrap_content"
@@ -815,7 +841,7 @@
             android:hint="시작시간 (예 : 09:00)"
             android:padding="15dp"
             android:textSize="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/FinishSat"
+            app:layout_constraintEnd_toStartOf="@+id/FinishSun"
             app:layout_constraintHorizontal_bias="0.032"
             app:layout_constraintStart_toStartOf="@+id/tableLayout_hospital_time_guide"
             app:layout_constraintTop_toBottomOf="@+id/textView18" />
@@ -837,7 +863,7 @@
             android:id="@+id/SaveButton"
             android:layout_width="350dp"
             android:layout_height="45dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="116dp"
             android:layout_marginBottom="40dp"
             android:background="@drawable/rounded_button_background2"
             android:backgroundTint="@color/sky"
@@ -847,9 +873,8 @@
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/FinishLunch"
-            app:layout_constraintHorizontal_bias="0.533"
-            app:layout_constraintStart_toStartOf="@+id/StartLunch"
+            app:layout_constraintEnd_toEndOf="@+id/FinishRestday"
+            app:layout_constraintStart_toStartOf="@+id/StartRestday"
             app:layout_constraintTop_toBottomOf="@+id/restday" />
 
         <TextView

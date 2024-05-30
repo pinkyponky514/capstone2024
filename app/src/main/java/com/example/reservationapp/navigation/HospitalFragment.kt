@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reservationapp.App
 import com.example.reservationapp.HospitalMainActivity
+import com.example.reservationapp.HospitalSecurityActivity
 //import com.example.reservationapp.Hospital_Mypage
 import com.example.reservationapp.Model.APIService
 import com.example.reservationapp.Model.Hospital
@@ -29,7 +30,9 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 
 class HospitalFragment : Fragment() {
@@ -54,7 +57,7 @@ class HospitalFragment : Fragment() {
         val reservationRecyclerView = binding.reservationList //requireView().findViewById<RecyclerView>(R.id.reservation_list)
         val calendarView = binding.calendarView //requireView().findViewById<CalendarView>(R.id.calendar_view)
         val hospitalNameTextView =  binding.hospitalName
-
+        val securityButton = binding.hospitalSecurity
         //Retrofit
         retrofitClient = RetrofitClient.getInstance()
         apiService = retrofitClient.getRetrofitInterface()
@@ -69,6 +72,14 @@ class HospitalFragment : Fragment() {
         reservationRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         reservationRecyclerView.adapter = reservationAdapter
 
+        val currentDate = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        selectedDate = dateFormat.format(currentDate)
+
+        // 캘린더 초기 선택 날짜 설정
+        calendarView.date = currentDate.time
+
+
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val newSelectedDate = String.format("%d-%02d-%02d", year, month+1, dayOfMonth) // 새로 선택된 날짜 문자열로 변환
 
@@ -78,7 +89,10 @@ class HospitalFragment : Fragment() {
             }
         }
 
-
+        securityButton.setOnClickListener{
+            val intent = Intent(requireContext(), HospitalSecurityActivity::class.java)
+            startActivity(intent)
+        }
         // 상태 복원을 위해 onRestoreInstanceState 호출을 대기
         if (savedInstanceState == null) {  //savedInstanceState가 null이 아닌 경우 hospitalName을 복원
             // 병원 정보를 가져와서 UI를 업데이트하는 메소드 호출
@@ -108,15 +122,16 @@ class HospitalFragment : Fragment() {
                 if (response.isSuccessful) {
                     val responseBodyDetail = response.body()!!
                     Log.d("SUCCESS Response", "Message: ${responseBodyDetail.message}")
-                    hospitalName = responseBodyDetail.data.name
+                    hospitalName = responseBodyDetail.data.hospital.name
                     hospitalNameTextView.text = hospitalName
                     App.hospitalName = hospitalName
                     App.prefs.hospitalName = hospitalName
                     reservations = responseBodyDetail.data.hospital.reservations
 
-                    if(reservations.size >= 1) {
-                        for (reservation in reservations) {
+                    reservationList.clear() // 기존 리스트 초기화
 
+                    if (reservations.isNotEmpty()) {
+                        for (reservation in reservations) {
                             val time = reservation.reservationTime
                             val date = reservation.reservationDate
                             val status = reservation.status
@@ -130,12 +145,9 @@ class HospitalFragment : Fragment() {
                                     status
                                 )
                             )
-
                         }
-                        reservationAdapter.updateList(reservationList)
-
+                        updateReservationList() // 초기 데이터 가져온 후 업데이트
                     }
-
                 } else {
                     handleErrorResponse(response)
                 }
