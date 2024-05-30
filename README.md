@@ -2,7 +2,7 @@
 # CapStone2024-한냥갱-CatchDoctor
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/26127a3f-da51-455b-a8af-a1dc71d912d8)
 
-## 프로젝트 소개
+## 1. 프로젝트 소개
 * CatchDoctor은 openAI를 fine-tuning한 챗봇을 활용하여 병원 예약을 도와주는 위치 기반 병원 예약 애플리케이션 입니다.
 * 환자는 원하는 병원을 검색하고 진료시간에 맞게 예약할 수 있고, 커뮤니티, 리뷰 작성, 즐겨찾기 등을 할 수 있습니다.
 * 환자는 CatchDoctor의 인공지능 챗봇에게 증상을 말하면 챗봇은 환자의 위치정보를 기반으로 증상에 맞는 병원을 추천해 줍니다.
@@ -21,13 +21,17 @@
 * Framework & OPEN API : Spring Boot, Naver api, 공공데이터 api, Openai api
 * Database: MySQL
 ------------------------------------------
-## 주요 기능
+## 2. 주요 기능
 
+### 2.1 회원가입 및 로그인
 
-### 작품 사진 및 설명
+### 2.2 병원 예약
 
+### 2.3 커뮤니티
 
-### API 명세서 
+### 2.4 리뷰 및 즐겨찾기  
+
+## 3. API 명세서 
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/58a77deb-387c-4497-93f2-111cee73e06d)
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/eea321f1-a762-47bb-8c1f-db0ed48f998c)
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/62d3a0c7-d765-4533-994a-f3e48813f0a7)
@@ -38,7 +42,7 @@
 
 **API명세서 Notion URL : https://www.notion.so/2024-CatchDoctor-d51d6de0813c407f95ea2ad211fe29a5**
 
-### 테이블 ERD
+## 4. 테이블 ERD
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/df5ef14e-26e3-4053-91df-1229e25c1bb7)
 
 ------------------------------------------
