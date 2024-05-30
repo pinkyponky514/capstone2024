@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="240dp"
         android:text="우편번호"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -60,16 +60,26 @@
         android:id="@+id/security_button"
         android:layout_width="350dp"
         android:layout_height="45dp"
-        android:layout_marginTop="106dp"
-        android:background="@drawable/rounded_button_background2"
-        android:backgroundTint="@color/sky"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_button_background4"
         android:onClick="onBackToHospitalClicked"
         android:text="인증하기"
         android:textColor="@color/white"
         android:textSize="16dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/edithospital"
-        app:layout_constraintStart_toStartOf="@+id/edithospital"
-        app:layout_constraintTop_toBottomOf="@+id/edithospital" />
+        app:layout_constraintStart_toStartOf="@+id/edithospital" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:textColor="@color/sky"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textaddress"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
