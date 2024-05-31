@@ -310,11 +310,13 @@ class Hospital_DetailPage : AppCompatActivity(), OnMapReadyCallback {
                     }
 
 
+/*
                     //진료마감 됐으면 예약 못함
                     if(statusTextView.text == "진료마감") {
                     reservationButton.isEnabled = false
                     reservationButton.setBackgroundResource(R.drawable.style_gray_radius_20)
                     }
+*/
 
                     //진료시간 table 설정
                     db_lunch_time_start = responseBodyDetail.data.hospital.hospitalDetail.lunch_start
@@ -356,11 +358,15 @@ class Hospital_DetailPage : AppCompatActivity(), OnMapReadyCallback {
                         recyclerView.suppressLayout(true) //스트롤 불가능
                     }
 
-                } else Log.w("Hospital_DetailPage FAILURE Response", "Detail Connect SUCESS, Response FAILURE") //통신 성공, 응답 실패
+                } else {
+                    Log.w("Hospital_DetailPage FAILURE Response", "Detail Connect SUCESS, Response FAILURE")
+                    CustomToast(this@Hospital_DetailPage, "${response.errorBody()?.toString()}")
+                } //통신 성공, 응답 실패
             }
 
             override fun onFailure(call: Call<HospitalSearchResponse>, t: Throwable) {
                 Log.w("Hospital_DetailPage CONNECTION FAILURE: ", "Detail Connect FAILURE : ${t.localizedMessage}") //통신 실패
+                CustomToast(this@Hospital_DetailPage, "${t.localizedMessage}")
             }
         })
 
@@ -711,11 +717,15 @@ class Hospital_DetailPage : AppCompatActivity(), OnMapReadyCallback {
                         startActivity(intent)
                     }
 
-                    else handleErrorResponse(response)
+                    else {
+                        handleErrorResponse(response)
+                        CustomToast(this@Hospital_DetailPage, "${response.errorBody()?.toString()}")
+                    }
                 }
 
                 override fun onFailure(call: Call<ReservationResponse>, t: Throwable) {
                     Log.w("CONNECTION FAILURE: ", "Reservation Connect FAILURE : ${t.localizedMessage}")
+                    CustomToast(this@Hospital_DetailPage, "${t.localizedMessage}")
                 }
             })
         }

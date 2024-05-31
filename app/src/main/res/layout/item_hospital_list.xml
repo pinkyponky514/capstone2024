@@ -35,7 +35,7 @@
                     android:id="@+id/hopsitalImageView"
                     android:layout_width="match_parent"
                     android:layout_height="135dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="centerInside"
                     app:srcCompat="@drawable/ex_hospital" />
             </FrameLayout>
 

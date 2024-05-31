@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reservationapp.Model.ChatItem
@@ -25,10 +26,11 @@ class ChattingAdapter :
     inner class MessageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var chatTextView: TextView
         private var chatImageView: ImageView?
-
+        private var chatProgressBar: ProgressBar?
         init {
             chatTextView = itemView.findViewById(R.id.chatTextView)
             chatImageView = itemView.findViewById(R.id.chatImageView)
+            chatProgressBar = itemView.findViewById(R.id.chatprogressBar)
 
             itemView.setOnClickListener {
                 itemClickListener?.invoke(chatArray[adapterPosition])
@@ -36,14 +38,22 @@ class ChattingAdapter :
         }
 
         fun setContents(chat: ChatItem) {
-            chatTextView.text = chat.text
-            chat.imageResource?.let { resourceId ->
-                chatImageView?.apply {
-                    setImageBitmap(resourceId)
-                    visibility = View.VISIBLE
-                }
-            } ?: run {
+            if (chat.isLoading) {
+                chatTextView.visibility = View.GONE
                 chatImageView?.visibility = View.GONE
+                chatProgressBar?.visibility = View.VISIBLE
+            } else {
+                chatProgressBar?.visibility = View.GONE
+                chatTextView.visibility = View.VISIBLE
+                chatTextView.text = chat.text
+                chat.imageResource?.let { resourceId ->
+                    chatImageView?.apply {
+                        setImageBitmap(resourceId)
+                        visibility = View.VISIBLE
+                    }
+                } ?: run {
+                    chatImageView?.visibility = View.GONE
+                }
             }
         }
     }

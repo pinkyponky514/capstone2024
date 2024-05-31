@@ -18,7 +18,7 @@ object RetrofitClient {
     private var apiService: APIService? = null
     private var retrofit: Retrofit
 
-    private const val baseUrl = "http://10.0.2.2:8080"
+    private const val baseUrl = "http://223.194.135.46:8080" //"http://10.0.2.2:8080"
 
     init {
         val okHttpClient = OkHttpClient.Builder().addInterceptor(AuthInterceptor()).build()

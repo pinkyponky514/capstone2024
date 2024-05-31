@@ -51,7 +51,8 @@ data class ChatItem (
     var text: String? = null,
     var imageResource: Bitmap? = null, // 이미지 리소스의 ID를 저장할 수 있는 nullable Int 타입의 필드 추가
     var hospitalName: String? = null, // 병원 이름 추가
-    var hospitalAddress: String? = null // 병원 주소 추가
+    var hospitalAddress: String? = null, // 병원 주소 추가
+    var isLoading: Boolean = false // 추가된 필드
 )
 
 

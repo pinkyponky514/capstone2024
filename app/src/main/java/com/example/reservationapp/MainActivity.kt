@@ -23,8 +23,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 var userMapx: Double = App.mylat //사용자 위도
 var userMapy: Double = App.mylng //사용자 경도
 */
-var userMapx: Double = 37.5 //사용자 위도
-var userMapy: Double = 126.9 //사용자 경도
+var userMapx: Double = 37.582 //사용자 위도
+var userMapy: Double = 127.01 //사용자 경도
 
 //메인메뉴
 class MainActivity : AppCompatActivity() {

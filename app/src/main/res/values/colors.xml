@@ -29,6 +29,7 @@
     <color name="select_button_color">#FF018086</color>
     <color name="checkbox_checked_color">#99CCFF</color>
     <color name="checkbox_unchecked_color">#FFFFFF</color>
+    <color name="reservation_check">#2086D4</color>
 
 
 

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -73,6 +74,7 @@ class HomeFragment : Fragment() {
     //
     private lateinit var commingReserveTextView: TextView //다가오는 예약 textview
     private lateinit var commingMoreTextView: TextView //다가오는 예약 더보기
+    private lateinit var scrollView: ScrollView
 
 
     //
@@ -133,11 +135,21 @@ class HomeFragment : Fragment() {
         //새로고침
         var RefreshLayout = binding.refreshLayout
         RefreshLayout.setOnRefreshListener {
-            RefreshLayout.isRefreshing = false
-
             getUserReservation() //유저 예약 알림 설정
             getHospitalBookmark() //인기 순위 병원 설정
+
+            RefreshLayout.isRefreshing = false
         }
+        scrollView = binding.ScrollView
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+            if (scrollView.scrollY == 0) {
+                RefreshLayout.isEnabled = true
+            } else {
+                RefreshLayout.isEnabled = false
+            }
+        }
+
+
 
         //지도 API
         NaverMapSdk.getInstance(requireContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))

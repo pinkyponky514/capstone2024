@@ -73,6 +73,8 @@ class ReserveHistoryAdapter: RecyclerView.Adapter<ReserveHistoryAdapter.ViewHold
                 cancel_Button.isEnabled = false
                 cancel_Button.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                 cancel_Button.setBackgroundResource(R.drawable.style_gray_radius_5)
+            } else if(list.status == "예약확정") {
+                status_TextView.setBackgroundResource(R.drawable.style_reservation_check_radius_5_status_padding)
             }
 
 

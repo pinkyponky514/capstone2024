@@ -26,6 +26,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.io.encoding.ExperimentalEncodingApi
 import android.util.Base64
+import android.widget.ProgressBar
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
 // 챗gpt 채팅 페이지 액티비티
 class ChatActivity : AppCompatActivity() {
@@ -41,6 +44,8 @@ class ChatActivity : AppCompatActivity() {
 
     private var hospitalid:Long = 0
 
+    private lateinit var recyclerView: RecyclerView
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +59,7 @@ class ChatActivity : AppCompatActivity() {
         apiService = retrofitClient.getRetrofitInterface()
 
         //채팅 recyclerView
-        val recyclerView = binding.chatRecyclerView
+        recyclerView = binding.chatRecyclerView
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.stackFromEnd = true // 가장 최근 대화 맨 아래로 정렬
         recyclerView.setHasFixedSize(true)
@@ -110,8 +115,11 @@ class ChatActivity : AppCompatActivity() {
             if (messageString.trim().isNotEmpty()) {
                 chatList.add(ChatItem("hansung", messageString))
                 adapter.updateList(chatList)
+                chatList.add(ChatItem("AI", isLoading = true))
+                adapter.updateList(chatList)
                 messageEditText.setText("")
 
+                val aiMessageIndex = chatList.size - 1
 
                 apiService.getChatBotAnswer(prompt = messageString).enqueue(object : Callback<ChatBotResponse> {
                     override fun onResponse(call: Call<ChatBotResponse>, response: Response<ChatBotResponse>) {
@@ -126,13 +134,21 @@ class ChatActivity : AppCompatActivity() {
                                     chatBotResponse += "#${department} "
                                 }
 
+                                // chatList.add(ChatItem("AI", chatBotResponse))
+                                chatList[aiMessageIndex] = ChatItem("AI", chatBotResponse.toString())
+                                adapter.updateList(chatList)
+
+
+                                chatBotResponse = "현 위치에서 가장 가까운 ${recommended_departments}를 추천해드리겠습니다."
                                 chatList.add(ChatItem("AI", chatBotResponse))
                                 adapter.updateList(chatList)
+
                                 gethospital(recommended_departments[0])
                             }
                             else{
                                 var chatBotResponse = responseBody.fail_message
-                                chatList.add(ChatItem("AI", chatBotResponse))
+                                //chatList.add(ChatItem("AI", chatBotResponse, isLoading = false))
+                                chatList[aiMessageIndex] = ChatItem("AI", chatBotResponse)
                                 adapter.updateList(chatList)
                             }
                         } else {
@@ -148,8 +164,7 @@ class ChatActivity : AppCompatActivity() {
 
             } else Log.w("Message Send Error", "$messageString")
 
-            recyclerView.scrollToPosition(chatList.size-1) //recyclerView.scrollToPosition(chatList.size-1)
-
+            recyclerView.scrollToPosition(chatList.size - 1)
 
             // 아이콘 클릭 이벤트 설정
             val backIcon: ImageView = findViewById(R.id.backIcon)
@@ -163,9 +178,17 @@ class ChatActivity : AppCompatActivity() {
 
     @OptIn(ExperimentalEncodingApi::class)
     private fun gethospital(department:String){
+        // API 호출 전 ProgressBar 표시
+
+        chatList.add(ChatItem("AI", isLoading = true))
+        adapter.updateList(chatList)
+
+        val aiMessageIndex = chatList.size - 1
+
         apiService.getSearchHospital(className = department, mapx = App.mylat, mapy = App.mylng).enqueue(object : Callback<List<SearchHospital>> {
             override fun onResponse(call: Call<List<SearchHospital>>, response: Response<List<SearchHospital>>) {
                 if (response.isSuccessful) {
+
                     val responseBody = response.body()!!
                     Log.d("Success Response", responseBody.toString())
                     val hospitalName = responseBody[0].hospitalName  //병원이름
@@ -183,9 +206,7 @@ class ChatActivity : AppCompatActivity() {
                     }
 
                     hospitalid  = responseBody[0].hospital.hospitalId
-                    var chatBotResponse = "현 위치에서 가장 가까운 ${department}를 추천해드리겠습니다."
-                    chatList.add(ChatItem("AI", chatBotResponse))
-                    adapter.updateList(chatList)
+
 
                     val hospitalChatItem = ChatItem(
                         user="AI",
@@ -197,9 +218,9 @@ class ChatActivity : AppCompatActivity() {
 //
 //
 //                    chatList.add(ChatItem("AI", chatBotResponse))
-                    chatList.add(hospitalChatItem)
+                    chatList[aiMessageIndex] = hospitalChatItem
 
-                    chatBotResponse = "더 많은 ${department} 찾아보기"
+                    var chatBotResponse = "더 많은 ${department} 찾아보기"
                     chatList.add(ChatItem("AI", text = chatBotResponse))
 
                     adapter.updateList(chatList)
@@ -207,7 +228,7 @@ class ChatActivity : AppCompatActivity() {
                 } else {
                     chatList.add(ChatItem("AI", "죄송합니다. 챗봇이 응답을 잘 처리하지 못하였습니다."))
                     adapter.updateList(chatList)
-                  //  handleErrorResponse(response)
+                    //  handleErrorResponse(response)
                     Log.d("FAILURE Response", "Connect SUCESS, Response FAILURE, body: ${response.body().toString()}")
                 } //통신 성공, 응답은 실패
             }
@@ -216,6 +237,7 @@ class ChatActivity : AppCompatActivity() {
                 Log.d("CONNECTION FAILURE: ", t.localizedMessage)
             }
         })
+        recyclerView.scrollToPosition(chatList.size - 2)
     }
 
     private fun handleErrorResponse(response: Response<ChatBotResponse>) {

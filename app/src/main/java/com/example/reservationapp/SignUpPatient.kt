@@ -295,11 +295,15 @@ class SignUpPatient : AppCompatActivity() {
                     }
 
                     //통신 성공, 응답은 실패
-                    else handleErrorResponse(response)
+                    else {
+                        handleErrorResponse(response)
+                        CustomToast(this@SignUpPatient, "회원가입 실패하였습니다.")
+                    }
                 }
 
                 override fun onFailure(call: Call<PatientSignupInfoResponse>, t: Throwable) {
                     Log.d("CONNECTION FAILURE: ", t.localizedMessage) //통신 실패
+                    CustomToast(this@SignUpPatient, "${t.localizedMessage}")
                 }
             })
         }
