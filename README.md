@@ -1,5 +1,3 @@
-
-https://github.com/pinkyponky514/capstone2024/assets/71865475/149a1cf0-bc2a-40a1-94e4-8c59614b0afe
 ------------------------------------------
 # 병원 예약 서비스앱 CatchDoctor
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/26127a3f-da51-455b-a8af-a1dc71d912d8)
