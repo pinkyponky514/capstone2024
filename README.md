@@ -19,7 +19,7 @@
 * 개발 환경: Android, Windows, Mac os
 * 개발 도구: Android Studio, IntelliJ
 * 개발 언어: Kotlin, Java
-* Framework & OPEN API : Spring Boot, Naver api, 공공데이터 api, Openai api
+* Framework & OPEN API : Spring Boot, Naver API, 공공데이터 API, Openai API
 * Database: MySQL
 ------------------------------------------
 ## 2. 주요 기능(추가예정)
