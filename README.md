@@ -1,3 +1,5 @@
+
+https://github.com/pinkyponky514/capstone2024/assets/71865475/149a1cf0-bc2a-40a1-94e4-8c59614b0afe
 ------------------------------------------
 # 병원 예약 서비스앱 CatchDoctor
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/26127a3f-da51-455b-a8af-a1dc71d912d8)
@@ -24,46 +26,46 @@
 ------------------------------------------
 ## 2. 주요 기능
 
-### [병원 회원가입 및 로그인]
-|병원 회원가입 및 로그인|
+### [병원 회원가입 & 로그인]
+|병원 회원가입 & 로그인|
 |:------:|
 |![병원 회원가입 로그인](https://github.com/pinkyponky514/capstone2024/assets/71865475/11d628fa-a765-4a85-9476-e4764c68399f)|
-### [병원 연결 및 상세정보 작성]
-|병원 연결 및 상세정보 작성|
+### [병원 연결 & 상세정보 작성]
+|병원 연결 & 상세정보 작성|
 |:------:|
-|테스트1|
+| ![병원 연결 및 상세정보](https://github.com/pinkyponky514/capstone2024/assets/71865475/e524aea5-5922-482f-a8e5-2a53f50bc10d)|
 ### [환자 로그인 및 병원 예약 & 확인]
 |환자 로그인 및 병원 예약 & 확인|
 |:------:|
-|테스트1|
+|![병원 예약 및 진료내역 확인](https://github.com/pinkyponky514/capstone2024/assets/71865475/5da8155c-9dce-4b23-a565-5a1551f2d13b)|
 ### [챗봇]
 |챗봇|
 |:------:|
-|테스트1|
+|![챗봇](https://github.com/pinkyponky514/capstone2024/assets/71865475/0bea9716-e8fa-40d8-bcde-591d49d762e3)|
 ### [병원지도 & 약국지도]
 |병원지도 & 약국지도|
 |:------:|
-|테스트1|
-### [예약 관리 & 환자 확인]
+|![병원   약국 지도](https://github.com/pinkyponky514/capstone2024/assets/71865475/e7dd0586-3757-49da-a3f6-32b594631ebb)|
+### [예약 확정 & 환자 확인 & 진료 완료]
 |예약 확정|환자 확인|
 |:------:|:------:|
-|테스트1|테스트1|
+|![병원 예약 확정](https://github.com/pinkyponky514/capstone2024/assets/71865475/bc13d956-aef8-4e6d-9ab4-3f243478dbc0)|![환자 확인](https://github.com/pinkyponky514/capstone2024/assets/71865475/29eab588-5629-41bb-aa43-2606ea4a4f13)|
 
 |진료 완료|
 |:------:|
-|테스트1|
+|![병원 진료 완료](https://github.com/pinkyponky514/capstone2024/assets/71865475/72faf79d-7d51-45a2-a7e3-8aede7888354)|
 ### [커뮤니티]
-|커뮤니티|
-|:------:|
-|테스트1|
+|게시글 작성|댓글 작성|
+|:------:|:------:|
+|![커뮤니티 글쓰기](https://github.com/pinkyponky514/capstone2024/assets/71865475/4f56be85-c740-4f8b-b0a6-f727825648f4)|![커뮤니티 댓글 작성](https://github.com/pinkyponky514/capstone2024/assets/71865475/42d3a32e-863e-446b-adc1-0ce761e56046)|
 ### [리뷰]
-|리뷰|
+|리뷰 작성|
 |:------:|
-|테스트1|
+|![리뷰 작성](https://github.com/pinkyponky514/capstone2024/assets/71865475/8cb8979e-af93-4860-b24c-7b658b03e087)|
 ### [즐겨찾기]
 |즐겨찾기|
 |:------:|
-|테스트1|
+|![즐겨찾기](https://github.com/pinkyponky514/capstone2024/assets/71865475/9f4788bc-c3ef-4343-a3d8-ff2a68c0ee09)|
 ## 3. API 명세서 
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/58a77deb-387c-4497-93f2-111cee73e06d)
 ![image](https://github.com/pinkyponky514/capstone2024/assets/71865475/eea321f1-a762-47bb-8c1f-db0ed48f998c)
