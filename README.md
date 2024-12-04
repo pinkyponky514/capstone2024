@@ -15,7 +15,6 @@
 * 신경환 : BACK-END
 * 이찬희 : BACK-END
   
-* BACK-END Github 주소 : https://github.com/llleeco/CatchDoctor_BackEnd
 ### 주요 적용 기술 및 구조
 * 개발 환경: Android, Windows, Mac os
 * 개발 도구: Android Studio, IntelliJ
