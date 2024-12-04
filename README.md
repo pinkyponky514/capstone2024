@@ -7,7 +7,8 @@
 * 환자는 원하는 병원을 검색하고 진료시간에 맞게 예약할 수 있고, 커뮤니티, 리뷰 작성, 즐겨찾기 등을 할 수 있습니다.
 * 환자는 CatchDoctor의 인공지능 챗봇에게 증상을 말하면 챗봇은 환자의 위치정보를 기반으로 증상에 맞는 병원을 추천해 줍니다.
 * 병원은 CatchDotcor에 자신의 병원을 등록하고, 병원정보를 작성, 예약을 관리할 수 있습니다.
-  
+
+----> BACK-END 바로가기 : https://github.com/llleeco/CatchDoctor_BackEnd
 ### 조원 정보
 * 여혜인 : 팀장, FRONT-END
 * 유현경 : FRONT-END
